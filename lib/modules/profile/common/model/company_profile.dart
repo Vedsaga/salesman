@@ -7,9 +7,9 @@ part "company_profile.g.dart" ;
 @HiveType(typeId: 1)
 class CompanyProfile extends HiveObject {
   @HiveField(0)
-  final String name;
+  String name;
   @HiveField(1)
-  final DateTime lastUpdated;
+  DateTime lastUpdated;
   @HiveField(2)
   final DateTime createdAt;
 

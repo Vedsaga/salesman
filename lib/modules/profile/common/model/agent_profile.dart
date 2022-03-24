@@ -7,13 +7,13 @@ part "agent_profile.g.dart" ;
 @HiveType(typeId: 0)
 class AgentProfile extends HiveObject {
   @HiveField(0)
-  final String name;
+  String name;
   @HiveField(1)
-  final String phone;
+  String phone;
   @HiveField(2) 
-  final String username;
+  String username;
   @HiveField(3)
-  final DateTime lastUpdated;
+  DateTime lastUpdated;
   @HiveField(4)
   final DateTime createdAt;
 

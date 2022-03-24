@@ -12,7 +12,7 @@ ScaffoldFeatureController snackbarMessage(
   final Color _color = _getColor(type);
   return ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      duration: const Duration(milliseconds: 3000),
+      duration: const Duration(milliseconds: 2000),
       elevation: 6.0,
       behavior: SnackBarBehavior.floating,
       backgroundColor: AppColors.secondaryDark,
@@ -57,6 +57,9 @@ IconData _getIcon(MessageType type) {
       return Icons.cancel_rounded;
     case MessageType.finish:
       return Icons.check_circle_rounded;
+    case MessageType.inProgress:
+      return Icons.autorenew_rounded;
+
   }
 }
 
@@ -78,6 +81,8 @@ Color _getColor(MessageType type) {
       return AppColors.red;
     case MessageType.finish:
       return AppColors.green;
+    case MessageType.inProgress:
+      return AppColors.skyBlue;
   }
 }
 
@@ -89,5 +94,6 @@ enum MessageType {
   stop,
   resume,
   cancel,
-  finish
+  finish,
+  inProgress,
 }

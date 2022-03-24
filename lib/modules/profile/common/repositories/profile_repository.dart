@@ -1,9 +1,11 @@
 // project imports:
+import 'package:hive/hive.dart';
 import 'package:salesman/core/hive/boxes.dart';
 
 // project imports:
-import 'package:salesman/modules/profile/model/agent_profile.dart';
-import 'package:salesman/modules/profile/model/company_profile.dart';
+import 'package:salesman/modules/profile/common/model/agent_profile.dart';
+import 'package:salesman/modules/profile/common/model/company_profile.dart';
+
 
 class ProfileRepository {
   final _agentProfileBox = Boxes.agentProfileBox();
@@ -28,8 +30,21 @@ class ProfileRepository {
   }
 
   // edit agent profile
-  Future<void> editAgentProfile(AgentProfile agentProfile) async {
-    await _agentProfileBox.putAt(0, agentProfile);
+  Future<bool?> editAgentProfile({
+    required String name,
+    required String phone,
+    required String username,
+  }) async {
+    final agentProfile = _agentProfileBox.get(0);
+    if (agentProfile != null) {
+      agentProfile.name = name;
+      agentProfile.phone = phone;
+      agentProfile.username = username;
+      agentProfile.lastUpdated = DateTime.now();
+      await _agentProfileBox.put(0, agentProfile);
+      return true;
+    }
+    return null;
   }
 
   // delete agent profile
@@ -46,6 +61,11 @@ class ProfileRepository {
     return null;
   }
 
+  // make a stream that emits agent profile
+  Stream<BoxEvent> getAgentProfileStream() {
+    return _agentProfileBox.watch();
+  }
+
   // add company profile
   Future<bool?> addCompanyProfile(
       {required String name,
@@ -58,8 +78,15 @@ class ProfileRepository {
   }
 
   // edit company profile
-  Future<void> editCompanyProfile(CompanyProfile companyProfile) async {
-    await _companyProfileBox.putAt(0, companyProfile);
+  Future<bool?> editCompanyProfile({required String name}) async {
+    final companyProfile = _companyProfileBox.get(0);
+    if (companyProfile != null) {
+      companyProfile.name = name;
+      companyProfile.lastUpdated = DateTime.now();
+      await _companyProfileBox.put(0, companyProfile);
+      return true;
+    }
+    return null;
   }
 
   // delete company profile
@@ -75,5 +102,10 @@ class ProfileRepository {
       return response.getAt(0);
     }
     return null;
+  }
+
+  // make a stream that emits company profile
+  Stream<BoxEvent> getCompanyProfileStream() {
+    return _companyProfileBox.watch();
   }
 }

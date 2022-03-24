@@ -21,6 +21,8 @@ dependencies:
   hive: ^2.0.6
   hive_flutter: ^1.1.0
   equatable: ^2.0.3
+  formz: ^0.4.1
+  flow_builder: ^0.0.6
 
 
   
@@ -37,6 +39,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/icons/svgs/
+    - assets/images/
   fonts:
     - family: Montserrat
       fonts:
@@ -58,4 +61,6 @@ flutter:
         - asset: assets/fonts/Montserrat-SemiBoldItalic.ttf
         - asset: assets/fonts/Montserrat-Thin.ttf
         - asset: assets/fonts/Montserrat-ThinItalic.ttf
-        
+    - family: Righteous
+      fonts:
+        - asset: assets/fonts/Righteous-Regular.ttf

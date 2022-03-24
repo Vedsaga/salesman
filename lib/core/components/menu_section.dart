@@ -5,15 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
 import 'package:salesman/core/components/menu_button.dart';
-import 'package:salesman/core/models/menu_button_element.dart';
+import 'package:salesman/core/models/designs/menu_button_element.dart';
 import 'package:salesman/config/layouts/design_values.dart';
 
 class MenuSection extends StatelessWidget {
   final List<MenuButtonElement> menuItems;
   final String groupName;
+  final bool disabled;
   const MenuSection({
     required this.menuItems,
     required this.groupName,
+    required this.disabled,
     Key? key,
   }) : super(key: key);
 
@@ -25,10 +27,14 @@ class MenuSection extends StatelessWidget {
           alignment: Alignment.topLeft,
           child: Text(
             groupName.toUpperCase(),
-            style: AppTheme.of(context)
+            style: disabled
+                ? AppTheme.of(context)
                 .textTheme
                 .headline5
-                ?.copyWith(color: AppColors.orange),
+                    ?.copyWith(color: AppColors.grey)
+                : AppTheme.of(context).textTheme.headline5?.copyWith(
+                      color: AppColors.orange,
+                    ),
           ),
         ),
         SizedBox(height: designValues(context).containerCornerRadius21),
@@ -52,6 +58,7 @@ class MenuSection extends StatelessWidget {
                     svgPath:
                         'assets/icons/svgs/${menuItems[index].iconName}.svg',
                     onTap: menuItems[index].onTap,
+                    disabled: menuItems[index].disabled,
                   );
                 },
                 childCount: menuItems.length,

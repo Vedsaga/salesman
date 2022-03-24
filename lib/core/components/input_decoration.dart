@@ -12,6 +12,7 @@ InputDecoration inputDecoration(
   required String hintText,
   bool usernameSuffix = false,
   String? errorText,
+  required bool inFocus,
 }) {
   return InputDecoration(
     errorText: errorText,
@@ -34,7 +35,11 @@ InputDecoration inputDecoration(
         : null,
     floatingLabelBehavior: FloatingLabelBehavior.auto,
     labelText: labelText,
-    labelStyle: AppTheme.of(context).textTheme.subtitle2,
+    labelStyle: inFocus ? AppTheme.of(context)
+                .textTheme
+                .subtitle2
+                ?.copyWith(color: AppColors.skyBlue)
+            : AppTheme.of(context).textTheme.subtitle2,
     hintText: hintText,
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(designValues(context).textCornerRadius),

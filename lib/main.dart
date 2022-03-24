@@ -7,8 +7,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 // project import
 import 'package:salesman/config/theme/theme.dart';
 import 'package:salesman/config/routes/router.dart';
-import 'package:salesman/modules/profile/model/agent_profile.dart';
-import 'package:salesman/modules/profile/model/company_profile.dart';
+import 'package:salesman/modules/profile/common/model/agent_profile.dart';
+import 'package:salesman/modules/profile/common/model/company_profile.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

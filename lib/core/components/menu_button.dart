@@ -7,27 +7,37 @@ import 'package:salesman/config/layouts/design_values.dart';
 
 // project import
 import 'package:salesman/config/theme/box_decoration.dart';
+import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
 
 class MenuButton extends StatelessWidget {
   final String svgPath;
   final String title;
   final Function onTap;
+  final bool disabled;
   const MenuButton(
       {Key? key,
       required this.title,
       required this.svgPath,
-      required this.onTap})
+      required this.onTap,
+      required this.disabled})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: disabled ? null :
+           () {
         onTap();
-      },
+            },
       child: Container(
-        decoration: myBoxDecoration(context),
+        decoration: disabled
+            ? BoxDecoration(
+                color: AppColors.lightGrey,
+                borderRadius: BorderRadius.circular(
+                    designValues(context).buttonCornerRadius),
+              )
+            : myBoxDecoration(context),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal:designValues(context).mainAxisSpacing13),
           child: Column(
@@ -46,6 +56,7 @@ class MenuButton extends StatelessWidget {
                 svgPath,
                 width: designValues(context).containerCornerRadius21,
                 height: designValues(context).containerCornerRadius21,
+                color: disabled ? AppColors.grey : null,
               ),
             ],
           ),

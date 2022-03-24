@@ -1,10 +1,11 @@
 // third party imports:
 import 'package:hive/hive.dart';
+import 'package:salesman/modules/profile/common/model/agent_profile.dart';
+import 'package:salesman/modules/profile/common/model/company_profile.dart';
 
 
 // project imports:
-import 'package:salesman/modules/profile/model/agent_profile.dart';
-import 'package:salesman/modules/profile/model/company_profile.dart';
+
 
 class Boxes {
   static Box<AgentProfile> agentProfileBox() => Hive.box<AgentProfile>('agent_profile');

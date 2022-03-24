@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 // project import
-import 'package:salesman/core/models/design_values_model.dart';
+import 'package:salesman/core/models/designs/design_values_model.dart';
 
 DesignValuesModel designValues(BuildContext context) {
   return DesignValuesModel(
