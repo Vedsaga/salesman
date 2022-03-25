@@ -35,7 +35,7 @@ class MenuButton extends StatelessWidget {
             ? BoxDecoration(
                 color: AppColors.lightGrey,
                 borderRadius: BorderRadius.circular(
-                    designValues(context).buttonCornerRadius),
+                    designValues(context).containerCornerRadius21),
               )
             : myBoxDecoration(context),
         child: Padding(
@@ -45,7 +45,12 @@ class MenuButton extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: AppTheme.of(context).textTheme.caption,
+                style: disabled
+                    ? AppTheme.of(context)
+                        .textTheme
+                        .caption
+                        ?.copyWith(color: AppColors.grey)
+                    : AppTheme.of(context).textTheme.caption,
                 softWrap: false,
                 overflow: TextOverflow.ellipsis,
               ),

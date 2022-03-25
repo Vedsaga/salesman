@@ -8,3 +8,17 @@ abstract class MenuEvent extends Equatable {
 }
 
 class FetchCompanyProfileEvent extends MenuEvent {}
+
+class FetchActiveFeaturesEvent extends MenuEvent {}
+
+class AddActiveFeaturesEvent extends MenuEvent {
+  final ActiveFeaturesModel activeFeatures;
+
+  const AddActiveFeaturesEvent(this.activeFeatures);
+
+  @override
+  List<Object> get props => [activeFeatures];
+}
+
+class UpdateActiveFeaturesEvent extends MenuEvent {}
+

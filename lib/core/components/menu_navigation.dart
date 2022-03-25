@@ -6,11 +6,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 // project imports
 import 'package:salesman/config/theme/box_decoration.dart';
-import 'package:salesman/core/models/designs/menu_button_element.dart';
 import 'package:salesman/config/layouts/design_values.dart';
+import 'package:salesman/core/models/designs/menu_button_model.dart';
 
 class MenuNavigation extends StatelessWidget {
-  final List<MenuButtonElement> menuItems;
+  final List<MenuButtonModel> menuItems;
   const MenuNavigation({Key? key, required this.menuItems}) : super(key: key);
 
   @override

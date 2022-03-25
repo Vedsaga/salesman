@@ -15,7 +15,7 @@ import 'package:salesman/core/components/snackbar_message.dart';
 import 'package:salesman/core/components/view_top_app_bar.dart';
 import 'package:salesman/core/models/validations/generic_field.dart';
 import 'package:salesman/core/models/validations/phone_number.dart';
-import 'package:salesman/modules/profile/creation/bloc/profile_bloc.dart';
+import 'package:salesman/modules/profile/profile_creation/bloc/profile_bloc.dart';
 
 class ProfileCreation extends StatefulWidget {
   const ProfileCreation({Key? key}) : super(key: key);

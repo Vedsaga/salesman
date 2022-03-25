@@ -12,7 +12,7 @@ class MenuInitialSate extends MenuState {}
 class MenuCompanyProfileFetchingState extends MenuState {}
 
 class MenuCompanyProfileFetchedState extends MenuState {
-  final CompanyProfile companyProfile;
+  final CompanyProfileModel companyProfile;
 
   const MenuCompanyProfileFetchedState({required this.companyProfile});
 
@@ -21,7 +21,7 @@ class MenuCompanyProfileFetchedState extends MenuState {
   
 
   MenuCompanyProfileFetchedState copyWith({
-    CompanyProfile? companyProfile,
+    CompanyProfileModel? companyProfile,
   }) {
     return MenuCompanyProfileFetchedState(
       companyProfile: companyProfile ?? this.companyProfile,
@@ -29,4 +29,28 @@ class MenuCompanyProfileFetchedState extends MenuState {
   }
 }
 
-class MenuCompanyProfileEmptyState extends MenuState {}
+class CompanyProfileEmptyState extends MenuState {}
+
+class FetchActiveFeaturesState extends MenuState {}
+class FetchingActiveFeaturesState extends MenuState {}
+class FetchedActiveFeaturesState extends MenuState {
+  final ActiveFeaturesModel activeFeatures;
+
+  const FetchedActiveFeaturesState({required this.activeFeatures});
+
+  @override
+  List<Object> get props => [activeFeatures];
+
+  FetchedActiveFeaturesState copyWith({
+   required ActiveFeaturesModel activeFeatures,
+  }) {
+    return FetchedActiveFeaturesState(
+      activeFeatures: activeFeatures,
+    );
+  }
+}
+class EmptyActiveFeaturesState extends MenuState {}
+class ErrorActiveFeaturesState extends MenuState {}
+
+
+

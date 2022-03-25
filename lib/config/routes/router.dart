@@ -6,12 +6,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Package imports:
 import 'package:salesman/config/routes/route_name.dart';
-import 'package:salesman/core/bloc/profile_check_bloc.dart';
 import 'package:salesman/modules/menu/bloc/menu_bloc.dart';
-import 'package:salesman/modules/menu/menu.dart';
-import 'package:salesman/modules/profile/common/repositories/profile_repository.dart';
-import 'package:salesman/modules/profile/creation/bloc/profile_bloc.dart';
-import 'package:salesman/modules/profile/creation/screens/profile_creation.dart';
+import 'package:salesman/modules/menu/repositories/menu_repository.dart';
+import 'package:salesman/modules/menu/screens/menu.dart';
+import 'package:salesman/modules/profile/profile_creation/bloc/profile_bloc.dart';
+import 'package:salesman/modules/profile/profile_creation/screens/profile_creation.dart';
+import 'package:salesman/modules/profile/repositories/profile_repository.dart';
+import 'package:salesman/modules/splashscreen/bloc/profile_check_bloc.dart';
 import 'package:salesman/modules/splashscreen/screens/splash_screen.dart';
 
 
@@ -32,8 +33,9 @@ class AppRouter {
       case RouteNames.menu:
         return MaterialPageRoute(builder: (_) {
           return BlocProvider<MenuBloc>(
-            create: (context) => MenuBloc(ProfileRepository()),
-            child: const Menu(),
+            create: (context) =>
+                MenuBloc(ProfileRepository(), MenuRepository()),
+            child: Menu(),
           );
         });
       default:

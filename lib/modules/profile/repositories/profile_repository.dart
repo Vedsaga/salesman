@@ -1,11 +1,10 @@
 // project imports:
 import 'package:hive/hive.dart';
-import 'package:salesman/core/hive/boxes.dart';
 
 // project imports:
-import 'package:salesman/modules/profile/common/model/agent_profile.dart';
-import 'package:salesman/modules/profile/common/model/company_profile.dart';
-
+import 'package:salesman/core/hive/models/agent_profile_model.dart';
+import 'package:salesman/core/hive/boxes.dart';
+import 'package:salesman/core/hive/models/company_profile_model.dart';
 
 class ProfileRepository {
   final _agentProfileBox = Boxes.agentProfileBox();
@@ -18,7 +17,7 @@ class ProfileRepository {
       required String username,
       required DateTime lastUpdated,
       required DateTime createdAt}) async {
-    final agentProfile = AgentProfile(
+    final agentProfile = AgentProfileModel(
         name: name,
         phone: phone,
         username: username,
@@ -53,7 +52,7 @@ class ProfileRepository {
   }
 
   // get agent profile
-  Future<AgentProfile?> getAgentProfile() async {
+  Future<AgentProfileModel?> getAgentProfile() async {
     final response = _agentProfileBox;
     if (response.isNotEmpty) {
       return response.getAt(0);
@@ -71,7 +70,7 @@ class ProfileRepository {
       {required String name,
       required DateTime lastUpdated,
       required DateTime createdAt}) async {
-    final companyProfile = CompanyProfile(
+    final companyProfile = CompanyProfileModel(
         name: name, lastUpdated: lastUpdated, createdAt: createdAt);
     await _companyProfileBox.add(companyProfile);
     return true;
@@ -96,7 +95,7 @@ class ProfileRepository {
   }
 
   // get company profile
-  Future<CompanyProfile?>? getCompanyProfile() async {
+  Future<CompanyProfileModel?>? getCompanyProfile() async {
     final response = _companyProfileBox;
     if (response.isNotEmpty) {
       return response.getAt(0);

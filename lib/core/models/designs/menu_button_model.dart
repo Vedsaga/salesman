@@ -1,10 +1,10 @@
-class MenuButtonElement {
+class MenuButtonModel {
   final String title;
   final String iconName;
   final Function onTap;
   final bool disabled;
 
-  MenuButtonElement({
+  MenuButtonModel({
     required this.title,
     required this.iconName,
     required this.onTap,

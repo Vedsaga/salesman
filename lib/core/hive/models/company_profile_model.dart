@@ -2,25 +2,19 @@
 import 'package:hive/hive.dart';
 
 // generated file:
-part "agent_profile.g.dart" ;
+part "company_profile_model.g.dart";
 
-@HiveType(typeId: 0)
-class AgentProfile extends HiveObject {
+@HiveType(typeId: 1)
+class CompanyProfileModel extends HiveObject {
   @HiveField(0)
   String name;
   @HiveField(1)
-  String phone;
-  @HiveField(2) 
-  String username;
-  @HiveField(3)
   DateTime lastUpdated;
-  @HiveField(4)
+  @HiveField(2)
   final DateTime createdAt;
 
-  AgentProfile({
+  CompanyProfileModel({
     required this.name,
-    required this.phone,
-    required this.username,
     required this.lastUpdated,
     required this.createdAt,
   });

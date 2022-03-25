@@ -1,11 +1,15 @@
 // flutter import
 import 'package:flutter/material.dart';
+
+// third party imports:
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+// project imports:
 import 'package:salesman/config/routes/route_name.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/fonts.dart';
-import 'package:salesman/core/bloc/profile_check_bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:salesman/core/components/round_button.dart';
+import 'package:salesman/modules/splashscreen/bloc/profile_check_bloc.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);

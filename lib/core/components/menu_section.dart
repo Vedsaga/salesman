@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
 import 'package:salesman/core/components/menu_button.dart';
-import 'package:salesman/core/models/designs/menu_button_element.dart';
 import 'package:salesman/config/layouts/design_values.dart';
+import 'package:salesman/core/models/designs/menu_button_model.dart';
 
 class MenuSection extends StatelessWidget {
-  final List<MenuButtonElement> menuItems;
+  final List<MenuButtonModel> menuItems;
   final String groupName;
   final bool disabled;
   const MenuSection({

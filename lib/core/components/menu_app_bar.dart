@@ -4,19 +4,18 @@ import 'package:intl/intl.dart';
 
 // Package imports:
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:salesman/config/routes/route_name.dart';
 
 // Project imports:
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
-import 'package:salesman/modules/profile/common/model/company_profile.dart';
+import 'package:salesman/core/hive/models/company_profile_model.dart';
 
 //  created an AppBar widget
 class MenuAppBar extends StatelessWidget {
   const MenuAppBar(
       {Key? key, required this.companyProfile, required this.currentPage})
       : super(key: key);
-  final CompanyProfile companyProfile;
+  final CompanyProfileModel companyProfile;
   final String currentPage;
 
   @override
