@@ -12,7 +12,7 @@ import 'package:salesman/config/routes/route_name.dart';
 import 'package:salesman/core/components/action_button.dart';
 import 'package:salesman/core/components/input_decoration.dart';
 import 'package:salesman/core/components/snackbar_message.dart';
-import 'package:salesman/core/components/view_top_app_bar.dart';
+import 'package:salesman/core/components/normal_top_app_bar.dart';
 import 'package:salesman/core/models/validations/generic_field.dart';
 import 'package:salesman/core/models/validations/phone_number.dart';
 import 'package:salesman/modules/profile/profile_creation/bloc/profile_bloc.dart';
@@ -163,7 +163,7 @@ class _ProfileCreationState extends State<ProfileCreation> {
         }
       },
       child: MobileLayout(
-        topAppBar: const ViewTopAppBar(title: "agent"),
+        topAppBar: const NormalTopAppBar(title: "agent"),
         bottomAppBarRequired: true,
         bottomAppBar: BlocBuilder<ProfileCreationBloc, ProfileCreationState>(
           builder: (context, state) {
@@ -265,7 +265,7 @@ class _ProfileCreationState extends State<ProfileCreation> {
                   ),
                 ),
                 SizedBox(height: designValues(context).sectionSpacing89),
-                const ViewTopAppBar(
+                const NormalTopAppBar(
                   title: "Company",
                 ),
                 SizedBox(height: designValues(context).design34),

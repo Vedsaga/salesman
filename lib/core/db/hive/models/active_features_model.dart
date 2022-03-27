@@ -38,9 +38,9 @@ class ActiveFeaturesModel extends HiveObject {
   bool disableStats;
 
   ActiveFeaturesModel({
-    this.disableDetails = true,
-    this.disableClient = true,
-    this.disableItem = true,
+    this.disableDetails = false,
+    this.disableClient = false,
+    this.disableItem = false,
     this.disableTrade = true,
     this.disableOrder = true,
     this.disableDelivery = true,

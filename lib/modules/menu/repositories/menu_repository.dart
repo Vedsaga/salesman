@@ -1,8 +1,8 @@
 // third part imports:
 
 // project imports:
-import 'package:salesman/core/hive/boxes.dart';
-import 'package:salesman/core/hive/models/active_features_model.dart';
+import 'package:salesman/core/db/hive/boxes.dart';
+import 'package:salesman/core/db/hive/models/active_features_model.dart';
 
 class MenuRepository {
   final _activeFeaturesBox = Boxes.activeFeaturesBox();

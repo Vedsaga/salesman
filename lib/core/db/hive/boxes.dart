@@ -1,11 +1,10 @@
 // third party imports:
 import 'package:hive/hive.dart';
 
-
 // project imports:
-import 'package:salesman/core/hive/models/agent_profile_model.dart';
-import 'package:salesman/core/hive/models/company_profile_model.dart';
-import 'package:salesman/core/hive/models/active_features_model.dart';
+import 'package:salesman/core/db/hive/models/active_features_model.dart';
+import 'package:salesman/core/db/hive/models/agent_profile_model.dart';
+import 'package:salesman/core/db/hive/models/company_profile_model.dart';
 
 class Boxes {
   static Box<AgentProfileModel> agentProfileBox() =>

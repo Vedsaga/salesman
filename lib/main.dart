@@ -7,10 +7,12 @@ import 'package:hive_flutter/hive_flutter.dart';
 // project import
 import 'package:salesman/config/theme/theme.dart';
 import 'package:salesman/config/routes/router.dart';
-import 'package:salesman/core/hive/models/active_features_model.dart';
-import 'package:salesman/core/hive/models/agent_profile_model.dart';
-import 'package:salesman/core/hive/models/company_profile_model.dart';
+import 'package:salesman/core/db/drift/app_database.dart';
+import 'package:salesman/core/db/hive/models/active_features_model.dart';
+import 'package:salesman/core/db/hive/models/agent_profile_model.dart';
+import 'package:salesman/core/db/hive/models/company_profile_model.dart';
 
+AppDatabase appDatabaseInstance = AppDatabase();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

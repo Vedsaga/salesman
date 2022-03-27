@@ -8,11 +8,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 // Project imports:
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
-import 'package:salesman/core/hive/models/company_profile_model.dart';
+import 'package:salesman/core/db/hive/models/company_profile_model.dart';
 
 //  created an AppBar widget
-class MenuAppBar extends StatelessWidget {
-  const MenuAppBar(
+class MenuTopAppBar extends StatelessWidget {
+  const MenuTopAppBar(
       {Key? key, required this.companyProfile, required this.currentPage})
       : super(key: key);
   final CompanyProfileModel companyProfile;
@@ -34,7 +34,6 @@ class MenuAppBar extends StatelessWidget {
             child: currentPage == "home"
                 ? SvgPicture.asset(
                     'assets/icons/svgs/menu.svg',
-                    
                   )
                 : SvgPicture.asset(
                     'assets/icons/svgs/home.svg',

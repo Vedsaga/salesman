@@ -1,8 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:salesman/core/hive/models/agent_profile_model.dart';
-import 'package:salesman/core/hive/models/company_profile_model.dart';
+import 'package:salesman/core/db/hive/models/company_profile_model.dart';
+
+// project imports:
 import 'package:salesman/modules/profile/repositories/profile_repository.dart';
+import 'package:salesman/core/db/hive/models/agent_profile_model.dart';
 
 part 'profile_check_event.dart';
 part 'profile_check_state.dart';

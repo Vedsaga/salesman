@@ -22,3 +22,7 @@ class AddActiveFeaturesEvent extends MenuEvent {
 
 class UpdateActiveFeaturesEvent extends MenuEvent {}
 
+class FetchAllDetailsEvent extends MenuEvent {}
+
+class EnableDetailsEvent extends MenuEvent {}
+

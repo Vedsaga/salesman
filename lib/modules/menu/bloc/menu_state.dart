@@ -11,46 +11,39 @@ class MenuInitialSate extends MenuState {}
 
 class MenuCompanyProfileFetchingState extends MenuState {}
 
-class MenuCompanyProfileFetchedState extends MenuState {
-  final CompanyProfileModel companyProfile;
-
-  const MenuCompanyProfileFetchedState({required this.companyProfile});
-
-  @override
-  List<Object> get props => [companyProfile];
-  
-
-  MenuCompanyProfileFetchedState copyWith({
-    CompanyProfileModel? companyProfile,
-  }) {
-    return MenuCompanyProfileFetchedState(
-      companyProfile: companyProfile ?? this.companyProfile,
-    );
-  }
-}
+class MenuCompanyProfileFetchedState extends MenuState {}
 
 class CompanyProfileEmptyState extends MenuState {}
 
 class FetchActiveFeaturesState extends MenuState {}
 class FetchingActiveFeaturesState extends MenuState {}
 class FetchedActiveFeaturesState extends MenuState {
+}
+class EmptyActiveFeaturesState extends MenuState {}
+class ErrorAddingActiveFeaturesState extends MenuState {}
+class FetchAllDetails extends MenuState {}
+class FetchedAllDetailsState extends MenuState {
+  final CompanyProfileModel companyProfile;
   final ActiveFeaturesModel activeFeatures;
 
-  const FetchedActiveFeaturesState({required this.activeFeatures});
+  const FetchedAllDetailsState({required this.companyProfile, required this.activeFeatures});
 
   @override
-  List<Object> get props => [activeFeatures];
+  List<Object> get props => [companyProfile, activeFeatures];
 
-  FetchedActiveFeaturesState copyWith({
-   required ActiveFeaturesModel activeFeatures,
+  FetchedAllDetailsState copyWith({
+    CompanyProfileModel? companyProfile,
+    ActiveFeaturesModel? activeFeatures,
   }) {
-    return FetchedActiveFeaturesState(
-      activeFeatures: activeFeatures,
+    return FetchedAllDetailsState(
+      companyProfile: companyProfile ?? this.companyProfile,
+      activeFeatures: activeFeatures ?? this.activeFeatures,
     );
   }
 }
-class EmptyActiveFeaturesState extends MenuState {}
-class ErrorActiveFeaturesState extends MenuState {}
 
+class ErrorAllDetailsState extends MenuState {}
+
+class EnablePaymentState extends MenuState {}
 
 

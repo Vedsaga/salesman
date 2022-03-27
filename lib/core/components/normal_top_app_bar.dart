@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 // project imports:
 import 'package:salesman/config/theme/theme.dart';
 
-class ViewTopAppBar extends StatelessWidget {
-  const ViewTopAppBar({Key? key, required this.title}) : super(key: key);
+class NormalTopAppBar extends StatelessWidget {
+  const NormalTopAppBar({Key? key, required this.title}) : super(key: key);
 
   final String title;
 

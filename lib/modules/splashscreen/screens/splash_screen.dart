@@ -16,7 +16,6 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<ProfileCheckBloc>(context).add(FetchProfileDataEvent());
     return Scaffold(
       backgroundColor: AppColors.white,
       body: Padding(
@@ -82,7 +81,7 @@ class SplashScreen extends StatelessWidget {
                       BlocProvider.of<ProfileCheckBloc>(context).add(FetchProfileDataEvent());
                 }
                 if (state is ProfileCheckFetched) {
-                  Navigator.pushNamed(context, RouteNames.menu);
+                  Navigator.popAndPushNamed(context, RouteNames.menu);
                 }
               },
               builder: (context, state) {

@@ -5,4 +5,5 @@ class RouteNames {
   static const String editProfile = 'editProfile';
   static const String home = 'home';
   static const String menu = 'menu';
+  static const String viewItem = 'viewItem';
 }

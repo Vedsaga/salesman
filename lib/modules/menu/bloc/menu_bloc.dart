@@ -1,12 +1,12 @@
 // third party imports:
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:salesman/core/hive/models/active_features_model.dart';
 
 // project imports:
-import 'package:salesman/core/hive/models/company_profile_model.dart';
 import 'package:salesman/modules/menu/repositories/menu_repository.dart';
 import 'package:salesman/modules/profile/repositories/profile_repository.dart';
+import 'package:salesman/core/db/hive/models/active_features_model.dart';
+import 'package:salesman/core/db/hive/models/company_profile_model.dart';
 
 part 'menu_event.dart';
 part 'menu_state.dart';
@@ -19,6 +19,8 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
     on<FetchCompanyProfileEvent>(_onFetchCompanyProfile);
     on<FetchActiveFeaturesEvent>(_onFetchedActiveFeatures);
     on<AddActiveFeaturesEvent>(_onAddFeatures);
+    on<FetchAllDetailsEvent>(_onFetchAllDetails);
+    on<EnableDetailsEvent>(_onEnableDetails);
   }
 
   void _onFetchCompanyProfile(
@@ -28,7 +30,6 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
         await profileRepository.getCompanyProfile();
 
     if (_companyProfile != null) {
-      emit(MenuCompanyProfileFetchedState(companyProfile: _companyProfile));
       emit(FetchActiveFeaturesState());
     } else {
       emit(CompanyProfileEmptyState());
@@ -42,7 +43,7 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
         await menuRepository.getActiveFeatures();
 
     if (_activeFeatures != null) {
-      emit(FetchedActiveFeaturesState(activeFeatures: _activeFeatures));
+      emit(FetchedActiveFeaturesState());
     } else {
       emit(EmptyActiveFeaturesState());
     }
@@ -51,12 +52,45 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
   void _onAddFeatures(
       AddActiveFeaturesEvent event, Emitter<MenuState> emit) async {
     emit(FetchingActiveFeaturesState());
-    final bool? _addActiveFeatures = await menuRepository.addActiveFeatures(event.activeFeatures);
+    final bool? _addActiveFeatures =
+        await menuRepository.addActiveFeatures(event.activeFeatures);
     if (_addActiveFeatures == true) {
       emit(FetchActiveFeaturesState());
     } else {
-      emit(ErrorActiveFeaturesState());
+      emit(ErrorAddingActiveFeaturesState());
     }
   }
 
+  void _onFetchAllDetails(
+      FetchAllDetailsEvent event, Emitter<MenuState> emit) async {
+    final CompanyProfileModel? _companyProfile =
+        await profileRepository.getCompanyProfile();
+    final ActiveFeaturesModel? _activeFeatures =
+        await menuRepository.getActiveFeatures();
+
+    if (_companyProfile != null && _activeFeatures != null) {
+      emit(FetchedAllDetailsState(
+        companyProfile: _companyProfile,
+        activeFeatures: _activeFeatures,
+      ));
+    } else {
+      emit(ErrorAllDetailsState());
+    }
+  }
+
+  void _onEnableDetails(
+      EnableDetailsEvent event, Emitter<MenuState> emit) async {
+    // update the active features details, client and item to false
+    final bool? _enableDetails = await menuRepository.setActiveFeatures(
+      ActiveFeaturesModel(
+        disableClient: false,
+        disableItem: false,
+        disableDetails: false,
+      ),
+    );
+
+    if (_enableDetails == true) {
+      emit((EnablePaymentState()));
+    }
+  }
 }

@@ -9,15 +9,17 @@ import 'package:salesman/core/components/menu_section.dart';
 
 //  project import
 import 'package:salesman/core/components/snackbar_message.dart';
-import 'package:salesman/core/hive/models/active_features_model.dart';
-import 'package:salesman/core/hive/models/company_profile_model.dart';
+import 'package:salesman/core/db/hive/models/active_features_model.dart';
 import 'package:salesman/config/layouts/mobile_layout.dart';
+import 'package:salesman/core/db/hive/models/company_profile_model.dart';
 import 'package:salesman/core/models/designs/menu_button_model.dart';
 import 'package:salesman/modules/menu/bloc/menu_bloc.dart';
-import 'package:salesman/core/components/menu_app_bar.dart';
+import 'package:salesman/core/components/menu_top_app_bar.dart';
 
 class Menu extends StatelessWidget {
-  Menu({Key? key}) : super(key: key);
+  Menu({
+    Key? key,
+  }) : super(key: key);
   final List<MenuButtonModel> listOfMenuButtons = [
     MenuButtonModel(
         title: "client", iconName: "client", disabled: false, onTap: () {}),
@@ -48,11 +50,12 @@ class Menu extends StatelessWidget {
         if (state is CompanyProfileEmptyState) {
           Navigator.popAndPushNamed(context, RouteNames.profileCreation);
         }
-        if (state is ErrorActiveFeaturesState) {
+        if (state is ErrorAddingActiveFeaturesState) {
           snackbarMessage(
               context,
               "Something went wrong... Please reach out to us.",
               MessageType.failed);
+          Navigator.popAndPushNamed(context, RouteNames.profileCreation);
         }
         if (state is FetchActiveFeaturesState) {
           BlocProvider.of<MenuBloc>(context).add(FetchActiveFeaturesEvent());
@@ -61,17 +64,23 @@ class Menu extends StatelessWidget {
           BlocProvider.of<MenuBloc>(context)
               .add(AddActiveFeaturesEvent(ActiveFeaturesModel()));
         }
+        if (state is FetchedActiveFeaturesState) {
+          BlocProvider.of<MenuBloc>(context).add(FetchAllDetailsEvent());
+        }
+        if (state is ErrorAllDetailsState) {
+          snackbarMessage(
+              context,
+              "Something went wrong... Please reach out to us.",
+              MessageType.failed);
+          Navigator.popAndPushNamed(context, RouteNames.profileCreation);
+        }
       },
       child: MobileLayout(
           topAppBar: BlocBuilder<MenuBloc, MenuState>(
             builder: (context, state) {
-              if (state is MenuInitialSate) {
-                BlocProvider.of<MenuBloc>(context)
-                    .add(FetchCompanyProfileEvent());
-              }
-              if (state is MenuCompanyProfileFetchedState) {
+              if (state is FetchedAllDetailsState) {
                 final CompanyProfileModel companyProfile = state.companyProfile;
-                return MenuAppBar(
+                return MenuTopAppBar(
                     companyProfile: companyProfile, currentPage: "menu");
               }
               return const SizedBox();
@@ -81,7 +90,7 @@ class Menu extends StatelessWidget {
           bottomAppBarRequired: false,
           body: BlocBuilder<MenuBloc, MenuState>(
             builder: (context, state) {
-              if (state is FetchedActiveFeaturesState) {
+              if (state is FetchedAllDetailsState) {
                 final ActiveFeaturesModel activeFeatures = state.activeFeatures;
                 return Column(
                   children: [
@@ -92,15 +101,15 @@ class Menu extends StatelessWidget {
                           title: "client",
                           iconName: "client",
                           disabled: activeFeatures.disableClient,
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
+                          onTap: () {},
                         ),
                         MenuButtonModel(
                           title: "item",
                           iconName: "item",
                           disabled: activeFeatures.disableItem,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.pushNamed(context, RouteNames.viewItem);
+                          },
                         ),
                       ],
                       groupName: "details",
