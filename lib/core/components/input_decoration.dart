@@ -1,5 +1,6 @@
 // flutter import:
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 // project import:
 import 'package:salesman/config/layouts/design_values.dart';
@@ -10,6 +11,8 @@ InputDecoration inputDecoration(
   BuildContext context, {
   required String labelText,
   required String hintText,
+  bool showCurrency = false,
+  Widget? suffixIconWidget,
   bool usernameSuffix = false,
   String? errorText,
   required bool inFocus,
@@ -22,6 +25,16 @@ InputDecoration inputDecoration(
       right: designValues(context).textContentPaddingHorizontal,
       bottom: designValues(context).textCornerRadius,
     ),
+    prefixIcon: showCurrency
+        ? Padding(
+            padding: const EdgeInsets.symmetric(vertical: 13),
+            child: SvgPicture.asset(
+              "assets/icons/svgs/inr.svg",
+              color: AppColors.secondaryDark,
+            ),
+          )
+        : null,
+    suffixIcon: suffixIconWidget,
     suffix: usernameSuffix
         ? Padding(
             padding: const EdgeInsets.only(left: 13),

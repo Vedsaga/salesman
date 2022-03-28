@@ -101,7 +101,9 @@ class Menu extends StatelessWidget {
                           title: "client",
                           iconName: "client",
                           disabled: activeFeatures.disableClient,
-                          onTap: () {},
+                          onTap: () {
+                            snackbarMessage(context, "Will Implement Soon!", MessageType.normal);
+                            },
                         ),
                         MenuButtonModel(
                           title: "item",

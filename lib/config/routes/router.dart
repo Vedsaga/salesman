@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Package imports:
 import 'package:salesman/config/routes/route_name.dart';
+import 'package:salesman/modules/item/add/bloc/add_item_bloc.dart';
+import 'package:salesman/modules/item/add/screens/add_item.dart';
 import 'package:salesman/modules/item/view/bloc/view_item_bloc.dart';
 import 'package:salesman/modules/item/view/screens/view_items.dart';
 import 'package:salesman/modules/menu/bloc/menu_bloc.dart';
@@ -45,6 +47,13 @@ class AppRouter {
                   child: const ViewItem(),
                 );
             });
+      case RouteNames.addItem:
+        return MaterialPageRoute(builder: (_) {
+          return BlocProvider<AddItemBloc>(
+            create: (context) => AddItemBloc(),
+            child: const AddItem(),
+          );
+        });
       default:
         return MaterialPageRoute(builder: (_) {
           return BlocProvider<ProfileCheckBloc>(

@@ -28,10 +28,11 @@ DesignValuesModel designValues(BuildContext context) {
     textCornerRadius: 0.0089285714285714 * MediaQuery.of(context).size.height,
     menuButtonHeight: 0.0613839285714286 * MediaQuery.of(context).size.height,
     menuButtonWidth: 0.3861607142857143 * MediaQuery.of(context).size.height,
-    design34: 0.0379464285714286 * MediaQuery.of(context).size.height,
+    cornerRadius34: 0.0379464285714286 * MediaQuery.of(context).size.height,
     roundButtonHeight: 0.0613839285714286 * MediaQuery.of(context).size.height,
     roundButtonRadius: 0.0379464285714286 * MediaQuery.of(context).size.height,
     roundButtonHorizontalPadding:
         0.0234375 * MediaQuery.of(context).size.height,
+    cornerRadius13: 0.0145089285714286 * MediaQuery.of(context).size.height,
   );
 }

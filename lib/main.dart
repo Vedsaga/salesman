@@ -16,9 +16,7 @@ AppDatabase appDatabaseInstance = AppDatabase();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await Hive.initFlutter();
-
   Hive.registerAdapter(AgentProfileModelAdapter());
   await Hive.openBox<AgentProfileModel>('agent_profile');
 
@@ -27,8 +25,6 @@ Future<void> main() async {
 
   Hive.registerAdapter(ActiveFeaturesModelAdapter());
   await Hive.openBox<ActiveFeaturesModel>('active_features');
-
-
 
   runApp(SalemanApp());
 }

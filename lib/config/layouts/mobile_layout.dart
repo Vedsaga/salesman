@@ -11,7 +11,7 @@ class MobileLayout extends StatelessWidget {
       required this.topAppBar,
       required this.body,
       required this.bottomAppBar,
-       this.bottomAppBarRequired = false})
+      this.bottomAppBarRequired = true})
       : super(key: key);
 
   final Widget topAppBar;

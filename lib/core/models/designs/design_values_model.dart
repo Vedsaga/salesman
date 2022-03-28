@@ -19,10 +19,11 @@ class DesignValuesModel {
   double textCornerRadius;
   double menuButtonHeight;
   double menuButtonWidth;
-  double design34;
+  double cornerRadius34;
   double roundButtonHeight;
   double roundButtonRadius;
   double roundButtonHorizontalPadding;
+  double cornerRadius13;
   DesignValuesModel({
     required this.screenWidth,
     required this.screenHeight,
@@ -44,11 +45,10 @@ class DesignValuesModel {
     required this.textCornerRadius,
     required this.menuButtonHeight,
     required this.menuButtonWidth,
-    required this.design34,
+    required this.cornerRadius34,
     required this.roundButtonHeight,
     required this.roundButtonRadius,
     required this.roundButtonHorizontalPadding,
-
+    required this.cornerRadius13,
   });
-  
 }

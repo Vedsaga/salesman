@@ -61,7 +61,7 @@ class ModelClient extends Table {
 class ModelItem extends Table {
   IntColumn get itemId => integer().autoIncrement()();
   TextColumn get itemName => text().withLength(min: 3, max: 50)();
-  TextColumn get tag => text().withLength(min: 3, max: 20)();
+  TextColumn get unit => text().withLength(min: 3, max: 20)();
   RealColumn get sellingPrice => real().withDefault(const Constant(0.0))();
   RealColumn get buyingPrice => real().withDefault(const Constant(0.0))();
   RealColumn get availableQuantity => real().withDefault(const Constant(0.0))();

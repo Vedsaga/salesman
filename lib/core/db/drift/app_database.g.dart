@@ -274,7 +274,7 @@ class $ModelClientTable extends ModelClient
 class ModelItemData extends DataClass implements Insertable<ModelItemData> {
   final int itemId;
   final String itemName;
-  final String tag;
+  final String unit;
   final double sellingPrice;
   final double buyingPrice;
   final double availableQuantity;
@@ -283,7 +283,7 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
   ModelItemData(
       {required this.itemId,
       required this.itemName,
-      required this.tag,
+      required this.unit,
       required this.sellingPrice,
       required this.buyingPrice,
       required this.availableQuantity,
@@ -296,8 +296,8 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
           .mapFromDatabaseResponse(data['${effectivePrefix}item_id'])!,
       itemName: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}item_name'])!,
-      tag: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}tag'])!,
+      unit: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}unit'])!,
       sellingPrice: const RealType()
           .mapFromDatabaseResponse(data['${effectivePrefix}selling_price'])!,
       buyingPrice: const RealType()
@@ -315,7 +315,7 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
     final map = <String, Expression>{};
     map['item_id'] = Variable<int>(itemId);
     map['item_name'] = Variable<String>(itemName);
-    map['tag'] = Variable<String>(tag);
+    map['unit'] = Variable<String>(unit);
     map['selling_price'] = Variable<double>(sellingPrice);
     map['buying_price'] = Variable<double>(buyingPrice);
     map['available_quantity'] = Variable<double>(availableQuantity);
@@ -328,7 +328,7 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
     return ModelItemCompanion(
       itemId: Value(itemId),
       itemName: Value(itemName),
-      tag: Value(tag),
+      unit: Value(unit),
       sellingPrice: Value(sellingPrice),
       buyingPrice: Value(buyingPrice),
       availableQuantity: Value(availableQuantity),
@@ -343,7 +343,7 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
     return ModelItemData(
       itemId: serializer.fromJson<int>(json['itemId']),
       itemName: serializer.fromJson<String>(json['itemName']),
-      tag: serializer.fromJson<String>(json['tag']),
+      unit: serializer.fromJson<String>(json['unit']),
       sellingPrice: serializer.fromJson<double>(json['sellingPrice']),
       buyingPrice: serializer.fromJson<double>(json['buyingPrice']),
       availableQuantity: serializer.fromJson<double>(json['availableQuantity']),
@@ -357,7 +357,7 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
     return <String, dynamic>{
       'itemId': serializer.toJson<int>(itemId),
       'itemName': serializer.toJson<String>(itemName),
-      'tag': serializer.toJson<String>(tag),
+      'unit': serializer.toJson<String>(unit),
       'sellingPrice': serializer.toJson<double>(sellingPrice),
       'buyingPrice': serializer.toJson<double>(buyingPrice),
       'availableQuantity': serializer.toJson<double>(availableQuantity),
@@ -369,7 +369,7 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
   ModelItemData copyWith(
           {int? itemId,
           String? itemName,
-          String? tag,
+          String? unit,
           double? sellingPrice,
           double? buyingPrice,
           double? availableQuantity,
@@ -378,7 +378,7 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
       ModelItemData(
         itemId: itemId ?? this.itemId,
         itemName: itemName ?? this.itemName,
-        tag: tag ?? this.tag,
+        unit: unit ?? this.unit,
         sellingPrice: sellingPrice ?? this.sellingPrice,
         buyingPrice: buyingPrice ?? this.buyingPrice,
         availableQuantity: availableQuantity ?? this.availableQuantity,
@@ -390,7 +390,7 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
     return (StringBuffer('ModelItemData(')
           ..write('itemId: $itemId, ')
           ..write('itemName: $itemName, ')
-          ..write('tag: $tag, ')
+          ..write('unit: $unit, ')
           ..write('sellingPrice: $sellingPrice, ')
           ..write('buyingPrice: $buyingPrice, ')
           ..write('availableQuantity: $availableQuantity, ')
@@ -401,7 +401,7 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
   }
 
   @override
-  int get hashCode => Object.hash(itemId, itemName, tag, sellingPrice,
+  int get hashCode => Object.hash(itemId, itemName, unit, sellingPrice,
       buyingPrice, availableQuantity, reservedQuantity, isActive);
   @override
   bool operator ==(Object other) =>
@@ -409,7 +409,7 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
       (other is ModelItemData &&
           other.itemId == this.itemId &&
           other.itemName == this.itemName &&
-          other.tag == this.tag &&
+          other.unit == this.unit &&
           other.sellingPrice == this.sellingPrice &&
           other.buyingPrice == this.buyingPrice &&
           other.availableQuantity == this.availableQuantity &&
@@ -420,7 +420,7 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
 class ModelItemCompanion extends UpdateCompanion<ModelItemData> {
   final Value<int> itemId;
   final Value<String> itemName;
-  final Value<String> tag;
+  final Value<String> unit;
   final Value<double> sellingPrice;
   final Value<double> buyingPrice;
   final Value<double> availableQuantity;
@@ -429,7 +429,7 @@ class ModelItemCompanion extends UpdateCompanion<ModelItemData> {
   const ModelItemCompanion({
     this.itemId = const Value.absent(),
     this.itemName = const Value.absent(),
-    this.tag = const Value.absent(),
+    this.unit = const Value.absent(),
     this.sellingPrice = const Value.absent(),
     this.buyingPrice = const Value.absent(),
     this.availableQuantity = const Value.absent(),
@@ -439,18 +439,18 @@ class ModelItemCompanion extends UpdateCompanion<ModelItemData> {
   ModelItemCompanion.insert({
     this.itemId = const Value.absent(),
     required String itemName,
-    required String tag,
+    required String unit,
     this.sellingPrice = const Value.absent(),
     this.buyingPrice = const Value.absent(),
     this.availableQuantity = const Value.absent(),
     this.reservedQuantity = const Value.absent(),
     this.isActive = const Value.absent(),
   })  : itemName = Value(itemName),
-        tag = Value(tag);
+        unit = Value(unit);
   static Insertable<ModelItemData> custom({
     Expression<int>? itemId,
     Expression<String>? itemName,
-    Expression<String>? tag,
+    Expression<String>? unit,
     Expression<double>? sellingPrice,
     Expression<double>? buyingPrice,
     Expression<double>? availableQuantity,
@@ -460,7 +460,7 @@ class ModelItemCompanion extends UpdateCompanion<ModelItemData> {
     return RawValuesInsertable({
       if (itemId != null) 'item_id': itemId,
       if (itemName != null) 'item_name': itemName,
-      if (tag != null) 'tag': tag,
+      if (unit != null) 'unit': unit,
       if (sellingPrice != null) 'selling_price': sellingPrice,
       if (buyingPrice != null) 'buying_price': buyingPrice,
       if (availableQuantity != null) 'available_quantity': availableQuantity,
@@ -472,7 +472,7 @@ class ModelItemCompanion extends UpdateCompanion<ModelItemData> {
   ModelItemCompanion copyWith(
       {Value<int>? itemId,
       Value<String>? itemName,
-      Value<String>? tag,
+      Value<String>? unit,
       Value<double>? sellingPrice,
       Value<double>? buyingPrice,
       Value<double>? availableQuantity,
@@ -481,7 +481,7 @@ class ModelItemCompanion extends UpdateCompanion<ModelItemData> {
     return ModelItemCompanion(
       itemId: itemId ?? this.itemId,
       itemName: itemName ?? this.itemName,
-      tag: tag ?? this.tag,
+      unit: unit ?? this.unit,
       sellingPrice: sellingPrice ?? this.sellingPrice,
       buyingPrice: buyingPrice ?? this.buyingPrice,
       availableQuantity: availableQuantity ?? this.availableQuantity,
@@ -499,8 +499,8 @@ class ModelItemCompanion extends UpdateCompanion<ModelItemData> {
     if (itemName.present) {
       map['item_name'] = Variable<String>(itemName.value);
     }
-    if (tag.present) {
-      map['tag'] = Variable<String>(tag.value);
+    if (unit.present) {
+      map['unit'] = Variable<String>(unit.value);
     }
     if (sellingPrice.present) {
       map['selling_price'] = Variable<double>(sellingPrice.value);
@@ -525,7 +525,7 @@ class ModelItemCompanion extends UpdateCompanion<ModelItemData> {
     return (StringBuffer('ModelItemCompanion(')
           ..write('itemId: $itemId, ')
           ..write('itemName: $itemName, ')
-          ..write('tag: $tag, ')
+          ..write('unit: $unit, ')
           ..write('sellingPrice: $sellingPrice, ')
           ..write('buyingPrice: $buyingPrice, ')
           ..write('availableQuantity: $availableQuantity, ')
@@ -557,10 +557,10 @@ class $ModelItemTable extends ModelItem
           GeneratedColumn.checkTextLength(minTextLength: 3, maxTextLength: 50),
       type: const StringType(),
       requiredDuringInsert: true);
-  final VerificationMeta _tagMeta = const VerificationMeta('tag');
+  final VerificationMeta _unitMeta = const VerificationMeta('unit');
   @override
-  late final GeneratedColumn<String?> tag = GeneratedColumn<String?>(
-      'tag', aliasedName, false,
+  late final GeneratedColumn<String?> unit = GeneratedColumn<String?>(
+      'unit', aliasedName, false,
       additionalChecks:
           GeneratedColumn.checkTextLength(minTextLength: 3, maxTextLength: 20),
       type: const StringType(),
@@ -609,7 +609,7 @@ class $ModelItemTable extends ModelItem
   List<GeneratedColumn> get $columns => [
         itemId,
         itemName,
-        tag,
+        unit,
         sellingPrice,
         buyingPrice,
         availableQuantity,
@@ -635,11 +635,11 @@ class $ModelItemTable extends ModelItem
     } else if (isInserting) {
       context.missing(_itemNameMeta);
     }
-    if (data.containsKey('tag')) {
+    if (data.containsKey('unit')) {
       context.handle(
-          _tagMeta, tag.isAcceptableOrUnknown(data['tag']!, _tagMeta));
+          _unitMeta, unit.isAcceptableOrUnknown(data['unit']!, _unitMeta));
     } else if (isInserting) {
-      context.missing(_tagMeta);
+      context.missing(_unitMeta);
     }
     if (data.containsKey('selling_price')) {
       context.handle(

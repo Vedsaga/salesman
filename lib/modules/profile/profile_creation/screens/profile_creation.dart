@@ -147,9 +147,8 @@ class _ProfileCreationState extends State<ProfileCreation> {
           snackbarMessage(
               context, "yeee.. Your Profile Created!", MessageType.success);
           // delay for 2 seconds
-          Future.delayed(const Duration(seconds: 2), () {
-            Navigator.popAndPushNamed(context, RouteNames.menu);
-          });
+          Future.delayed(const Duration(seconds: 2));
+          Navigator.popAndPushNamed(context, RouteNames.menu);
         }
 
         if (state.status.isSubmissionFailure) {
@@ -164,7 +163,6 @@ class _ProfileCreationState extends State<ProfileCreation> {
       },
       child: MobileLayout(
         topAppBar: const NormalTopAppBar(title: "agent"),
-        bottomAppBarRequired: true,
         bottomAppBar: BlocBuilder<ProfileCreationBloc, ProfileCreationState>(
           builder: (context, state) {
             return ActionButton(
@@ -210,7 +208,7 @@ class _ProfileCreationState extends State<ProfileCreation> {
                   textInputAction: TextInputAction.next,
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
-                SizedBox(height: designValues(context).design34),
+                SizedBox(height: designValues(context).cornerRadius34),
                 TextFormField(
                   initialValue: state.phone.value,
                   focusNode: _phoneFocusNode,
@@ -236,7 +234,7 @@ class _ProfileCreationState extends State<ProfileCreation> {
                         _phoneFocusNode.hasFocus ? _phoneErrorText() : null,
                   ),
                 ),
-                SizedBox(height: designValues(context).design34),
+                SizedBox(height: designValues(context).cornerRadius34),
                 TextFormField(
                   initialValue: state.username.value,
                   focusNode: _usernameFocusNode,
@@ -268,7 +266,7 @@ class _ProfileCreationState extends State<ProfileCreation> {
                 const NormalTopAppBar(
                   title: "Company",
                 ),
-                SizedBox(height: designValues(context).design34),
+                SizedBox(height: designValues(context).cornerRadius34),
                 TextFormField(
                   initialValue: state.companyName.value,
                   focusNode: _companyNameFocusNode,
