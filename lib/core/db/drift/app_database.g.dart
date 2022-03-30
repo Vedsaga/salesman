@@ -11,12 +11,18 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
   final int clientId;
   final String clientName;
   final String clientPhone;
+  final double totalTrade;
+  final double dueAmount;
   final bool isActive;
+  final DateTime? lastTradeOn;
   ModelClientData(
       {required this.clientId,
       required this.clientName,
       required this.clientPhone,
-      required this.isActive});
+      required this.totalTrade,
+      required this.dueAmount,
+      required this.isActive,
+      this.lastTradeOn});
   factory ModelClientData.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -27,8 +33,14 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
           .mapFromDatabaseResponse(data['${effectivePrefix}client_name'])!,
       clientPhone: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}client_phone'])!,
+      totalTrade: const RealType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}total_trade'])!,
+      dueAmount: const RealType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}due_amount'])!,
       isActive: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}is_active'])!,
+      lastTradeOn: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}last_trade_on']),
     );
   }
   @override
@@ -37,7 +49,12 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
     map['client_id'] = Variable<int>(clientId);
     map['client_name'] = Variable<String>(clientName);
     map['client_phone'] = Variable<String>(clientPhone);
+    map['total_trade'] = Variable<double>(totalTrade);
+    map['due_amount'] = Variable<double>(dueAmount);
     map['is_active'] = Variable<bool>(isActive);
+    if (!nullToAbsent || lastTradeOn != null) {
+      map['last_trade_on'] = Variable<DateTime?>(lastTradeOn);
+    }
     return map;
   }
 
@@ -46,7 +63,12 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
       clientId: Value(clientId),
       clientName: Value(clientName),
       clientPhone: Value(clientPhone),
+      totalTrade: Value(totalTrade),
+      dueAmount: Value(dueAmount),
       isActive: Value(isActive),
+      lastTradeOn: lastTradeOn == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastTradeOn),
     );
   }
 
@@ -57,7 +79,10 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
       clientId: serializer.fromJson<int>(json['clientId']),
       clientName: serializer.fromJson<String>(json['clientName']),
       clientPhone: serializer.fromJson<String>(json['clientPhone']),
+      totalTrade: serializer.fromJson<double>(json['totalTrade']),
+      dueAmount: serializer.fromJson<double>(json['dueAmount']),
       isActive: serializer.fromJson<bool>(json['isActive']),
+      lastTradeOn: serializer.fromJson<DateTime?>(json['lastTradeOn']),
     );
   }
   @override
@@ -67,7 +92,10 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
       'clientId': serializer.toJson<int>(clientId),
       'clientName': serializer.toJson<String>(clientName),
       'clientPhone': serializer.toJson<String>(clientPhone),
+      'totalTrade': serializer.toJson<double>(totalTrade),
+      'dueAmount': serializer.toJson<double>(dueAmount),
       'isActive': serializer.toJson<bool>(isActive),
+      'lastTradeOn': serializer.toJson<DateTime?>(lastTradeOn),
     };
   }
 
@@ -75,12 +103,18 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
           {int? clientId,
           String? clientName,
           String? clientPhone,
-          bool? isActive}) =>
+          double? totalTrade,
+          double? dueAmount,
+          bool? isActive,
+          DateTime? lastTradeOn}) =>
       ModelClientData(
         clientId: clientId ?? this.clientId,
         clientName: clientName ?? this.clientName,
         clientPhone: clientPhone ?? this.clientPhone,
+        totalTrade: totalTrade ?? this.totalTrade,
+        dueAmount: dueAmount ?? this.dueAmount,
         isActive: isActive ?? this.isActive,
+        lastTradeOn: lastTradeOn ?? this.lastTradeOn,
       );
   @override
   String toString() {
@@ -88,13 +122,17 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
           ..write('clientId: $clientId, ')
           ..write('clientName: $clientName, ')
           ..write('clientPhone: $clientPhone, ')
-          ..write('isActive: $isActive')
+          ..write('totalTrade: $totalTrade, ')
+          ..write('dueAmount: $dueAmount, ')
+          ..write('isActive: $isActive, ')
+          ..write('lastTradeOn: $lastTradeOn')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(clientId, clientName, clientPhone, isActive);
+  int get hashCode => Object.hash(clientId, clientName, clientPhone, totalTrade,
+      dueAmount, isActive, lastTradeOn);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -102,38 +140,56 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
           other.clientId == this.clientId &&
           other.clientName == this.clientName &&
           other.clientPhone == this.clientPhone &&
-          other.isActive == this.isActive);
+          other.totalTrade == this.totalTrade &&
+          other.dueAmount == this.dueAmount &&
+          other.isActive == this.isActive &&
+          other.lastTradeOn == this.lastTradeOn);
 }
 
 class ModelClientCompanion extends UpdateCompanion<ModelClientData> {
   final Value<int> clientId;
   final Value<String> clientName;
   final Value<String> clientPhone;
+  final Value<double> totalTrade;
+  final Value<double> dueAmount;
   final Value<bool> isActive;
+  final Value<DateTime?> lastTradeOn;
   const ModelClientCompanion({
     this.clientId = const Value.absent(),
     this.clientName = const Value.absent(),
     this.clientPhone = const Value.absent(),
+    this.totalTrade = const Value.absent(),
+    this.dueAmount = const Value.absent(),
     this.isActive = const Value.absent(),
+    this.lastTradeOn = const Value.absent(),
   });
   ModelClientCompanion.insert({
     this.clientId = const Value.absent(),
     required String clientName,
     required String clientPhone,
+    this.totalTrade = const Value.absent(),
+    this.dueAmount = const Value.absent(),
     this.isActive = const Value.absent(),
+    this.lastTradeOn = const Value.absent(),
   })  : clientName = Value(clientName),
         clientPhone = Value(clientPhone);
   static Insertable<ModelClientData> custom({
     Expression<int>? clientId,
     Expression<String>? clientName,
     Expression<String>? clientPhone,
+    Expression<double>? totalTrade,
+    Expression<double>? dueAmount,
     Expression<bool>? isActive,
+    Expression<DateTime?>? lastTradeOn,
   }) {
     return RawValuesInsertable({
       if (clientId != null) 'client_id': clientId,
       if (clientName != null) 'client_name': clientName,
       if (clientPhone != null) 'client_phone': clientPhone,
+      if (totalTrade != null) 'total_trade': totalTrade,
+      if (dueAmount != null) 'due_amount': dueAmount,
       if (isActive != null) 'is_active': isActive,
+      if (lastTradeOn != null) 'last_trade_on': lastTradeOn,
     });
   }
 
@@ -141,12 +197,18 @@ class ModelClientCompanion extends UpdateCompanion<ModelClientData> {
       {Value<int>? clientId,
       Value<String>? clientName,
       Value<String>? clientPhone,
-      Value<bool>? isActive}) {
+      Value<double>? totalTrade,
+      Value<double>? dueAmount,
+      Value<bool>? isActive,
+      Value<DateTime?>? lastTradeOn}) {
     return ModelClientCompanion(
       clientId: clientId ?? this.clientId,
       clientName: clientName ?? this.clientName,
       clientPhone: clientPhone ?? this.clientPhone,
+      totalTrade: totalTrade ?? this.totalTrade,
+      dueAmount: dueAmount ?? this.dueAmount,
       isActive: isActive ?? this.isActive,
+      lastTradeOn: lastTradeOn ?? this.lastTradeOn,
     );
   }
 
@@ -162,8 +224,17 @@ class ModelClientCompanion extends UpdateCompanion<ModelClientData> {
     if (clientPhone.present) {
       map['client_phone'] = Variable<String>(clientPhone.value);
     }
+    if (totalTrade.present) {
+      map['total_trade'] = Variable<double>(totalTrade.value);
+    }
+    if (dueAmount.present) {
+      map['due_amount'] = Variable<double>(dueAmount.value);
+    }
     if (isActive.present) {
       map['is_active'] = Variable<bool>(isActive.value);
+    }
+    if (lastTradeOn.present) {
+      map['last_trade_on'] = Variable<DateTime?>(lastTradeOn.value);
     }
     return map;
   }
@@ -174,7 +245,10 @@ class ModelClientCompanion extends UpdateCompanion<ModelClientData> {
           ..write('clientId: $clientId, ')
           ..write('clientName: $clientName, ')
           ..write('clientPhone: $clientPhone, ')
-          ..write('isActive: $isActive')
+          ..write('totalTrade: $totalTrade, ')
+          ..write('dueAmount: $dueAmount, ')
+          ..write('isActive: $isActive, ')
+          ..write('lastTradeOn: $lastTradeOn')
           ..write(')'))
         .toString();
   }
@@ -210,6 +284,20 @@ class $ModelClientTable extends ModelClient
           GeneratedColumn.checkTextLength(minTextLength: 7, maxTextLength: 15),
       type: const StringType(),
       requiredDuringInsert: true);
+  final VerificationMeta _totalTradeMeta = const VerificationMeta('totalTrade');
+  @override
+  late final GeneratedColumn<double?> totalTrade = GeneratedColumn<double?>(
+      'total_trade', aliasedName, false,
+      type: const RealType(),
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0.0));
+  final VerificationMeta _dueAmountMeta = const VerificationMeta('dueAmount');
+  @override
+  late final GeneratedColumn<double?> dueAmount = GeneratedColumn<double?>(
+      'due_amount', aliasedName, false,
+      type: const RealType(),
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0.0));
   final VerificationMeta _isActiveMeta = const VerificationMeta('isActive');
   @override
   late final GeneratedColumn<bool?> isActive = GeneratedColumn<bool?>(
@@ -218,9 +306,22 @@ class $ModelClientTable extends ModelClient
       requiredDuringInsert: false,
       defaultConstraints: 'CHECK (is_active IN (0, 1))',
       defaultValue: const Constant(true));
+  final VerificationMeta _lastTradeOnMeta =
+      const VerificationMeta('lastTradeOn');
   @override
-  List<GeneratedColumn> get $columns =>
-      [clientId, clientName, clientPhone, isActive];
+  late final GeneratedColumn<DateTime?> lastTradeOn =
+      GeneratedColumn<DateTime?>('last_trade_on', aliasedName, true,
+          type: const IntType(), requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        clientId,
+        clientName,
+        clientPhone,
+        totalTrade,
+        dueAmount,
+        isActive,
+        lastTradeOn
+      ];
   @override
   String get aliasedName => _alias ?? 'model_client';
   @override
@@ -250,9 +351,25 @@ class $ModelClientTable extends ModelClient
     } else if (isInserting) {
       context.missing(_clientPhoneMeta);
     }
+    if (data.containsKey('total_trade')) {
+      context.handle(
+          _totalTradeMeta,
+          totalTrade.isAcceptableOrUnknown(
+              data['total_trade']!, _totalTradeMeta));
+    }
+    if (data.containsKey('due_amount')) {
+      context.handle(_dueAmountMeta,
+          dueAmount.isAcceptableOrUnknown(data['due_amount']!, _dueAmountMeta));
+    }
     if (data.containsKey('is_active')) {
       context.handle(_isActiveMeta,
           isActive.isAcceptableOrUnknown(data['is_active']!, _isActiveMeta));
+    }
+    if (data.containsKey('last_trade_on')) {
+      context.handle(
+          _lastTradeOnMeta,
+          lastTradeOn.isAcceptableOrUnknown(
+              data['last_trade_on']!, _lastTradeOnMeta));
     }
     return context;
   }

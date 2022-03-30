@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:salesman/core/db/drift/app_database.dart';
+import 'package:salesman/core/db/drift/models/model_item.dart';
 
 part 'order_table_queries.g.dart';
 

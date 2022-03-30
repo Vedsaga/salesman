@@ -32,15 +32,44 @@ class ItemFieldsChange extends AddItemEvent {
       ];
 }
 
-class ItemNameFieldUnfocused extends AddItemEvent {}
+class ItemNameFieldUnfocused extends AddItemEvent {
+  const ItemNameFieldUnfocused({required this.unit});
 
-class ItemUnitFieldUnfocused extends AddItemEvent {}
+  final String unit;
+}
 
-class ItemSellingPriceFieldUnfocused extends AddItemEvent {}
+class ItemSellingPriceFieldUnfocused extends AddItemEvent {
+  const ItemSellingPriceFieldUnfocused({required this.unit});
 
-class ItemBuyingPriceFieldUnfocused extends AddItemEvent {}
+  final String unit;
+}
 
-class ItemAvailableQuantityFieldUnfocused extends AddItemEvent {}
+class ItemBuyingPriceFieldUnfocused extends AddItemEvent {
+    const ItemBuyingPriceFieldUnfocused({required this.unit});
 
-class ItemFormSubmitted extends AddItemEvent {}
+  final String unit;
+}
 
+class ItemAvailableQuantityFieldUnfocused extends AddItemEvent {
+    const ItemAvailableQuantityFieldUnfocused({required this.unit});
+
+  final String unit;
+}
+
+class ItemFormSubmitted extends AddItemEvent {
+    const ItemFormSubmitted({required this.unit});
+
+  final String unit;
+}
+
+class ShowUnitEvent extends AddItemEvent {
+    const ShowUnitEvent({required this.unit});
+
+  final String unit;
+}
+
+class NotShowUnitEvent extends AddItemEvent {
+    const NotShowUnitEvent({required this.unit});
+
+  final String unit;
+}

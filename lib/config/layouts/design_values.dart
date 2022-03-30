@@ -34,5 +34,9 @@ DesignValuesModel designValues(BuildContext context) {
     roundButtonHorizontalPadding:
         0.0234375 * MediaQuery.of(context).size.height,
     cornerRadius13: 0.0145089285714286 * MediaQuery.of(context).size.height,
+    unitDropDownLeftPadding: 0.55 * MediaQuery.of(context).size.width,
+    cornerRadius8: 0.0089285714285714 * MediaQuery.of(context).size.height,
+    padding13: 0.0145089285714286 * MediaQuery.of(context).size.height,
+    padding21: 0.0234375 * MediaQuery.of(context).size.height,
   );
 }

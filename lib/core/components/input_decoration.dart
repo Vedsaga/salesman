@@ -47,7 +47,10 @@ InputDecoration inputDecoration(
           )
         : null,
     floatingLabelBehavior: FloatingLabelBehavior.auto,
-    labelText: labelText,
+    labelText: labelText.toUpperCase().replaceFirst(
+          labelText.substring(0, 1),
+          labelText.substring(0, 1).toUpperCase(),
+        ),
     labelStyle: inFocus ? AppTheme.of(context)
                 .textTheme
                 .subtitle2

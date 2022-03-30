@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:salesman/config/routes/route_name.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/fonts.dart';
-import 'package:salesman/core/components/round_button.dart';
+import 'package:salesman/core/components/custom_round_button.dart';
 import 'package:salesman/modules/splashscreen/bloc/profile_check_bloc.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -89,7 +89,7 @@ class SplashScreen extends StatelessWidget {
                   return Padding(
                       padding: const EdgeInsets.only(bottom: 34),
                       child: Center(
-                        child: RoundButton(
+                        child: CustomRoundButton(
                             label: "Create Profile",
                             svgPath: "profile",
                             onPressed: () {

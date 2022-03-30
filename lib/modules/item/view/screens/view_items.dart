@@ -1,9 +1,14 @@
 // flutter imports
 import 'package:flutter/material.dart';
+
+// third party imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+// project imports:
 import 'package:salesman/config/layouts/mobile_layout.dart';
 import 'package:salesman/config/routes/route_name.dart';
 import 'package:salesman/core/components/bottom_navigation.dart';
+import 'package:salesman/core/components/empty_message.dart';
 import 'package:salesman/core/components/normal_top_app_bar.dart';
 import 'package:salesman/core/components/snackbar_message.dart';
 import 'package:salesman/modules/item/view/bloc/view_item_bloc.dart';
@@ -57,6 +62,11 @@ class _ViewItemState extends State<ViewItem> {
                 },
               );
             }
+            if (state is EmptyItemState) {
+              return const EmptyMessage(
+                message: 'No item have been added...',
+              );
+            }
             return const Text("Not Implemented");
           },
         ),
@@ -64,7 +74,7 @@ class _ViewItemState extends State<ViewItem> {
           onTapAddIcon: () {
             Navigator.pushNamed(
               context,
-              RouteNames.addItem,
+              RouteNames.addItemList,
             );
           },
         ),

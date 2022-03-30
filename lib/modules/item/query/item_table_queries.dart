@@ -3,6 +3,7 @@ import 'package:drift/drift.dart';
 
 // project imports:
 import 'package:salesman/core/db/drift/app_database.dart';
+import 'package:salesman/core/db/drift/models/model_item.dart';
 
 // part
 part 'item_table_queries.g.dart';
@@ -13,7 +14,7 @@ class ItemTableQueries extends DatabaseAccessor<AppDatabase>
   final AppDatabase db;
   ItemTableQueries(this.db) : super(db);
 
-  Future<int> insertItem(Insertable<ModelItemData> item) async {
+  Future<int> insertItem(ModelItemData item) async {
     return await into(modelItem).insert(item);
   }
 

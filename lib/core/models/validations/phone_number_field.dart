@@ -9,9 +9,9 @@ enum PhoneNumberValidationError {
   invalidCharacters
 }
 
-class PhoneNumber extends FormzInput<String, PhoneNumberValidationError> {
-  const PhoneNumber.pure([String value = '']) : super.pure(value);
-  const PhoneNumber.dirty([String value = '']) : super.dirty(value);
+class PhoneNumberField extends FormzInput<String, PhoneNumberValidationError> {
+  const PhoneNumberField.pure([String value = '']) : super.pure(value);
+  const PhoneNumberField.dirty([String value = '']) : super.dirty(value);
   // regex check for phone number
   static final RegExp _phoneNumberRegex = RegExp(r'^\d+$');
 

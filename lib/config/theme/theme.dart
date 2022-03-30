@@ -33,6 +33,7 @@ class AppTheme {
           fontWeight: FontWeight.w300,
           letterSpacing: -1.5,
           color: AppColors.dark,
+          overflow: TextOverflow.ellipsis,
         ),
         headline2: TextStyle(
           fontFamily: AppFonts.montserrat,
@@ -40,12 +41,14 @@ class AppTheme {
           fontWeight: FontWeight.w300,
           letterSpacing: -0.5,
           color: AppColors.dark,
+          overflow: TextOverflow.ellipsis,
         ),
         headline3: TextStyle(
           fontFamily: AppFonts.montserrat,
           fontSize: 48,
           fontWeight: FontWeight.w400,
           color: AppColors.dark,
+          overflow: TextOverflow.ellipsis,
         ),
         headline4: TextStyle(
           fontFamily: AppFonts.montserrat,
@@ -53,6 +56,7 @@ class AppTheme {
           fontWeight: FontWeight.w400,
           letterSpacing: 0.25,
           color: AppColors.dark,
+          overflow: TextOverflow.ellipsis,
         ),
         headline5: TextStyle(
           fontFamily: AppFonts.montserrat,
@@ -60,6 +64,7 @@ class AppTheme {
           fontWeight: FontWeight.w700,
           letterSpacing: 0.03,
           color: AppColors.dark,
+          overflow: TextOverflow.ellipsis,
         ),
         headline6: TextStyle(
           fontFamily: AppFonts.montserrat,
@@ -67,6 +72,7 @@ class AppTheme {
           fontWeight: FontWeight.w700,
           letterSpacing: 0.03,
           color: AppColors.dark,
+          overflow: TextOverflow.ellipsis,
         ),
         subtitle1: TextStyle(
           fontFamily: AppFonts.montserrat,
@@ -74,6 +80,7 @@ class AppTheme {
           fontWeight: FontWeight.w600,
           letterSpacing: 0.5,
           color: AppColors.grey,
+          overflow: TextOverflow.ellipsis,
         ),
         subtitle2: TextStyle(
           fontFamily: AppFonts.montserrat,
@@ -81,6 +88,7 @@ class AppTheme {
           fontWeight: FontWeight.w600,
           letterSpacing: 0.5,
           color: AppColors.grey,
+          overflow: TextOverflow.ellipsis,
         ),
         bodyText1: TextStyle(
           fontFamily: AppFonts.montserrat,
@@ -89,6 +97,7 @@ class AppTheme {
           // 3% of the original text size
           letterSpacing: 0.5,
           color: AppColors.dark,
+          overflow: TextOverflow.ellipsis,
         ),
         bodyText2: TextStyle(
           fontFamily: AppFonts.montserrat,
@@ -96,6 +105,7 @@ class AppTheme {
           fontWeight: FontWeight.w700,
           letterSpacing: 0.25,
           color: AppColors.dark,
+          overflow: TextOverflow.ellipsis,
         ),
         button: TextStyle(
           fontFamily: AppFonts.montserrat,
@@ -103,6 +113,7 @@ class AppTheme {
           fontWeight: FontWeight.w700,
           letterSpacing: 1.25,
           color: AppColors.light,
+          overflow: TextOverflow.ellipsis,
         ),
         caption: TextStyle(
           fontFamily: AppFonts.montserrat,
@@ -110,6 +121,7 @@ class AppTheme {
           fontWeight: FontWeight.w600,
           letterSpacing: 0.1,
           color: AppColors.dark,
+          overflow: TextOverflow.ellipsis,
         ),
         overline: TextStyle(
           fontFamily: AppFonts.montserrat,
@@ -117,6 +129,7 @@ class AppTheme {
           fontWeight: FontWeight.w400,
           letterSpacing: 1.5,
           color: AppColors.dark,
+          overflow: TextOverflow.ellipsis,
         ),
       ),
     );

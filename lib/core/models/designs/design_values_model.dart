@@ -24,6 +24,10 @@ class DesignValuesModel {
   double roundButtonRadius;
   double roundButtonHorizontalPadding;
   double cornerRadius13;
+  double unitDropDownLeftPadding;
+  double cornerRadius8;
+  double padding13;
+  double padding21;
   DesignValuesModel({
     required this.screenWidth,
     required this.screenHeight,
@@ -50,5 +54,9 @@ class DesignValuesModel {
     required this.roundButtonRadius,
     required this.roundButtonHorizontalPadding,
     required this.cornerRadius13,
+    required this.unitDropDownLeftPadding,
+    required this.cornerRadius8,
+    required this.padding13,
+    required this.padding21,
   });
 }

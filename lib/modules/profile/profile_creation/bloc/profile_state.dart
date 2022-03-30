@@ -3,14 +3,14 @@ part of 'profile_bloc.dart';
 class ProfileCreationState extends Equatable {
   const ProfileCreationState({
     this.agentName = const GenericField.pure(),
-    this.phone = const PhoneNumber.pure(),
+    this.phone = const PhoneNumberField.pure(),
     this.username = const GenericField.pure(),
     this.companyName = const GenericField.pure(),
     this.status = FormzStatus.pure,
   });
 
   final GenericField agentName;
-  final PhoneNumber phone;
+  final PhoneNumberField phone;
   final GenericField username;
   final GenericField companyName;
   final FormzStatus status;
@@ -26,7 +26,7 @@ class ProfileCreationState extends Equatable {
 
   ProfileCreationState copyWith({
     GenericField? agentName,
-    PhoneNumber? phone,
+    PhoneNumberField? phone,
     GenericField? username,
     GenericField? companyName,
     FormzStatus? status,

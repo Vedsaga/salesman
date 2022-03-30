@@ -12,7 +12,7 @@ ScaffoldFeatureController snackbarMessage(
   final Color _color = _getColor(type);
   return ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      duration: const Duration(milliseconds: 2000),
+      duration: const Duration(milliseconds: 1500),
       elevation: 6.0,
       behavior: SnackBarBehavior.floating,
       backgroundColor: AppColors.secondaryDark,

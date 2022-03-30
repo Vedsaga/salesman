@@ -5,7 +5,7 @@ import 'package:formz/formz.dart';
 
 // project imports
 import 'package:salesman/core/models/validations/generic_field.dart';
-import 'package:salesman/core/models/validations/phone_number.dart';
+import 'package:salesman/core/models/validations/phone_number_field.dart';
 import 'package:salesman/modules/profile/repositories/profile_repository.dart';
 
 // part
@@ -34,14 +34,14 @@ class ProfileCreationBloc
   void _onProfileChange(
       ProfileFieldsChange event, Emitter<ProfileCreationState> emit) {
     final agentName = GenericField.dirty(event.agentName);
-    final phone = PhoneNumber.dirty(event.phone);
+    final phone = PhoneNumberField.dirty(event.phone);
     final username = GenericField.dirty(event.username);
     final companyName = GenericField.dirty(event.companyName);
 
     emit(state.copyWith(
       agentName:
           agentName.valid ? agentName : GenericField.pure(event.agentName),
-      phone: phone.valid ? phone : PhoneNumber.pure(event.phone),
+      phone: phone.valid ? phone : PhoneNumberField.pure(event.phone),
       username: username.valid ? username : GenericField.pure(event.username),
       companyName: companyName.valid
           ? companyName
@@ -62,7 +62,7 @@ class ProfileCreationBloc
 
   void _onPhoneFieldUnfocused(
       PhoneFieldUnfocused event, Emitter<ProfileCreationState> emit) {
-    final phone = PhoneNumber.dirty(state.phone.value);
+    final phone = PhoneNumberField.dirty(state.phone.value);
     emit(state.copyWith(
       phone: phone,
       status: Formz.validate(
@@ -93,7 +93,7 @@ class ProfileCreationBloc
   void _onProfileFormSubmitted(
       ProfileFormSubmitted event, Emitter<ProfileCreationState> emit) async {
     final agentName = GenericField.dirty(state.agentName.value);
-    final phone = PhoneNumber.dirty(state.phone.value);
+    final phone = PhoneNumberField.dirty(state.phone.value);
     final username = GenericField.dirty(state.username.value);
     final companyName = GenericField.dirty(state.companyName.value);
     emit(state.copyWith(

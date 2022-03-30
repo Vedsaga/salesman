@@ -6,5 +6,7 @@ class RouteNames {
   static const String home = 'home';
   static const String menu = 'menu';
   static const String viewItem = 'viewItem';
-  static const String addItem = 'addItem';
+  static const String addItemList = 'addItemList';
+  static const String viewClientList = 'viewClientList';
+  static const String addClient = 'addClient';
 }

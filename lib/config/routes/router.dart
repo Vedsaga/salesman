@@ -6,6 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Package imports:
 import 'package:salesman/config/routes/route_name.dart';
+import 'package:salesman/modules/client/add/bloc/add_client_bloc.dart';
+import 'package:salesman/modules/client/add/screens/add_client.dart';
+import 'package:salesman/modules/client/view_list/bloc/view_client_bloc.dart';
+import 'package:salesman/modules/client/view_list/screens/view_client_list.dart';
 import 'package:salesman/modules/item/add/bloc/add_item_bloc.dart';
 import 'package:salesman/modules/item/add/screens/add_item.dart';
 import 'package:salesman/modules/item/view/bloc/view_item_bloc.dart';
@@ -18,7 +22,6 @@ import 'package:salesman/modules/profile/profile_creation/screens/profile_creati
 import 'package:salesman/modules/profile/repositories/profile_repository.dart';
 import 'package:salesman/modules/splashscreen/bloc/profile_check_bloc.dart';
 import 'package:salesman/modules/splashscreen/screens/splash_screen.dart';
-
 class AppRouter {
   Route onGenerateRoute(
     RouteSettings settings,
@@ -40,20 +43,34 @@ class AppRouter {
           );
         });
       case RouteNames.viewItem:
-        return MaterialPageRoute(
-            builder: (_) {
-              return BlocProvider<ViewItemBloc>(
-                  create: (context) => ViewItemBloc()..add(FetchItemEvent()),
-                  child: const ViewItem(),
-                );
-            });
-      case RouteNames.addItem:
+        return MaterialPageRoute(builder: (_) {
+          return BlocProvider<ViewItemBloc>(
+            create: (context) => ViewItemBloc()..add(FetchItemEvent()),
+            child: const ViewItem(),
+          );
+        });
+      case RouteNames.addItemList:
         return MaterialPageRoute(builder: (_) {
           return BlocProvider<AddItemBloc>(
             create: (context) => AddItemBloc(),
             child: const AddItem(),
           );
         });
+      case RouteNames.viewClientList:
+        return MaterialPageRoute(builder: (_) {
+          return BlocProvider<ViewClientBloc>(
+            create: (context) => ViewClientBloc()..add(FetchClientEvent()),
+            child: const ViewClientList(),
+          );
+        });
+      case RouteNames.addClient:
+        return MaterialPageRoute(builder: (_) {
+          return BlocProvider<AddClientBloc>(
+            create: (context) => AddClientBloc(),
+            child: const AddClient(),
+          );
+        });
+
       default:
         return MaterialPageRoute(builder: (_) {
           return BlocProvider<ProfileCheckBloc>(

@@ -3,6 +3,7 @@ import 'package:drift/drift.dart';
 
 // project imports:
 import 'package:salesman/core/db/drift/app_database.dart';
+import 'package:salesman/core/db/drift/models/model_client.dart';
 
 // part
 part 'client_table_queries.g.dart';
@@ -13,7 +14,7 @@ class ClientTableQueries extends DatabaseAccessor<AppDatabase>
   final AppDatabase db;
   ClientTableQueries(this.db) : super(db);
 
-  Future<int> insertClient(Insertable<ModelClientData> client) async {
+  Future<int> insertClient({required ModelClientCompanion client}) async {
     return await into(modelClient).insert(client);
   }
 

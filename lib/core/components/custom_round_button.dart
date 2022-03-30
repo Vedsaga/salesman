@@ -10,8 +10,8 @@ import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/round_button_decoration.dart';
 import 'package:salesman/config/theme/theme.dart';
 
-class RoundButton extends StatelessWidget {
-  const RoundButton(
+class CustomRoundButton extends StatelessWidget {
+  const CustomRoundButton(
       {Key? key,
       required this.label,
       required this.svgPath,

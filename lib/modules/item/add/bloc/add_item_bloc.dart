@@ -1,9 +1,13 @@
+// third party imports:
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
+
+// project imports:
 import 'package:salesman/core/models/validations/double_field.dart';
 import 'package:salesman/core/models/validations/generic_field.dart';
 
+// part
 part 'add_item_event.dart';
 part 'add_item_state.dart';
 
@@ -11,7 +15,8 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
   AddItemBloc() : super(const AddItemState()) {
     on<ItemFieldsChange>(_addItem);
     on<ItemNameFieldUnfocused>(_itemNameUnfocused);
-    on<ItemUnitFieldUnfocused>(_unitUnfocused);
+    on<ShowUnitEvent>(_showUnit);
+    on<NotShowUnitEvent>(_notShowUnit);
     on<ItemSellingPriceFieldUnfocused>(_sellingPriceUnfocused);
     on<ItemBuyingPriceFieldUnfocused>(_buyingPriceUnfocused);
     on<ItemAvailableQuantityFieldUnfocused>(_availableQuantityUnfocused);
@@ -25,14 +30,12 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
 
   void _addItem(ItemFieldsChange event, Emitter<AddItemState> emit) {
     final itemName = GenericField.dirty(event.itemName);
-    final unit = GenericField.dirty(event.unit);
     final sellingPrice = DoubleField.dirty(event.sellingPrice);
     final buyingPrice = DoubleField.dirty(event.buyingPrice);
     final availableQuantity = DoubleField.dirty(event.availableQuantity);
-
     emit(state.copyWith(
       itemName: itemName.valid ? itemName : GenericField.pure(event.itemName),
-      unit: unit.valid ? unit : GenericField.pure(event.unit),
+      unit: event.unit,
       sellingPrice: sellingPrice.valid
           ? sellingPrice
           : DoubleField.pure(event.sellingPrice),
@@ -42,8 +45,16 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
           ? availableQuantity
           : DoubleField.pure(event.availableQuantity),
       status: Formz.validate(
-          [itemName, unit, sellingPrice, buyingPrice, availableQuantity]),
+          [itemName, sellingPrice, buyingPrice, availableQuantity]),
     ));
+    if (event.unit != "unit" &&
+        event.unit.isNotEmpty &&
+        itemName.valid &&
+        sellingPrice.valid &&
+        buyingPrice.valid &&
+        availableQuantity.valid) {
+      emit(ShowSaveButtonState());
+    }
   }
 
   void _itemNameUnfocused(
@@ -52,26 +63,9 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
     emit(
       state.copyWith(
         itemName: itemName,
+        unit: event.unit,
         status: Formz.validate([
           itemName,
-          state.unit,
-          state.sellingPrice,
-          state.buyingPrice,
-          state.availableQuantity
-        ]),
-      ),
-    );
-  }
-
-  void _unitUnfocused(
-      ItemUnitFieldUnfocused event, Emitter<AddItemState> emit) {
-    final unit = GenericField.dirty(state.unit.value);
-    emit(
-      state.copyWith(
-        unit: unit,
-        status: Formz.validate([
-          unit,
-          state.itemName,
           state.sellingPrice,
           state.buyingPrice,
           state.availableQuantity
@@ -86,9 +80,9 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
     emit(
       state.copyWith(
         sellingPrice: sellingPrice,
+        unit: event.unit,
         status: Formz.validate([
           sellingPrice,
-          state.unit,
           state.itemName,
           state.buyingPrice,
           state.availableQuantity
@@ -103,9 +97,9 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
     emit(
       state.copyWith(
         buyingPrice: buyingPrice,
+        unit: event.unit,
         status: Formz.validate([
           buyingPrice,
-          state.unit,
           state.itemName,
           state.sellingPrice,
           state.availableQuantity
@@ -120,9 +114,9 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
     emit(
       state.copyWith(
         availableQuantity: availableQuantity,
+        unit: event.unit,
         status: Formz.validate([
           availableQuantity,
-          state.unit,
           state.itemName,
           state.sellingPrice,
           state.buyingPrice
@@ -131,6 +125,14 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
     );
   }
 
-  void _itemFormSubmitted(
-      ItemFormSubmitted event, Emitter<AddItemState> emit) {}
+  void _itemFormSubmitted(ItemFormSubmitted event, Emitter<AddItemState> emit) {
+  }
+
+  void _showUnit(ShowUnitEvent event, Emitter<AddItemState> emit) {
+    emit(ShowUnitState());
+  }
+
+  void _notShowUnit(NotShowUnitEvent event, Emitter<AddItemState> emit) {
+    emit(NotShowUnitState());
+  }
 }
