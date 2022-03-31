@@ -55,7 +55,9 @@ class Menu extends StatelessWidget {
               context,
               "Something went wrong... Please reach out to us.",
               MessageType.failed);
-          Navigator.popAndPushNamed(context, RouteNames.profileCreation);
+          Future.delayed(const Duration(seconds: 2), () {
+            Navigator.popAndPushNamed(context, RouteNames.profileCreation);
+          });
         }
         if (state is FetchActiveFeaturesState) {
           BlocProvider.of<MenuBloc>(context).add(FetchActiveFeaturesEvent());
@@ -72,7 +74,9 @@ class Menu extends StatelessWidget {
               context,
               "Something went wrong... Please reach out to us.",
               MessageType.failed);
-          Navigator.popAndPushNamed(context, RouteNames.profileCreation);
+          Future.delayed(const Duration(seconds: 2), () {
+            Navigator.popAndPushNamed(context, RouteNames.profileCreation);
+          });
         }
       },
       child: MobileLayout(
@@ -102,16 +106,17 @@ class Menu extends StatelessWidget {
                           iconName: "client",
                           disabled: activeFeatures.disableClient,
                           onTap: () {
-                            Navigator.pushNamed(
+                            Navigator.popAndPushNamed(
                                 context, RouteNames.viewClientList);
-                            },
+                          },
                         ),
                         MenuButtonModel(
                           title: "item",
                           iconName: "item",
                           disabled: activeFeatures.disableItem,
                           onTap: () {
-                            Navigator.pushNamed(context, RouteNames.viewItem);
+                            Navigator.popAndPushNamed(
+                                context, RouteNames.viewItemList);
                           },
                         ),
                       ],
@@ -128,7 +133,10 @@ class Menu extends StatelessWidget {
                           title: "order",
                           iconName: "order",
                           disabled: activeFeatures.disableOrder,
-                          onTap: () {},
+                          onTap: () {
+                            snackbarMessage(context, "will add soon :D",
+                                MessageType.normal);
+                          },
                         ),
                         MenuButtonModel(
                           title: "delivery",

@@ -392,8 +392,9 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
   final int itemId;
   final String itemName;
   final String unit;
-  final double sellingPrice;
-  final double buyingPrice;
+  final double sellingPricePerUnit;
+  final double buyingPricePerUnit;
+  final double totalTrade;
   final double availableQuantity;
   final double reservedQuantity;
   final bool isActive;
@@ -401,8 +402,9 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
       {required this.itemId,
       required this.itemName,
       required this.unit,
-      required this.sellingPrice,
-      required this.buyingPrice,
+      required this.sellingPricePerUnit,
+      required this.buyingPricePerUnit,
+      required this.totalTrade,
       required this.availableQuantity,
       required this.reservedQuantity,
       required this.isActive});
@@ -415,10 +417,12 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
           .mapFromDatabaseResponse(data['${effectivePrefix}item_name'])!,
       unit: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}unit'])!,
-      sellingPrice: const RealType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}selling_price'])!,
-      buyingPrice: const RealType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}buying_price'])!,
+      sellingPricePerUnit: const RealType().mapFromDatabaseResponse(
+          data['${effectivePrefix}selling_price_per_unit'])!,
+      buyingPricePerUnit: const RealType().mapFromDatabaseResponse(
+          data['${effectivePrefix}buying_price_per_unit'])!,
+      totalTrade: const RealType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}total_trade'])!,
       availableQuantity: const RealType().mapFromDatabaseResponse(
           data['${effectivePrefix}available_quantity'])!,
       reservedQuantity: const RealType().mapFromDatabaseResponse(
@@ -433,8 +437,9 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
     map['item_id'] = Variable<int>(itemId);
     map['item_name'] = Variable<String>(itemName);
     map['unit'] = Variable<String>(unit);
-    map['selling_price'] = Variable<double>(sellingPrice);
-    map['buying_price'] = Variable<double>(buyingPrice);
+    map['selling_price_per_unit'] = Variable<double>(sellingPricePerUnit);
+    map['buying_price_per_unit'] = Variable<double>(buyingPricePerUnit);
+    map['total_trade'] = Variable<double>(totalTrade);
     map['available_quantity'] = Variable<double>(availableQuantity);
     map['reserved_quantity'] = Variable<double>(reservedQuantity);
     map['is_active'] = Variable<bool>(isActive);
@@ -446,8 +451,9 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
       itemId: Value(itemId),
       itemName: Value(itemName),
       unit: Value(unit),
-      sellingPrice: Value(sellingPrice),
-      buyingPrice: Value(buyingPrice),
+      sellingPricePerUnit: Value(sellingPricePerUnit),
+      buyingPricePerUnit: Value(buyingPricePerUnit),
+      totalTrade: Value(totalTrade),
       availableQuantity: Value(availableQuantity),
       reservedQuantity: Value(reservedQuantity),
       isActive: Value(isActive),
@@ -461,8 +467,11 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
       itemId: serializer.fromJson<int>(json['itemId']),
       itemName: serializer.fromJson<String>(json['itemName']),
       unit: serializer.fromJson<String>(json['unit']),
-      sellingPrice: serializer.fromJson<double>(json['sellingPrice']),
-      buyingPrice: serializer.fromJson<double>(json['buyingPrice']),
+      sellingPricePerUnit:
+          serializer.fromJson<double>(json['sellingPricePerUnit']),
+      buyingPricePerUnit:
+          serializer.fromJson<double>(json['buyingPricePerUnit']),
+      totalTrade: serializer.fromJson<double>(json['totalTrade']),
       availableQuantity: serializer.fromJson<double>(json['availableQuantity']),
       reservedQuantity: serializer.fromJson<double>(json['reservedQuantity']),
       isActive: serializer.fromJson<bool>(json['isActive']),
@@ -475,8 +484,9 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
       'itemId': serializer.toJson<int>(itemId),
       'itemName': serializer.toJson<String>(itemName),
       'unit': serializer.toJson<String>(unit),
-      'sellingPrice': serializer.toJson<double>(sellingPrice),
-      'buyingPrice': serializer.toJson<double>(buyingPrice),
+      'sellingPricePerUnit': serializer.toJson<double>(sellingPricePerUnit),
+      'buyingPricePerUnit': serializer.toJson<double>(buyingPricePerUnit),
+      'totalTrade': serializer.toJson<double>(totalTrade),
       'availableQuantity': serializer.toJson<double>(availableQuantity),
       'reservedQuantity': serializer.toJson<double>(reservedQuantity),
       'isActive': serializer.toJson<bool>(isActive),
@@ -487,8 +497,9 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
           {int? itemId,
           String? itemName,
           String? unit,
-          double? sellingPrice,
-          double? buyingPrice,
+          double? sellingPricePerUnit,
+          double? buyingPricePerUnit,
+          double? totalTrade,
           double? availableQuantity,
           double? reservedQuantity,
           bool? isActive}) =>
@@ -496,8 +507,9 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
         itemId: itemId ?? this.itemId,
         itemName: itemName ?? this.itemName,
         unit: unit ?? this.unit,
-        sellingPrice: sellingPrice ?? this.sellingPrice,
-        buyingPrice: buyingPrice ?? this.buyingPrice,
+        sellingPricePerUnit: sellingPricePerUnit ?? this.sellingPricePerUnit,
+        buyingPricePerUnit: buyingPricePerUnit ?? this.buyingPricePerUnit,
+        totalTrade: totalTrade ?? this.totalTrade,
         availableQuantity: availableQuantity ?? this.availableQuantity,
         reservedQuantity: reservedQuantity ?? this.reservedQuantity,
         isActive: isActive ?? this.isActive,
@@ -508,8 +520,9 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
           ..write('itemId: $itemId, ')
           ..write('itemName: $itemName, ')
           ..write('unit: $unit, ')
-          ..write('sellingPrice: $sellingPrice, ')
-          ..write('buyingPrice: $buyingPrice, ')
+          ..write('sellingPricePerUnit: $sellingPricePerUnit, ')
+          ..write('buyingPricePerUnit: $buyingPricePerUnit, ')
+          ..write('totalTrade: $totalTrade, ')
           ..write('availableQuantity: $availableQuantity, ')
           ..write('reservedQuantity: $reservedQuantity, ')
           ..write('isActive: $isActive')
@@ -518,8 +531,16 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
   }
 
   @override
-  int get hashCode => Object.hash(itemId, itemName, unit, sellingPrice,
-      buyingPrice, availableQuantity, reservedQuantity, isActive);
+  int get hashCode => Object.hash(
+      itemId,
+      itemName,
+      unit,
+      sellingPricePerUnit,
+      buyingPricePerUnit,
+      totalTrade,
+      availableQuantity,
+      reservedQuantity,
+      isActive);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -527,8 +548,9 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
           other.itemId == this.itemId &&
           other.itemName == this.itemName &&
           other.unit == this.unit &&
-          other.sellingPrice == this.sellingPrice &&
-          other.buyingPrice == this.buyingPrice &&
+          other.sellingPricePerUnit == this.sellingPricePerUnit &&
+          other.buyingPricePerUnit == this.buyingPricePerUnit &&
+          other.totalTrade == this.totalTrade &&
           other.availableQuantity == this.availableQuantity &&
           other.reservedQuantity == this.reservedQuantity &&
           other.isActive == this.isActive);
@@ -538,8 +560,9 @@ class ModelItemCompanion extends UpdateCompanion<ModelItemData> {
   final Value<int> itemId;
   final Value<String> itemName;
   final Value<String> unit;
-  final Value<double> sellingPrice;
-  final Value<double> buyingPrice;
+  final Value<double> sellingPricePerUnit;
+  final Value<double> buyingPricePerUnit;
+  final Value<double> totalTrade;
   final Value<double> availableQuantity;
   final Value<double> reservedQuantity;
   final Value<bool> isActive;
@@ -547,8 +570,9 @@ class ModelItemCompanion extends UpdateCompanion<ModelItemData> {
     this.itemId = const Value.absent(),
     this.itemName = const Value.absent(),
     this.unit = const Value.absent(),
-    this.sellingPrice = const Value.absent(),
-    this.buyingPrice = const Value.absent(),
+    this.sellingPricePerUnit = const Value.absent(),
+    this.buyingPricePerUnit = const Value.absent(),
+    this.totalTrade = const Value.absent(),
     this.availableQuantity = const Value.absent(),
     this.reservedQuantity = const Value.absent(),
     this.isActive = const Value.absent(),
@@ -557,8 +581,9 @@ class ModelItemCompanion extends UpdateCompanion<ModelItemData> {
     this.itemId = const Value.absent(),
     required String itemName,
     required String unit,
-    this.sellingPrice = const Value.absent(),
-    this.buyingPrice = const Value.absent(),
+    this.sellingPricePerUnit = const Value.absent(),
+    this.buyingPricePerUnit = const Value.absent(),
+    this.totalTrade = const Value.absent(),
     this.availableQuantity = const Value.absent(),
     this.reservedQuantity = const Value.absent(),
     this.isActive = const Value.absent(),
@@ -568,8 +593,9 @@ class ModelItemCompanion extends UpdateCompanion<ModelItemData> {
     Expression<int>? itemId,
     Expression<String>? itemName,
     Expression<String>? unit,
-    Expression<double>? sellingPrice,
-    Expression<double>? buyingPrice,
+    Expression<double>? sellingPricePerUnit,
+    Expression<double>? buyingPricePerUnit,
+    Expression<double>? totalTrade,
     Expression<double>? availableQuantity,
     Expression<double>? reservedQuantity,
     Expression<bool>? isActive,
@@ -578,8 +604,11 @@ class ModelItemCompanion extends UpdateCompanion<ModelItemData> {
       if (itemId != null) 'item_id': itemId,
       if (itemName != null) 'item_name': itemName,
       if (unit != null) 'unit': unit,
-      if (sellingPrice != null) 'selling_price': sellingPrice,
-      if (buyingPrice != null) 'buying_price': buyingPrice,
+      if (sellingPricePerUnit != null)
+        'selling_price_per_unit': sellingPricePerUnit,
+      if (buyingPricePerUnit != null)
+        'buying_price_per_unit': buyingPricePerUnit,
+      if (totalTrade != null) 'total_trade': totalTrade,
       if (availableQuantity != null) 'available_quantity': availableQuantity,
       if (reservedQuantity != null) 'reserved_quantity': reservedQuantity,
       if (isActive != null) 'is_active': isActive,
@@ -590,8 +619,9 @@ class ModelItemCompanion extends UpdateCompanion<ModelItemData> {
       {Value<int>? itemId,
       Value<String>? itemName,
       Value<String>? unit,
-      Value<double>? sellingPrice,
-      Value<double>? buyingPrice,
+      Value<double>? sellingPricePerUnit,
+      Value<double>? buyingPricePerUnit,
+      Value<double>? totalTrade,
       Value<double>? availableQuantity,
       Value<double>? reservedQuantity,
       Value<bool>? isActive}) {
@@ -599,8 +629,9 @@ class ModelItemCompanion extends UpdateCompanion<ModelItemData> {
       itemId: itemId ?? this.itemId,
       itemName: itemName ?? this.itemName,
       unit: unit ?? this.unit,
-      sellingPrice: sellingPrice ?? this.sellingPrice,
-      buyingPrice: buyingPrice ?? this.buyingPrice,
+      sellingPricePerUnit: sellingPricePerUnit ?? this.sellingPricePerUnit,
+      buyingPricePerUnit: buyingPricePerUnit ?? this.buyingPricePerUnit,
+      totalTrade: totalTrade ?? this.totalTrade,
       availableQuantity: availableQuantity ?? this.availableQuantity,
       reservedQuantity: reservedQuantity ?? this.reservedQuantity,
       isActive: isActive ?? this.isActive,
@@ -619,11 +650,15 @@ class ModelItemCompanion extends UpdateCompanion<ModelItemData> {
     if (unit.present) {
       map['unit'] = Variable<String>(unit.value);
     }
-    if (sellingPrice.present) {
-      map['selling_price'] = Variable<double>(sellingPrice.value);
+    if (sellingPricePerUnit.present) {
+      map['selling_price_per_unit'] =
+          Variable<double>(sellingPricePerUnit.value);
     }
-    if (buyingPrice.present) {
-      map['buying_price'] = Variable<double>(buyingPrice.value);
+    if (buyingPricePerUnit.present) {
+      map['buying_price_per_unit'] = Variable<double>(buyingPricePerUnit.value);
+    }
+    if (totalTrade.present) {
+      map['total_trade'] = Variable<double>(totalTrade.value);
     }
     if (availableQuantity.present) {
       map['available_quantity'] = Variable<double>(availableQuantity.value);
@@ -643,8 +678,9 @@ class ModelItemCompanion extends UpdateCompanion<ModelItemData> {
           ..write('itemId: $itemId, ')
           ..write('itemName: $itemName, ')
           ..write('unit: $unit, ')
-          ..write('sellingPrice: $sellingPrice, ')
-          ..write('buyingPrice: $buyingPrice, ')
+          ..write('sellingPricePerUnit: $sellingPricePerUnit, ')
+          ..write('buyingPricePerUnit: $buyingPricePerUnit, ')
+          ..write('totalTrade: $totalTrade, ')
           ..write('availableQuantity: $availableQuantity, ')
           ..write('reservedQuantity: $reservedQuantity, ')
           ..write('isActive: $isActive')
@@ -679,22 +715,29 @@ class $ModelItemTable extends ModelItem
   late final GeneratedColumn<String?> unit = GeneratedColumn<String?>(
       'unit', aliasedName, false,
       additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 3, maxTextLength: 20),
+          GeneratedColumn.checkTextLength(minTextLength: 2, maxTextLength: 20),
       type: const StringType(),
       requiredDuringInsert: true);
-  final VerificationMeta _sellingPriceMeta =
-      const VerificationMeta('sellingPrice');
+  final VerificationMeta _sellingPricePerUnitMeta =
+      const VerificationMeta('sellingPricePerUnit');
   @override
-  late final GeneratedColumn<double?> sellingPrice = GeneratedColumn<double?>(
-      'selling_price', aliasedName, false,
-      type: const RealType(),
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0.0));
-  final VerificationMeta _buyingPriceMeta =
-      const VerificationMeta('buyingPrice');
+  late final GeneratedColumn<double?> sellingPricePerUnit =
+      GeneratedColumn<double?>('selling_price_per_unit', aliasedName, false,
+          type: const RealType(),
+          requiredDuringInsert: false,
+          defaultValue: const Constant(0.0));
+  final VerificationMeta _buyingPricePerUnitMeta =
+      const VerificationMeta('buyingPricePerUnit');
   @override
-  late final GeneratedColumn<double?> buyingPrice = GeneratedColumn<double?>(
-      'buying_price', aliasedName, false,
+  late final GeneratedColumn<double?> buyingPricePerUnit =
+      GeneratedColumn<double?>('buying_price_per_unit', aliasedName, false,
+          type: const RealType(),
+          requiredDuringInsert: false,
+          defaultValue: const Constant(0.0));
+  final VerificationMeta _totalTradeMeta = const VerificationMeta('totalTrade');
+  @override
+  late final GeneratedColumn<double?> totalTrade = GeneratedColumn<double?>(
+      'total_trade', aliasedName, false,
       type: const RealType(),
       requiredDuringInsert: false,
       defaultValue: const Constant(0.0));
@@ -727,8 +770,9 @@ class $ModelItemTable extends ModelItem
         itemId,
         itemName,
         unit,
-        sellingPrice,
-        buyingPrice,
+        sellingPricePerUnit,
+        buyingPricePerUnit,
+        totalTrade,
         availableQuantity,
         reservedQuantity,
         isActive
@@ -758,17 +802,23 @@ class $ModelItemTable extends ModelItem
     } else if (isInserting) {
       context.missing(_unitMeta);
     }
-    if (data.containsKey('selling_price')) {
+    if (data.containsKey('selling_price_per_unit')) {
       context.handle(
-          _sellingPriceMeta,
-          sellingPrice.isAcceptableOrUnknown(
-              data['selling_price']!, _sellingPriceMeta));
+          _sellingPricePerUnitMeta,
+          sellingPricePerUnit.isAcceptableOrUnknown(
+              data['selling_price_per_unit']!, _sellingPricePerUnitMeta));
     }
-    if (data.containsKey('buying_price')) {
+    if (data.containsKey('buying_price_per_unit')) {
       context.handle(
-          _buyingPriceMeta,
-          buyingPrice.isAcceptableOrUnknown(
-              data['buying_price']!, _buyingPriceMeta));
+          _buyingPricePerUnitMeta,
+          buyingPricePerUnit.isAcceptableOrUnknown(
+              data['buying_price_per_unit']!, _buyingPricePerUnitMeta));
+    }
+    if (data.containsKey('total_trade')) {
+      context.handle(
+          _totalTradeMeta,
+          totalTrade.isAcceptableOrUnknown(
+              data['total_trade']!, _totalTradeMeta));
     }
     if (data.containsKey('available_quantity')) {
       context.handle(

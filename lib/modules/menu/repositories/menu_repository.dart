@@ -29,4 +29,12 @@ class MenuRepository {
     await _activeFeaturesBox.clear();
     return true;
   }
+
+  Future<Map<String, dynamic>?> getFeatureMap() async {
+    final response = await getActiveFeatures();
+    if (response != null) {
+      return response.toMap();
+    }
+    return null;
+  }
 }

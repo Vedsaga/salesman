@@ -28,3 +28,5 @@ class ClientNameFieldUnfocused extends AddClientEvent {
 class ClientPhoneFieldUnfocused extends AddClientEvent {}
 
 class ClientFormSubmitted extends AddClientEvent {}
+
+class EnableItemFeatureEvent extends AddClientEvent {}

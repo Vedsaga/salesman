@@ -5,8 +5,10 @@ class RouteNames {
   static const String editProfile = 'editProfile';
   static const String home = 'home';
   static const String menu = 'menu';
-  static const String viewItem = 'viewItem';
-  static const String addItemList = 'addItemList';
+  static const String viewItemList = 'viewItemList';
+  static const String viewItemDetails = 'viewItemDetails';
+  static const String addItem = 'addItem';
   static const String viewClientList = 'viewClientList';
   static const String addClient = 'addClient';
+  static const String viewClientDetails = 'viewClientDetails';
 }

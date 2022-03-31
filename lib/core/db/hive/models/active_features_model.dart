@@ -1,8 +1,6 @@
 // third part imports:
 import 'package:hive/hive.dart';
 
-// project imports
-
 // part
 part 'active_features_model.g.dart';
 
@@ -40,7 +38,7 @@ class ActiveFeaturesModel extends HiveObject {
   ActiveFeaturesModel({
     this.disableDetails = false,
     this.disableClient = false,
-    this.disableItem = false,
+    this.disableItem = true,
     this.disableTrade = true,
     this.disableOrder = true,
     this.disableDelivery = true,
@@ -53,4 +51,23 @@ class ActiveFeaturesModel extends HiveObject {
     this.disableSurvey = true,
     this.disableStats = true,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'disableDetails': disableDetails,
+      'disableClient': disableClient,
+      'disableItem': disableItem,
+      'disableTrade': disableTrade,
+      'disableOrder': disableOrder,
+      'disableDelivery': disableDelivery,
+      'disableReturn': disableReturn,
+      'disableRecords': disableRecords,
+      'disablePayment': disablePayment,
+      'disableReceive': disableReceive,
+      'disableHistory': disableHistory,
+      'disableReport': disableReport,
+      'disableSurvey': disableSurvey,
+      'disableStats': disableStats,
+    };
+  }
 }

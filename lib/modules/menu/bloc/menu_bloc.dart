@@ -20,7 +20,6 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
     on<FetchActiveFeaturesEvent>(_onFetchedActiveFeatures);
     on<AddActiveFeaturesEvent>(_onAddFeatures);
     on<FetchAllDetailsEvent>(_onFetchAllDetails);
-    on<EnableDetailsEvent>(_onEnableDetails);
   }
 
   void _onFetchCompanyProfile(
@@ -75,22 +74,6 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
       ));
     } else {
       emit(ErrorAllDetailsState());
-    }
-  }
-
-  void _onEnableDetails(
-      EnableDetailsEvent event, Emitter<MenuState> emit) async {
-    // update the active features details, client and item to false
-    final bool? _enableDetails = await menuRepository.setActiveFeatures(
-      ActiveFeaturesModel(
-        disableClient: false,
-        disableItem: false,
-        disableDetails: false,
-      ),
-    );
-
-    if (_enableDetails == true) {
-      emit((EnablePaymentState()));
     }
   }
 }

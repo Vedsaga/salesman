@@ -149,9 +149,10 @@ class _ProfileCreationState extends State<ProfileCreation> {
             "yeee.. Your Profile Created!",
             MessageType.success,
           );
-          // delay for 2 seconds
-          Future.delayed(const Duration(seconds: 2));
-          Navigator.popAndPushNamed(context, RouteNames.menu);
+          Future.delayed(const Duration(seconds: 2), () {
+            Navigator.popAndPushNamed(context, RouteNames.menu);
+
+          });          
         }
 
         if (state.status.isSubmissionFailure) {

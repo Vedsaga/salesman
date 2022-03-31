@@ -21,7 +21,6 @@ class FetchedActiveFeaturesState extends MenuState {
 }
 class EmptyActiveFeaturesState extends MenuState {}
 class ErrorAddingActiveFeaturesState extends MenuState {}
-class FetchAllDetails extends MenuState {}
 class FetchedAllDetailsState extends MenuState {
   final CompanyProfileModel companyProfile;
   final ActiveFeaturesModel activeFeatures;
@@ -44,6 +43,5 @@ class FetchedAllDetailsState extends MenuState {
 
 class ErrorAllDetailsState extends MenuState {}
 
-class EnablePaymentState extends MenuState {}
 
 

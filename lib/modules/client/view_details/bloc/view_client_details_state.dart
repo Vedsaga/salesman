@@ -17,6 +17,9 @@ class ViewingClientDetailsState extends ViewClientDetailsState {
 
 class DeactivationInProgress extends ViewClientDetailsState {}
 
+class AvailableQuantityNotZeroState extends ViewClientDetailsState {}
+
+class ReservedQuantityNotZeroState extends ViewClientDetailsState {}
 
 class SuccessfullyDeactivateClientState extends ViewClientDetailsState {}
 

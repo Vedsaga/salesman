@@ -3,7 +3,7 @@ part of 'add_item_bloc.dart';
  class AddItemState extends Equatable {
   const AddItemState({
     this.itemName = const GenericField.pure(),
-    this.unit = '',
+    this.unit = const UnitField.pure(),
     this.sellingPrice = const DoubleField.pure(),
     this.buyingPrice = const DoubleField.pure(),
     this.availableQuantity = const DoubleField.pure(),
@@ -11,7 +11,7 @@ part of 'add_item_bloc.dart';
   });
 
   final GenericField itemName;
-  final String unit;
+  final UnitField unit;
   final DoubleField sellingPrice;
   final DoubleField buyingPrice;
   final DoubleField availableQuantity;
@@ -21,7 +21,7 @@ part of 'add_item_bloc.dart';
 
   AddItemState copyWith({
     GenericField? itemName,
-    required String unit,
+    UnitField?  unit,
     DoubleField? sellingPrice,
     DoubleField? buyingPrice,
     DoubleField? availableQuantity,
@@ -29,7 +29,7 @@ part of 'add_item_bloc.dart';
   }) {
     return AddItemState(
       itemName: itemName ?? this.itemName,
-      unit: unit,
+      unit: unit ?? this.unit,
       sellingPrice: sellingPrice ?? this.sellingPrice,
       buyingPrice: buyingPrice ?? this.buyingPrice,
       availableQuantity: availableQuantity ?? this.availableQuantity,
@@ -38,8 +38,9 @@ part of 'add_item_bloc.dart';
   }
 }
 
-class ShowUnitState extends AddItemState{}
-
-class NotShowUnitState extends AddItemState{}
-
-class ShowSaveButtonState extends AddItemState{}
+class ItemAddedSuccessfullyState extends AddItemState {
+  const ItemAddedSuccessfullyState({required this.itemId});
+  final int itemId;
+  @override
+  List<Object> get props => [itemId];
+}

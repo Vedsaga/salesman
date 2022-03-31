@@ -27,8 +27,8 @@ part of 'add_client_bloc.dart';
   }
 }
 
-class ClientAddedSuccessfully extends AddClientState{
-  const ClientAddedSuccessfully({required this.clientId});
+class ClientAddedSuccessfullyState extends AddClientState{
+  const ClientAddedSuccessfullyState({required this.clientId});
   final int clientId;
   @override
   List<Object> get props => [clientName, clientPhone, status];

@@ -97,15 +97,16 @@ class _AddClientState extends State<AddClient> {
   Widget build(BuildContext context) {
     return BlocListener<AddClientBloc, AddClientState>(
       listener: (context, state) {
-        if (state is ClientAddedSuccessfully) {
+        if (state is ClientAddedSuccessfullyState) {
           snackbarMessage(
             context,
             "Client added successfully! Client ID: ${state.clientId}",
             MessageType.success,
           );
-          // delay for 2 seconds
-          Future.delayed(const Duration(seconds: 2));
-          Navigator.popAndPushNamed(context, RouteNames.viewClientList);
+          context.read<AddClientBloc>().add(EnableItemFeatureEvent());
+          Future.delayed(const Duration(seconds: 2), () {
+            Navigator.popAndPushNamed(context, RouteNames.viewClientList);
+          });
         }
 
         if (state.status.isSubmissionFailure) {

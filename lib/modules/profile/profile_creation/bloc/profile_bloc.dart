@@ -112,14 +112,12 @@ class ProfileCreationBloc
         lastUpdated: DateTime.now(),
         createdAt: DateTime.now(),
       );
-
       final bool? responseForCompany =
           await profileRepository.addCompanyProfile(
         name: state.companyName.value,
         lastUpdated: DateTime.now(),
         createdAt: DateTime.now(),
       );
-
       if (responseForAgent == true && responseForCompany == true) {
         emit(state.copyWith(status: FormzStatus.submissionSuccess));
       } else {

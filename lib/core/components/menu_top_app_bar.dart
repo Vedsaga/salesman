@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 // Project imports:
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
+import 'package:salesman/core/components/snackbar_message.dart';
 import 'package:salesman/core/db/hive/models/company_profile_model.dart';
 
 //  created an AppBar widget
@@ -39,7 +40,13 @@ class MenuTopAppBar extends StatelessWidget {
                     'assets/icons/svgs/home.svg',
                   ),
           ),
-          onPressed: () {},
+          onPressed: () {
+            snackbarMessage(
+              context,
+              "Coming Soon :D",
+              MessageType.normal,
+            );
+          },
         ),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

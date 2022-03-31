@@ -7,20 +7,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // project imports:
 import 'package:salesman/config/layouts/mobile_layout.dart';
 import 'package:salesman/config/routes/route_name.dart';
+import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/core/components/bottom_navigation.dart';
+import 'package:salesman/core/components/custom_list_card.dart';
 import 'package:salesman/core/components/empty_message.dart';
 import 'package:salesman/core/components/normal_top_app_bar.dart';
 import 'package:salesman/core/components/snackbar_message.dart';
-import 'package:salesman/modules/item/view/bloc/view_item_bloc.dart';
+import 'package:salesman/modules/item/view_list/bloc/view_item_bloc.dart';
 
-class ViewItem extends StatefulWidget {
-  const ViewItem({Key? key}) : super(key: key);
+class ViewItemList extends StatefulWidget {
+  const ViewItemList({Key? key}) : super(key: key);
 
   @override
-  State<ViewItem> createState() => _ViewItemState();
+  State<ViewItemList> createState() => _ViewItemState();
 }
 
-class _ViewItemState extends State<ViewItem> {
+class _ViewItemState extends State<ViewItemList> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<ViewItemBloc, ViewItemState>(
@@ -31,7 +33,9 @@ class _ViewItemState extends State<ViewItem> {
             'Error fetching items. Please try again later.',
             MessageType.failed,
           );
-          Navigator.popAndPushNamed(context, RouteNames.menu);
+          Future.delayed(const Duration(seconds: 2), () {
+            Navigator.popAndPushNamed(context, RouteNames.menu);
+          });
         }
 
         if (state is EmptyItemState) {
@@ -53,11 +57,28 @@ class _ViewItemState extends State<ViewItem> {
             }
             if (state is FetchedItemState) {
               return ListView.builder(
+                shrinkWrap: true,
                 itemCount: state.items.length,
                 itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(state.items[index].itemName),
-                    subtitle: Text(state.items[index].sellingPrice.toString()),
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).popAndPushNamed(
+                        RouteNames.viewItemDetails,
+                        arguments: state.items[index],
+                      );
+                    },
+                    child: CustomListCard(
+                      leadingDataAtTop: state.items[index].itemName,
+                      trailingDataAtTop:
+                          state.items[index].totalTrade.toString(),
+                      leadingInfoAtBottom: "stock ",
+                      leadingDataAtBottom:
+                          "${state.items[index].availableQuantity} ${state.items[index].unit}",
+                      trailingInfoAtBottom: "MRP ",
+                      trailingDataAtBottom:
+                          "${state.items[index].sellingPricePerUnit}",
+                      color: AppColors.grey,
+                    ),
                   );
                 },
               );
@@ -74,7 +95,7 @@ class _ViewItemState extends State<ViewItem> {
           onTapAddIcon: () {
             Navigator.pushNamed(
               context,
-              RouteNames.addItemList,
+              RouteNames.addItem,
             );
           },
         ),

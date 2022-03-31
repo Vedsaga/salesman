@@ -1,26 +1,36 @@
 // third party imports:
 import 'package:bloc/bloc.dart';
+import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 
 // project imports:
 import 'package:salesman/core/models/validations/double_field.dart';
 import 'package:salesman/core/models/validations/generic_field.dart';
+import 'package:salesman/core/models/validations/unit_field.dart';
+import 'package:salesman/core/utils/feature_monitor.dart';
+import 'package:salesman/main.dart';
+import 'package:salesman/modules/item/query/item_table_queries.dart';
+import 'package:salesman/modules/menu/repositories/menu_repository.dart';
+import 'package:salesman/core/db/drift/app_database.dart';
 
 // part
 part 'add_item_event.dart';
 part 'add_item_state.dart';
 
 class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
-  AddItemBloc() : super(const AddItemState()) {
+  final MenuRepository menuRepository;
+
+  AddItemBloc(this.menuRepository) : super(const AddItemState()) {
     on<ItemFieldsChange>(_addItem);
     on<ItemNameFieldUnfocused>(_itemNameUnfocused);
-    on<ShowUnitEvent>(_showUnit);
-    on<NotShowUnitEvent>(_notShowUnit);
+    on<ItemUnitFieldUnfocused>(_unitUnfocused);
     on<ItemSellingPriceFieldUnfocused>(_sellingPriceUnfocused);
     on<ItemBuyingPriceFieldUnfocused>(_buyingPriceUnfocused);
     on<ItemAvailableQuantityFieldUnfocused>(_availableQuantityUnfocused);
-    on<ItemFormSubmitted>(_itemFormSubmitted);
+    on<ItemFormSubmitted>(_itemFormSubmitted);  
+    on<EnableTradeFeatureEvent>(_onEnableTradeFeature);
+    on<EnableOrderFeatureEvent>(_onEnableOrderFeature);
   }
 
   @override
@@ -30,12 +40,13 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
 
   void _addItem(ItemFieldsChange event, Emitter<AddItemState> emit) {
     final itemName = GenericField.dirty(event.itemName);
+    final unit = UnitField.dirty(event.unit);
     final sellingPrice = DoubleField.dirty(event.sellingPrice);
     final buyingPrice = DoubleField.dirty(event.buyingPrice);
     final availableQuantity = DoubleField.dirty(event.availableQuantity);
     emit(state.copyWith(
       itemName: itemName.valid ? itemName : GenericField.pure(event.itemName),
-      unit: event.unit,
+      unit: unit.valid ? unit : UnitField.pure(event.unit),
       sellingPrice: sellingPrice.valid
           ? sellingPrice
           : DoubleField.pure(event.sellingPrice),
@@ -45,16 +56,8 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
           ? availableQuantity
           : DoubleField.pure(event.availableQuantity),
       status: Formz.validate(
-          [itemName, sellingPrice, buyingPrice, availableQuantity]),
+          [itemName, unit, sellingPrice, buyingPrice, availableQuantity]),
     ));
-    if (event.unit != "unit" &&
-        event.unit.isNotEmpty &&
-        itemName.valid &&
-        sellingPrice.valid &&
-        buyingPrice.valid &&
-        availableQuantity.valid) {
-      emit(ShowSaveButtonState());
-    }
   }
 
   void _itemNameUnfocused(
@@ -63,9 +66,26 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
     emit(
       state.copyWith(
         itemName: itemName,
-        unit: event.unit,
         status: Formz.validate([
           itemName,
+          state.unit,
+          state.sellingPrice,
+          state.buyingPrice,
+          state.availableQuantity
+        ]),
+      ),
+    );
+  }
+
+  void _unitUnfocused(
+      ItemUnitFieldUnfocused event, Emitter<AddItemState> emit) {
+    final unit = UnitField.dirty(state.unit.value);
+    emit(
+      state.copyWith(
+        unit: unit,
+        status: Formz.validate([
+          state.itemName,
+          unit,
           state.sellingPrice,
           state.buyingPrice,
           state.availableQuantity
@@ -80,10 +100,10 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
     emit(
       state.copyWith(
         sellingPrice: sellingPrice,
-        unit: event.unit,
         status: Formz.validate([
-          sellingPrice,
           state.itemName,
+          state.unit,
+          sellingPrice,
           state.buyingPrice,
           state.availableQuantity
         ]),
@@ -97,11 +117,11 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
     emit(
       state.copyWith(
         buyingPrice: buyingPrice,
-        unit: event.unit,
         status: Formz.validate([
-          buyingPrice,
           state.itemName,
+          state.unit,
           state.sellingPrice,
+          buyingPrice,
           state.availableQuantity
         ]),
       ),
@@ -114,25 +134,73 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
     emit(
       state.copyWith(
         availableQuantity: availableQuantity,
-        unit: event.unit,
         status: Formz.validate([
-          availableQuantity,
           state.itemName,
+          state.unit,
           state.sellingPrice,
-          state.buyingPrice
+          state.buyingPrice,
+          availableQuantity,
         ]),
       ),
     );
   }
 
-  void _itemFormSubmitted(ItemFormSubmitted event, Emitter<AddItemState> emit) {
+  void _itemFormSubmitted(
+      ItemFormSubmitted event, Emitter<AddItemState> emit) async {
+    final itemName = GenericField.dirty(state.itemName.value);
+    final unit = UnitField.dirty(state.unit.value);
+    final sellingPrice = DoubleField.dirty(state.sellingPrice.value);
+    final buyingPrice = DoubleField.dirty(state.buyingPrice.value);
+    final availableQuantity = DoubleField.dirty(state.availableQuantity.value);
+
+    emit(
+      state.copyWith(
+        itemName: itemName,
+        unit: unit,
+        sellingPrice: sellingPrice,
+        buyingPrice: buyingPrice,
+        availableQuantity: availableQuantity,
+        status: Formz.validate(
+            [itemName, unit, sellingPrice, buyingPrice, availableQuantity]),
+      ),
+    );
+
+    if (state.status.isValidated) {
+      emit(state.copyWith(status: FormzStatus.submissionInProgress));
+      final ModelItemCompanion itemCompanion = ModelItemCompanion(
+        itemName: Value(state.itemName.value),
+        unit: Value(state.unit.value),
+        sellingPricePerUnit: Value(state.sellingPrice.value),
+        buyingPricePerUnit: Value(state.buyingPrice.value),
+        availableQuantity: Value(state.availableQuantity.value),
+      );
+      try {
+        final itemId = await ItemTableQueries(appDatabaseInstance)
+            .insertItem(itemCompanion);
+        emit(ItemAddedSuccessfullyState(itemId: itemId));
+      } catch (e) {
+        emit(state.copyWith(status: FormzStatus.submissionFailure));
+      }
+    }
   }
 
-  void _showUnit(ShowUnitEvent event, Emitter<AddItemState> emit) {
-    emit(ShowUnitState());
+  void _onEnableTradeFeature(
+      EnableTradeFeatureEvent event, Emitter<AddItemState> emit) async {
+    final _feature = await menuRepository.getActiveFeatures();
+
+    if (_feature != null && _feature.disableTrade) {
+      FeatureMonitor(menuRepository: menuRepository)
+          .enableFeature("disableTrade");
+    }
   }
 
-  void _notShowUnit(NotShowUnitEvent event, Emitter<AddItemState> emit) {
-    emit(NotShowUnitState());
+  void _onEnableOrderFeature(
+      EnableOrderFeatureEvent event, Emitter<AddItemState> emit) async {
+    final _feature = await menuRepository.getActiveFeatures();
+
+    if (_feature != null && _feature.disableOrder) {
+      FeatureMonitor(menuRepository: menuRepository)
+          .enableFeature("disableOrder");
+    }
   }
 }

@@ -14,18 +14,19 @@ class ItemTableQueries extends DatabaseAccessor<AppDatabase>
   final AppDatabase db;
   ItemTableQueries(this.db) : super(db);
 
-  Future<int> insertItem(ModelItemData item) async {
+  Future<int> insertItem(ModelItemCompanion item) async {
     return await into(modelItem).insert(item);
   }
 
   Future<List<ModelItemData>> getAllItems() async {
     return await (select(modelItem)
+          ..where(
+            (table) => table.isActive.equals(true),
+          )
           ..orderBy([
             (table) => OrderingTerm(expression: table.itemName),
           ])
-          ..where(
-            (table) => table.isActive.equals(true),
-          ))
+          )
         .get();
   }
 
@@ -46,7 +47,7 @@ class ItemTableQueries extends DatabaseAccessor<AppDatabase>
           ..where((table) => table.itemId.equals(itemId)))
         .write(
       ModelItemCompanion(
-        sellingPrice: Value(sellingPrice),
+        sellingPricePerUnit: Value(sellingPrice),
       ),
     );
   }
@@ -57,7 +58,7 @@ class ItemTableQueries extends DatabaseAccessor<AppDatabase>
           ..where((table) => table.itemId.equals(itemId)))
         .write(
       ModelItemCompanion(
-        buyingPrice: Value(buyingPrice),
+        buyingPricePerUnit: Value(buyingPrice),
       ),
     );
   }

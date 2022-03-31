@@ -11,7 +11,8 @@ import 'package:salesman/config/theme/theme.dart';
 //  created an AppBar widget
 class InputTopAppBar extends StatelessWidget {
   final String title;
-  const InputTopAppBar({Key? key, required this.title}) : super(key: key);
+  const InputTopAppBar({Key? key, required this.title, this.routeName}) : super(key: key);
+  final String? routeName;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,13 @@ class InputTopAppBar extends StatelessWidget {
             'assets/icons/svgs/back.svg',
           ),
         ),
-        onPressed: () => Navigator.of(context).pop(),
+        onPressed: () {
+          if (routeName != null) {
+             Navigator.popAndPushNamed(context, routeName!);
+          } else {
+            Navigator.pop(context);
+          }
+        },
       ),
       title: Text(
         title.toUpperCase(),

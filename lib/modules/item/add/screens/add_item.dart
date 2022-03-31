@@ -4,9 +4,11 @@ import 'package:flutter/services.dart';
 
 // third party import
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:salesman/config/layouts/design_values.dart';
 // project imports
 import 'package:salesman/config/layouts/mobile_layout.dart';
+import 'package:salesman/config/routes/route_name.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
 import 'package:salesman/core/components/action_button.dart';
@@ -15,6 +17,7 @@ import 'package:salesman/core/components/input_top_app_bar.dart';
 import 'package:salesman/core/components/snackbar_message.dart';
 import 'package:salesman/core/models/validations/double_field.dart';
 import 'package:salesman/core/models/validations/generic_field.dart';
+import 'package:salesman/core/models/validations/unit_field.dart';
 import 'package:salesman/modules/item/add/bloc/add_item_bloc.dart';
 
 class AddItem extends StatefulWidget {
@@ -26,26 +29,17 @@ class AddItem extends StatefulWidget {
 
 class _AddItemState extends State<AddItem> {
   final FocusNode _itemNameFocusNode = FocusNode();
+  final FocusNode _unitFocusNode = FocusNode();
   final FocusNode _itemSellingPriceFocusNode = FocusNode();
   final FocusNode _itemBuyingPriceFocusNode = FocusNode();
   final FocusNode _itemAvailableQuantityFocusNode = FocusNode();
-  final TextEditingController _unitController =
-      TextEditingController(text: "unit");
-  final List<String> _units = [
-    'Kg',
-    'Liter',
-    'Piece',
-    'Box',
-    'Bag',
-    'Bottle',
-    'Dozen',
-    'Packet'
-  ];
+  final List<String> _units = UnitField.units;
 
   @override
   void initState() {
     super.initState();
     _itemNameFocusNode.addListener(_itemNameFocusListener);
+    _unitFocusNode.addListener(_unitFocusListener);
     _itemSellingPriceFocusNode.addListener(_itemSellingPriceFocusListener);
     _itemBuyingPriceFocusNode.addListener(_itemBuyingPriceFocusListener);
     _itemAvailableQuantityFocusNode
@@ -59,9 +53,19 @@ class _AddItemState extends State<AddItem> {
       _itemAvailableQuantityFocusNode.unfocus();
     }
     if (!_itemNameFocusNode.hasFocus) {
-      context
-          .read<AddItemBloc>()
-          .add(ItemNameFieldUnfocused(unit: _unitController.text));
+      context.read<AddItemBloc>().add(ItemNameFieldUnfocused());
+    }
+  }
+
+  void _unitFocusListener() {
+    if (_unitFocusNode.hasFocus) {
+      _itemNameFocusNode.unfocus();
+      _itemSellingPriceFocusNode.unfocus();
+      _itemBuyingPriceFocusNode.unfocus();
+      _itemAvailableQuantityFocusNode.unfocus();
+    }
+    if (!_unitFocusNode.hasFocus) {
+      context.read<AddItemBloc>().add(ItemUnitFieldUnfocused());
     }
   }
 
@@ -72,9 +76,7 @@ class _AddItemState extends State<AddItem> {
       _itemAvailableQuantityFocusNode.unfocus();
     }
     if (!_itemSellingPriceFocusNode.hasFocus) {
-      context
-          .read<AddItemBloc>()
-          .add(ItemSellingPriceFieldUnfocused(unit: _unitController.text));
+      context.read<AddItemBloc>().add(ItemSellingPriceFieldUnfocused());
     }
   }
 
@@ -85,9 +87,7 @@ class _AddItemState extends State<AddItem> {
       _itemAvailableQuantityFocusNode.unfocus();
     }
     if (!_itemBuyingPriceFocusNode.hasFocus) {
-      context
-          .read<AddItemBloc>()
-          .add(ItemBuyingPriceFieldUnfocused(unit: _unitController.text));
+      context.read<AddItemBloc>().add(ItemBuyingPriceFieldUnfocused());
     }
   }
 
@@ -98,9 +98,7 @@ class _AddItemState extends State<AddItem> {
       _itemBuyingPriceFocusNode.unfocus();
     }
     if (!_itemAvailableQuantityFocusNode.hasFocus) {
-      context
-          .read<AddItemBloc>()
-          .add(ItemAvailableQuantityFieldUnfocused(unit: _unitController.text));
+      context.read<AddItemBloc>().add(ItemAvailableQuantityFieldUnfocused());
     }
   }
 
@@ -177,7 +175,31 @@ class _AddItemState extends State<AddItem> {
   Widget build(BuildContext context) {
     return BlocListener<AddItemBloc, AddItemState>(
       listener: (context, state) {
-        // TODO: implement listener
+        if (state is ItemAddedSuccessfullyState) {
+          snackbarMessage(
+              context,
+              "Item added successfully! Item ID: ${state.itemId}",
+              MessageType.success);
+          context.read<AddItemBloc>().add(EnableTradeFeatureEvent());
+          context.read<AddItemBloc>().add(EnableOrderFeatureEvent());
+          Future.delayed(const Duration(seconds: 2), () {
+            Navigator.popAndPushNamed(context, RouteNames.viewItemList);
+          });
+        }
+        if (state.status.isSubmissionFailure) {
+          snackbarMessage(
+            context,
+            "oh no.. Something went wrong!",
+            MessageType.failed,
+          );
+        }
+        if (state.status.isSubmissionInProgress) {
+          snackbarMessage(
+            context,
+            "Submitting details...",
+            MessageType.inProgress,
+          );
+        }
       },
       child: MobileLayout(
         topAppBar: const InputTopAppBar(title: "add item"),
@@ -185,25 +207,15 @@ class _AddItemState extends State<AddItem> {
           builder: (context, state) {
             return BlocBuilder<AddItemBloc, AddItemState>(
               builder: (context, state) {
-                if (state is ShowSaveButtonState) {
-                  return ActionButton(
-                    disabled: false,
-                    text: "save",
-                    onPressed: () {
-                      BlocProvider.of<AddItemBloc>(context)
-                          .add(ItemFormSubmitted(unit: _unitController.text));
-                    },
-                  );
-                }
                 return ActionButton(
-                  disabled: true,
+                  disabled: !state.status.isValidated,
                   text: "save",
                   onPressed: () {
-                    snackbarMessage(
-                      context,
-                      "Coming Soon :D",
-                      MessageType.normal,
-                    );
+                    state.status.isValidated
+                        ?
+                    BlocProvider.of<AddItemBloc>(context)
+                            .add(ItemFormSubmitted())
+                        : null;
                   },
                 );
               },
@@ -228,7 +240,7 @@ class _AddItemState extends State<AddItem> {
                 onChanged: (value) {
                   BlocProvider.of<AddItemBloc>(context).add(ItemFieldsChange(
                     itemName: value,
-                    unit: _unitController.text,
+                    unit: state.unit.value,
                     sellingPrice: state.sellingPrice.value,
                     buyingPrice: state.buyingPrice.value,
                     availableQuantity: state.availableQuantity.value,
@@ -238,6 +250,11 @@ class _AddItemState extends State<AddItem> {
                 textAlignVertical: TextAlignVertical.center,
                 textInputAction: TextInputAction.next,
                 style: Theme.of(context).textTheme.bodyText1,
+                onFieldSubmitted: (term) {
+                  _itemNameFocusNode.unfocus();
+                  FocusScope.of(context)
+                      .requestFocus(_itemSellingPriceFocusNode);
+                },
               ),
               SizedBox(height: designValues(context).cornerRadius34),
               TextFormField(
@@ -247,8 +264,8 @@ class _AddItemState extends State<AddItem> {
                   context,
                   showCurrency: true,
                   inFocus: _itemSellingPriceFocusNode.hasFocus,
-                  labelText: "Selling price",
-                  hintText: "Selling price",
+                  labelText: "Selling price per unit",
+                  hintText: "Selling price per unit",
                   errorText: _itemSellingPriceFocusNode.hasFocus
                       ? _itemSellingPriceErrorText()
                       : null,
@@ -262,7 +279,7 @@ class _AddItemState extends State<AddItem> {
                 onChanged: (value) {
                   BlocProvider.of<AddItemBloc>(context).add(ItemFieldsChange(
                     itemName: state.itemName.value,
-                    unit: _unitController.text,
+                    unit: state.unit.value,
                     sellingPrice: double.tryParse(value) ?? 0.0,
                     buyingPrice: state.buyingPrice.value,
                     availableQuantity: state.availableQuantity.value,
@@ -272,12 +289,16 @@ class _AddItemState extends State<AddItem> {
                 textAlignVertical: TextAlignVertical.center,
                 textInputAction: TextInputAction.next,
                 style: Theme.of(context).textTheme.bodyText1,
+                onFieldSubmitted: (term) {
+                  _itemSellingPriceFocusNode.unfocus();
+                  FocusScope.of(context)
+                      .requestFocus(_itemBuyingPriceFocusNode);
+                },
               ),
               SizedBox(height: designValues(context).cornerRadius34),
               TextFormField(
                 initialValue: state.buyingPrice.value.toString(),
                 focusNode: _itemBuyingPriceFocusNode,
-                
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(
                       RegExp(r'^[0-9]+(\.[0-9]*)?$')),
@@ -286,8 +307,8 @@ class _AddItemState extends State<AddItem> {
                   context,
                   showCurrency: true,
                   inFocus: _itemBuyingPriceFocusNode.hasFocus,
-                  labelText: "Buying price",
-                  hintText: "Buying price",
+                  labelText: "Buying price per unit",
+                  hintText: "Buying price per unit",
                   errorText: _itemBuyingPriceFocusNode.hasFocus
                       ? _itemBuyingPriceErrorText()
                       : null,
@@ -296,7 +317,7 @@ class _AddItemState extends State<AddItem> {
                 onChanged: (value) {
                   BlocProvider.of<AddItemBloc>(context).add(ItemFieldsChange(
                     itemName: state.itemName.value,
-                    unit: _unitController.text,
+                    unit: state.unit.value,
                     sellingPrice: state.sellingPrice.value,
                     buyingPrice: double.tryParse(value) ?? 0.0,
                     availableQuantity: state.availableQuantity.value,
@@ -323,13 +344,18 @@ class _AddItemState extends State<AddItem> {
                   inFocus: _itemAvailableQuantityFocusNode.hasFocus,
                   suffixIconWidget: GestureDetector(
                     onTap: () {
-                      context
-                          .read<AddItemBloc>()
-                          .add(ShowUnitEvent(unit: _unitController.text));
+                      FocusScope.of(context).requestFocus(_unitFocusNode);
+                      if (!_unitFocusNode.hasFocus) {}
+                      if (_unitFocusNode.hasFocus) {
+                        _unitFocusNode.unfocus();
+                      }
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        color: AppColors.skyBlue,
+                        color: _unitFocusNode.hasFocus ||
+                                state.unit.value != "unit"
+                            ? AppColors.dark
+                            : AppColors.skyBlue,
 
                         // apply the border to the right side
                         borderRadius: BorderRadius.only(
@@ -350,12 +376,14 @@ class _AddItemState extends State<AddItem> {
                           Padding(
                             padding: const EdgeInsets.only(left: 8),
                             child: Text(
-                              _unitController.text,
+                              state.unit.value,
                               style: AppTheme.of(context)
                                   .textTheme
                                   .bodyText1
                                   ?.copyWith(
-                                    color: AppColors.secondaryDark,
+                                    color: _unitFocusNode.hasFocus
+                                        ? AppColors.skyBlue
+                                        : AppColors.light,
                                     fontWeight: FontWeight.w700,
                                   ),
                             ),
@@ -365,10 +393,10 @@ class _AddItemState extends State<AddItem> {
                             padding: const EdgeInsets.only(right: 8),
                             child: BlocBuilder<AddItemBloc, AddItemState>(
                               builder: (context, state) {
-                                if (state is ShowUnitState) {
+                                if (_unitFocusNode.hasFocus) {
                                   return const Icon(
                                     Icons.keyboard_arrow_up_rounded,
-                                    color: AppColors.light,
+                                    color: AppColors.skyBlue,
                                   );
                                 }
                                 return const Icon(
@@ -392,7 +420,7 @@ class _AddItemState extends State<AddItem> {
                 onChanged: (value) {
                   BlocProvider.of<AddItemBloc>(context).add(ItemFieldsChange(
                     itemName: state.itemName.value,
-                    unit: _unitController.text,
+                    unit: state.unit.value,
                     sellingPrice: state.sellingPrice.value,
                     buyingPrice: state.buyingPrice.value,
                     availableQuantity: double.tryParse(value) ?? 0.0,
@@ -402,13 +430,15 @@ class _AddItemState extends State<AddItem> {
                 textAlignVertical: TextAlignVertical.center,
                 textInputAction: TextInputAction.done,
                 style: Theme.of(context).textTheme.bodyText1,
+                onFieldSubmitted: (term) {
+                  _itemAvailableQuantityFocusNode.unfocus();
+                },
               ),
               SizedBox(height: designValues(context).cornerRadius13),
-              if (state is ShowUnitState)
+              if (_unitFocusNode.hasFocus)
                 Padding(
                   padding: EdgeInsets.only(
-                    left: designValues(context).unitDropDownLeftPadding,
-                  ),
+                      left: designValues(context).unitDropDownLeftPadding),
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(
@@ -427,17 +457,16 @@ class _AddItemState extends State<AddItem> {
                       itemCount: _units.length,
                       itemBuilder: (context, index) => TextButton(
                         onPressed: () {
-                          _unitController.text = _units[index];
-
                           BlocProvider.of<AddItemBloc>(context).add(
                             ItemFieldsChange(
                               itemName: state.itemName.value,
-                              unit: _unitController.text,
+                              unit: _units[index],
                               sellingPrice: state.sellingPrice.value,
                               buyingPrice: state.buyingPrice.value,
                               availableQuantity: state.availableQuantity.value,
                             ),
                           );
+                          _unitFocusNode.unfocus();
                         },
                         child: Align(
                           alignment: Alignment.centerLeft,
