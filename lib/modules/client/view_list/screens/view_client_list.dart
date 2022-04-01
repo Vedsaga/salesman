@@ -34,7 +34,7 @@ class _ViewClientState extends State<ViewClientList> {
             'Error fetching clients. Please try again later.',
             MessageType.failed,
           );
-          Future.delayed(const Duration(seconds: 2), () {
+          Future.delayed(const Duration(seconds: 1), () {
             Navigator.popAndPushNamed(context, RouteNames.menu);
 
           });

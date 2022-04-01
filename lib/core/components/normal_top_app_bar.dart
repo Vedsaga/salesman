@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:salesman/config/theme/theme.dart';
 
 class NormalTopAppBar extends StatelessWidget {
-  const NormalTopAppBar({Key? key, required this.title}) : super(key: key);
+  const NormalTopAppBar({Key? key, required this.title, this.titleStyle}) : super(key: key);
 
   final String title;
+  final TextStyle? titleStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,7 @@ class NormalTopAppBar extends StatelessWidget {
       alignment: Alignment.centerLeft,
       child: Text(
         title.toUpperCase(),
-        style: AppTheme.of(context).textTheme.headline5,
+        style: titleStyle ?? AppTheme.of(context).textTheme.headline5,
       ),
     );
   }

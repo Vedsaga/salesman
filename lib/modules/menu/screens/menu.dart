@@ -55,7 +55,7 @@ class Menu extends StatelessWidget {
               context,
               "Something went wrong... Please reach out to us.",
               MessageType.failed);
-          Future.delayed(const Duration(seconds: 2), () {
+          Future.delayed(const Duration(seconds: 1), () {
             Navigator.popAndPushNamed(context, RouteNames.profileCreation);
           });
         }
@@ -74,7 +74,7 @@ class Menu extends StatelessWidget {
               context,
               "Something went wrong... Please reach out to us.",
               MessageType.failed);
-          Future.delayed(const Duration(seconds: 2), () {
+          Future.delayed(const Duration(seconds: 1), () {
             Navigator.popAndPushNamed(context, RouteNames.profileCreation);
           });
         }

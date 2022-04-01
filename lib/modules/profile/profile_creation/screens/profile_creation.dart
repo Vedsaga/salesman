@@ -149,7 +149,7 @@ class _ProfileCreationState extends State<ProfileCreation> {
             "yeee.. Your Profile Created!",
             MessageType.success,
           );
-          Future.delayed(const Duration(seconds: 2), () {
+          Future.delayed(const Duration(seconds: 1), () {
             Navigator.popAndPushNamed(context, RouteNames.menu);
 
           });          

@@ -861,6 +861,7 @@ class ModelOrderData extends DataClass implements Insertable<ModelOrderData> {
   final double totalPrice;
   final String orderNote;
   final String orderType;
+  final String paymentStatus;
   final String createdBy;
   final DateTime createdAt;
   final DateTime lastUpdated;
@@ -874,6 +875,7 @@ class ModelOrderData extends DataClass implements Insertable<ModelOrderData> {
       required this.totalPrice,
       required this.orderNote,
       required this.orderType,
+      required this.paymentStatus,
       required this.createdBy,
       required this.createdAt,
       required this.lastUpdated,
@@ -896,6 +898,8 @@ class ModelOrderData extends DataClass implements Insertable<ModelOrderData> {
           .mapFromDatabaseResponse(data['${effectivePrefix}order_note'])!,
       orderType: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}order_type'])!,
+      paymentStatus: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}payment_status'])!,
       createdBy: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}created_by'])!,
       createdAt: const DateTimeType()
@@ -918,6 +922,7 @@ class ModelOrderData extends DataClass implements Insertable<ModelOrderData> {
     map['total_price'] = Variable<double>(totalPrice);
     map['order_note'] = Variable<String>(orderNote);
     map['order_type'] = Variable<String>(orderType);
+    map['payment_status'] = Variable<String>(paymentStatus);
     map['created_by'] = Variable<String>(createdBy);
     map['created_at'] = Variable<DateTime>(createdAt);
     map['last_updated'] = Variable<DateTime>(lastUpdated);
@@ -935,6 +940,7 @@ class ModelOrderData extends DataClass implements Insertable<ModelOrderData> {
       totalPrice: Value(totalPrice),
       orderNote: Value(orderNote),
       orderType: Value(orderType),
+      paymentStatus: Value(paymentStatus),
       createdBy: Value(createdBy),
       createdAt: Value(createdAt),
       lastUpdated: Value(lastUpdated),
@@ -954,6 +960,7 @@ class ModelOrderData extends DataClass implements Insertable<ModelOrderData> {
       totalPrice: serializer.fromJson<double>(json['totalPrice']),
       orderNote: serializer.fromJson<String>(json['orderNote']),
       orderType: serializer.fromJson<String>(json['orderType']),
+      paymentStatus: serializer.fromJson<String>(json['paymentStatus']),
       createdBy: serializer.fromJson<String>(json['createdBy']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       lastUpdated: serializer.fromJson<DateTime>(json['lastUpdated']),
@@ -973,6 +980,7 @@ class ModelOrderData extends DataClass implements Insertable<ModelOrderData> {
       'totalPrice': serializer.toJson<double>(totalPrice),
       'orderNote': serializer.toJson<String>(orderNote),
       'orderType': serializer.toJson<String>(orderType),
+      'paymentStatus': serializer.toJson<String>(paymentStatus),
       'createdBy': serializer.toJson<String>(createdBy),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'lastUpdated': serializer.toJson<DateTime>(lastUpdated),
@@ -989,6 +997,7 @@ class ModelOrderData extends DataClass implements Insertable<ModelOrderData> {
           double? totalPrice,
           String? orderNote,
           String? orderType,
+          String? paymentStatus,
           String? createdBy,
           DateTime? createdAt,
           DateTime? lastUpdated,
@@ -1002,6 +1011,7 @@ class ModelOrderData extends DataClass implements Insertable<ModelOrderData> {
         totalPrice: totalPrice ?? this.totalPrice,
         orderNote: orderNote ?? this.orderNote,
         orderType: orderType ?? this.orderType,
+        paymentStatus: paymentStatus ?? this.paymentStatus,
         createdBy: createdBy ?? this.createdBy,
         createdAt: createdAt ?? this.createdAt,
         lastUpdated: lastUpdated ?? this.lastUpdated,
@@ -1018,6 +1028,7 @@ class ModelOrderData extends DataClass implements Insertable<ModelOrderData> {
           ..write('totalPrice: $totalPrice, ')
           ..write('orderNote: $orderNote, ')
           ..write('orderType: $orderType, ')
+          ..write('paymentStatus: $paymentStatus, ')
           ..write('createdBy: $createdBy, ')
           ..write('createdAt: $createdAt, ')
           ..write('lastUpdated: $lastUpdated, ')
@@ -1036,6 +1047,7 @@ class ModelOrderData extends DataClass implements Insertable<ModelOrderData> {
       totalPrice,
       orderNote,
       orderType,
+      paymentStatus,
       createdBy,
       createdAt,
       lastUpdated,
@@ -1052,6 +1064,7 @@ class ModelOrderData extends DataClass implements Insertable<ModelOrderData> {
           other.totalPrice == this.totalPrice &&
           other.orderNote == this.orderNote &&
           other.orderType == this.orderType &&
+          other.paymentStatus == this.paymentStatus &&
           other.createdBy == this.createdBy &&
           other.createdAt == this.createdAt &&
           other.lastUpdated == this.lastUpdated &&
@@ -1067,6 +1080,7 @@ class ModelOrderCompanion extends UpdateCompanion<ModelOrderData> {
   final Value<double> totalPrice;
   final Value<String> orderNote;
   final Value<String> orderType;
+  final Value<String> paymentStatus;
   final Value<String> createdBy;
   final Value<DateTime> createdAt;
   final Value<DateTime> lastUpdated;
@@ -1080,6 +1094,7 @@ class ModelOrderCompanion extends UpdateCompanion<ModelOrderData> {
     this.totalPrice = const Value.absent(),
     this.orderNote = const Value.absent(),
     this.orderType = const Value.absent(),
+    this.paymentStatus = const Value.absent(),
     this.createdBy = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.lastUpdated = const Value.absent(),
@@ -1094,6 +1109,7 @@ class ModelOrderCompanion extends UpdateCompanion<ModelOrderData> {
     required double totalPrice,
     required String orderNote,
     required String orderType,
+    required String paymentStatus,
     required String createdBy,
     this.createdAt = const Value.absent(),
     this.lastUpdated = const Value.absent(),
@@ -1105,6 +1121,7 @@ class ModelOrderCompanion extends UpdateCompanion<ModelOrderData> {
         totalPrice = Value(totalPrice),
         orderNote = Value(orderNote),
         orderType = Value(orderType),
+        paymentStatus = Value(paymentStatus),
         createdBy = Value(createdBy);
   static Insertable<ModelOrderData> custom({
     Expression<int>? orderId,
@@ -1114,6 +1131,7 @@ class ModelOrderCompanion extends UpdateCompanion<ModelOrderData> {
     Expression<double>? totalPrice,
     Expression<String>? orderNote,
     Expression<String>? orderType,
+    Expression<String>? paymentStatus,
     Expression<String>? createdBy,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? lastUpdated,
@@ -1128,6 +1146,7 @@ class ModelOrderCompanion extends UpdateCompanion<ModelOrderData> {
       if (totalPrice != null) 'total_price': totalPrice,
       if (orderNote != null) 'order_note': orderNote,
       if (orderType != null) 'order_type': orderType,
+      if (paymentStatus != null) 'payment_status': paymentStatus,
       if (createdBy != null) 'created_by': createdBy,
       if (createdAt != null) 'created_at': createdAt,
       if (lastUpdated != null) 'last_updated': lastUpdated,
@@ -1145,6 +1164,7 @@ class ModelOrderCompanion extends UpdateCompanion<ModelOrderData> {
       Value<double>? totalPrice,
       Value<String>? orderNote,
       Value<String>? orderType,
+      Value<String>? paymentStatus,
       Value<String>? createdBy,
       Value<DateTime>? createdAt,
       Value<DateTime>? lastUpdated,
@@ -1158,6 +1178,7 @@ class ModelOrderCompanion extends UpdateCompanion<ModelOrderData> {
       totalPrice: totalPrice ?? this.totalPrice,
       orderNote: orderNote ?? this.orderNote,
       orderType: orderType ?? this.orderType,
+      paymentStatus: paymentStatus ?? this.paymentStatus,
       createdBy: createdBy ?? this.createdBy,
       createdAt: createdAt ?? this.createdAt,
       lastUpdated: lastUpdated ?? this.lastUpdated,
@@ -1190,6 +1211,9 @@ class ModelOrderCompanion extends UpdateCompanion<ModelOrderData> {
     if (orderType.present) {
       map['order_type'] = Variable<String>(orderType.value);
     }
+    if (paymentStatus.present) {
+      map['payment_status'] = Variable<String>(paymentStatus.value);
+    }
     if (createdBy.present) {
       map['created_by'] = Variable<String>(createdBy.value);
     }
@@ -1219,6 +1243,7 @@ class ModelOrderCompanion extends UpdateCompanion<ModelOrderData> {
           ..write('totalPrice: $totalPrice, ')
           ..write('orderNote: $orderNote, ')
           ..write('orderType: $orderType, ')
+          ..write('paymentStatus: $paymentStatus, ')
           ..write('createdBy: $createdBy, ')
           ..write('createdAt: $createdAt, ')
           ..write('lastUpdated: $lastUpdated, ')
@@ -1282,6 +1307,15 @@ class $ModelOrderTable extends ModelOrder
           GeneratedColumn.checkTextLength(minTextLength: 3, maxTextLength: 20),
       type: const StringType(),
       requiredDuringInsert: true);
+  final VerificationMeta _paymentStatusMeta =
+      const VerificationMeta('paymentStatus');
+  @override
+  late final GeneratedColumn<String?> paymentStatus = GeneratedColumn<String?>(
+      'payment_status', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 3, maxTextLength: 20),
+      type: const StringType(),
+      requiredDuringInsert: true);
   final VerificationMeta _createdByMeta = const VerificationMeta('createdBy');
   @override
   late final GeneratedColumn<String?> createdBy = GeneratedColumn<String?>(
@@ -1330,6 +1364,7 @@ class $ModelOrderTable extends ModelOrder
         totalPrice,
         orderNote,
         orderType,
+        paymentStatus,
         createdBy,
         createdAt,
         lastUpdated,
@@ -1386,6 +1421,14 @@ class $ModelOrderTable extends ModelOrder
           orderType.isAcceptableOrUnknown(data['order_type']!, _orderTypeMeta));
     } else if (isInserting) {
       context.missing(_orderTypeMeta);
+    }
+    if (data.containsKey('payment_status')) {
+      context.handle(
+          _paymentStatusMeta,
+          paymentStatus.isAcceptableOrUnknown(
+              data['payment_status']!, _paymentStatusMeta));
+    } else if (isInserting) {
+      context.missing(_paymentStatusMeta);
     }
     if (data.containsKey('created_by')) {
       context.handle(_createdByMeta,

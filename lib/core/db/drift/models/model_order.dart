@@ -11,6 +11,7 @@ class ModelOrder extends Table {
   RealColumn get totalPrice => real()();
   TextColumn get orderNote => text().withLength(min: 3, max: 50)();
   TextColumn get orderType => text().withLength(min: 3, max: 20)();
+  TextColumn get paymentStatus => text().withLength(min: 3, max: 20)();
   TextColumn get createdBy => text().withLength(min: 3, max: 20)();
   DateTimeColumn get createdAt =>
       dateTime().withDefault(Constant(DateTime.now()))();

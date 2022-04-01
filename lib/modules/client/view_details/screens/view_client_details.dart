@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 // third party imports
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 // project imports
 import 'package:salesman/config/layouts/design_values.dart';
@@ -15,6 +16,7 @@ import 'package:salesman/core/components/delete_confirmation.dart';
 import 'package:salesman/core/components/double_info_box.dart';
 import 'package:salesman/core/components/input_decoration.dart';
 import 'package:salesman/core/components/input_top_app_bar.dart';
+import 'package:salesman/core/components/single_info_box.dart';
 import 'package:salesman/core/components/snackbar_message.dart';
 import 'package:salesman/modules/client/view_details/bloc/view_client_details_bloc.dart';
 
@@ -38,7 +40,7 @@ class _ViewClientDetailsState extends State<ViewClientDetails> {
           if (state is SuccessfullyDeactivateClientState) {
             snackbarMessage(
                 context, "Client removed successfully...", MessageType.success);
-            Future.delayed(const Duration(seconds: 2), () {
+            Future.delayed(const Duration(seconds: 1), () {
               Navigator.popAndPushNamed(context, RouteNames.viewClientList);
             });
           }
@@ -83,15 +85,34 @@ class _ViewClientDetailsState extends State<ViewClientDetails> {
                   ),
                   SizedBox(height: designValues(context).cornerRadius34),
                   DoubleInfoBox(
-                    firstBoxInfo: "trade volume",
-                    firstBoxData: state.clientDetails.totalTrade.toString(),
-                    secondBoxInfo: "due amount",
-                    secondBoxData: state.clientDetails.dueAmount.toString(),
-                    color: state.clientDetails.dueAmount > 0
-                        ? AppColors.green
-                        : state.clientDetails.dueAmount < 0
+                    firstBoxWidget: SingleInfoBox(
+                      info: "trade volume",
+                      data: state.clientDetails.totalTrade.toString(),
+                      dataPrefixWidget: SvgPicture.asset(
+                        "assets/icons/svgs/inr.svg",
+                        height: 13,
+                        width: 13,
+                      ),
+                    ),
+                    secondBoxWidget: SingleInfoBox(
+                      info: "due amount",
+                      data: state.clientDetails.dueAmount.toString(),
+                      dataColor: state.clientDetails.dueAmount > 0
+                          ? AppColors.red
+                          : state.clientDetails.dueAmount > 0
+                              ? AppColors.green
+                              : AppColors.grey,
+                      dataPrefixWidget: SvgPicture.asset(
+                        "assets/icons/svgs/inr.svg",
+                        height: 13,
+                        width: 13,
+                        color: state.clientDetails.dueAmount > 0
                             ? AppColors.red
-                            : AppColors.grey,
+                            : state.clientDetails.dueAmount > 0
+                                ? AppColors.green
+                                : AppColors.grey,
+                      ),
+                    ),
                   )
                 ],
               );

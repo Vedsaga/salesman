@@ -3,23 +3,16 @@ import 'package:flutter/material.dart';
 
 // project imports
 import 'package:salesman/config/layouts/design_values.dart';
-import 'package:salesman/core/components/single_info_box.dart';
 
 class DoubleInfoBox extends StatelessWidget {
   const DoubleInfoBox({
     Key? key,
-    required this.firstBoxInfo,
-    required this.firstBoxData,
-    required this.secondBoxInfo,
-    required this.secondBoxData,
-    required this.color,
+   required  this.firstBoxWidget,
+   required  this.secondBoxWidget,
   }) : super(key: key);
 
-  final String firstBoxInfo;
-  final String firstBoxData;
-  final String secondBoxInfo;
-  final String secondBoxData;
-  final Color color;
+  final Widget firstBoxWidget;
+  final Widget secondBoxWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +20,11 @@ class DoubleInfoBox extends StatelessWidget {
       direction: Axis.horizontal,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        SingleInfoBox(info: firstBoxInfo, data: firstBoxData),
+        firstBoxWidget,
         SizedBox(
           width: designValues(context).padding21,
         ),
-        SingleInfoBox(
-          info: secondBoxInfo,
-          data: secondBoxData,
-          dataColor: color,
-          svgColor: color,
-        ),
+        secondBoxWidget,
       ],
     );
   }

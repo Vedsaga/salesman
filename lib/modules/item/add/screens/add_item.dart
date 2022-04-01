@@ -182,7 +182,7 @@ class _AddItemState extends State<AddItem> {
               MessageType.success);
           context.read<AddItemBloc>().add(EnableTradeFeatureEvent());
           context.read<AddItemBloc>().add(EnableOrderFeatureEvent());
-          Future.delayed(const Duration(seconds: 2), () {
+          Future.delayed(const Duration(seconds: 1), () {
             Navigator.popAndPushNamed(context, RouteNames.viewItemList);
           });
         }

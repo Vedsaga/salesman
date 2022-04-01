@@ -104,7 +104,7 @@ class _AddClientState extends State<AddClient> {
             MessageType.success,
           );
           context.read<AddClientBloc>().add(EnableItemFeatureEvent());
-          Future.delayed(const Duration(seconds: 2), () {
+          Future.delayed(const Duration(seconds: 1), () {
             Navigator.popAndPushNamed(context, RouteNames.viewClientList);
           });
         }

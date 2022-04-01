@@ -1,6 +1,5 @@
 // flutter import
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 // project imports
 import 'package:salesman/config/layouts/design_values.dart';
@@ -15,14 +14,16 @@ class SingleInfoBox extends StatelessWidget {
     required this.data,
     this.infoColor,
     this.dataColor,
-    this.svgColor,
+    this.dataPrefixWidget,
+    this.dataSuffixWidget,
   }) : super(key: key);
 
   final String info;
   final String data;
   final Color? infoColor;
+  final Widget? dataPrefixWidget;
+  final Widget? dataSuffixWidget;
   final Color? dataColor;
-  final Color? svgColor;
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +45,7 @@ class SingleInfoBox extends StatelessWidget {
                 direction: Axis.horizontal,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SvgPicture.asset(
-                    "assets/icons/svgs/inr.svg",
-                    height: 13,
-                    width: 13,
-                    color: svgColor,
-                  ),
+                dataPrefixWidget ?? const SizedBox(),
                   SizedBox(
                     width: designValues(context).cornerRadius8,
                   ),
@@ -60,7 +56,12 @@ class SingleInfoBox extends StatelessWidget {
                         .subtitle2
                         ?.copyWith(color: dataColor ?? AppColors.dark),
                   ),
-                ]),
+                  SizedBox(
+                    width: designValues(context).cornerRadius8,
+                  ),
+                  dataSuffixWidget ?? const SizedBox(),
+              ],
+            ),
           ],
         ),
       ),

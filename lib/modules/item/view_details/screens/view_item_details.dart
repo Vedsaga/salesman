@@ -4,17 +4,23 @@ import 'package:flutter/material.dart';
 
 // third party imports
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:salesman/config/layouts/design_values.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 // project imports
 import 'package:salesman/config/layouts/mobile_layout.dart';
 import 'package:salesman/config/routes/route_name.dart';
+import 'package:salesman/config/theme/colors.dart';
+import 'package:salesman/config/theme/theme.dart';
 import 'package:salesman/core/components/custom_round_button.dart';
 import 'package:salesman/core/components/delete_confirmation.dart';
+import 'package:salesman/core/components/double_info_box.dart';
 import 'package:salesman/core/components/input_decoration.dart';
 import 'package:salesman/core/components/input_top_app_bar.dart';
+import 'package:salesman/core/components/normal_top_app_bar.dart';
+import 'package:salesman/core/components/single_info_box.dart';
 import 'package:salesman/core/components/snackbar_message.dart';
 import 'package:salesman/modules/item/view_details/bloc/view_item_details_bloc.dart';
+import 'package:salesman/config/layouts/design_values.dart';
 
 class ViewItemDetails extends StatefulWidget {
   const ViewItemDetails({Key? key}) : super(key: key);
@@ -31,7 +37,7 @@ class _ViewItemDetailsState extends State<ViewItemDetails> {
         if (state is SuccessfullyDeactivatedItemState) {
           snackbarMessage(
               context, "Item removed successfully...", MessageType.success);
-          Future.delayed(const Duration(seconds: 2), () {
+          Future.delayed(const Duration(seconds: 1), () {
             Navigator.popAndPushNamed(context, RouteNames.viewItemList);
           });
         }
@@ -42,7 +48,7 @@ class _ViewItemDetailsState extends State<ViewItemDetails> {
             MessageType.warning,
           );
           // delay for 2 seconds
-          Future.delayed(const Duration(seconds: 2), () {
+          Future.delayed(const Duration(seconds: 1), () {
             Navigator.popAndPushNamed(context, RouteNames.viewItemList);
           });
         }
@@ -52,7 +58,7 @@ class _ViewItemDetailsState extends State<ViewItemDetails> {
             "Reserved quantity must be 0.",
             MessageType.warning,
           );
-          Future.delayed(const Duration(seconds: 2), () {
+          Future.delayed(const Duration(seconds: 1), () {
             Navigator.popAndPushNamed(context, RouteNames.viewItemList);
           });
         }
@@ -114,6 +120,66 @@ class _ViewItemDetailsState extends State<ViewItemDetails> {
                       labelText: "buying price per unit",
                       hintText: "buying price per unit",
                       inFocus: false,
+                    ),
+                  ),
+                  SizedBox(height: designValues(context).verticalPadding),
+                  NormalTopAppBar(
+                    title: "quantity",
+                    titleStyle: AppTheme.of(context).textTheme.headline6,
+                  ),
+                  SizedBox(height: designValues(context).cornerRadius34),
+                  DoubleInfoBox(
+                    firstBoxWidget: SingleInfoBox(
+                      info: "available",
+                      data: state.itemDetails.availableQuantity.toString(),
+                      dataSuffixWidget: Text(
+                        state.itemDetails.unit,
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle2
+                            ?.copyWith(color: AppColors.deepBlue),
+                      ),
+                    ),
+                    secondBoxWidget: SingleInfoBox(
+                      info: "reserved",
+                      data: state.itemDetails.reservedQuantity.toString(),
+                      dataSuffixWidget: Text(
+                        state.itemDetails.unit,
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle2
+                            ?.copyWith(color: AppColors.orange),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: designValues(context).verticalPadding),
+                  NormalTopAppBar(
+                    title: "cost",
+                    titleStyle: AppTheme.of(context).textTheme.headline6,
+                  ),
+                  SizedBox(height: designValues(context).cornerRadius34),
+                  DoubleInfoBox(
+                    firstBoxWidget: SingleInfoBox(
+                      info: "selling",
+                      data: state.itemDetails.sellingPricePerUnit.toString(),
+                      dataColor: AppColors.deepBlue,
+                      dataPrefixWidget: SvgPicture.asset(
+                        "assets/icons/svgs/inr.svg",
+                        height: 13,
+                        width: 13,
+                        color: AppColors.deepBlue,
+                      ),
+                    ),
+                    secondBoxWidget: SingleInfoBox(
+                      info: "buying",
+                      data: state.itemDetails.buyingPricePerUnit.toString(),
+                      dataColor: AppColors.orange,
+                      dataPrefixWidget: SvgPicture.asset(
+                        "assets/icons/svgs/inr.svg",
+                        height: 13,
+                        width: 13,
+                        color: AppColors.orange,
+                      ),
                     ),
                   ),
                 ],

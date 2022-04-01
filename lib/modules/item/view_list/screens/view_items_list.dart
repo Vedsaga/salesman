@@ -33,7 +33,7 @@ class _ViewItemState extends State<ViewItemList> {
             'Error fetching items. Please try again later.',
             MessageType.failed,
           );
-          Future.delayed(const Duration(seconds: 2), () {
+          Future.delayed(const Duration(seconds: 1), () {
             Navigator.popAndPushNamed(context, RouteNames.menu);
           });
         }
