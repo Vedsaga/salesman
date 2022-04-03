@@ -44,6 +44,7 @@ class _ViewItemState extends State<ViewItemList> {
             'No items found! Please Add Item',
             MessageType.warning,
           );
+          context.read<ViewItemBloc>().add(DisableOrderFeatureEvent());
         }
       },
       child: MobileLayout(
@@ -56,31 +57,34 @@ class _ViewItemState extends State<ViewItemList> {
               );
             }
             if (state is FetchedItemState) {
-              return ListView.builder(
-                shrinkWrap: true,
-                itemCount: state.items.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).popAndPushNamed(
-                        RouteNames.viewItemDetails,
-                        arguments: state.items[index],
-                      );
-                    },
-                    child: CustomListCard(
-                      leadingDataAtTop: state.items[index].itemName,
-                      trailingDataAtTop:
-                          state.items[index].totalTrade.toString(),
-                      leadingInfoAtBottom: "stock ",
-                      leadingDataAtBottom:
-                          "${state.items[index].availableQuantity} ${state.items[index].unit}",
-                      trailingInfoAtBottom: "MRP ",
-                      trailingDataAtBottom:
-                          "${state.items[index].sellingPricePerUnit}",
-                      color: AppColors.grey,
-                    ),
-                  );
-                },
+              return SingleChildScrollView(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: state.items.length,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).popAndPushNamed(
+                          RouteNames.viewItemDetails,
+                          arguments: state.items[index],
+                        );
+                      },
+                      child: CustomListCard(
+                        leadingDataAtTop: state.items[index].itemName,
+                        trailingDataAtTop:
+                            state.items[index].totalTrade.toString(),
+                        leadingInfoAtBottom: "stock ",
+                        leadingDataAtBottom:
+                            "${state.items[index].availableQuantity} ${state.items[index].unit}",
+                        trailingInfoAtBottom: "MRP ",
+                        trailingDataAtBottom:
+                            "${state.items[index].sellingPricePerUnit}",
+                        color: AppColors.grey,
+                      ),
+                    );
+                  },
+                ),
               );
             }
             if (state is EmptyItemState) {

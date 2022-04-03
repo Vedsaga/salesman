@@ -106,7 +106,7 @@ class Menu extends StatelessWidget {
                           iconName: "client",
                           disabled: activeFeatures.disableClient,
                           onTap: () {
-                            Navigator.popAndPushNamed(
+                            Navigator.pushNamed(
                                 context, RouteNames.viewClientList);
                           },
                         ),
@@ -115,7 +115,7 @@ class Menu extends StatelessWidget {
                           iconName: "item",
                           disabled: activeFeatures.disableItem,
                           onTap: () {
-                            Navigator.popAndPushNamed(
+                            Navigator.pushNamed(
                                 context, RouteNames.viewItemList);
                           },
                         ),
@@ -134,8 +134,8 @@ class Menu extends StatelessWidget {
                           iconName: "order",
                           disabled: activeFeatures.disableOrder,
                           onTap: () {
-                            snackbarMessage(context, "will add soon :D",
-                                MessageType.normal);
+                            Navigator.pushNamed(
+                                context, RouteNames.viewOrderList);
                           },
                         ),
                         MenuButtonModel(

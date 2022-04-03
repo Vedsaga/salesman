@@ -18,13 +18,22 @@ class ItemTableQueries extends DatabaseAccessor<AppDatabase>
     return await into(modelItem).insert(item);
   }
 
-  Future<List<ModelItemData>> getAllItems() async {
+  Future<List<ModelItemData>> getAllActiveItems() async {
     return await (select(modelItem)
           ..where(
             (table) => table.isActive.equals(true),
           )
           ..orderBy([
             (table) => OrderingTerm(expression: table.itemName),
+          ])
+          )
+        .get();
+  }
+  
+  Future<List<ModelItemData>> getAllItems() async {
+    return await (select(modelItem)
+          ..orderBy([
+            (table) => OrderingTerm(expression: table.itemId),
           ])
           )
         .get();
@@ -41,89 +50,49 @@ class ItemTableQueries extends DatabaseAccessor<AppDatabase>
     );
   }
 
-  // update item sellingPrice
-  Future<int> updateItemSellingPrice(int itemId, double sellingPrice) async {
-    return await (update(modelItem)
-          ..where((table) => table.itemId.equals(itemId)))
-        .write(
-      ModelItemCompanion(
-        sellingPricePerUnit: Value(sellingPrice),
-      ),
-    );
-  }
 
-  // update item buyingPrice
-  Future<int> updateItemBuyingPrice(int itemId, double buyingPrice) async {
-    return await (update(modelItem)
-          ..where((table) => table.itemId.equals(itemId)))
-        .write(
-      ModelItemCompanion(
-        buyingPricePerUnit: Value(buyingPrice),
-      ),
-    );
-  }
-
-  // add item quantity to availableQuantity
-  Future<int> addItemQuantity(int itemId, double quantity) async {
-    return await (update(modelItem)
-          ..where((table) => table.itemId.equals(itemId)))
-        .write(
-      ModelItemCompanion(
-        availableQuantity: Value((await (select(modelItem)
-                      ..where((table) => table.itemId.equals(itemId)))
-                    .getSingle())
-                .availableQuantity +
-            quantity),
-      ),
-    );
-  }
-
-  Future<int?> subtractItemQuantity(int itemId, int quantity) async {
+  Future<int> updateAvailableQuantity(int itemId, double quantity) async {
     double availableQuantity = (await (select(modelItem)
               ..where((table) => table.itemId.equals(itemId)))
             .getSingle())
         .availableQuantity;
+    double reservedQuantity = (await (select(modelItem)
+              ..where((table) => table.itemId.equals(itemId)))
+            .getSingle())
+        .reservedQuantity;
+      
 
     if (availableQuantity < quantity) {
-      return null;
+      return -1;
     }
     return await (update(modelItem)
           ..where((table) => table.itemId.equals(itemId)))
         .write(
       ModelItemCompanion(
         availableQuantity: Value(availableQuantity - quantity),
+        reservedQuantity: Value(reservedQuantity + quantity),
       ),
     );
   }
 
-  // reservedQuantity
-  Future<int> addItemReservedQuantity(int itemId, double quantity) async {
-    return await (update(modelItem)
-          ..where((table) => table.itemId.equals(itemId)))
-        .write(
-      ModelItemCompanion(
-        reservedQuantity: Value((await (select(modelItem)
-                      ..where((table) => table.itemId.equals(itemId)))
-                    .getSingle())
-                .reservedQuantity +
-            quantity),
-      ),
-    );
-  }
-
-  Future<int?> subtractItemReservedQuantity(int itemId, double quantity) async {
+  Future<int> updateReservedQuantity(int itemId, double quantity) async {
+    double availableQuantity = (await (select(modelItem)
+              ..where((table) => table.itemId.equals(itemId)))
+            .getSingle())
+        .availableQuantity;
     double reservedQuantity = (await (select(modelItem)
               ..where((table) => table.itemId.equals(itemId)))
             .getSingle())
         .reservedQuantity;
 
     if (reservedQuantity < quantity) {
-      return null;
+      return -1;
     }
     return await (update(modelItem)
           ..where((table) => table.itemId.equals(itemId)))
         .write(
       ModelItemCompanion(
+        availableQuantity: Value(availableQuantity + quantity),
         reservedQuantity: Value(reservedQuantity - quantity),
       ),
     );

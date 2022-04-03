@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 // project imports:
 import 'package:salesman/config/layouts/design_values.dart';
+import 'package:salesman/config/theme/card_box_decoration.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
 
@@ -30,18 +31,7 @@ class CustomListCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: designValues(context).padding21),
-      decoration: BoxDecoration(
-        borderRadius:
-            BorderRadius.circular(designValues(context).cornerRadius8),
-        color: AppColors.light,
-        boxShadow: const [
-          BoxShadow(
-            color: AppColors.shadowColor,
-            blurRadius: 34,
-            offset: Offset(-5, 5),
-          ),
-        ],
-      ),
+      decoration: cardBoxDecoration(context),
       child: Padding(
         padding: EdgeInsets.all(designValues(context).padding21),
         child: Flex(

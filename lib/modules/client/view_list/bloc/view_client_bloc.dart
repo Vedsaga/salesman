@@ -7,7 +7,7 @@ import 'package:salesman/main.dart';
 import 'package:salesman/core/db/drift/app_database.dart';
 import 'package:salesman/modules/client/query/client_table_queries.dart';
 
-// part 
+// part
 part 'view_client_event.dart';
 part 'view_client_state.dart';
 
@@ -21,7 +21,7 @@ class ViewClientBloc extends Bloc<ViewClientEvent, ViewClientState> {
     emit(FetchingClientState());
     try {
       final List<ModelClientData>? _clients =
-          await ClientTableQueries(appDatabaseInstance).getAllClients();
+          await ClientTableQueries(appDatabaseInstance).getAllActiveClients();
       if (_clients != null && _clients.isNotEmpty) {
         emit(FetchedClientState(_clients));
       } else {

@@ -1,5 +1,6 @@
 class RouteNames {
   static const String splash = '/';
+  static const String testDesign = '/test_design';
   static const String profileCreation = 'profileCreation';
   static const String viewProfile = 'viewProfile';
   static const String editProfile = 'editProfile';
@@ -11,4 +12,7 @@ class RouteNames {
   static const String viewClientList = 'viewClientList';
   static const String addClient = 'addClient';
   static const String viewClientDetails = 'viewClientDetails';
+  static const String viewOrderList = 'viewOrderList';
+  static const String createOrder = 'createOrder';
+  static const String viewOrderDetails = 'viewOrderDetails';
 }

@@ -1,5 +1,4 @@
 // third party import
-
 import 'package:formz/formz.dart';
 
 enum DoubleFieldValidationError {

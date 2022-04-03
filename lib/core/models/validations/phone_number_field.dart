@@ -26,7 +26,7 @@ class PhoneNumberField extends FormzInput<String, PhoneNumberValidationError> {
     if (value.length < 10) {
       return PhoneNumberValidationError.tooShort;
     }
-    if (value.length > 11) {
+    if (value.length > 10) {
       return PhoneNumberValidationError.tooLong;
     }
     return null;

@@ -123,15 +123,19 @@ class _ViewItemDetailsState extends State<ViewItemDetails> {
                     ),
                   ),
                   SizedBox(height: designValues(context).verticalPadding),
+                  
                   NormalTopAppBar(
-                    title: "quantity",
-                    titleStyle: AppTheme.of(context).textTheme.headline6,
+                    titleWidget: Text(
+                      "QUANTITY",
+                      style: AppTheme.of(context).textTheme.headline6,
+                    ),
                   ),
                   SizedBox(height: designValues(context).cornerRadius34),
                   DoubleInfoBox(
                     firstBoxWidget: SingleInfoBox(
                       info: "available",
-                      data: state.itemDetails.availableQuantity.toString(),
+                      data: state.itemDetails.availableQuantity
+                          .toStringAsFixed(2),
                       dataSuffixWidget: Text(
                         state.itemDetails.unit,
                         style: Theme.of(context)
@@ -142,7 +146,8 @@ class _ViewItemDetailsState extends State<ViewItemDetails> {
                     ),
                     secondBoxWidget: SingleInfoBox(
                       info: "reserved",
-                      data: state.itemDetails.reservedQuantity.toString(),
+                      data:
+                          state.itemDetails.reservedQuantity.toStringAsFixed(2),
                       dataSuffixWidget: Text(
                         state.itemDetails.unit,
                         style: Theme.of(context)
@@ -154,14 +159,18 @@ class _ViewItemDetailsState extends State<ViewItemDetails> {
                   ),
                   SizedBox(height: designValues(context).verticalPadding),
                   NormalTopAppBar(
-                    title: "cost",
-                    titleStyle: AppTheme.of(context).textTheme.headline6,
+                    titleWidget: Text(
+                      "COST per ${state.itemDetails.unit.substring(0, 1).toUpperCase() + state.itemDetails.unit.substring(1)}",
+                      style: AppTheme.of(context).textTheme.headline6,
                   ),
+                  ),
+                  
                   SizedBox(height: designValues(context).cornerRadius34),
                   DoubleInfoBox(
                     firstBoxWidget: SingleInfoBox(
-                      info: "selling",
-                      data: state.itemDetails.sellingPricePerUnit.toString(),
+                      info: "selling price",
+                      data: state.itemDetails.sellingPricePerUnit
+                          .toStringAsFixed(2),
                       dataColor: AppColors.deepBlue,
                       dataPrefixWidget: SvgPicture.asset(
                         "assets/icons/svgs/inr.svg",
@@ -171,8 +180,9 @@ class _ViewItemDetailsState extends State<ViewItemDetails> {
                       ),
                     ),
                     secondBoxWidget: SingleInfoBox(
-                      info: "buying",
-                      data: state.itemDetails.buyingPricePerUnit.toString(),
+                      info: "buying price",
+                      data: state.itemDetails.buyingPricePerUnit
+                          .toStringAsFixed(2),
                       dataColor: AppColors.orange,
                       dataPrefixWidget: SvgPicture.asset(
                         "assets/icons/svgs/inr.svg",

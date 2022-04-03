@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:salesman/config/layouts/design_values.dart';
+
 // project imports
 import 'package:salesman/config/layouts/mobile_layout.dart';
 import 'package:salesman/config/routes/route_name.dart';
@@ -14,6 +15,7 @@ import 'package:salesman/config/theme/theme.dart';
 import 'package:salesman/core/components/action_button.dart';
 import 'package:salesman/core/components/input_decoration.dart';
 import 'package:salesman/core/components/input_top_app_bar.dart';
+import 'package:salesman/core/components/show_unit.dart';
 import 'package:salesman/core/components/snackbar_message.dart';
 import 'package:salesman/core/models/validations/double_field.dart';
 import 'package:salesman/core/models/validations/generic_field.dart';
@@ -30,6 +32,8 @@ class AddItem extends StatefulWidget {
 class _AddItemState extends State<AddItem> {
   final FocusNode _itemNameFocusNode = FocusNode();
   final FocusNode _unitFocusNode = FocusNode();
+  final TextEditingController _unitController =
+      TextEditingController(text: "unit");
   final FocusNode _itemSellingPriceFocusNode = FocusNode();
   final FocusNode _itemBuyingPriceFocusNode = FocusNode();
   final FocusNode _itemAvailableQuantityFocusNode = FocusNode();
@@ -37,13 +41,12 @@ class _AddItemState extends State<AddItem> {
 
   @override
   void initState() {
-    super.initState();
     _itemNameFocusNode.addListener(_itemNameFocusListener);
-    _unitFocusNode.addListener(_unitFocusListener);
     _itemSellingPriceFocusNode.addListener(_itemSellingPriceFocusListener);
     _itemBuyingPriceFocusNode.addListener(_itemBuyingPriceFocusListener);
     _itemAvailableQuantityFocusNode
         .addListener(_itemAvailableQuantityFocusListener);
+    super.initState();
   }
 
   void _itemNameFocusListener() {
@@ -57,17 +60,7 @@ class _AddItemState extends State<AddItem> {
     }
   }
 
-  void _unitFocusListener() {
-    if (_unitFocusNode.hasFocus) {
-      _itemNameFocusNode.unfocus();
-      _itemSellingPriceFocusNode.unfocus();
-      _itemBuyingPriceFocusNode.unfocus();
-      _itemAvailableQuantityFocusNode.unfocus();
-    }
-    if (!_unitFocusNode.hasFocus) {
-      context.read<AddItemBloc>().add(ItemUnitFieldUnfocused());
-    }
-  }
+
 
   void _itemSellingPriceFocusListener() {
     if (_itemSellingPriceFocusNode.hasFocus) {
@@ -165,6 +158,8 @@ class _AddItemState extends State<AddItem> {
     _itemAvailableQuantityFocusNode
         .removeListener(_itemAvailableQuantityFocusListener);
     _itemNameFocusNode.dispose();
+    _unitFocusNode.dispose();
+    _unitController.dispose();
     _itemSellingPriceFocusNode.dispose();
     _itemBuyingPriceFocusNode.dispose();
     _itemAvailableQuantityFocusNode.dispose();
@@ -212,8 +207,7 @@ class _AddItemState extends State<AddItem> {
                   text: "save",
                   onPressed: () {
                     state.status.isValidated
-                        ?
-                    BlocProvider.of<AddItemBloc>(context)
+                        ? BlocProvider.of<AddItemBloc>(context)
                             .add(ItemFormSubmitted())
                         : null;
                   },
@@ -344,70 +338,17 @@ class _AddItemState extends State<AddItem> {
                   inFocus: _itemAvailableQuantityFocusNode.hasFocus,
                   suffixIconWidget: GestureDetector(
                     onTap: () {
-                      FocusScope.of(context).requestFocus(_unitFocusNode);
-                      if (!_unitFocusNode.hasFocus) {}
+                      if (!_unitFocusNode.hasFocus) {
+                        FocusScope.of(context).requestFocus(_unitFocusNode);
+                      }
                       if (_unitFocusNode.hasFocus) {
                         _unitFocusNode.unfocus();
                       }
                     },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: _unitFocusNode.hasFocus ||
-                                state.unit.value != "unit"
-                            ? AppColors.dark
-                            : AppColors.skyBlue,
-
-                        // apply the border to the right side
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(
-                              designValues(context).textCornerRadius),
-                          bottomRight: Radius.circular(
-                              designValues(context).textCornerRadius),
-                          topLeft: Radius.circular(
-                              designValues(context).textCornerRadius),
-                          bottomLeft: Radius.circular(
-                              designValues(context).textCornerRadius),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8),
-                            child: Text(
-                              state.unit.value,
-                              style: AppTheme.of(context)
-                                  .textTheme
-                                  .bodyText1
-                                  ?.copyWith(
-                                    color: _unitFocusNode.hasFocus
-                                        ? AppColors.skyBlue
-                                        : AppColors.light,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                            ),
-                          ),
-                          const SizedBox(width: 5),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 8),
-                            child: BlocBuilder<AddItemBloc, AddItemState>(
-                              builder: (context, state) {
-                                if (_unitFocusNode.hasFocus) {
-                                  return const Icon(
-                                    Icons.keyboard_arrow_up_rounded,
-                                    color: AppColors.skyBlue,
-                                  );
-                                }
-                                return const Icon(
-                                  Icons.keyboard_arrow_down_rounded,
-                                  color: AppColors.light,
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
+                    child: ShowUnit(
+                      showUnit: _unitFocusNode.hasFocus,
+                      value: _unitController.text,
+                      showIcon: true,
                     ),
                   ),
                   labelText: "Available quantity",
@@ -452,34 +393,39 @@ class _AddItemState extends State<AddItem> {
                         ),
                       ],
                     ),
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: _units.length,
-                      itemBuilder: (context, index) => TextButton(
-                        onPressed: () {
-                          BlocProvider.of<AddItemBloc>(context).add(
-                            ItemFieldsChange(
-                              itemName: state.itemName.value,
-                              unit: _units[index],
-                              sellingPrice: state.sellingPrice.value,
-                              buyingPrice: state.buyingPrice.value,
-                              availableQuantity: state.availableQuantity.value,
+                    child: SingleChildScrollView(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: _units.length,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) => TextButton(
+                          onPressed: () {
+                            _unitController.text = _units[index];
+                            BlocProvider.of<AddItemBloc>(context).add(
+                              ItemFieldsChange(
+                                itemName: state.itemName.value,
+                                unit: _unitController.text,
+                                sellingPrice: state.sellingPrice.value,
+                                buyingPrice: state.buyingPrice.value,
+                                availableQuantity:
+                                    state.availableQuantity.value,
+                              ),
+                            );
+                            _unitFocusNode.unfocus();
+                          },
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                left: designValues(context).cornerRadius13,
+                                top: designValues(context).cornerRadius13,
+                                bottom: designValues(context).cornerRadius13,
+                                right: designValues(context).cornerRadius13,
+                              ),
+                              child: Text(_units[index],
+                                  style:
+                                      AppTheme.of(context).textTheme.bodyText2),
                             ),
-                          );
-                          _unitFocusNode.unfocus();
-                        },
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                              left: designValues(context).cornerRadius13,
-                              top: designValues(context).cornerRadius13,
-                              bottom: designValues(context).cornerRadius13,
-                              right: designValues(context).cornerRadius13,
-                            ),
-                            child: Text(_units[index],
-                                style:
-                                    AppTheme.of(context).textTheme.bodyText2),
                           ),
                         ),
                       ),

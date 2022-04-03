@@ -7,5 +7,5 @@ part of 'order_table_queries.dart';
 // **************************************************************************
 
 mixin _$OrderTableQueriesMixin on DatabaseAccessor<AppDatabase> {
-  $ModelItemTable get modelItem => attachedDatabase.modelItem;
+  $ModelOrderTable get modelOrder => attachedDatabase.modelOrder;
 }

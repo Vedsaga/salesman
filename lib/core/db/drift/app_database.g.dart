@@ -857,30 +857,30 @@ class ModelOrderData extends DataClass implements Insertable<ModelOrderData> {
   final int orderId;
   final int clientId;
   final int itemId;
-  final double quantity;
-  final double totalPrice;
-  final String orderNote;
+  final double perUnitCost;
+  final double totalQuantity;
+  final double totalCost;
   final String orderType;
-  final String paymentStatus;
+  final String? paymentStatus;
+  final String orderStatus;
   final String createdBy;
   final DateTime createdAt;
   final DateTime lastUpdated;
-  final DateTime expectedDeliveryDate;
-  final bool isValid;
+  final DateTime? expectedDeliveryDate;
   ModelOrderData(
       {required this.orderId,
       required this.clientId,
       required this.itemId,
-      required this.quantity,
-      required this.totalPrice,
-      required this.orderNote,
+      required this.perUnitCost,
+      required this.totalQuantity,
+      required this.totalCost,
       required this.orderType,
-      required this.paymentStatus,
+      this.paymentStatus,
+      required this.orderStatus,
       required this.createdBy,
       required this.createdAt,
       required this.lastUpdated,
-      required this.expectedDeliveryDate,
-      required this.isValid});
+      this.expectedDeliveryDate});
   factory ModelOrderData.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return ModelOrderData(
@@ -890,16 +890,18 @@ class ModelOrderData extends DataClass implements Insertable<ModelOrderData> {
           .mapFromDatabaseResponse(data['${effectivePrefix}client_id'])!,
       itemId: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}item_id'])!,
-      quantity: const RealType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}quantity'])!,
-      totalPrice: const RealType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}total_price'])!,
-      orderNote: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}order_note'])!,
+      perUnitCost: const RealType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}per_unit_cost'])!,
+      totalQuantity: const RealType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}total_quantity'])!,
+      totalCost: const RealType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}total_cost'])!,
       orderType: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}order_type'])!,
       paymentStatus: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}payment_status'])!,
+          .mapFromDatabaseResponse(data['${effectivePrefix}payment_status']),
+      orderStatus: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}order_status'])!,
       createdBy: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}created_by'])!,
       createdAt: const DateTimeType()
@@ -907,9 +909,7 @@ class ModelOrderData extends DataClass implements Insertable<ModelOrderData> {
       lastUpdated: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}last_updated'])!,
       expectedDeliveryDate: const DateTimeType().mapFromDatabaseResponse(
-          data['${effectivePrefix}expected_delivery_date'])!,
-      isValid: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}is_valid'])!,
+          data['${effectivePrefix}expected_delivery_date']),
     );
   }
   @override
@@ -918,16 +918,20 @@ class ModelOrderData extends DataClass implements Insertable<ModelOrderData> {
     map['order_id'] = Variable<int>(orderId);
     map['client_id'] = Variable<int>(clientId);
     map['item_id'] = Variable<int>(itemId);
-    map['quantity'] = Variable<double>(quantity);
-    map['total_price'] = Variable<double>(totalPrice);
-    map['order_note'] = Variable<String>(orderNote);
+    map['per_unit_cost'] = Variable<double>(perUnitCost);
+    map['total_quantity'] = Variable<double>(totalQuantity);
+    map['total_cost'] = Variable<double>(totalCost);
     map['order_type'] = Variable<String>(orderType);
-    map['payment_status'] = Variable<String>(paymentStatus);
+    if (!nullToAbsent || paymentStatus != null) {
+      map['payment_status'] = Variable<String?>(paymentStatus);
+    }
+    map['order_status'] = Variable<String>(orderStatus);
     map['created_by'] = Variable<String>(createdBy);
     map['created_at'] = Variable<DateTime>(createdAt);
     map['last_updated'] = Variable<DateTime>(lastUpdated);
-    map['expected_delivery_date'] = Variable<DateTime>(expectedDeliveryDate);
-    map['is_valid'] = Variable<bool>(isValid);
+    if (!nullToAbsent || expectedDeliveryDate != null) {
+      map['expected_delivery_date'] = Variable<DateTime?>(expectedDeliveryDate);
+    }
     return map;
   }
 
@@ -936,16 +940,20 @@ class ModelOrderData extends DataClass implements Insertable<ModelOrderData> {
       orderId: Value(orderId),
       clientId: Value(clientId),
       itemId: Value(itemId),
-      quantity: Value(quantity),
-      totalPrice: Value(totalPrice),
-      orderNote: Value(orderNote),
+      perUnitCost: Value(perUnitCost),
+      totalQuantity: Value(totalQuantity),
+      totalCost: Value(totalCost),
       orderType: Value(orderType),
-      paymentStatus: Value(paymentStatus),
+      paymentStatus: paymentStatus == null && nullToAbsent
+          ? const Value.absent()
+          : Value(paymentStatus),
+      orderStatus: Value(orderStatus),
       createdBy: Value(createdBy),
       createdAt: Value(createdAt),
       lastUpdated: Value(lastUpdated),
-      expectedDeliveryDate: Value(expectedDeliveryDate),
-      isValid: Value(isValid),
+      expectedDeliveryDate: expectedDeliveryDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(expectedDeliveryDate),
     );
   }
 
@@ -956,17 +964,17 @@ class ModelOrderData extends DataClass implements Insertable<ModelOrderData> {
       orderId: serializer.fromJson<int>(json['orderId']),
       clientId: serializer.fromJson<int>(json['clientId']),
       itemId: serializer.fromJson<int>(json['itemId']),
-      quantity: serializer.fromJson<double>(json['quantity']),
-      totalPrice: serializer.fromJson<double>(json['totalPrice']),
-      orderNote: serializer.fromJson<String>(json['orderNote']),
+      perUnitCost: serializer.fromJson<double>(json['perUnitCost']),
+      totalQuantity: serializer.fromJson<double>(json['totalQuantity']),
+      totalCost: serializer.fromJson<double>(json['totalCost']),
       orderType: serializer.fromJson<String>(json['orderType']),
-      paymentStatus: serializer.fromJson<String>(json['paymentStatus']),
+      paymentStatus: serializer.fromJson<String?>(json['paymentStatus']),
+      orderStatus: serializer.fromJson<String>(json['orderStatus']),
       createdBy: serializer.fromJson<String>(json['createdBy']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       lastUpdated: serializer.fromJson<DateTime>(json['lastUpdated']),
       expectedDeliveryDate:
-          serializer.fromJson<DateTime>(json['expectedDeliveryDate']),
-      isValid: serializer.fromJson<bool>(json['isValid']),
+          serializer.fromJson<DateTime?>(json['expectedDeliveryDate']),
     );
   }
   @override
@@ -976,16 +984,17 @@ class ModelOrderData extends DataClass implements Insertable<ModelOrderData> {
       'orderId': serializer.toJson<int>(orderId),
       'clientId': serializer.toJson<int>(clientId),
       'itemId': serializer.toJson<int>(itemId),
-      'quantity': serializer.toJson<double>(quantity),
-      'totalPrice': serializer.toJson<double>(totalPrice),
-      'orderNote': serializer.toJson<String>(orderNote),
+      'perUnitCost': serializer.toJson<double>(perUnitCost),
+      'totalQuantity': serializer.toJson<double>(totalQuantity),
+      'totalCost': serializer.toJson<double>(totalCost),
       'orderType': serializer.toJson<String>(orderType),
-      'paymentStatus': serializer.toJson<String>(paymentStatus),
+      'paymentStatus': serializer.toJson<String?>(paymentStatus),
+      'orderStatus': serializer.toJson<String>(orderStatus),
       'createdBy': serializer.toJson<String>(createdBy),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'lastUpdated': serializer.toJson<DateTime>(lastUpdated),
-      'expectedDeliveryDate': serializer.toJson<DateTime>(expectedDeliveryDate),
-      'isValid': serializer.toJson<bool>(isValid),
+      'expectedDeliveryDate':
+          serializer.toJson<DateTime?>(expectedDeliveryDate),
     };
   }
 
@@ -993,30 +1002,30 @@ class ModelOrderData extends DataClass implements Insertable<ModelOrderData> {
           {int? orderId,
           int? clientId,
           int? itemId,
-          double? quantity,
-          double? totalPrice,
-          String? orderNote,
+          double? perUnitCost,
+          double? totalQuantity,
+          double? totalCost,
           String? orderType,
           String? paymentStatus,
+          String? orderStatus,
           String? createdBy,
           DateTime? createdAt,
           DateTime? lastUpdated,
-          DateTime? expectedDeliveryDate,
-          bool? isValid}) =>
+          DateTime? expectedDeliveryDate}) =>
       ModelOrderData(
         orderId: orderId ?? this.orderId,
         clientId: clientId ?? this.clientId,
         itemId: itemId ?? this.itemId,
-        quantity: quantity ?? this.quantity,
-        totalPrice: totalPrice ?? this.totalPrice,
-        orderNote: orderNote ?? this.orderNote,
+        perUnitCost: perUnitCost ?? this.perUnitCost,
+        totalQuantity: totalQuantity ?? this.totalQuantity,
+        totalCost: totalCost ?? this.totalCost,
         orderType: orderType ?? this.orderType,
         paymentStatus: paymentStatus ?? this.paymentStatus,
+        orderStatus: orderStatus ?? this.orderStatus,
         createdBy: createdBy ?? this.createdBy,
         createdAt: createdAt ?? this.createdAt,
         lastUpdated: lastUpdated ?? this.lastUpdated,
         expectedDeliveryDate: expectedDeliveryDate ?? this.expectedDeliveryDate,
-        isValid: isValid ?? this.isValid,
       );
   @override
   String toString() {
@@ -1024,16 +1033,16 @@ class ModelOrderData extends DataClass implements Insertable<ModelOrderData> {
           ..write('orderId: $orderId, ')
           ..write('clientId: $clientId, ')
           ..write('itemId: $itemId, ')
-          ..write('quantity: $quantity, ')
-          ..write('totalPrice: $totalPrice, ')
-          ..write('orderNote: $orderNote, ')
+          ..write('perUnitCost: $perUnitCost, ')
+          ..write('totalQuantity: $totalQuantity, ')
+          ..write('totalCost: $totalCost, ')
           ..write('orderType: $orderType, ')
           ..write('paymentStatus: $paymentStatus, ')
+          ..write('orderStatus: $orderStatus, ')
           ..write('createdBy: $createdBy, ')
           ..write('createdAt: $createdAt, ')
           ..write('lastUpdated: $lastUpdated, ')
-          ..write('expectedDeliveryDate: $expectedDeliveryDate, ')
-          ..write('isValid: $isValid')
+          ..write('expectedDeliveryDate: $expectedDeliveryDate')
           ..write(')'))
         .toString();
   }
@@ -1043,16 +1052,16 @@ class ModelOrderData extends DataClass implements Insertable<ModelOrderData> {
       orderId,
       clientId,
       itemId,
-      quantity,
-      totalPrice,
-      orderNote,
+      perUnitCost,
+      totalQuantity,
+      totalCost,
       orderType,
       paymentStatus,
+      orderStatus,
       createdBy,
       createdAt,
       lastUpdated,
-      expectedDeliveryDate,
-      isValid);
+      expectedDeliveryDate);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1060,99 +1069,99 @@ class ModelOrderData extends DataClass implements Insertable<ModelOrderData> {
           other.orderId == this.orderId &&
           other.clientId == this.clientId &&
           other.itemId == this.itemId &&
-          other.quantity == this.quantity &&
-          other.totalPrice == this.totalPrice &&
-          other.orderNote == this.orderNote &&
+          other.perUnitCost == this.perUnitCost &&
+          other.totalQuantity == this.totalQuantity &&
+          other.totalCost == this.totalCost &&
           other.orderType == this.orderType &&
           other.paymentStatus == this.paymentStatus &&
+          other.orderStatus == this.orderStatus &&
           other.createdBy == this.createdBy &&
           other.createdAt == this.createdAt &&
           other.lastUpdated == this.lastUpdated &&
-          other.expectedDeliveryDate == this.expectedDeliveryDate &&
-          other.isValid == this.isValid);
+          other.expectedDeliveryDate == this.expectedDeliveryDate);
 }
 
 class ModelOrderCompanion extends UpdateCompanion<ModelOrderData> {
   final Value<int> orderId;
   final Value<int> clientId;
   final Value<int> itemId;
-  final Value<double> quantity;
-  final Value<double> totalPrice;
-  final Value<String> orderNote;
+  final Value<double> perUnitCost;
+  final Value<double> totalQuantity;
+  final Value<double> totalCost;
   final Value<String> orderType;
-  final Value<String> paymentStatus;
+  final Value<String?> paymentStatus;
+  final Value<String> orderStatus;
   final Value<String> createdBy;
   final Value<DateTime> createdAt;
   final Value<DateTime> lastUpdated;
-  final Value<DateTime> expectedDeliveryDate;
-  final Value<bool> isValid;
+  final Value<DateTime?> expectedDeliveryDate;
   const ModelOrderCompanion({
     this.orderId = const Value.absent(),
     this.clientId = const Value.absent(),
     this.itemId = const Value.absent(),
-    this.quantity = const Value.absent(),
-    this.totalPrice = const Value.absent(),
-    this.orderNote = const Value.absent(),
+    this.perUnitCost = const Value.absent(),
+    this.totalQuantity = const Value.absent(),
+    this.totalCost = const Value.absent(),
     this.orderType = const Value.absent(),
     this.paymentStatus = const Value.absent(),
+    this.orderStatus = const Value.absent(),
     this.createdBy = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.lastUpdated = const Value.absent(),
     this.expectedDeliveryDate = const Value.absent(),
-    this.isValid = const Value.absent(),
   });
   ModelOrderCompanion.insert({
     this.orderId = const Value.absent(),
     required int clientId,
     required int itemId,
-    required double quantity,
-    required double totalPrice,
-    required String orderNote,
+    required double perUnitCost,
+    required double totalQuantity,
+    required double totalCost,
     required String orderType,
-    required String paymentStatus,
+    this.paymentStatus = const Value.absent(),
+    required String orderStatus,
     required String createdBy,
     this.createdAt = const Value.absent(),
     this.lastUpdated = const Value.absent(),
     this.expectedDeliveryDate = const Value.absent(),
-    this.isValid = const Value.absent(),
   })  : clientId = Value(clientId),
         itemId = Value(itemId),
-        quantity = Value(quantity),
-        totalPrice = Value(totalPrice),
-        orderNote = Value(orderNote),
+        perUnitCost = Value(perUnitCost),
+        totalQuantity = Value(totalQuantity),
+        totalCost = Value(totalCost),
         orderType = Value(orderType),
-        paymentStatus = Value(paymentStatus),
+        orderStatus = Value(orderStatus),
         createdBy = Value(createdBy);
   static Insertable<ModelOrderData> custom({
     Expression<int>? orderId,
     Expression<int>? clientId,
     Expression<int>? itemId,
-    Expression<double>? quantity,
-    Expression<double>? totalPrice,
-    Expression<String>? orderNote,
+    Expression<double>? perUnitCost,
+    Expression<double>? totalQuantity,
+    Expression<double>? totalCost,
     Expression<String>? orderType,
-    Expression<String>? paymentStatus,
+    Expression<String?>? paymentStatus,
+    Expression<String>? orderStatus,
     Expression<String>? createdBy,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? lastUpdated,
-    Expression<DateTime>? expectedDeliveryDate,
-    Expression<bool>? isValid,
+    Expression<DateTime?>? expectedDeliveryDate,
   }) {
     return RawValuesInsertable({
       if (orderId != null) 'order_id': orderId,
       if (clientId != null) 'client_id': clientId,
       if (itemId != null) 'item_id': itemId,
-      if (quantity != null) 'quantity': quantity,
-      if (totalPrice != null) 'total_price': totalPrice,
-      if (orderNote != null) 'order_note': orderNote,
+      if (perUnitCost != null) 'per_unit_cost': perUnitCost,
+      if (totalQuantity != null) 'total_quantity': totalQuantity,
+      if (totalCost != null) 'total_cost': totalCost,
       if (orderType != null) 'order_type': orderType,
       if (paymentStatus != null) 'payment_status': paymentStatus,
+      if (orderStatus != null) 'order_status': orderStatus,
       if (createdBy != null) 'created_by': createdBy,
       if (createdAt != null) 'created_at': createdAt,
       if (lastUpdated != null) 'last_updated': lastUpdated,
       if (expectedDeliveryDate != null)
         'expected_delivery_date': expectedDeliveryDate,
-      if (isValid != null) 'is_valid': isValid,
     });
   }
 
@@ -1160,30 +1169,30 @@ class ModelOrderCompanion extends UpdateCompanion<ModelOrderData> {
       {Value<int>? orderId,
       Value<int>? clientId,
       Value<int>? itemId,
-      Value<double>? quantity,
-      Value<double>? totalPrice,
-      Value<String>? orderNote,
+      Value<double>? perUnitCost,
+      Value<double>? totalQuantity,
+      Value<double>? totalCost,
       Value<String>? orderType,
-      Value<String>? paymentStatus,
+      Value<String?>? paymentStatus,
+      Value<String>? orderStatus,
       Value<String>? createdBy,
       Value<DateTime>? createdAt,
       Value<DateTime>? lastUpdated,
-      Value<DateTime>? expectedDeliveryDate,
-      Value<bool>? isValid}) {
+      Value<DateTime?>? expectedDeliveryDate}) {
     return ModelOrderCompanion(
       orderId: orderId ?? this.orderId,
       clientId: clientId ?? this.clientId,
       itemId: itemId ?? this.itemId,
-      quantity: quantity ?? this.quantity,
-      totalPrice: totalPrice ?? this.totalPrice,
-      orderNote: orderNote ?? this.orderNote,
+      perUnitCost: perUnitCost ?? this.perUnitCost,
+      totalQuantity: totalQuantity ?? this.totalQuantity,
+      totalCost: totalCost ?? this.totalCost,
       orderType: orderType ?? this.orderType,
       paymentStatus: paymentStatus ?? this.paymentStatus,
+      orderStatus: orderStatus ?? this.orderStatus,
       createdBy: createdBy ?? this.createdBy,
       createdAt: createdAt ?? this.createdAt,
       lastUpdated: lastUpdated ?? this.lastUpdated,
       expectedDeliveryDate: expectedDeliveryDate ?? this.expectedDeliveryDate,
-      isValid: isValid ?? this.isValid,
     );
   }
 
@@ -1199,20 +1208,23 @@ class ModelOrderCompanion extends UpdateCompanion<ModelOrderData> {
     if (itemId.present) {
       map['item_id'] = Variable<int>(itemId.value);
     }
-    if (quantity.present) {
-      map['quantity'] = Variable<double>(quantity.value);
+    if (perUnitCost.present) {
+      map['per_unit_cost'] = Variable<double>(perUnitCost.value);
     }
-    if (totalPrice.present) {
-      map['total_price'] = Variable<double>(totalPrice.value);
+    if (totalQuantity.present) {
+      map['total_quantity'] = Variable<double>(totalQuantity.value);
     }
-    if (orderNote.present) {
-      map['order_note'] = Variable<String>(orderNote.value);
+    if (totalCost.present) {
+      map['total_cost'] = Variable<double>(totalCost.value);
     }
     if (orderType.present) {
       map['order_type'] = Variable<String>(orderType.value);
     }
     if (paymentStatus.present) {
-      map['payment_status'] = Variable<String>(paymentStatus.value);
+      map['payment_status'] = Variable<String?>(paymentStatus.value);
+    }
+    if (orderStatus.present) {
+      map['order_status'] = Variable<String>(orderStatus.value);
     }
     if (createdBy.present) {
       map['created_by'] = Variable<String>(createdBy.value);
@@ -1225,10 +1237,7 @@ class ModelOrderCompanion extends UpdateCompanion<ModelOrderData> {
     }
     if (expectedDeliveryDate.present) {
       map['expected_delivery_date'] =
-          Variable<DateTime>(expectedDeliveryDate.value);
-    }
-    if (isValid.present) {
-      map['is_valid'] = Variable<bool>(isValid.value);
+          Variable<DateTime?>(expectedDeliveryDate.value);
     }
     return map;
   }
@@ -1239,16 +1248,16 @@ class ModelOrderCompanion extends UpdateCompanion<ModelOrderData> {
           ..write('orderId: $orderId, ')
           ..write('clientId: $clientId, ')
           ..write('itemId: $itemId, ')
-          ..write('quantity: $quantity, ')
-          ..write('totalPrice: $totalPrice, ')
-          ..write('orderNote: $orderNote, ')
+          ..write('perUnitCost: $perUnitCost, ')
+          ..write('totalQuantity: $totalQuantity, ')
+          ..write('totalCost: $totalCost, ')
           ..write('orderType: $orderType, ')
           ..write('paymentStatus: $paymentStatus, ')
+          ..write('orderStatus: $orderStatus, ')
           ..write('createdBy: $createdBy, ')
           ..write('createdAt: $createdAt, ')
           ..write('lastUpdated: $lastUpdated, ')
-          ..write('expectedDeliveryDate: $expectedDeliveryDate, ')
-          ..write('isValid: $isValid')
+          ..write('expectedDeliveryDate: $expectedDeliveryDate')
           ..write(')'))
         .toString();
   }
@@ -1281,24 +1290,23 @@ class $ModelOrderTable extends ModelOrder
       type: const IntType(),
       requiredDuringInsert: true,
       defaultConstraints: 'REFERENCES model_item (item_id)');
-  final VerificationMeta _quantityMeta = const VerificationMeta('quantity');
+  final VerificationMeta _perUnitCostMeta =
+      const VerificationMeta('perUnitCost');
   @override
-  late final GeneratedColumn<double?> quantity = GeneratedColumn<double?>(
-      'quantity', aliasedName, false,
+  late final GeneratedColumn<double?> perUnitCost = GeneratedColumn<double?>(
+      'per_unit_cost', aliasedName, false,
       type: const RealType(), requiredDuringInsert: true);
-  final VerificationMeta _totalPriceMeta = const VerificationMeta('totalPrice');
+  final VerificationMeta _totalQuantityMeta =
+      const VerificationMeta('totalQuantity');
   @override
-  late final GeneratedColumn<double?> totalPrice = GeneratedColumn<double?>(
-      'total_price', aliasedName, false,
+  late final GeneratedColumn<double?> totalQuantity = GeneratedColumn<double?>(
+      'total_quantity', aliasedName, false,
       type: const RealType(), requiredDuringInsert: true);
-  final VerificationMeta _orderNoteMeta = const VerificationMeta('orderNote');
+  final VerificationMeta _totalCostMeta = const VerificationMeta('totalCost');
   @override
-  late final GeneratedColumn<String?> orderNote = GeneratedColumn<String?>(
-      'order_note', aliasedName, false,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 3, maxTextLength: 50),
-      type: const StringType(),
-      requiredDuringInsert: true);
+  late final GeneratedColumn<double?> totalCost = GeneratedColumn<double?>(
+      'total_cost', aliasedName, false,
+      type: const RealType(), requiredDuringInsert: true);
   final VerificationMeta _orderTypeMeta = const VerificationMeta('orderType');
   @override
   late final GeneratedColumn<String?> orderType = GeneratedColumn<String?>(
@@ -1311,7 +1319,13 @@ class $ModelOrderTable extends ModelOrder
       const VerificationMeta('paymentStatus');
   @override
   late final GeneratedColumn<String?> paymentStatus = GeneratedColumn<String?>(
-      'payment_status', aliasedName, false,
+      'payment_status', aliasedName, true,
+      type: const StringType(), requiredDuringInsert: false);
+  final VerificationMeta _orderStatusMeta =
+      const VerificationMeta('orderStatus');
+  @override
+  late final GeneratedColumn<String?> orderStatus = GeneratedColumn<String?>(
+      'order_status', aliasedName, false,
       additionalChecks:
           GeneratedColumn.checkTextLength(minTextLength: 3, maxTextLength: 20),
       type: const StringType(),
@@ -1343,33 +1357,23 @@ class $ModelOrderTable extends ModelOrder
       const VerificationMeta('expectedDeliveryDate');
   @override
   late final GeneratedColumn<DateTime?> expectedDeliveryDate =
-      GeneratedColumn<DateTime?>('expected_delivery_date', aliasedName, false,
-          type: const IntType(),
-          requiredDuringInsert: false,
-          defaultValue: Constant(DateTime.now()));
-  final VerificationMeta _isValidMeta = const VerificationMeta('isValid');
-  @override
-  late final GeneratedColumn<bool?> isValid = GeneratedColumn<bool?>(
-      'is_valid', aliasedName, false,
-      type: const BoolType(),
-      requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (is_valid IN (0, 1))',
-      defaultValue: const Constant(true));
+      GeneratedColumn<DateTime?>('expected_delivery_date', aliasedName, true,
+          type: const IntType(), requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         orderId,
         clientId,
         itemId,
-        quantity,
-        totalPrice,
-        orderNote,
+        perUnitCost,
+        totalQuantity,
+        totalCost,
         orderType,
         paymentStatus,
+        orderStatus,
         createdBy,
         createdAt,
         lastUpdated,
-        expectedDeliveryDate,
-        isValid
+        expectedDeliveryDate
       ];
   @override
   String get aliasedName => _alias ?? 'model_order';
@@ -1396,25 +1400,27 @@ class $ModelOrderTable extends ModelOrder
     } else if (isInserting) {
       context.missing(_itemIdMeta);
     }
-    if (data.containsKey('quantity')) {
-      context.handle(_quantityMeta,
-          quantity.isAcceptableOrUnknown(data['quantity']!, _quantityMeta));
-    } else if (isInserting) {
-      context.missing(_quantityMeta);
-    }
-    if (data.containsKey('total_price')) {
+    if (data.containsKey('per_unit_cost')) {
       context.handle(
-          _totalPriceMeta,
-          totalPrice.isAcceptableOrUnknown(
-              data['total_price']!, _totalPriceMeta));
+          _perUnitCostMeta,
+          perUnitCost.isAcceptableOrUnknown(
+              data['per_unit_cost']!, _perUnitCostMeta));
     } else if (isInserting) {
-      context.missing(_totalPriceMeta);
+      context.missing(_perUnitCostMeta);
     }
-    if (data.containsKey('order_note')) {
-      context.handle(_orderNoteMeta,
-          orderNote.isAcceptableOrUnknown(data['order_note']!, _orderNoteMeta));
+    if (data.containsKey('total_quantity')) {
+      context.handle(
+          _totalQuantityMeta,
+          totalQuantity.isAcceptableOrUnknown(
+              data['total_quantity']!, _totalQuantityMeta));
     } else if (isInserting) {
-      context.missing(_orderNoteMeta);
+      context.missing(_totalQuantityMeta);
+    }
+    if (data.containsKey('total_cost')) {
+      context.handle(_totalCostMeta,
+          totalCost.isAcceptableOrUnknown(data['total_cost']!, _totalCostMeta));
+    } else if (isInserting) {
+      context.missing(_totalCostMeta);
     }
     if (data.containsKey('order_type')) {
       context.handle(_orderTypeMeta,
@@ -1427,8 +1433,14 @@ class $ModelOrderTable extends ModelOrder
           _paymentStatusMeta,
           paymentStatus.isAcceptableOrUnknown(
               data['payment_status']!, _paymentStatusMeta));
+    }
+    if (data.containsKey('order_status')) {
+      context.handle(
+          _orderStatusMeta,
+          orderStatus.isAcceptableOrUnknown(
+              data['order_status']!, _orderStatusMeta));
     } else if (isInserting) {
-      context.missing(_paymentStatusMeta);
+      context.missing(_orderStatusMeta);
     }
     if (data.containsKey('created_by')) {
       context.handle(_createdByMeta,
@@ -1451,10 +1463,6 @@ class $ModelOrderTable extends ModelOrder
           _expectedDeliveryDateMeta,
           expectedDeliveryDate.isAcceptableOrUnknown(
               data['expected_delivery_date']!, _expectedDeliveryDateMeta));
-    }
-    if (data.containsKey('is_valid')) {
-      context.handle(_isValidMeta,
-          isValid.isAcceptableOrUnknown(data['is_valid']!, _isValidMeta));
     }
     return context;
   }

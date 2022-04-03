@@ -22,13 +22,21 @@ class ClientTableQueries extends DatabaseAccessor<AppDatabase>
     return await update(modelClient).replace(client);
   }
 
-  Future<List<ModelClientData>> getAllClients() async {
+  Future<List<ModelClientData>> getAllActiveClients() async {
     return await (select(modelClient)
           ..where(
             (table) => table.isActive.equals(true),
           )
           ..orderBy([
             (table) => OrderingTerm(expression: table.clientName),
+          ])
+          )
+        .get();
+  }
+  Future<List<ModelClientData>> getAllClients() async {
+    return await (select(modelClient)
+          ..orderBy([
+            (table) => OrderingTerm(expression: table.clientId),
           ])
           )
         .get();

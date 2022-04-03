@@ -57,36 +57,39 @@ class _ViewClientState extends State<ViewClientList> {
               );
             }
             if (state is FetchedClientState) {
-              return ListView.builder(
-                shrinkWrap: true,
-                itemCount: state.clients.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).popAndPushNamed(
-                        RouteNames.viewClientDetails,
-                        arguments: state.clients[index],
-                      );
-                    },
-                      child: CustomListCard(
-                        leadingDataAtTop: state.clients[index].clientName,
-                        trailingDataAtTop:
-                            state.clients[index].totalTrade.toString(),
-                        leadingInfoAtBottom: "last trade ",
-                        leadingDataAtBottom:
-                            state.clients[index].lastTradeOn.toString(),
-                        trailingInfoAtBottom: "due ",
-                        trailingDataAtBottom:
-                            state.clients[index].dueAmount.toString(),
-                        color: state.clients[index].dueAmount > 0
-                            ? AppColors.green
-                            : state.clients[index].dueAmount < 0
-                                ? AppColors.red
-                                : AppColors.grey,
-                      )
-                     
-                  );
-                },
+              return SingleChildScrollView(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: state.clients.length,
+                    physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).popAndPushNamed(
+                          RouteNames.viewClientDetails,
+                          arguments: state.clients[index],
+                        );
+                      },
+                        child: CustomListCard(
+                          leadingDataAtTop: state.clients[index].clientName,
+                          trailingDataAtTop:
+                              state.clients[index].totalTrade.toString(),
+                          leadingInfoAtBottom: "last trade ",
+                          leadingDataAtBottom:
+                              state.clients[index].lastTradeOn.toString(),
+                          trailingInfoAtBottom: "due ",
+                          trailingDataAtBottom:
+                              state.clients[index].dueAmount.toString(),
+                          color: state.clients[index].dueAmount > 0
+                              ? AppColors.green
+                              : state.clients[index].dueAmount < 0
+                                  ? AppColors.red
+                                  : AppColors.grey,
+                        )
+                       
+                    );
+                  },
+                ),
               );
             }
             if (state is EmptyClientState) {
