@@ -73,9 +73,8 @@ class _CreateOrderState extends State<CreateOrder> {
     return -1;
   }
 
-  int _returnDataFromItemList({
+  int _returnItemId({
     required List<ModelItemData>? itemList,
-    required String askFor,
     required String name,
   }) {
     if (itemList != null) {
@@ -116,6 +115,9 @@ class _CreateOrderState extends State<CreateOrder> {
           if (askedFor == "buyingPricePerUnit") {
             return element.buyingPricePerUnit;
           }
+          if (askedFor == "availableQuantity") {
+            return element.availableQuantity;
+          }
         }
       }
     }
@@ -125,10 +127,10 @@ class _CreateOrderState extends State<CreateOrder> {
   String? _totalQuantityErrorText() {
     final totalQuantity = context.read<CreateOrderBloc>().state.totalQuantity;
     if (totalQuantity.value >
-        _returnDataFromItemList(
+        _returnPerUnitCostOfItem(
           itemList: context.read<CreateOrderBloc>().state.itemList,
           name: _itemIdController.text,
-          askFor: 'availableQuantity',
+          askedFor: 'availableQuantity',
         )) {
       return 'Selling quantity is greater than available quantity';
     }
@@ -230,11 +232,11 @@ class _CreateOrderState extends State<CreateOrder> {
             return ActionButton(
               disabled: !state.status.isValidated ||
                   state.totalQuantity.value >
-                      _returnDataFromItemList(
+                      _returnPerUnitCostOfItem(
                         itemList:
                             context.read<CreateOrderBloc>().state.itemList,
                         name: _itemIdController.text,
-                        askFor: 'availableQuantity',
+                        askedFor: 'availableQuantity',
                       ),
               text: "create",
               onPressed: () {
@@ -324,10 +326,9 @@ class _CreateOrderState extends State<CreateOrder> {
                         BlocProvider.of<CreateOrderBloc>(context).add(
                           OrderFieldsChangeEvent(
                             clientId: state.clientId.value,
-                            itemId: _returnDataFromItemList(
+                            itemId: _returnItemId(
                               itemList: state.itemList,
                               name: _itemIdController.text,
-                              askFor: 'itemId',
                             ),
                             perUnitCost: state.perUnitCost.value,
                             totalCost: state.totalCost.value,
@@ -376,6 +377,7 @@ class _CreateOrderState extends State<CreateOrder> {
                         _totalQuantityFocusNode.unfocus();
                       },
                       onChanged: (value) {
+                        print(value);
                         BlocProvider.of<CreateOrderBloc>(context).add(
                           OrderFieldsChangeEvent(
                             clientId: state.clientId.value,
