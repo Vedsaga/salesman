@@ -1,8 +1,12 @@
 // flutter import
+
+// Flutter imports:
 import 'package:flutter/material.dart';
-// third party imports
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
-// project's imports
+
+// Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/routes/arguments_models/add_payment_details_route_arguments.dart';
 import 'package:salesman/config/routes/route_name.dart';
@@ -16,6 +20,9 @@ import 'package:salesman/core/db/drift/app_database.dart';
 import 'package:salesman/core/models/designs/summary_card_model.dart';
 import 'package:salesman/modules/order/view_order_details/bloc/view_order_details_bloc.dart';
 
+// third party imports
+// project's imports
+
 class OrderPaymentsTab extends StatelessWidget {
   const OrderPaymentsTab({
     Key? key,
@@ -23,7 +30,7 @@ class OrderPaymentsTab extends StatelessWidget {
   double totalReceivedAmount(List<ModelPaymentData> listOfPayments) {
     double totalReceived = 0;
     // loop through the listOfPayments and if the paymentType == "receive" then return sum of the amount
-    for (var payment in listOfPayments) {
+    for (final payment in listOfPayments) {
       if (payment.paymentType == "receive") {
         totalReceived += payment.amount;
       }
@@ -34,7 +41,7 @@ class OrderPaymentsTab extends StatelessWidget {
   double totalSendAmount(List<ModelPaymentData> listOfPayments) {
     double totalSend = 0;
     // loop through the listOfPayments and if the paymentType == "send" then return sum of the amount
-    for (var payment in listOfPayments) {
+    for (final payment in listOfPayments) {
       if (payment.paymentType == "send") {
         totalSend += payment.amount;
       }
@@ -44,7 +51,8 @@ class OrderPaymentsTab extends StatelessWidget {
 
   double calculateExtraPaidOrRemaining(
       {required List<ModelPaymentData> listOfPayments,
-      required double totalOrderAmount}) {
+    required double totalOrderAmount,
+  }) {
     if (listOfPayments.isNotEmpty) {
       final double totalPaid = totalReceivedAmount(listOfPayments);
       final double totalSend = totalSendAmount(listOfPayments);
@@ -92,13 +100,13 @@ class OrderPaymentsTab extends StatelessWidget {
                               info: "Received",
                               value: totalReceivedAmount(listOfPayments)
                                   .toStringAsFixed(2),
-                              color: AppColors.green,
+                              color: green,
                             ),
                             SummaryCardModel(
                               info: "Send",
                               value: totalSendAmount(listOfPayments)
                                   .toStringAsFixed(2),
-                              color: AppColors.red,
+                              color: red,
                             ),
                           ],
                           highlightText: state.orderDetails.totalCost +
@@ -109,27 +117,28 @@ class OrderPaymentsTab extends StatelessWidget {
                           highlightValue: calculateExtraPaidOrRemaining(
                                   listOfPayments: listOfPayments,
                                   totalOrderAmount:
-                                      state.orderDetails.totalCost)
+                                      state.orderDetails.totalCost,
+                          )
                               .toStringAsFixed(2),
                           highlightTextColor: state.orderDetails.totalCost +
                                       totalSendAmount(listOfPayments) >
                                   totalReceivedAmount(listOfPayments)
-                              ? AppColors.red
-                              : AppColors.green,
+                              ? red
+                              : green,
                           highlightValueColor: state.orderDetails.totalCost +
                                       totalSendAmount(listOfPayments) >
                                   totalReceivedAmount(listOfPayments)
-                              ? AppColors.red
-                              : AppColors.green,
+                              ? red
+                              : green,
                         ),
                         SizedBox(height: designValues(context).verticalPadding),
                         NormalTopAppBar(
                           titleWidget: Text(
                             "HISTORY",
-                            style: AppTheme.of(context)
+                            style: of(context)
                                 .textTheme
                                 .headline6
-                                ?.copyWith(color: AppColors.grey),
+                                ?.copyWith(color: grey),
                           ),
                         ),
                         SizedBox(height: designValues(context).cornerRadius34),
@@ -141,10 +150,10 @@ class OrderPaymentsTab extends StatelessWidget {
                             ),
                             child: Text(
                               "No Payments Yet",
-                              style: AppTheme.of(context)
+                              style: of(context)
                                   .textTheme
                                   .bodyText1
-                                  ?.copyWith(color: AppColors.grey),
+                                  ?.copyWith(color: grey),
                             ),
                           ),
                         if (state.paymentReceivedList.isNotEmpty)
@@ -157,10 +166,12 @@ class OrderPaymentsTab extends StatelessWidget {
                                 onTap: () {
                                   Navigator.pushNamed(
                                       context, RouteNames.viewPaymentDetails,
-                                      arguments: listOfPayments[index]);
+                                    arguments: listOfPayments[index],
+                                  );
                                 },
                                 child: PaymentCard(
-                                    paymentData: listOfPayments[index]),
+                                  paymentData: listOfPayments[index],
+                                ),
                               );
                             },
                           ),
@@ -186,7 +197,8 @@ class OrderPaymentsTab extends StatelessWidget {
                               comingFrom: RouteNames.viewOrderList,
                               deliveryOrderList: [state.orderDetails],
                               returnOrderList: null,
-                            ));
+                          ),
+                        );
                       },
                     ),
                     const Spacer(),

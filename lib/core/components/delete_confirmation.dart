@@ -1,6 +1,9 @@
 // flutter import
 
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:salesman/config/theme/colors.dart';
 
 class DeleteConfirmation extends StatelessWidget {
@@ -17,7 +20,7 @@ class DeleteConfirmation extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       elevation: 55,
-      backgroundColor: AppColors.lightGrey,
+      backgroundColor: lightGrey,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(21),
       ),
@@ -26,7 +29,7 @@ class DeleteConfirmation extends StatelessWidget {
         style: const TextStyle(
           fontSize: 17,
           fontWeight: FontWeight.w600,
-          color: AppColors.dark,
+          color: dark,
           fontFamily: 'Montserrat',
         ),
       ),
@@ -35,7 +38,7 @@ class DeleteConfirmation extends StatelessWidget {
         style: const TextStyle(
           fontSize: 15,
           fontWeight: FontWeight.w400,
-          color: AppColors.grey,
+          color: grey,
           fontFamily: 'Montserrat',
         ),
       ),
@@ -46,7 +49,7 @@ class DeleteConfirmation extends StatelessWidget {
             style: TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.bold,
-              color: AppColors.skyBlue,
+              color: skyBlue,
               fontFamily: 'Montserrat',
             ),
           ),
@@ -62,7 +65,7 @@ class DeleteConfirmation extends StatelessWidget {
             style: TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.bold,
-              color: AppColors.red,
+              color: red,
               fontFamily: 'Montserrat',
             ),
           ),

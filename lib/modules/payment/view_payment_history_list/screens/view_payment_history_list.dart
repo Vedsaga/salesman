@@ -1,6 +1,12 @@
 // flutter imports
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+// Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/layouts/mobile_layout.dart';
 import 'package:salesman/config/routes/arguments_models/add_payment_details_route_arguments.dart';
@@ -80,13 +86,13 @@ class _ViewPaymentHistoryListState extends State<ViewPaymentHistoryList> {
                             Navigator.pushNamed(
                               context,
                               RouteNames.viewPaymentDetails,
-                              arguments:  paymentHistoryList[index]
+                              arguments:  paymentHistoryList[index],
                             );
                           },
                           child: PaymentCard(
-                              paymentData: paymentHistoryList[index]),
+                              paymentData: paymentHistoryList[index],),
                         );
-                      }),
+                      },),
                 ),
               );
             }
@@ -108,26 +114,26 @@ class _ViewPaymentHistoryListState extends State<ViewPaymentHistoryList> {
                       arguments: AddPaymentDetailsRouteArguments(
                           comingFrom: RouteNames.paymentReceived,
                           deliveryOrderList: null,
-                          returnOrderList: null
-                          ));
+                          returnOrderList: null,
+                          ),);
                 } else if (state.topBarTitle == RouteNames.paymentSent) {
                   Navigator.popAndPushNamed(
                       context, RouteNames.addPaymentDetails,
                       arguments: AddPaymentDetailsRouteArguments(
-                          comingFrom: RouteNames.paymentSent, deliveryOrderList: null, returnOrderList: null));
+                          comingFrom: RouteNames.paymentSent, deliveryOrderList: null, returnOrderList: null,),);
                 } else {
                   Navigator.popAndPushNamed(
                       context, RouteNames.addPaymentDetails,
                       arguments: AddPaymentDetailsRouteArguments(
                           comingFrom: RouteNames.viewPaymentHistoryList,
-                          deliveryOrderList: null, returnOrderList: null));
+                          deliveryOrderList: null, returnOrderList: null,),);
                 }
               },
             );
           }
           return const SizedBox();
         },
-      )),
+      ),),
     );
   }
 }

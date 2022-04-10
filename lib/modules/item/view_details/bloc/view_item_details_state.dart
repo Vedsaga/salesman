@@ -27,3 +27,5 @@ class ReservedQuantityNotZeroState extends ViewItemDetailsState {}
 class SuccessfullyDeactivatedItemState extends ViewItemDetailsState {}
 
 class FailedToDeactivateItemState extends ViewItemDetailsState {}
+
+class EmptyItemDetailsState extends ViewItemDetailsState {}

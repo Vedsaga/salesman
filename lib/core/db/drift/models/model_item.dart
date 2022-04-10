@@ -1,3 +1,4 @@
+// Package imports:
 import 'package:drift/drift.dart';
 
 class ModelItem extends Table {

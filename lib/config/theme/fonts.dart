@@ -1,5 +1,4 @@
 
-class AppFonts {
-  static String montserrat = "Montserrat";
-  static String righteous = "Righteous";
-}
+   String montserrat = "Montserrat";
+   String righteous = "Righteous";
+   

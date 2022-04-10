@@ -1,3 +1,4 @@
+// Project imports:
 import 'package:salesman/core/db/drift/app_database.dart';
 
 class AddPaymentDetailsRouteArguments {
@@ -8,7 +9,5 @@ class AddPaymentDetailsRouteArguments {
     required this.comingFrom,
     required this.deliveryOrderList,
     required this.returnOrderList,
-  }) {
-    assert(deliveryOrderList == null || returnOrderList == null);
-  }
+  }) : assert(deliveryOrderList == null || returnOrderList == null);
 }

@@ -1,10 +1,13 @@
+// Package imports:
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-// project imports:
+// Project imports:
 import 'package:salesman/core/db/drift/app_database.dart';
 import 'package:salesman/main.dart';
 import 'package:salesman/modules/payment/query/payment_table_queries.dart';
+
+// project imports:
 
 // part of
 part 'view_order_details_event.dart';
@@ -16,11 +19,11 @@ class ViewOrderDetailsBloc extends Bloc<ViewOrderDetailsEvent, ViewOrderDetailsS
   final ModelClientData clientDetails;
   ViewOrderDetailsBloc({required this.orderDetails,
       required this.itemDetails,
-      required this.clientDetails}) : super(ViewOrderDetailsInitialState()) {
+      required this.clientDetails,}) : super(ViewOrderDetailsInitialState()) {
     on<GetOrderDetailsEvent>(_getOrderDetails);
   }
 
-  void _getOrderDetails(GetOrderDetailsEvent event, Emitter<ViewOrderDetailsState> emit) async{
+  Future<void> _getOrderDetails(GetOrderDetailsEvent event, Emitter<ViewOrderDetailsState> emit) async{
     emit(FetchingOrderDetailsState());
     try {
       final List<ModelPaymentData> paymentReceivedList =
@@ -31,7 +34,7 @@ class ViewOrderDetailsBloc extends Bloc<ViewOrderDetailsEvent, ViewOrderDetailsS
         clientDetails: clientDetails,
         itemDetails: itemDetails,
         paymentReceivedList: paymentReceivedList,
-      ));
+      ),);
     } catch(e) {
       emit(ErrorFetchingOrderDetailsState());
     }

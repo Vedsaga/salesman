@@ -1,14 +1,20 @@
 //  flutter import
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 
-//  third party import
+// Package imports:
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:salesman/config/layouts/design_values.dart';
 
-// project import
+// Project imports:
+import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/theme/box_decoration.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
+
+//  third party import
+
+// project import
 
 class MenuButton extends StatelessWidget {
   final String svgPath;
@@ -20,7 +26,8 @@ class MenuButton extends StatelessWidget {
       required this.title,
       required this.svgPath,
       required this.onTap,
-      required this.disabled})
+    required this.disabled,
+  })
       : super(key: key);
 
   @override
@@ -28,14 +35,16 @@ class MenuButton extends StatelessWidget {
     return GestureDetector(
       onTap: disabled ? null :
            () {
+        // ignore: avoid_dynamic_calls
         onTap();
             },
       child: Container(
         decoration: disabled
             ? BoxDecoration(
-                color: AppColors.lightGrey,
+                color: lightGrey,
                 borderRadius: BorderRadius.circular(
-                    designValues(context).containerCornerRadius21),
+                  designValues(context).containerCornerRadius21,
+                ),
               )
             : myBoxDecoration(context),
         child: Padding(
@@ -46,11 +55,11 @@ class MenuButton extends StatelessWidget {
               Text(
                 title,
                 style: disabled
-                    ? AppTheme.of(context)
+                    ? of(context)
                         .textTheme
                         .caption
-                        ?.copyWith(color: AppColors.grey)
-                    : AppTheme.of(context).textTheme.caption,
+                        ?.copyWith(color: grey)
+                    : of(context).textTheme.caption,
                 softWrap: false,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -61,7 +70,7 @@ class MenuButton extends StatelessWidget {
                 svgPath,
                 width: designValues(context).containerCornerRadius21,
                 height: designValues(context).containerCornerRadius21,
-                color: disabled ? AppColors.grey : null,
+                color: disabled ? grey : null,
               ),
             ],
           ),

@@ -1,13 +1,22 @@
 // flutter import
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 
-// project import
+// Project imports:
+import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
-import 'package:salesman/config/layouts/design_values.dart';
+
+// project import
 
 class ActionButton extends StatelessWidget {
-  const ActionButton({required this.disabled, required this.text, Key? key, required this.onPressed})
+  const ActionButton({
+    required this.disabled,
+    required this.text,
+    Key? key,
+    required this.onPressed,
+  })
       : super(key: key);
 
   final bool disabled;
@@ -20,6 +29,7 @@ class ActionButton extends StatelessWidget {
       onTap: disabled
           ? null
           : () {
+              // ignore: avoid_dynamic_calls
               onPressed();
             },
       child: Container(
@@ -27,25 +37,27 @@ class ActionButton extends StatelessWidget {
         height: designValues(context).buttonHeight,
         decoration: disabled
             ? BoxDecoration(
-                color: AppColors.lightGrey,
+                color: lightGrey,
                 borderRadius: BorderRadius.circular(
-                   designValues(context).buttonCornerRadius),
+                  designValues(context).buttonCornerRadius,
+                ),
               )
             : BoxDecoration(
-                color: AppColors.dark,
+                color: dark,
                 borderRadius: BorderRadius.circular(
-                    designValues(context).buttonCornerRadius),
+                  designValues(context).buttonCornerRadius,
+                ),
               ),
         child: Center(
           child: Text(
             // capitalize the first letter
             text.substring(0, 1).toUpperCase() + text.substring(1),
             style: disabled
-                ? AppTheme.of(context)
+                ? of(context)
                     .textTheme
                     .button
-                    ?.copyWith(color: AppColors.grey)
-                : AppTheme.of(context).textTheme.button,
+                    ?.copyWith(color: grey)
+                : of(context).textTheme.button,
           ),
         ),
       ),

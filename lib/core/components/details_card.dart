@@ -1,10 +1,15 @@
 // flutter import
+
+// Flutter imports:
 import 'package:flutter/material.dart';
-// project imports
+
+// Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
 import 'package:salesman/core/components/row_flex_close_children.dart';
+
+// project imports
 
 class DetailsCard extends StatelessWidget {
   const DetailsCard({
@@ -28,7 +33,7 @@ class DetailsCard extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: Text(
             label,
-            style: AppTheme.of(context).textTheme.subtitle2,
+            style: of(context).textTheme.subtitle2,
           ),
         ),
         SizedBox(height: designValues(context).cornerRadius8),
@@ -40,10 +45,10 @@ class DetailsCard extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius:
                   BorderRadius.circular(designValues(context).cornerRadius13),
-              gradient: containerGradient ?? AppColors.lightGradient,
+              gradient: containerGradient ?? lightGradient,
               boxShadow: const [
                 BoxShadow(
-                  color: AppColors.shadowColor,
+                  color: shadowColor,
                   blurRadius: 34,
                   offset: Offset(-5, 5),
                 ),
@@ -58,7 +63,8 @@ class DetailsCard extends StatelessWidget {
                 child: RowFlexCloseChildren(
                   firstChild: firstChild,
                   secondChild: secondChild,
-                )),
+              ),
+            ),
           ),
         )
       ],

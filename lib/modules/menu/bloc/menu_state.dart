@@ -42,6 +42,3 @@ class FetchedAllDetailsState extends MenuState {
 }
 
 class ErrorAllDetailsState extends MenuState {}
-
-
-

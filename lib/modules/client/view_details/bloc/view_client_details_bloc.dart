@@ -1,5 +1,8 @@
+// Package imports:
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+
+// Project imports:
 import 'package:salesman/core/db/drift/app_database.dart';
 import 'package:salesman/main.dart';
 import 'package:salesman/modules/client/query/client_table_queries.dart';
@@ -9,7 +12,7 @@ part 'view_client_details_state.dart';
 
 class ViewClientDetailsBloc
     extends Bloc<ViewClientDetailsEvent, ViewClientDetailsState> {
-  final ModelClientData clientDetails;
+  final ModelClientData? clientDetails;
 
   ViewClientDetailsBloc({required this.clientDetails})
       : super(ViewClientDetailsInitialState()) {
@@ -18,21 +21,36 @@ class ViewClientDetailsBloc
   }
 
   void _getClientDetails(
-      GetClientDetailsEvent event, Emitter<ViewClientDetailsState> emit) {
-    emit(ViewingClientDetailsState(clientDetails: clientDetails));
+    GetClientDetailsEvent event,
+    Emitter<ViewClientDetailsState> emit,
+  ) {
+    if (clientDetails == null) {
+      emit(FailedToDeactivateClientState());
+      return;
+    } else {
+      emit(ViewingClientDetailsState(clientDetails: clientDetails!));
+    }
   }
 
-  void _deactivateClient(
-      DeactivateClientEvent event, Emitter<ViewClientDetailsState> emit) async {
+  Future<void> _deactivateClient(
+    DeactivateClientEvent event,
+    Emitter<ViewClientDetailsState> emit,
+  ) async {
     emit(DeactivationInProgress());
     try {
-      final int id = await ClientTableQueries(appDatabaseInstance)
-          .deActiveClient(clientDetails.clientId);
-      if (id > 0) {
-        emit(SuccessfullyDeactivateClientState());
+    if (clientDetails == null) {
+        emit(EmptyClientDetailsState());
+        return;
+      } else {
+        final int id = await ClientTableQueries(appDatabaseInstance)
+            .deActiveClient(clientDetails!.clientId);
+        if (id > 0) {
+          emit(SuccessfullyDeactivateClientState());
+        }
       }
+
     } catch (e) {
-      emit(FailedToDeactivateClientState());
+      emit(EmptyClientDetailsState());
     }
   }
 }

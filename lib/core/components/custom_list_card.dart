@@ -1,12 +1,18 @@
 // flutter imports
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_svg/flutter_svg.dart';
 
-// project imports:
+// Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/theme/card_box_decoration.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
+
+// project imports:
 
 class CustomListCard extends StatelessWidget {
   const CustomListCard(
@@ -17,7 +23,8 @@ class CustomListCard extends StatelessWidget {
       required this.leadingDataAtBottom,
       required this.trailingInfoAtBottom,
       required this.trailingDataAtBottom,
-      required this.color})
+    required this.color,
+  })
       : super(key: key);
   final String leadingDataAtTop;
   final String trailingDataAtTop;
@@ -43,8 +50,7 @@ class CustomListCard extends StatelessWidget {
                 Text(leadingDataAtTop),
                 const Spacer(),
                 Flex(
-                    direction: Axis.horizontal,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                  direction: Axis.horizontal,
                     children: [
                       SvgPicture.asset(
                         "assets/icons/svgs/inr.svg",
@@ -55,7 +61,8 @@ class CustomListCard extends StatelessWidget {
                         width: designValues(context).cornerRadius8,
                       ),
                       Text(trailingDataAtTop),
-                    ]),
+                  ],
+                ),
               ],
             ),
             SizedBox(height: designValues(context).padding13),
@@ -66,36 +73,40 @@ class CustomListCard extends StatelessWidget {
                   text: TextSpan(children: [
                     TextSpan(
                       text: leadingInfoAtBottom,
-                      style: AppTheme.of(context).textTheme.subtitle2?.copyWith(
-                          color: AppColors.grey, fontWeight: FontWeight.normal),
+                        style: of(context).textTheme.subtitle2?.copyWith(
+                              color: grey,
+                              fontWeight: FontWeight.normal,
+                            ),
                     ),
                     TextSpan(
                       text: leadingDataAtBottom,
-                      style: AppTheme.of(context)
+                        style: of(context)
                           .textTheme
                           .subtitle2
-                          ?.copyWith(color: AppColors.grey),
+                            ?.copyWith(color: grey),
                     )
-                  ]),
+                    ],
+                  ),
                 ),
                 const Spacer(),
                 RichText(
                   text: TextSpan(children: [
                     TextSpan(
                       text: trailingInfoAtBottom,
-                      style: AppTheme.of(context).textTheme.subtitle2?.copyWith(
-                            color: AppColors.grey,
+                        style: of(context).textTheme.subtitle2?.copyWith(
+                              color: grey,
                             fontWeight: FontWeight.normal,
                           ),
                     ),
                     TextSpan(
                       text: trailingDataAtBottom,
-                      style: AppTheme.of(context)
+                        style: of(context)
                           .textTheme
                           .subtitle2
                           ?.copyWith(color: color),
                     )
-                  ]),
+                    ],
+                  ),
                 )
               ],
             ),

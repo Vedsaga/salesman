@@ -1,9 +1,13 @@
 // third party imports:
+
+// Package imports:
 import 'package:drift/drift.dart';
 
-// project imports:
+// Project imports:
 import 'package:salesman/core/db/drift/app_database.dart';
 import 'package:salesman/core/db/drift/models/model_item.dart';
+
+// project imports:
 
 // part
 part 'item_table_queries.g.dart';
@@ -15,11 +19,11 @@ class ItemTableQueries extends DatabaseAccessor<AppDatabase>
   ItemTableQueries(this.db) : super(db);
 
   Future<int> insertItem(ModelItemCompanion item) async {
-    return await into(modelItem).insert(item);
+    return  into(modelItem).insert(item);
   }
 
   Future<List<ModelItemData>> getAllActiveItems() async {
-    return await (select(modelItem)
+    return  (select(modelItem)
           ..where(
             (table) => table.isActive.equals(true),
           )
@@ -31,7 +35,7 @@ class ItemTableQueries extends DatabaseAccessor<AppDatabase>
   }
   
   Future<List<ModelItemData>> getAllItems() async {
-    return await (select(modelItem)
+    return  (select(modelItem)
           ..orderBy([
             (table) => OrderingTerm(expression: table.itemId),
           ])
@@ -41,7 +45,7 @@ class ItemTableQueries extends DatabaseAccessor<AppDatabase>
 
   // set isActive to false
   Future<int> deActiveItem(int itemId) async {
-    return await (update(modelItem)
+    return  (update(modelItem)
           ..where((table) => table.itemId.equals(itemId)))
         .write(
       const ModelItemCompanion(
@@ -52,11 +56,11 @@ class ItemTableQueries extends DatabaseAccessor<AppDatabase>
 
 
   Future<int> updateAvailableQuantity(int itemId, double quantity) async {
-    double availableQuantity = (await (select(modelItem)
+    final double availableQuantity = (await (select(modelItem)
               ..where((table) => table.itemId.equals(itemId)))
             .getSingle())
         .availableQuantity;
-    double reservedQuantity = (await (select(modelItem)
+    final double reservedQuantity = (await (select(modelItem)
               ..where((table) => table.itemId.equals(itemId)))
             .getSingle())
         .reservedQuantity;
@@ -64,7 +68,7 @@ class ItemTableQueries extends DatabaseAccessor<AppDatabase>
     if (availableQuantity < quantity) {
       return -1;
     }
-    return await (update(modelItem)
+    return  (update(modelItem)
           ..where((table) => table.itemId.equals(itemId)))
         .write(
       ModelItemCompanion(
@@ -75,11 +79,11 @@ class ItemTableQueries extends DatabaseAccessor<AppDatabase>
   }
 
   Future<int> updateReservedQuantity(int itemId, double quantity) async {
-    double availableQuantity = (await (select(modelItem)
+    final double availableQuantity = (await (select(modelItem)
               ..where((table) => table.itemId.equals(itemId)))
             .getSingle())
         .availableQuantity;
-    double reservedQuantity = (await (select(modelItem)
+    final double reservedQuantity = (await (select(modelItem)
               ..where((table) => table.itemId.equals(itemId)))
             .getSingle())
         .reservedQuantity;
@@ -87,7 +91,7 @@ class ItemTableQueries extends DatabaseAccessor<AppDatabase>
     if (reservedQuantity < quantity) {
       return -1;
     }
-    return await (update(modelItem)
+    return  (update(modelItem)
           ..where((table) => table.itemId.equals(itemId)))
         .write(
       ModelItemCompanion(
@@ -99,7 +103,7 @@ class ItemTableQueries extends DatabaseAccessor<AppDatabase>
 
   // get item details
   Future<ModelItemData> getItemDetails(int itemId) async {
-    return await (select(modelItem)
+    return  (select(modelItem)
           ..where((table) => table.itemId.equals(itemId)))
         .getSingle();
   }

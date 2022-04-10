@@ -1,9 +1,13 @@
 //  flutter imports
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 
-// third party imports:
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+
+// Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/layouts/mobile_layout.dart';
 import 'package:salesman/config/routes/route_name.dart';
@@ -13,9 +17,11 @@ import 'package:salesman/core/components/input_top_app_bar.dart';
 import 'package:salesman/core/components/snackbar_message.dart';
 import 'package:salesman/core/models/validations/generic_field.dart';
 import 'package:salesman/core/models/validations/phone_number_field.dart';
+import 'package:salesman/modules/client/add/bloc/add_client_bloc.dart';
+
+// third party imports:
 
 // project imports:
-import 'package:salesman/modules/client/add/bloc/add_client_bloc.dart';
 
 class AddClient extends StatefulWidget {
   const AddClient({Key? key}) : super(key: key);
@@ -135,9 +141,9 @@ class _AddClientState extends State<AddClient> {
               disabled: !state.status.isValidated,
               text: "save",
               onPressed: () {
-                state.status.isValidated
-                    ? context.read<AddClientBloc>().add(ClientFormSubmitted())
-                    : null;
+                  if (state.status.isValidated) {
+                    context.read<AddClientBloc>().add(ClientFormSubmitted());
+                }
               },
             );
           },
@@ -175,7 +181,6 @@ class _AddClientState extends State<AddClient> {
                             ),
                           );
                     },
-                    readOnly: false,
                     textAlignVertical: TextAlignVertical.center,
                     textInputAction: TextInputAction.next,
                     style: Theme.of(context).textTheme.bodyText1,
@@ -206,7 +211,6 @@ class _AddClientState extends State<AddClient> {
                       // make unfocus
                       _clientPhoneFocusNode.unfocus();
                     },
-                    readOnly: false,
                     textAlignVertical: TextAlignVertical.center,
                     textInputAction: TextInputAction.done,
                     style: Theme.of(context).textTheme.bodyText1,

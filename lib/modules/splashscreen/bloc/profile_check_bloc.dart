@@ -1,10 +1,13 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
+// Package imports:
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+// Project imports:
+import 'package:salesman/core/db/hive/models/agent_profile_model.dart';
 import 'package:salesman/core/db/hive/models/company_profile_model.dart';
+import 'package:salesman/modules/profile/repositories/profile_repository.dart';
 
 // project imports:
-import 'package:salesman/modules/profile/repositories/profile_repository.dart';
-import 'package:salesman/core/db/hive/models/agent_profile_model.dart';
 
 part 'profile_check_event.dart';
 part 'profile_check_state.dart';

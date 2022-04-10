@@ -1,7 +1,9 @@
+// Package imports:
 import 'package:drift/drift.dart';
 
-import 'model_client.dart';
-import 'model_item.dart';
+// Project imports:
+import 'package:salesman/core/db/drift/models/model_client.dart';
+import 'package:salesman/core/db/drift/models/model_item.dart';
 
 class ModelDeliveryOrder extends Table {
   IntColumn get deliveryOrderId => integer().autoIncrement()();

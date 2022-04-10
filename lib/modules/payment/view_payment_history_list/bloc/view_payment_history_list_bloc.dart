@@ -1,5 +1,8 @@
+// Package imports:
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+
+// Project imports:
 import 'package:salesman/config/routes/arguments_models/view_payment_history_list_route_arguments.dart';
 import 'package:salesman/core/db/drift/app_database.dart';
 import 'package:salesman/main.dart';
@@ -13,7 +16,7 @@ class ViewPaymentHistoryListBloc extends Bloc<ViewPaymentHistoryListEvent, ViewP
     on<FetchPaymentHistoryListEvent>(_getPaymentHistoryList);
   }
 
-  void _getPaymentHistoryList(FetchPaymentHistoryListEvent event, Emitter<ViewPaymentHistoryListState> emit) async {
+  Future<void> _getPaymentHistoryList(FetchPaymentHistoryListEvent event, Emitter<ViewPaymentHistoryListState> emit) async {
     emit(LoadingPaymentHistoryList());
     try {
       if (event.routeArgument == null) {

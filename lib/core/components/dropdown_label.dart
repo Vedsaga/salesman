@@ -17,7 +17,7 @@ RichText dropdownLabel(
       children: [
         TextSpan(
           text: labelText,
-          style: AppTheme.of(context).textTheme.subtitle2,
+          style: of(context).textTheme.subtitle2,
         ),
         if (isRequired)
           TextSpan(
@@ -25,7 +25,7 @@ RichText dropdownLabel(
             style: Theme.of(context)
                 .textTheme
                 .caption
-                ?.copyWith(color: AppColors.orange),
+                ?.copyWith(color: orange),
           ),
       ],
     ),

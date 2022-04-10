@@ -15,7 +15,7 @@ ScaffoldFeatureController snackbarMessage(
       duration: const Duration(milliseconds: 1000),
       elevation: 6.0,
       behavior: SnackBarBehavior.floating,
-      backgroundColor: AppColors.secondaryDark,
+      backgroundColor: secondaryDark,
       content: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -66,23 +66,23 @@ IconData _getIcon(MessageType type) {
 Color _getColor(MessageType type) {
   switch (type) {
     case MessageType.normal:
-      return AppColors.white;
+      return white;
     case MessageType.success:
-      return AppColors.green;
+      return green;
     case MessageType.failed:
-      return AppColors.red;
+      return red;
     case MessageType.warning:
-      return AppColors.orange;
+      return orange;
     case MessageType.stop:
-      return AppColors.orange;
+      return orange;
     case MessageType.resume:
-      return AppColors.skyBlue;
+      return skyBlue;
     case MessageType.cancel:
-      return AppColors.red;
+      return red;
     case MessageType.finish:
-      return AppColors.green;
+      return green;
     case MessageType.inProgress:
-      return AppColors.skyBlue;
+      return skyBlue;
   }
 }
 

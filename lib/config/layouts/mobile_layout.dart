@@ -1,9 +1,13 @@
 // flutter imports:
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 
-// project import:
-import 'package:salesman/config/theme/colors.dart';
+// Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
+import 'package:salesman/config/theme/colors.dart';
+
+// project import:
 
 class MobileLayout extends StatelessWidget {
   const MobileLayout(
@@ -11,7 +15,8 @@ class MobileLayout extends StatelessWidget {
       required this.topAppBar,
       required this.body,
       required this.bottomAppBar,
-      this.bottomAppBarRequired = true})
+    this.bottomAppBarRequired = true,
+  })
       : super(key: key);
 
   final Widget topAppBar;
@@ -28,7 +33,8 @@ class MobileLayout extends StatelessWidget {
         ),
         child: Padding(
           padding: EdgeInsets.symmetric(
-              horizontal: designValues(context).horizontalPadding),
+            horizontal: designValues(context).horizontalPadding,
+          ),
           child: topAppBar,
         ),
       ),
@@ -41,7 +47,7 @@ class MobileLayout extends StatelessWidget {
           ),
           if (bottomAppBarRequired)
             Container(
-              color: AppColors.light,
+              color: light,
               height: designValues(context).bottomAppBarHeight,
               width: designValues(context).screenWidth,
               child: Center(child: bottomAppBar),

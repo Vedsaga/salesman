@@ -1,5 +1,10 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_svg/flutter_svg.dart';
+
+// Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
@@ -10,7 +15,8 @@ class MobileLayoutForTabScreen extends StatelessWidget {
       required this.body,
       required this.title,
       this.routeName,
-      required this.tabController})
+    required this.tabController,
+  })
       : super(key: key);
   final Widget body;
   final String title;
@@ -21,12 +27,11 @@ class MobileLayoutForTabScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: AppColors.dark,
+        foregroundColor: dark,
         leading: Padding(
           padding:
               EdgeInsets.only(left: designValues(context).horizontalPadding),
           child: IconButton(
-            padding: const EdgeInsets.only(left: 0),
             hoverColor: Colors.transparent,
             focusColor: Colors.transparent,
             highlightColor: Colors.transparent,
@@ -47,40 +52,38 @@ class MobileLayoutForTabScreen extends StatelessWidget {
         ),
         title: Text(
           title.toUpperCase(),
-          style: AppTheme.of(context).textTheme.headline5,
+          style: of(context).textTheme.headline5,
         ),
         bottom: TabBar(
           controller: tabController,
-          // prevent the tab bar from being swiped away
-          isScrollable: false,
           tabs: [
             Text(
               'details',
               style: tabController.index == 0
-                  ? AppTheme.of(context)
+                  ? of(context)
                       .textTheme
                       .headline6
-                      ?.copyWith(color: AppColors.skyBlue)
-                  : AppTheme.of(context)
+                      ?.copyWith(color: skyBlue)
+                  : of(context)
                       .textTheme
                       .overline
-                      ?.copyWith(color: AppColors.grey),
+                      ?.copyWith(color: grey),
             ),
             Text(
               'payment',
               style: tabController.index == 1
-                  ? AppTheme.of(context)
+                  ? of(context)
                       .textTheme
                       .headline6
-                      ?.copyWith(color: AppColors.skyBlue)
-                  : AppTheme.of(context)
+                      ?.copyWith(color: skyBlue)
+                  : of(context)
                       .textTheme
                       .overline
-                      ?.copyWith(color: AppColors.grey),
+                      ?.copyWith(color: grey),
             ),
           ],
           indicatorColor: Colors.transparent,
-          unselectedLabelColor: AppColors.grey,
+          unselectedLabelColor: grey,
           labelColor: Colors.black,
           // show no indicator
           indicator: const UnderlineTabIndicator(

@@ -1,5 +1,9 @@
 // flutter import
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/theme/card_box_decoration.dart';
 import 'package:salesman/config/theme/colors.dart';
@@ -14,7 +18,8 @@ class TransactionListCard extends StatelessWidget {
       required this.trailingDataAtTop,
       required this.leadingDataAtBottom,
       required this.trailingDataAtBottom,
-      required this.statusTextColor})
+    required this.statusTextColor,
+  })
       : super(key: key);
   final LinearGradient statusColor;
   final Color statusTextColor;
@@ -31,8 +36,6 @@ class TransactionListCard extends StatelessWidget {
       decoration: cardBoxDecoration(context),
       child: Flex(
         direction: Axis.horizontal,
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Container(
             decoration: BoxDecoration(
@@ -41,7 +44,8 @@ class TransactionListCard extends StatelessWidget {
                   topLeft: Radius.circular(designValues(context).cornerRadius8),
                   bottomLeft:
                       Radius.circular(designValues(context).cornerRadius8),
-                )),
+              ),
+            ),
             child: RotatedBox(
               quarterTurns: 3,
               child: Padding(
@@ -53,7 +57,7 @@ class TransactionListCard extends StatelessWidget {
                 ),
                 child: Text(
                   status,
-                  style: AppTheme.of(context)
+                  style: of(context)
                       .textTheme
                       .caption
                       ?.copyWith(color: statusTextColor),
@@ -64,24 +68,29 @@ class TransactionListCard extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: designValues(context).padding21),
+                horizontal: designValues(context).padding21,
+              ),
               child: Flex(
                 direction: Axis.vertical,
-                mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
                   Flex(direction: Axis.horizontal, children: <Widget>[
                     Text(
                       leadingDataAtTop,
-                      style: AppTheme.of(context).textTheme.subtitle2?.copyWith(
-                          fontWeight: FontWeight.bold, color: AppColors.dark),
+                        style: of(context).textTheme.subtitle2?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: dark,
+                            ),
                     ),
                     const Spacer(),
                     Text(
                       trailingDataAtTop,
-                      style: AppTheme.of(context).textTheme.subtitle2?.copyWith(
-                          fontWeight: FontWeight.bold, color: AppColors.dark),
+                        style: of(context).textTheme.subtitle2?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: dark,
+                            ),
                     )
-                  ]),
+                    ],
+                  ),
                   SizedBox(height: designValues(context).padding13),
                   Flex(
                       direction: Axis.horizontal,
@@ -89,19 +98,20 @@ class TransactionListCard extends StatelessWidget {
                       children: <Widget>[
                         Text(
                           leadingDataAtBottom,
-                          style: AppTheme.of(context)
+                        style: of(context)
                               .textTheme
                               .subtitle2
                               ?.copyWith(fontWeight: FontWeight.w600),
                         ),
                         Text(
                           trailingDataAtBottom,
-                          style: AppTheme.of(context)
+                        style: of(context)
                               .textTheme
                               .subtitle2
                               ?.copyWith(fontWeight: FontWeight.w600),
                         )
-                      ]),
+                    ],
+                  ),
                 ],
               ),
             ),

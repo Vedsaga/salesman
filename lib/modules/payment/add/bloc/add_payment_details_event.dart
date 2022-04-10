@@ -6,7 +6,7 @@ abstract class AddPaymentDetailsEvent extends Equatable {
 }
 
 class FetchingOrderDetailsEvent extends AddPaymentDetailsEvent {
-  final AddPaymentDetailsRouteArguments routeArguments;
+  final AddPaymentDetailsRouteArguments? routeArguments;
   const FetchingOrderDetailsEvent({required this.routeArguments});
   @override
   List<Object> get props => [];

@@ -1,11 +1,17 @@
 // flutter import:
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_svg/svg.dart';
 
-// project import:
+// Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
+
+// project import:
 
 InputDecoration inputDecoration(
   BuildContext context, {
@@ -31,7 +37,7 @@ InputDecoration inputDecoration(
             padding: const EdgeInsets.symmetric(vertical: 13),
             child: SvgPicture.asset(
               "assets/icons/svgs/inr.svg",
-              color: currencyColor ?? AppColors.secondaryDark,
+              color: currencyColor ?? secondaryDark,
             ),
           )
         : null,
@@ -41,8 +47,8 @@ InputDecoration inputDecoration(
             padding: const EdgeInsets.only(left: 13),
             child: Text(
               "@bitecope",
-              style: AppTheme.of(context).textTheme.bodyText2?.copyWith(
-                    color: AppColors.dark,
+              style: of(context).textTheme.bodyText2?.copyWith(
+                    color: dark,
                   ),
             ),
           )
@@ -52,30 +58,31 @@ InputDecoration inputDecoration(
           labelText.substring(0, 1),
           labelText.substring(0, 1).toUpperCase(),
         ),
-    labelStyle: inFocus ? AppTheme.of(context)
+    labelStyle: inFocus
+        ? of(context)
                 .textTheme
                 .subtitle2
-                ?.copyWith(color: AppColors.skyBlue)
-            : AppTheme.of(context).textTheme.subtitle2,
+                ?.copyWith(color: skyBlue)
+        : of(context).textTheme.subtitle2,
     hintText: hintText,
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(designValues(context).textCornerRadius),
       borderSide: const BorderSide(
-        color: AppColors.skyBlue,
+        color: skyBlue,
         width: 2,
       ),
     ),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(designValues(context).textCornerRadius),
       borderSide: const BorderSide(
-        color: AppColors.lightGrey,
+        color: lightGrey,
         width: 2,
       ),
     ),
     errorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(designValues(context).textCornerRadius),
       borderSide: const BorderSide(
-        color: AppColors.red,
+        color: red,
         width: 2,
       ),
     ),

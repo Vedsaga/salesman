@@ -1,9 +1,11 @@
 //flutter imports:
+
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 // Package imports:
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 
 // Project imports:
 import 'package:salesman/config/theme/colors.dart';
@@ -14,7 +16,11 @@ import 'package:salesman/core/db/hive/models/company_profile_model.dart';
 //  created an AppBar widget
 class MenuTopAppBar extends StatelessWidget {
   const MenuTopAppBar(
-      {Key? key, required this.companyProfile, required this.currentPage})
+      {
+    Key? key,
+    required this.companyProfile,
+    required this.currentPage,
+  })
       : super(key: key);
   final CompanyProfileModel companyProfile;
   final String currentPage;
@@ -24,9 +30,8 @@ class MenuTopAppBar extends StatelessWidget {
     return GestureDetector(
       onTap: () {},
       child: AppBar(
-        foregroundColor: AppColors.dark,
+        foregroundColor: dark,
         leading: IconButton(
-          padding: const EdgeInsets.only(left: 0),
           hoverColor: Colors.transparent,
           focusColor: Colors.transparent,
           highlightColor: Colors.transparent,
@@ -54,15 +59,15 @@ class MenuTopAppBar extends StatelessWidget {
             Text(
               // capitalize the first letter of the each word in organization name
               companyProfile.name,
-              style: AppTheme.of(context).textTheme.subtitle1?.copyWith(
-                    color: AppColors.dark,
+              style: of(context).textTheme.subtitle1?.copyWith(
+                    color: dark,
                   ),
               overflow: TextOverflow.ellipsis,
               softWrap: false,
             ),
             Text(
               "Last synced on ${DateFormat('d MMM, hh:mm a').format(companyProfile.lastUpdated)}",
-              style: AppTheme.of(context).textTheme.subtitle2,
+              style: of(context).textTheme.subtitle2,
               overflow: TextOverflow.ellipsis,
               softWrap: false,
             ),

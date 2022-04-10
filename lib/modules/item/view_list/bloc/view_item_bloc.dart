@@ -1,5 +1,8 @@
+// Package imports:
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+
+// Project imports:
 import 'package:salesman/core/db/drift/app_database.dart';
 import 'package:salesman/core/utils/feature_monitor.dart';
 import 'package:salesman/main.dart';
@@ -15,7 +18,7 @@ class ViewItemBloc extends Bloc<ViewItemEvent, ViewItemState> {
     on<FetchItemEvent>(_fetchItem);
     on<DisableOrderFeatureEvent>(_disableOrderFeature);
   }
-  void _fetchItem(FetchItemEvent event, Emitter<ViewItemState> emit) async {
+  Future<void> _fetchItem(FetchItemEvent event, Emitter<ViewItemState> emit) async {
     emit(FetchingItemState());
     try {
       final items =
@@ -30,8 +33,8 @@ class ViewItemBloc extends Bloc<ViewItemEvent, ViewItemState> {
     }
   }
 
-  void _disableOrderFeature(
-      DisableOrderFeatureEvent event, Emitter<ViewItemState> emit) async {
+  Future<void> _disableOrderFeature(
+      DisableOrderFeatureEvent event, Emitter<ViewItemState> emit,) async {
     final feature = await menuRepository.getActiveFeatures();
     if (feature != null && !feature.disableOrder) {
       FeatureMonitor(menuRepository: menuRepository)

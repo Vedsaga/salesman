@@ -1,14 +1,20 @@
 // flutter import
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 
-// third part imports
+// Package imports:
 import 'package:flutter_svg/flutter_svg.dart';
 
-// project imports
+// Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/routes/route_name.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/core/components/snackbar_message.dart';
+
+// third part imports
+
+// project imports
 
 class CommonBottomNavigation extends StatelessWidget {
   const CommonBottomNavigation({
@@ -26,10 +32,10 @@ class CommonBottomNavigation extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius:
             BorderRadius.circular(designValues(context).cornerRadius13),
-        color: AppColors.light,
+        color: light,
         boxShadow: const [
           BoxShadow(
-            color: AppColors.shadowColor,
+            color: shadowColor,
             blurRadius: 34,
             offset: Offset(-5, 5),
           ),
@@ -37,7 +43,8 @@ class CommonBottomNavigation extends StatelessWidget {
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(
-            horizontal: designValues(context).mainAxisSpacing13),
+          horizontal: designValues(context).mainAxisSpacing13,
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -51,6 +58,7 @@ class CommonBottomNavigation extends StatelessWidget {
             ),
             IconButton(
               onPressed: () {
+                // ignore: avoid_dynamic_calls
                 onTapAddIcon();
               },
               icon: SvgPicture.asset(

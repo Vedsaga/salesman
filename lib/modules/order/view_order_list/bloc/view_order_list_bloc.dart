@@ -1,5 +1,8 @@
+// Package imports:
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+
+// Project imports:
 import 'package:salesman/core/db/drift/app_database.dart';
 import 'package:salesman/main.dart';
 import 'package:salesman/modules/client/query/client_table_queries.dart';
@@ -14,8 +17,8 @@ class ViewOrderListBloc extends Bloc<ViewOrderListEvent, ViewOrderListState> {
     on<Fetch10LatestOrderListEvent>(_fetchOrderList);
   }
 
-  void _fetchOrderList(Fetch10LatestOrderListEvent event,
-      Emitter<ViewOrderListState> emit) async {
+  Future<void> _fetchOrderList(Fetch10LatestOrderListEvent event,
+      Emitter<ViewOrderListState> emit,) async {
     emit(FetchingOrderListState());
     try {
       final List<ModelDeliveryOrderData> orders =
@@ -27,7 +30,7 @@ class ViewOrderListBloc extends Bloc<ViewOrderListEvent, ViewOrderListState> {
           await ItemTableQueries(appDatabaseInstance).getAllItems();
       if (orders.isNotEmpty) {
         emit(FetchedOrderListState(
-            orders: orders, clientList: clientList, itemList: itemList));
+            orders: orders, clientList: clientList, itemList: itemList,),);
       } else {
         emit(EmptyOrderListState());
       }

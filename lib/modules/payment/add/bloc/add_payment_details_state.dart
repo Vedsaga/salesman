@@ -15,8 +15,8 @@ class AddPaymentDetailsState extends Equatable {
     this.status = FormzStatus.pure,
     this.comingFrom = RouteNames.viewPaymentHistoryList,
   })  : paymentDate = paymentDate ?? DateTimeField.pure(null),
-        deliveryOrderId = deliveryOrderId ?? const ForeignKeyField.pure(null),
-        returnOrderId = returnOrderId ?? const ForeignKeyField.pure(null);
+        deliveryOrderId = deliveryOrderId ?? const ForeignKeyField.pure(),
+        returnOrderId = returnOrderId ?? const ForeignKeyField.pure();
   final List<ModelDeliveryOrderData> deliveryOrderList;
   final List<ModelReturnOrderData> returnOrderList;
   final ForeignKeyField deliveryOrderId;
@@ -81,3 +81,4 @@ class ErrorFetchingRequiredDetailsState extends AddPaymentDetailsState {}
 class EmptyAgentProfileState extends AddPaymentDetailsState {}
 class EmptyOrderDetailsState extends AddPaymentDetailsState {}
 class ErrorEmptyDeliveryReturnOrderIdState extends AddPaymentDetailsState {}
+class EmptyAddPaymentDetailsRouteArgumentsState extends AddPaymentDetailsState {}

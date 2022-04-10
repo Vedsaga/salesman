@@ -1,10 +1,14 @@
 //  flutter import
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 
-// project import
+// Project imports:
+import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
-import 'package:salesman/config/layouts/design_values.dart';
+
+// project import
 
 class CustomTextForm extends StatelessWidget {
   final TextEditingController controller;
@@ -14,7 +18,7 @@ class CustomTextForm extends StatelessWidget {
   final bool autoFocus;
   final String? labelText;
   final String? hintText;
-  final bool isDense = false;
+  final bool isDense;
   final bool hasFocus;
   final bool usernameSuffix;
   final int maxWords;
@@ -33,6 +37,7 @@ class CustomTextForm extends StatelessWidget {
     this.usernameSuffix = false,
     this.maxWords = -1,
     this.errorText,
+    this.isDense = false,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -42,16 +47,15 @@ class CustomTextForm extends StatelessWidget {
       readOnly: readOnly,
       keyboardType: keyboardType,
       autofocus: autoFocus,
-      style: AppTheme.of(context).textTheme.bodyText1,
-      enableIMEPersonalizedLearning: true,
+      style: of(context).textTheme.bodyText1,
       decoration: InputDecoration(
         suffix: usernameSuffix
             ? Padding(
                 padding: const EdgeInsets.only(left: 13),
                 child: Text(
                   "@bitecope",
-                  style: AppTheme.of(context).textTheme.bodyText1?.copyWith(
-                        color: AppColors.skyBlue,
+                  style: of(context).textTheme.bodyText1?.copyWith(
+                        color: skyBlue,
                       ),
                 ),
               )
@@ -59,35 +63,35 @@ class CustomTextForm extends StatelessWidget {
         counter: maxWords != -1
             ? Text(
                 "${controller.text.split(" ").length}/$maxWords",
-                style: AppTheme.of(context).textTheme.bodyText1?.copyWith(
-                      color: AppColors.grey,
+                style: of(context).textTheme.bodyText1?.copyWith(
+                      color: grey,
                     ),
               )
             : null,
         hoverColor: Colors.transparent,
         labelText: labelText,
         labelStyle: focusNode.hasFocus
-            ? AppTheme.of(context)
+            ? of(context)
                 .textTheme
                 .subtitle2
-                ?.copyWith(color: AppColors.skyBlue)
-            : AppTheme.of(context).textTheme.subtitle2,
+                ?.copyWith(color: skyBlue)
+            : of(context).textTheme.subtitle2,
         hintText: hintText,
         filled: hasFocus,
         suffixIcon: hasFocus
             ? IconButton(
-                color: AppColors.red,
+                color: red,
                 icon: const Icon(Icons.clear),
                 onPressed: () {
                   controller.clear();
                 },
               )
             : null,
-        hintStyle: AppTheme.of(context).textTheme.subtitle2,
+        hintStyle: of(context).textTheme.subtitle2,
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(designValues(context).curveRadius),
           borderSide: const BorderSide(
-            color: AppColors.skyBlue,
+            color: skyBlue,
             width: 2,
           ),
         ),
@@ -96,7 +100,7 @@ class CustomTextForm extends StatelessWidget {
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(designValues(context).curveRadius),
           borderSide: const BorderSide(
-            color: AppColors.red,
+            color: red,
             width: 2,
           ),
         ),
@@ -104,7 +108,7 @@ class CustomTextForm extends StatelessWidget {
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(designValues(context).curveRadius),
           borderSide: const BorderSide(
-            color: AppColors.lightGrey,
+            color: lightGrey,
             width: 2,
           ),
         ),
@@ -112,7 +116,7 @@ class CustomTextForm extends StatelessWidget {
         contentPadding: EdgeInsets.symmetric(
           horizontal: designValues(context).horizontalPadding,
         ),
-        fillColor: AppColors.lightGrey,
+        fillColor: lightGrey,
       ),
     );
   }

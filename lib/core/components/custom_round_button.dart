@@ -1,14 +1,20 @@
 //  flutter import:
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 
-// third party imports:
+// Package imports:
 import 'package:flutter_svg/flutter_svg.dart';
 
-// project imports:
+// Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/round_button_decoration.dart';
 import 'package:salesman/config/theme/theme.dart';
+
+// third party imports:
+
+// project imports:
 
 class CustomRoundButton extends StatelessWidget {
   const CustomRoundButton(
@@ -26,6 +32,7 @@ class CustomRoundButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        // ignore: avoid_dynamic_calls
         onPressed();
       },
       child: Container(
@@ -40,14 +47,14 @@ class CustomRoundButton extends StatelessWidget {
             children: [
               Text(
                 label.substring(0, 1).toUpperCase() + label.substring(1),
-                style: AppTheme.of(context).textTheme.subtitle1?.copyWith(
-                      color: AppColors.white,
+                style: of(context).textTheme.subtitle1?.copyWith(
+                      color: white,
                     ),
               ),
               SizedBox(width: designValues(context).roundButtonHorizontalPadding),
               SvgPicture.asset(
                 "assets/icons/svgs/$svgPath.svg",
-                color: AppColors.light,
+                color: light,
                 height: 13,
               ),
             ],

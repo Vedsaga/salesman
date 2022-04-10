@@ -1,5 +1,7 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:salesman/config/theme/colors.dart';
 
 // Project imports:
@@ -27,7 +29,7 @@ RichText labelForDropdown(
             style: Theme.of(context)
                 .textTheme
                 .caption
-                ?.copyWith(color: AppColors.skyBlue),
+                ?.copyWith(color: skyBlue),
           ),
       ],
     ),

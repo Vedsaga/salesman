@@ -1,4 +1,6 @@
 //flutter imports:
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -17,9 +19,8 @@ class InputTopAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      foregroundColor: AppColors.dark,
+      foregroundColor: dark,
       leading: IconButton(
-        padding: const EdgeInsets.only(left: 0),
         hoverColor: Colors.transparent,
         focusColor: Colors.transparent,
         highlightColor: Colors.transparent,
@@ -39,7 +40,7 @@ class InputTopAppBar extends StatelessWidget {
       ),
       title: Text(
         title.toUpperCase(),
-        style: AppTheme.of(context).textTheme.headline5,
+        style: of(context).textTheme.headline5,
       ),
     );
   }

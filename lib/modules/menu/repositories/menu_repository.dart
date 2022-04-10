@@ -1,11 +1,10 @@
-// third part imports:
 
-// project imports:
+// Project imports:
 import 'package:salesman/core/db/hive/boxes.dart';
 import 'package:salesman/core/db/hive/models/active_features_model.dart';
 
 class MenuRepository {
-  final _activeFeaturesBox = Boxes.activeFeaturesBox();
+  final _activeFeaturesBox = activeFeaturesBox();
 
   Future<ActiveFeaturesModel?> getActiveFeatures() async {
     final response = _activeFeaturesBox;
@@ -30,7 +29,7 @@ class MenuRepository {
     return true;
   }
 
-  Future<Map<String, dynamic>?> getFeatureMap() async {
+  Future<Map<String, bool>?> getFeatureMap() async {
     final response = await getActiveFeatures();
     if (response != null) {
       return response.toMap();

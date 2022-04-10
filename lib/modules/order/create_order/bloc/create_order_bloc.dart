@@ -1,10 +1,12 @@
 // third party imports
+
+// Package imports:
 import 'package:bloc/bloc.dart';
 import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 
-// project imports
+// Project imports:
 import 'package:salesman/core/db/drift/app_database.dart';
 import 'package:salesman/core/db/hive/models/agent_profile_model.dart';
 import 'package:salesman/core/models/validations/double_field.dart';
@@ -19,6 +21,8 @@ import 'package:salesman/modules/item/query/item_table_queries.dart';
 import 'package:salesman/modules/menu/repositories/menu_repository.dart';
 import 'package:salesman/modules/order/query/delivery_order_table_queries.dart';
 import 'package:salesman/modules/profile/repositories/profile_repository.dart';
+
+// project imports
 
 // part
 part 'create_order_event.dart';
@@ -46,8 +50,8 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
     super.onTransition(transition);
   }
 
-  void _fetchRequiredList(
-      FetchRequiredListEvent event, Emitter<CreateOrderState> emit) async {
+  Future<void> _fetchRequiredList(
+      FetchRequiredListEvent event, Emitter<CreateOrderState> emit,) async {
     emit(FetchingRequiredListState());
     try {
       final AgentProfileModel? agentProfile =
@@ -68,7 +72,7 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
           itemList: items,
           createdBy: GenericField.dirty(agentProfile.name),
           orderStatus: StatusTypeField.dirty(orderStatus.first),
-        ));
+        ),);
       }
     } catch (e) {
       emit(ErrorFetchingRequiredListState());
@@ -76,7 +80,7 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
   }
 
   void _orderFieldsChange(
-      OrderFieldsChangeEvent event, Emitter<CreateOrderState> emit) {
+      OrderFieldsChangeEvent event, Emitter<CreateOrderState> emit,) {
     final clientId = ForeignKeyField.dirty(event.clientId);
     final itemId = ForeignKeyField.dirty(event.itemId);
     final totalQuantity = DoubleFieldNotZero.dirty(event.totalQuantity);
@@ -119,11 +123,11 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
         orderStatus,
         createdBy,
       ]),
-    ));
+    ),);
   }
 
   void _clientIdFieldUnfocused(
-      ClientIdFieldUnfocusedEvent event, Emitter<CreateOrderState> emit) {
+      ClientIdFieldUnfocusedEvent event, Emitter<CreateOrderState> emit,) {
     final clientId = ForeignKeyField.dirty(state.clientId.value);
     emit(state.copyWith(
       clientId: clientId,
@@ -136,11 +140,11 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
         state.orderStatus,
         state.createdBy,
       ]),
-    ));
+    ),);
   }
 
   void _itemIdFieldUnfocused(
-      ItemIdFieldUnfocusedEvent event, Emitter<CreateOrderState> emit) {
+      ItemIdFieldUnfocusedEvent event, Emitter<CreateOrderState> emit,) {
     final itemId = ForeignKeyField.dirty(state.itemId.value);
     emit(state.copyWith(
       itemId: itemId,
@@ -153,11 +157,11 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
         state.orderStatus,
         state.createdBy,
       ]),
-    ));
+    ),);
   }
 
   void _totalQuantityFieldUnfocused(
-      TotalQuantityFieldUnfocusedEvent event, Emitter<CreateOrderState> emit) {
+      TotalQuantityFieldUnfocusedEvent event, Emitter<CreateOrderState> emit,) {
     final totalQuantity = DoubleFieldNotZero.dirty(state.totalQuantity.value);
     emit(state.copyWith(
       totalQuantity: totalQuantity,
@@ -170,11 +174,11 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
         state.orderStatus,
         state.createdBy,
       ]),
-    ));
+    ),);
   }
 
-  void _submitOrder(
-      OrderFormSubmitEvent event, Emitter<CreateOrderState> emit) async {
+  Future<void> _submitOrder(
+      OrderFormSubmitEvent event, Emitter<CreateOrderState> emit,) async {
     final clientId = ForeignKeyField.dirty(state.clientId.value);
     final itemId = ForeignKeyField.dirty(state.itemId.value);
     final totalQuantity = DoubleFieldNotZero.dirty(state.totalQuantity.value);
@@ -229,7 +233,7 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
         if (id < 1) {
           emit(state.copyWith(
             status: FormzStatus.submissionFailure,
-          ));
+          ),);
         } else {
           final orderId = await DeliveryOrderTableQueries(appDatabaseInstance).newOrder(
             orderDetails,
@@ -241,13 +245,13 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
       } catch (e) {
         emit(state.copyWith(
           status: FormzStatus.submissionFailure,
-        ));
+        ),);
       }
     }
   }
 
-  void _enableDeliveryFeature(
-      EnableDeliveryFeatureEvent event, Emitter<CreateOrderState> emit) async {
+  Future<void> _enableDeliveryFeature(
+      EnableDeliveryFeatureEvent event, Emitter<CreateOrderState> emit,) async {
     final feature = await menuRepository.getActiveFeatures();
 
     if (feature != null && feature.disableDelivery) {
@@ -256,8 +260,8 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
     }
   }
 
-  void _enablePaymentFeature(
-      EnablePaymentFeatureEvent event, Emitter<CreateOrderState> emit) async {
+  Future<void> _enablePaymentFeature(
+      EnablePaymentFeatureEvent event, Emitter<CreateOrderState> emit,) async {
     final feature = await menuRepository.getActiveFeatures();
 
     if (feature != null && feature.disablePayment) {
@@ -266,8 +270,8 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
     }
   }
 
-  void _enableReceiveFeature(
-      EnableReceiveFeatureEvent event, Emitter<CreateOrderState> emit) async {
+  Future<void> _enableReceiveFeature(
+      EnableReceiveFeatureEvent event, Emitter<CreateOrderState> emit,) async {
     final feature = await menuRepository.getActiveFeatures();
 
     if (feature != null && feature.disableReceive) {
@@ -276,7 +280,7 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
     }
   }
 
-  void _enableSendFeature(EnableSendFeatureEvent event, Emitter<CreateOrderState> emit) async{
+  Future<void> _enableSendFeature(EnableSendFeatureEvent event, Emitter<CreateOrderState> emit) async{
     final feature = await menuRepository.getActiveFeatures();
     if (feature != null && feature.disableSend) {
       FeatureMonitor(menuRepository: menuRepository)

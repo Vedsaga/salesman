@@ -1,8 +1,13 @@
 // third party imports:
+
+// Package imports:
 import 'package:drift/drift.dart';
-// project imports:
+
+// Project imports:
 import 'package:salesman/core/db/drift/app_database.dart';
 import 'package:salesman/core/db/drift/models/model_return_order.dart';
+
+// project imports:
 
 part 'return_order_table_queries.g.dart';
 
@@ -14,7 +19,7 @@ class ReturnOrderTableQueries extends DatabaseAccessor<AppDatabase>
 
   // get all return orders
  Future<List<ModelReturnOrderData>?> getAllReturnOrders() async {
-    return await (select(modelReturnOrder)
+    return  (select(modelReturnOrder)
           ..orderBy([
             (table) =>
                 OrderingTerm(expression: table.returnOrderId, mode: OrderingMode.desc)

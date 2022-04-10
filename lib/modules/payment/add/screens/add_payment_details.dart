@@ -1,11 +1,15 @@
 // flutter imports
+
+// Flutter imports:
 import 'package:flutter/material.dart';
-// third party imports:
 import 'package:flutter/services.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
-// project imports:
+
+// Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/layouts/mobile_layout.dart';
 import 'package:salesman/config/routes/route_name.dart';
@@ -24,6 +28,9 @@ import 'package:salesman/core/components/snackbar_message.dart';
 import 'package:salesman/core/models/validations/double_field_not_zero.dart';
 import 'package:salesman/core/models/validations/status_type_field.dart';
 import 'package:salesman/modules/payment/add/bloc/add_payment_details_bloc.dart';
+
+// third party imports:
+// project imports:
 
 class AddPaymentDetails extends StatefulWidget {
   const AddPaymentDetails({Key? key}) : super(key: key);
@@ -189,38 +196,42 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                               isRequired: false,
                             ),
                             SizedBox(
-                                height: designValues(context).cornerRadius8),
+                              height: designValues(context).cornerRadius8,
+                            ),
                             Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(
-                                    designValues(context).cornerRadius8),
-                                color: AppColors.light,
+                                  designValues(context).cornerRadius8,
+                                ),
+                                color: light,
                                 border: Border.all(
-                                  color: AppColors.lightGrey,
+                                  color: lightGrey,
                                   width: 2,
                                 ),
                               ),
                               child: Padding(
                                 padding: EdgeInsets.all(
-                                    designValues(context).padding21),
+                                  designValues(context).padding21,
+                                ),
                                 child: RowFlexCloseChildren(
                                     firstChild: Text(
                                       DateFormat('EEE,')
                                           .format(_paymentDate.toLocal()),
-                                      style: AppTheme.of(context)
+                                    style: of(context)
                                           .textTheme
                                           .caption,
                                     ),
                                     secondChild: Text(
                                       DateFormat('dd MMM yyyy')
                                           .format(_paymentDate.toLocal()),
-                                      style: AppTheme.of(context)
+                                    style: of(context)
                                           .textTheme
                                           .bodyText2
                                           ?.copyWith(
-                                            color: AppColors.orange,
+                                          color: orange,
                                           ),
-                                    )),
+                                  ),
+                                ),
                               ),
                             ),
                           ],
@@ -229,7 +240,9 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                       secondChild: GestureDetector(
                         onTap: () {
                           showTimePicker(
-                                  context: context, initialTime: _paymentTime)
+                            context: context,
+                            initialTime: _paymentTime,
+                          )
                               .then((time) {
                             setState(() {
                               _paymentDate = join(_paymentDate, time!);
@@ -240,40 +253,49 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                           direction: Axis.vertical,
                           children: [
                             labelForDropdown(context,
-                                labelText: "Time", isRequired: false),
+                              labelText: "Time",
+                              isRequired: false,
+                            ),
                             SizedBox(
-                                height: designValues(context).cornerRadius8),
+                              height: designValues(context).cornerRadius8,
+                            ),
                             Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(
-                                    designValues(context).cornerRadius8),
-                                color: AppColors.light,
+                                  designValues(context).cornerRadius8,
+                                ),
+                                color: light,
                                 border: Border.all(
-                                  color: AppColors.lightGrey,
+                                  color: lightGrey,
                                   width: 2,
                                 ),
                               ),
                               child: Padding(
                                 padding: EdgeInsets.all(
-                                    designValues(context).padding21),
+                                  designValues(context).padding21,
+                                ),
                                 child: RichText(
                                     text: TextSpan(children: [
                                   TextSpan(
                                       text: DateFormat('h:mm ')
                                           .format(_paymentDate.toLocal()),
-                                      style: AppTheme.of(context)
+                                        style: of(context)
                                           .textTheme
-                                          .caption),
+                                            .caption,
+                                      ),
                                   TextSpan(
                                       text: DateFormat('a')
                                           .format(_paymentDate.toLocal()),
-                                      style: AppTheme.of(context)
+                                        style: of(context)
                                           .textTheme
                                           .caption
                                           ?.copyWith(
-                                            color: AppColors.orange,
-                                          )),
-                                ])),
+                                              color: orange,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
                             ),
                           ],
@@ -284,7 +306,7 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                     NormalTopAppBar(
                       titleWidget: Text(
                         "Payment Type",
-                        style: AppTheme.of(context).textTheme.headline6,
+                        style: of(context).textTheme.headline6,
                       ),
                     ),
                     Flex(
@@ -295,13 +317,14 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                           children: [
                             Radio<String>(
                               value: "receive",
-                              activeColor: AppColors.green,
+                              activeColor: green,
                               groupValue: state.paymentType.value,
                               onChanged: (value) {
                                 if (state.comingFrom !=
                                     RouteNames.paymentSent) {
                                   BlocProvider.of<AddPaymentDetailsBloc>(
-                                          context)
+                                    context,
+                                  )
                                       .add(PaymentFieldsChangeEvent(
                                           deliveryOrderId:
                                               state.deliveryOrderId.value,
@@ -314,19 +337,21 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                                           receivedBy: state.receivedBy.value,
                                           paymentDate:
                                               state.paymentDate.value ??
-                                                  _paymentDate));
+                                          _paymentDate,
+                                    ),
+                                  );
                                 }
                               },
                             ),
                             Text(
                               "receive",
-                              style: AppTheme.of(context)
+                              style: of(context)
                                   .textTheme
                                   .caption
                                   ?.copyWith(
                                     color: state.paymentType.value == "receive"
-                                        ? AppColors.green
-                                        : AppColors.grey,
+                                        ? green
+                                        : grey,
                                   ),
                             ),
                           ],
@@ -337,13 +362,14 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                           children: [
                             Radio<String>(
                               value: "send",
-                              activeColor: AppColors.red,
+                              activeColor: red,
                               groupValue: state.paymentType.value,
                               onChanged: (value) {
                                 if (state.comingFrom !=
                                     RouteNames.paymentReceived) {
                                   BlocProvider.of<AddPaymentDetailsBloc>(
-                                          context)
+                                    context,
+                                  )
                                       .add(PaymentFieldsChangeEvent(
                                           deliveryOrderId:
                                               state.deliveryOrderId.value,
@@ -356,19 +382,22 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                                           receivedBy: state.receivedBy.value,
                                           paymentDate:
                                               state.paymentDate.value ??
-                                                  _paymentDate));
+                                          _paymentDate,
+                                    ),
+                                  );
                                 }
                               },
                             ),
                             Text(
                               "send",
-                              style: AppTheme.of(context)
+                              style: of(context)
                                   .textTheme
                                   .caption
                                   ?.copyWith(
                                       color: state.paymentType.value == "send"
-                                          ? AppColors.red
-                                          : AppColors.grey),
+                                        ? red
+                                        : grey,
+                                  ),
                             ),
                           ],
                         )
@@ -378,7 +407,7 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                     NormalTopAppBar(
                       titleWidget: Text(
                         "Payment For",
-                        style: AppTheme.of(context).textTheme.headline6,
+                        style: of(context).textTheme.headline6,
                       ),
                     ),
                     Flex(
@@ -389,7 +418,7 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                           children: [
                             Radio<String>(
                               value: "delivery",
-                              activeColor: AppColors.green,
+                              activeColor: green,
                               groupValue: state.paymentFor.value,
                               onChanged: (value) {
                                 if (_returnOrderIdController.text != '') {
@@ -406,18 +435,20 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                                         paymentFor: value!,
                                         receivedBy: state.receivedBy.value,
                                         paymentDate: state.paymentDate.value ??
-                                            _paymentDate));
+                                            _paymentDate,
+                                  ),
+                                );
                               },
                             ),
                             Text(
                               "delivery",
-                              style: AppTheme.of(context)
+                              style: of(context)
                                   .textTheme
                                   .caption
                                   ?.copyWith(
                                     color: state.paymentFor.value == "delivery"
-                                        ? AppColors.green
-                                        : AppColors.grey,
+                                        ? green
+                                        : grey,
                                   ),
                             ),
                           ],
@@ -428,7 +459,7 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                           children: [
                             Radio<String>(
                               value: "return",
-                              activeColor: AppColors.red,
+                              activeColor: red,
                               groupValue: state.paymentFor.value,
                               onChanged: (value) {
                                 if (_deliveryOrderIdController.text != '') {
@@ -445,18 +476,21 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                                         paymentFor: value!,
                                         receivedBy: state.receivedBy.value,
                                         paymentDate: state.paymentDate.value ??
-                                            _paymentDate));
+                                            _paymentDate,
+                                  ),
+                                );
                               },
                             ),
                             Text(
                               "return",
-                              style: AppTheme.of(context)
+                              style: of(context)
                                   .textTheme
                                   .caption
                                   ?.copyWith(
                                       color: state.paymentFor.value == "return"
-                                          ? AppColors.red
-                                          : AppColors.grey),
+                                        ? red
+                                        : grey,
+                                  ),
                             ),
                           ],
                         )
@@ -484,7 +518,8 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                                   child: Padding(
                                     padding: EdgeInsets.only(
                                         right: designValues(context)
-                                            .horizontalPadding),
+                                            .horizontalPadding,
+                                  ),
                                     child: Flex(
                                       direction: Axis.horizontal,
                                       children: [
@@ -493,14 +528,15 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                                               firstChild: RowFlexCloseChildren(
                                                 firstChild: Text(
                                                   "id:",
-                                                  style: AppTheme.of(context)
+                                              style:
+                                                  of(context)
                                                       .textTheme
                                                       .caption,
                                                 ),
                                                 secondChild: Text(
                                                   orderDetails.deliveryOrderId
                                                       .toString(),
-                                                  style: AppTheme.of(context)
+                                              style: of(context)
                                                       .textTheme
                                                       .overline,
                                                 ),
@@ -509,13 +545,16 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                                                 DateFormat('dd MMM yyyy')
                                                     .format(orderDetails
                                                         .createdAt
-                                                        .toLocal()),
-                                              )),
+                                                        .toLocal(),
+                                            ),
+                                          ),
+                                        ),
                                         ),
                                       ],
                                     ),
                                   ),
-                                ))
+                              ),
+                            )
                             .toList(),
                         onChanged: (orderId) {
                           setState(() {
@@ -558,7 +597,8 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                                   child: Padding(
                                     padding: EdgeInsets.only(
                                         right: designValues(context)
-                                            .horizontalPadding),
+                                            .horizontalPadding,
+                                  ),
                                     child: Flex(
                                       direction: Axis.horizontal,
                                       children: [
@@ -567,14 +607,15 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                                               firstChild: RowFlexCloseChildren(
                                                 firstChild: Text(
                                                   "id:",
-                                                  style: AppTheme.of(context)
+                                              style:
+                                                  of(context)
                                                       .textTheme
                                                       .caption,
                                                 ),
                                                 secondChild: Text(
                                                   orderDetails.returnOrderId
                                                       .toString(),
-                                                  style: AppTheme.of(context)
+                                              style: of(context)
                                                       .textTheme
                                                       .overline,
                                                 ),
@@ -583,13 +624,16 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                                                 DateFormat('dd MMM yyyy')
                                                     .format(orderDetails
                                                         .startedAt
-                                                        .toLocal()),
-                                              )),
+                                                        .toLocal(),
+                                            ),
+                                          ),
+                                        ),
                                         ),
                                       ],
                                     ),
                                   ),
-                                ))
+                              ),
+                            )
                             .toList(),
                         onChanged: (returnId) {
                           setState(() {
@@ -623,9 +667,10 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                                 child: Text(
                                   mode,
                                   style:
-                                      AppTheme.of(context).textTheme.overline,
+                                     of(context).textTheme.overline,
                                 ),
-                              ))
+                            ),
+                          )
                           .toList(),
                       onChanged: (paymentMode) {
                         setState(() {
@@ -642,7 +687,8 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                               paymentFor: state.paymentFor.value,
                               receivedBy: state.receivedBy.value,
                               paymentDate:
-                                  state.paymentDate.value ?? _paymentDate),
+                                state.paymentDate.value ?? _paymentDate,
+                          ),
                         );
                       },
                       labelText: "Select Payment Mode",
@@ -652,14 +698,13 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                       initialValue: state.amount.value.toString(),
                       focusNode: _amountFocusNode,
                       keyboardType: TextInputType.number,
-                      autofocus: false,
                       decoration: inputDecoration(
                         context,
                         labelText: "Amount",
                         hintText: "Enter Amount",
                         inFocus: _amountFocusNode.hasFocus,
                         showCurrency: true,
-                        currencyColor: AppColors.orange,
+                        currencyColor: orange,
                         errorText: _amountFocusNode.hasFocus
                             ? _amountFieldErrorText()
                             : null,
@@ -669,7 +714,6 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                           RegExp(r'^[0-9]+(\.[0-9]*)?$'),
                         ),
                       ],
-                      readOnly: false,
                       textAlignVertical: TextAlignVertical.center,
                       textInputAction: TextInputAction.done,
                       style: Theme.of(context).textTheme.bodyText1,
@@ -705,11 +749,12 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                 disabled: !state.status.isValidated,
                 text: "Add",
                 onPressed: () {
-                  state.status.isValidated
-                      ? BlocProvider.of<AddPaymentDetailsBloc>(context)
-                          .add(AddPaymentReceiveSubmitEvent())
-                      : null;
-                });
+                if (state.status.isValidated) {
+                  BlocProvider.of<AddPaymentDetailsBloc>(context)
+                      .add(AddPaymentReceiveSubmitEvent());
+                }
+              },
+            );
           },
         ),
       ),

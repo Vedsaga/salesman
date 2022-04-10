@@ -1,13 +1,20 @@
 // flutter import
+
+// Flutter imports:
 import 'package:flutter/material.dart';
-// third party imports:
+
+// Package imports:
 import 'package:flutter_svg/svg.dart';
-// project imports:
+
+// Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/core/components/row_flex_close_children.dart';
 import 'package:salesman/core/components/row_flex_spaced_children.dart';
 import 'package:salesman/core/models/designs/summary_card_model.dart';
+
+// third party imports:
+// project imports:
 
 class SummaryCard extends StatelessWidget {
   const SummaryCard({
@@ -30,10 +37,10 @@ class SummaryCard extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius:
             BorderRadius.circular(designValues(context).cornerRadius8),
-        color: AppColors.light,
+        color: light,
         boxShadow: const [
           BoxShadow(
-            color: AppColors.shadowColor,
+            color: shadowColor,
             blurRadius: 34,
             offset: Offset(-5, 5),
           ),
@@ -67,7 +74,7 @@ class SummaryCard extends StatelessWidget {
                         firstChild: SvgPicture.asset(
                           "assets/icons/svgs/inr.svg",
                           color: summaryValuesList[index].color ??
-                              AppColors.secondaryDark,
+                              secondaryDark,
                           height: 10,
                           width: 10,
                         ),
@@ -78,8 +85,10 @@ class SummaryCard extends StatelessWidget {
                               .subtitle2
                               ?.copyWith(
                                   color: summaryValuesList[index].color ??
-                                      AppColors.dark),
-                        )),
+                                      dark,
+                            ),
+                      ),
+                    ),
                   ),
                 );
               },

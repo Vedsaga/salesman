@@ -1,12 +1,16 @@
 //  flutter import
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 
-// project imports
+// Project imports:
+import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
 import 'package:salesman/core/components/menu_button.dart';
-import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/core/models/designs/menu_button_model.dart';
+
+// project imports
 
 class MenuSection extends StatelessWidget {
   final List<MenuButtonModel> menuItems;
@@ -28,12 +32,12 @@ class MenuSection extends StatelessWidget {
           child: Text(
             groupName.toUpperCase(),
             style: disabled
-                ? AppTheme.of(context)
+                ? of(context)
                 .textTheme
                 .headline5
-                    ?.copyWith(color: AppColors.grey)
-                : AppTheme.of(context).textTheme.headline5?.copyWith(
-                      color: AppColors.orange,
+                    ?.copyWith(color: grey)
+                : of(context).textTheme.headline5?.copyWith(
+                      color: orange,
                     ),
           ),
         ),
@@ -49,7 +53,6 @@ class MenuSection extends StatelessWidget {
                 crossAxisCount: 3,
                 mainAxisSpacing: designValues(context).mainAxisSpacing13,
                 crossAxisSpacing: designValues(context).crossAxisSpacing31,
-                childAspectRatio: 1.0,
               ),
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {

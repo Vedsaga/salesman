@@ -1,4 +1,6 @@
 // third part imports:
+
+// Package imports:
 import 'package:hive/hive.dart';
 
 // part
@@ -55,7 +57,7 @@ class ActiveFeaturesModel extends HiveObject {
     this.disableSend = true,
   });
 
-  Map<String, dynamic> toMap() {
+  Map<String, bool> toMap() {
     return {
       'disableDetails': disableDetails,
       'disableClient': disableClient,

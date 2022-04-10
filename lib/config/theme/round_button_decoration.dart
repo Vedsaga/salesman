@@ -1,18 +1,22 @@
 //  flutter imports
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
+import 'package:salesman/config/theme/colors.dart';
 
 // project imports
-import 'package:salesman/config/theme/colors.dart';
 
 BoxDecoration roundButtonDecoration(BuildContext context) {
   return BoxDecoration(
-    color: AppColors.dark,
+    color: dark,
     borderRadius:
         BorderRadius.circular(designValues(context).roundButtonRadius),
     boxShadow: const [
       BoxShadow(
-        color: AppColors.shadowColor,
+        color: shadowColor,
         blurRadius: 34,
         offset: Offset(-5, 5),
       ),

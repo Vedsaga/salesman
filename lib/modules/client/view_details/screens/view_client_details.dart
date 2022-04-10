@@ -1,12 +1,14 @@
 // flutter imports
+
+// Flutter imports:
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-// third party imports
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-// project imports
+// Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/layouts/mobile_layout.dart';
 import 'package:salesman/config/routes/route_name.dart';
@@ -19,6 +21,10 @@ import 'package:salesman/core/components/input_top_app_bar.dart';
 import 'package:salesman/core/components/single_info_box.dart';
 import 'package:salesman/core/components/snackbar_message.dart';
 import 'package:salesman/modules/client/view_details/bloc/view_client_details_bloc.dart';
+
+// third party imports
+
+// project imports
 
 class ViewClientDetails extends StatefulWidget {
   const ViewClientDetails({Key? key}) : super(key: key);
@@ -39,7 +45,10 @@ class _ViewClientDetailsState extends State<ViewClientDetails> {
         listener: (context, state) {
           if (state is SuccessfullyDeactivateClientState) {
             snackbarMessage(
-                context, "Client removed successfully...", MessageType.success);
+              context,
+              "Client removed successfully...",
+              MessageType.success,
+            );
             Future.delayed(const Duration(seconds: 1), () {
               Navigator.popAndPushNamed(context, RouteNames.viewClientList);
             });
@@ -50,6 +59,16 @@ class _ViewClientDetailsState extends State<ViewClientDetails> {
               "Removing client...",
               MessageType.inProgress,
             );
+          }
+          if (state is EmptyClientDetailsState){
+            snackbarMessage(
+              context,
+              "Client details not found...",
+              MessageType.warning,
+            );
+            Future.delayed(const Duration(seconds: 1), () {
+              Navigator.popAndPushNamed(context, RouteNames.viewClientList);
+            });
           }
         },
         child: BlocBuilder<ViewClientDetailsBloc, ViewClientDetailsState>(
@@ -74,7 +93,8 @@ class _ViewClientDetailsState extends State<ViewClientDetails> {
                       decoration: inputDecoration(context,
                           labelText: "client name",
                           hintText: "client name",
-                          inFocus: false),
+                        inFocus: false,
+                      ),
                     ),
                     SizedBox(height: designValues(context).cornerRadius34),
                     TextFormField(
@@ -105,19 +125,19 @@ class _ViewClientDetailsState extends State<ViewClientDetails> {
                         info: "due amount",
                         data: state.clientDetails.dueAmount.toString(),
                         dataColor: state.clientDetails.dueAmount > 0
-                            ? AppColors.red
+                            ? red
                             : state.clientDetails.dueAmount > 0
-                                ? AppColors.green
-                                : AppColors.grey,
+                                ? green
+                                : grey,
                         dataPrefixWidget: SvgPicture.asset(
                           "assets/icons/svgs/inr.svg",
                           height: 13,
                           width: 13,
                           color: state.clientDetails.dueAmount > 0
-                              ? AppColors.red
+                              ? red
                               : state.clientDetails.dueAmount > 0
-                                  ? AppColors.green
-                                  : AppColors.grey,
+                                  ? green
+                                  : grey,
                         ),
                       ),
                     )
@@ -159,4 +179,3 @@ class _ViewClientDetailsState extends State<ViewClientDetails> {
     );
   }
 }
-

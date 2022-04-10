@@ -1,15 +1,22 @@
 // flutter imports
+
+// Flutter imports:
 import 'package:flutter/material.dart';
-// third party imports
+
+// Package imports:
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-// project's imports
+
+// Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
 import 'package:salesman/core/components/row_flex_close_children.dart';
 import 'package:salesman/core/components/row_flex_spaced_children.dart';
 import 'package:salesman/core/db/drift/app_database.dart';
+
+// third party imports
+// project's imports
 
 class PaymentCard extends StatelessWidget {
   const PaymentCard({
@@ -26,10 +33,10 @@ class PaymentCard extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius:
             BorderRadius.circular(designValues(context).cornerRadius8),
-        color: AppColors.light,
+        color: light,
         boxShadow: const [
           BoxShadow(
-            color: AppColors.shadowColor,
+            color: shadowColor,
             blurRadius: 34,
             offset: Offset(-5, 5),
           ),
@@ -65,7 +72,7 @@ class PaymentCard extends StatelessWidget {
                           maxWidth: 144,
                           child: Text(
                             paymentData.amount.toStringAsFixed(2),
-                            style: AppTheme.of(context).textTheme.headline6,
+                            style: of(context).textTheme.headline6,
                           ),
                         ),
                       ),
@@ -75,14 +82,16 @@ class PaymentCard extends StatelessWidget {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(paymentData.paymentMode,
-                            style: AppTheme.of(context).textTheme.caption),
+                          style: of(context).textTheme.caption,
+                        ),
                       ),
                     ],
                   ),
                   secondChild: LimitedBox(
                     maxWidth: 89,
                     child: Text(DateFormat('dd MMM yyyy')
-                        .format(paymentData.paymentDate.toLocal())),
+                          .format(paymentData.paymentDate.toLocal()),
+                    ),
                   ),
                 ),
               ),

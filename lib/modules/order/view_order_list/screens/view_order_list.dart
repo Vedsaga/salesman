@@ -1,9 +1,13 @@
 // flutter imports
+
+// Flutter imports:
 import 'package:flutter/material.dart';
-// third party import
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-// project imports
+
+// Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/layouts/mobile_layout.dart';
 import 'package:salesman/config/routes/arguments_models/view_order_details_route_arguments.dart';
@@ -16,6 +20,9 @@ import 'package:salesman/core/components/snackbar_message.dart';
 import 'package:salesman/core/components/transaction_info_card.dart';
 import 'package:salesman/core/utils/global_function.dart';
 import 'package:salesman/modules/order/view_order_list/bloc/view_order_list_bloc.dart';
+
+// third party import
+// project imports
 
 class ViewOrderList extends StatefulWidget {
   const ViewOrderList({Key? key}) : super(key: key);
@@ -70,7 +77,9 @@ class _ViewOrderListState extends State<ViewOrderList> {
             }
             if (state is FetchedOrderListState) {
               final GlobalFunction globalFunction = GlobalFunction(
-                  clientList: state.clientList, itemList: state.itemList);
+                clientList: state.clientList,
+                itemList: state.itemList,
+              );
               return SingleChildScrollView(
                 child: Container(
                   margin: EdgeInsets.only(
@@ -82,7 +91,6 @@ class _ViewOrderListState extends State<ViewOrderList> {
                   child: ListView.builder(
                     itemCount: state.orders.length,
                     shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
                       return GestureDetector(
@@ -95,34 +103,38 @@ class _ViewOrderListState extends State<ViewOrderList> {
                               itemDetails: globalFunction
                                   .getItemDetails(state.orders[index].itemId)!,
                               clientDetails: globalFunction.getClientDetails(
-                                  state.orders[index].clientId)!,
+                                state.orders[index].clientId,
+                              )!,
                             ),
                           );
                         },
                         child: TransactionListCard(
                           statusColor: state.orders[index].orderStatus ==
                                   "pending"
-                              ? AppColors.skyBlueGradient
+                              ? skyBlueGradient
                               : state.orders[index].orderStatus == "approved"
-                                  ? AppColors.greenGradient
+                                  ? greenGradient
                                   : state.orders[index].orderStatus ==
                                           "cancelled"
-                                      ? AppColors.redGradient
-                                      : AppColors.darkGradient,
-                          statusTextColor: AppColors.light,
+                                      ? redGradient
+                                      : darkGradient,
+                          statusTextColor: light,
                           status: state.orders[index].orderStatus,
                           leadingDataAtTop: globalFunction.getClientName(
-                                          state.orders[index].clientId) !=
+                                        state.orders[index].clientId,
+                                      ) !=
                                       null ||
                                   globalFunction
                                       .getClientName(
-                                          state.orders[index].clientId)!
+                                        state.orders[index].clientId,
+                                      )!
                                       .isNotEmpty
                               ? globalFunction
                                   .getClientName(state.orders[index].clientId)!
                               : "",
                           trailingDataAtTop: globalFunction.getItemName(
-                                          state.orders[index].itemId) !=
+                                        state.orders[index].itemId,
+                                      ) !=
                                       null ||
                                   globalFunction
                                       .getItemName(state.orders[index].itemId)!

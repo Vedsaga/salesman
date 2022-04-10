@@ -1,17 +1,21 @@
 //  third party imports:
+
+// Package imports:
 import 'package:bloc/bloc.dart';
 import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 
-// project imports:
+// Project imports:
+import 'package:salesman/core/db/drift/app_database.dart';
 import 'package:salesman/core/models/validations/generic_field.dart';
 import 'package:salesman/core/models/validations/phone_number_field.dart';
 import 'package:salesman/core/utils/feature_monitor.dart';
 import 'package:salesman/main.dart';
 import 'package:salesman/modules/client/query/client_table_queries.dart';
 import 'package:salesman/modules/menu/repositories/menu_repository.dart';
-import 'package:salesman/core/db/drift/app_database.dart';
+
+// project imports:
 
 // part
 part 'add_client_event.dart';
@@ -28,7 +32,7 @@ class AddClientBloc extends Bloc<AddClientEvent, AddClientState> {
   }
 
   void _clientFieldsChange(
-      ClientFieldsChange event, Emitter<AddClientState> emit) {
+      ClientFieldsChange event, Emitter<AddClientState> emit,) {
     final clientName = GenericField.dirty(event.clientName);
     final clientPhone = PhoneNumberField.dirty(event.clientPhone);
     emit(state.copyWith(
@@ -38,11 +42,11 @@ class AddClientBloc extends Bloc<AddClientEvent, AddClientState> {
           ? clientPhone
           : PhoneNumberField.pure(event.clientPhone),
       status: Formz.validate([clientName, clientPhone]),
-    ));
+    ),);
   }
 
   void _clientNameUnfocused(
-      ClientNameFieldUnfocused event, Emitter<AddClientState> emit) {
+      ClientNameFieldUnfocused event, Emitter<AddClientState> emit,) {
     final clientName = GenericField.dirty(state.clientName.value);
     emit(
       state.copyWith(
@@ -53,7 +57,7 @@ class AddClientBloc extends Bloc<AddClientEvent, AddClientState> {
   }
 
   void _clientPhoneUnfocused(
-      ClientPhoneFieldUnfocused event, Emitter<AddClientState> emit) {
+      ClientPhoneFieldUnfocused event, Emitter<AddClientState> emit,) {
     final clientPhone = PhoneNumberField.dirty(state.clientPhone.value);
     emit(
       state.copyWith(
@@ -63,8 +67,8 @@ class AddClientBloc extends Bloc<AddClientEvent, AddClientState> {
     );
   }
 
-  void _clientFormSubmitted(
-      ClientFormSubmitted event, Emitter<AddClientState> emit) async {
+  Future<void> _clientFormSubmitted(
+      ClientFormSubmitted event, Emitter<AddClientState> emit,) async {
     final clientName = GenericField.dirty(state.clientName.value);
     final clientPhone = PhoneNumberField.dirty(state.clientPhone.value);
     emit(
@@ -91,8 +95,8 @@ class AddClientBloc extends Bloc<AddClientEvent, AddClientState> {
     }
   }
 
-  void _onEnableItemFeature(
-      EnableItemFeatureEvent event, Emitter<AddClientState> emit) async {
+  Future<void> _onEnableItemFeature(
+      EnableItemFeatureEvent event, Emitter<AddClientState> emit,) async {
     final feature = await menuRepository.getActiveFeatures();
     if (feature != null && feature.disableItem) {
       FeatureMonitor(menuRepository: menuRepository)

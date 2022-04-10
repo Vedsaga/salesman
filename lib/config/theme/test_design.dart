@@ -1,4 +1,6 @@
 // flutter imports
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 
 class TestDesign extends StatelessWidget {
@@ -23,8 +25,6 @@ class TestDesign extends StatelessWidget {
                       Color(0xFFF68F1F),
                       Color(0xFFF68F1F),
                     ],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
                   ),
                   borderRadius: BorderRadius.circular(13),
                 ),

@@ -1,13 +1,25 @@
 // flutter imports
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_svg/flutter_svg.dart';
+
+// Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/core/components/dropdown_label.dart';
 
 class CustomDropdown extends StatelessWidget {
   const CustomDropdown(
-      {Key? key, required this.value, required this.items, required this.onChanged, required this.labelText})
+      {
+    Key? key,
+    required this.value,
+    required this.items,
+    required this.onChanged,
+    required this.labelText,
+  })
       : super(key: key);
   final String? value;
   final List<DropdownMenuItem<String>>? items;
@@ -27,7 +39,7 @@ class CustomDropdown extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             border: Border.all(
-              color: AppColors.lightGrey,
+              color: lightGrey,
               width: 2,
             ),
             borderRadius:
@@ -37,13 +49,14 @@ class CustomDropdown extends StatelessWidget {
           child: DropdownButtonHideUnderline(
             child: Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: designValues(context).mainAxisSpacing13),
+                horizontal: designValues(context).mainAxisSpacing13,
+              ),
               child: DropdownButton<String>(
                 value: value,
                 isExpanded: true,
                 icon: SvgPicture.asset(
                   "assets/icons/svgs/dropdown.svg",
-                  color: AppColors.dark,
+                  color: dark,
                 ),
                 items: items,
                 onChanged: onChanged,

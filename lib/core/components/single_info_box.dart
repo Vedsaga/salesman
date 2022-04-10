@@ -1,11 +1,15 @@
 // flutter import
+
+// Flutter imports:
 import 'package:flutter/cupertino.dart';
 
-// project imports
+// Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/theme/box_decoration.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
+
+// project imports
 
 class SingleInfoBox extends StatelessWidget {
   const SingleInfoBox({
@@ -36,14 +40,13 @@ class SingleInfoBox extends StatelessWidget {
           children: [
             Text(
               info,
-              style: AppTheme.of(context).textTheme.subtitle2?.copyWith(
-                    color: infoColor ?? AppColors.grey,
+              style: of(context).textTheme.subtitle2?.copyWith(
+                    color: infoColor ?? grey,
                   ),
             ),
             SizedBox(height: designValues(context).padding21),
             Flex(
-                direction: Axis.horizontal,
-                crossAxisAlignment: CrossAxisAlignment.center,
+              direction: Axis.horizontal,
                 children: [
                 dataPrefixWidget ?? const SizedBox(),
                   SizedBox(
@@ -51,10 +54,10 @@ class SingleInfoBox extends StatelessWidget {
                   ),
                   Text(
                     data,
-                    style: AppTheme.of(context)
+                  style: of(context)
                         .textTheme
                         .subtitle2
-                        ?.copyWith(color: dataColor ?? AppColors.dark),
+                      ?.copyWith(color: dataColor ?? dark),
                   ),
                   SizedBox(
                     width: designValues(context).cornerRadius8,

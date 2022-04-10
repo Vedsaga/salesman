@@ -1,5 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+// ignore_for_file: require_trailing_commas, avoid_redundant_argument_values, avoid_positional_boolean_parameters
+
 part of 'app_database.dart';
 
 // **************************************************************************

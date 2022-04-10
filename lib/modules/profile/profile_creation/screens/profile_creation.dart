@@ -1,21 +1,27 @@
 //  flutter imports:
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 
-// third party imports:
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
-// project imports:
-import 'package:salesman/config/layouts/mobile_layout.dart';
+// Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
+import 'package:salesman/config/layouts/mobile_layout.dart';
 import 'package:salesman/config/routes/route_name.dart';
 import 'package:salesman/core/components/action_button.dart';
 import 'package:salesman/core/components/input_decoration.dart';
-import 'package:salesman/core/components/snackbar_message.dart';
 import 'package:salesman/core/components/normal_top_app_bar.dart';
+import 'package:salesman/core/components/snackbar_message.dart';
 import 'package:salesman/core/models/validations/generic_field.dart';
 import 'package:salesman/core/models/validations/phone_number_field.dart';
 import 'package:salesman/modules/profile/profile_creation/bloc/profile_bloc.dart';
+
+// third party imports:
+
+// project imports:
 
 class ProfileCreation extends StatefulWidget {
   const ProfileCreation({Key? key}) : super(key: key);
@@ -41,25 +47,25 @@ class _ProfileCreationState extends State<ProfileCreation> {
     _companyNameFocusNode.addListener(_onCompanyNameChanged);
   }
 
-  _onAgentNameChanged() {
+  void _onAgentNameChanged() {
     if (!_agentNameFocusNode.hasFocus) {
       context.read<ProfileCreationBloc>().add(AgentNameFieldUnfocused());
     }
   }
 
-  _onPhoneChanged() {
+  void _onPhoneChanged() {
     if (!_phoneFocusNode.hasFocus) {
       context.read<ProfileCreationBloc>().add(PhoneFieldUnfocused());
     }
   }
 
-  _onUsernameChanged() {
+  void _onUsernameChanged() {
     if (!_usernameFocusNode.hasFocus) {
       context.read<ProfileCreationBloc>().add(UsernameFieldUnfocused());
     }
   }
 
-  _onCompanyNameChanged() {
+  void _onCompanyNameChanged() {
     if (!_companyNameFocusNode.hasFocus) {
       context.read<ProfileCreationBloc>().add(CompanyNameFieldUnfocused());
     }
@@ -156,18 +162,23 @@ class _ProfileCreationState extends State<ProfileCreation> {
           );
           Future.delayed(const Duration(seconds: 1), () {
             Navigator.popAndPushNamed(context, RouteNames.menu);
-
-          });          
+          });
         }
 
         if (state.status.isSubmissionFailure) {
           snackbarMessage(
-              context, "oh no.. Something went wrong!", MessageType.failed);
+            context,
+            "oh no.. Something went wrong!",
+            MessageType.failed,
+          );
         }
 
         if (state.status.isSubmissionInProgress) {
           snackbarMessage(
-              context, "Submitting Profile...", MessageType.inProgress);
+            context,
+            "Submitting Profile...",
+            MessageType.inProgress,
+          );
         }
       },
       child: MobileLayout(
@@ -175,15 +186,16 @@ class _ProfileCreationState extends State<ProfileCreation> {
         bottomAppBar: BlocBuilder<ProfileCreationBloc, ProfileCreationState>(
           builder: (context, state) {
             return ActionButton(
-                disabled: !state.status.isValidated,
-                text: "save",
-                onPressed: () {
-                  state.status.isValidated
-                      ? context
-                          .read<ProfileCreationBloc>()
-                          .add(ProfileFormSubmitted())
-                      : null;
-                });
+              disabled: !state.status.isValidated,
+              text: "save",
+              onPressed: () {
+                if (state.status.isValidated) {
+                  context
+                      .read<ProfileCreationBloc>()
+                      .add(ProfileFormSubmitted());
+                }
+              },
+            );
           },
         ),
         body: BlocBuilder<ProfileCreationBloc, ProfileCreationState>(
@@ -211,15 +223,15 @@ class _ProfileCreationState extends State<ProfileCreation> {
                     ),
                     keyboardType: TextInputType.text,
                     onChanged: (value) {
-                      BlocProvider.of<ProfileCreationBloc>(context)
-                          .add(ProfileFieldsChange(
-                        agentName: value,
-                        phone: state.phone.value,
-                        username: state.username.value,
-                        companyName: state.companyName.value,
-                      ));
+                      BlocProvider.of<ProfileCreationBloc>(context).add(
+                        ProfileFieldsChange(
+                          agentName: value,
+                          phone: state.phone.value,
+                          username: state.username.value,
+                          companyName: state.companyName.value,
+                        ),
+                      );
                     },
-                    readOnly: false,
                     textAlignVertical: TextAlignVertical.center,
                     textInputAction: TextInputAction.next,
                     style: Theme.of(context).textTheme.bodyText1,
@@ -229,15 +241,15 @@ class _ProfileCreationState extends State<ProfileCreation> {
                     initialValue: state.phone.value,
                     focusNode: _phoneFocusNode,
                     onChanged: (value) {
-                      BlocProvider.of<ProfileCreationBloc>(context)
-                          .add(ProfileFieldsChange(
-                        agentName: state.agentName.value,
-                        phone: value,
-                        username: state.username.value,
-                        companyName: state.companyName.value,
-                      ));
+                      BlocProvider.of<ProfileCreationBloc>(context).add(
+                        ProfileFieldsChange(
+                          agentName: state.agentName.value,
+                          phone: value,
+                          username: state.username.value,
+                          companyName: state.companyName.value,
+                        ),
+                      );
                     },
-                    readOnly: false,
                     textInputAction: TextInputAction.next,
                     style: Theme.of(context).textTheme.bodyText1,
                     keyboardType: TextInputType.phone,
@@ -255,15 +267,15 @@ class _ProfileCreationState extends State<ProfileCreation> {
                     initialValue: state.username.value,
                     focusNode: _usernameFocusNode,
                     onChanged: (value) {
-                      BlocProvider.of<ProfileCreationBloc>(context)
-                          .add(ProfileFieldsChange(
-                        agentName: state.agentName.value,
-                        phone: state.phone.value,
-                        username: value,
-                        companyName: state.companyName.value,
-                      ));
+                      BlocProvider.of<ProfileCreationBloc>(context).add(
+                        ProfileFieldsChange(
+                          agentName: state.agentName.value,
+                          phone: state.phone.value,
+                          username: value,
+                          companyName: state.companyName.value,
+                        ),
+                      );
                     },
-                    readOnly: false,
                     textAlignVertical: TextAlignVertical.center,
                     textInputAction: TextInputAction.next,
                     style: Theme.of(context).textTheme.bodyText1,
@@ -287,15 +299,15 @@ class _ProfileCreationState extends State<ProfileCreation> {
                     initialValue: state.companyName.value,
                     focusNode: _companyNameFocusNode,
                     onChanged: (value) {
-                      BlocProvider.of<ProfileCreationBloc>(context)
-                          .add(ProfileFieldsChange(
-                        agentName: state.agentName.value,
-                        phone: state.phone.value,
-                        username: state.username.value,
-                        companyName: value,
-                      ));
+                      BlocProvider.of<ProfileCreationBloc>(context).add(
+                        ProfileFieldsChange(
+                          agentName: state.agentName.value,
+                          phone: state.phone.value,
+                          username: state.username.value,
+                          companyName: value,
+                        ),
+                      );
                     },
-                    readOnly: false,
                     textAlignVertical: TextAlignVertical.center,
                     textInputAction: TextInputAction.done,
                     style: Theme.of(context).textTheme.bodyText1,

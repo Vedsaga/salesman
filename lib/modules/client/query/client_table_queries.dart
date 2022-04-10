@@ -1,9 +1,13 @@
 // third party imports:
+
+// Package imports:
 import 'package:drift/drift.dart';
 
-// project imports:
+// Project imports:
 import 'package:salesman/core/db/drift/app_database.dart';
 import 'package:salesman/core/db/drift/models/model_client.dart';
+
+// project imports:
 
 // part
 part 'client_table_queries.g.dart';
@@ -15,15 +19,15 @@ class ClientTableQueries extends DatabaseAccessor<AppDatabase>
   ClientTableQueries(this.db) : super(db);
 
   Future<int> insertClient({required ModelClientCompanion client}) async {
-    return await into(modelClient).insert(client);
+    return  into(modelClient).insert(client);
   }
 
   Future<bool> updateClient(Insertable<ModelClientData> client) async {
-    return await update(modelClient).replace(client);
+    return  update(modelClient).replace(client);
   }
 
   Future<List<ModelClientData>> getAllActiveClients() async {
-    return await (select(modelClient)
+    return  (select(modelClient)
           ..where(
             (table) => table.isActive.equals(true),
           )
@@ -34,7 +38,7 @@ class ClientTableQueries extends DatabaseAccessor<AppDatabase>
         .get();
   }
   Future<List<ModelClientData>> getAllClients() async {
-    return await (select(modelClient)
+    return  (select(modelClient)
           ..orderBy([
             (table) => OrderingTerm(expression: table.clientId),
           ])
@@ -44,7 +48,7 @@ class ClientTableQueries extends DatabaseAccessor<AppDatabase>
 
     // set isActive to false
   Future<int> deActiveClient(int clientId) async {
-    return await (update(modelClient)
+    return  (update(modelClient)
           ..where((table) => table.clientId.equals(clientId)))
         .write(
       const ModelClientCompanion(
@@ -55,7 +59,7 @@ class ClientTableQueries extends DatabaseAccessor<AppDatabase>
 
   // get client details by id
   Future<ModelClientData> getClientDetails(int clientId) async {
-    return await (select(modelClient)
+    return  (select(modelClient)
           ..where((table) => table.clientId.equals(clientId)))
         .getSingle();
   }

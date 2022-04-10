@@ -1,6 +1,9 @@
 // flutter import
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 
+// Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
@@ -20,10 +23,9 @@ class ShowUnit extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: showUnit ? AppColors.orange : AppColors.dark,
+        color: showUnit ? orange : dark,
         border: Border.all(
-          color: showUnit ? AppColors.orange : AppColors.dark,
-          width: 1,
+          color: showUnit ? orange : dark,
         ),
         borderRadius: BorderRadius.all(
           Radius.circular(designValues(context).textCornerRadius),
@@ -38,8 +40,8 @@ class ShowUnit extends StatelessWidget {
           children: <Widget>[
             Text(
               value,
-              style: AppTheme.of(context).textTheme.bodyText1?.copyWith(
-                    color: showUnit ? AppColors.light : AppColors.orange,
+              style: of(context).textTheme.bodyText1?.copyWith(
+                    color: showUnit ? light : orange,
                     fontWeight: FontWeight.w700,
                   ),
             ),
@@ -49,7 +51,7 @@ class ShowUnit extends StatelessWidget {
                 showUnit
                     ? Icons.keyboard_arrow_up_rounded
                     : Icons.keyboard_arrow_down_rounded,
-                color: AppColors.lightGrey,
+                color: lightGrey,
               ),
           ],
         ),

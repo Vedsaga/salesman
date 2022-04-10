@@ -1,16 +1,18 @@
 // third party imports:
+
+// Package imports:
 import 'package:hive/hive.dart';
 
-// project imports:
+// Project imports:
 import 'package:salesman/core/db/hive/models/active_features_model.dart';
 import 'package:salesman/core/db/hive/models/agent_profile_model.dart';
 import 'package:salesman/core/db/hive/models/company_profile_model.dart';
 
-class Boxes {
-  static Box<AgentProfileModel> agentProfileBox() =>
+// project imports:
+
+Box<AgentProfileModel> agentProfileBox() =>
       Hive.box<AgentProfileModel>('agent_profile');
-  static Box<CompanyProfileModel> companyProfileBox() =>
+Box<CompanyProfileModel> companyProfileBox() =>
       Hive.box<CompanyProfileModel>('company_profile');
-  static Box<ActiveFeaturesModel> activeFeaturesBox() =>
+Box<ActiveFeaturesModel> activeFeaturesBox() =>
       Hive.box<ActiveFeaturesModel>('active_features');
-}

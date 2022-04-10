@@ -1,143 +1,145 @@
 //  flutter imports
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 
-// my imports
+// Project imports:
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/fonts.dart';
 
-class AppTheme {
-  static ThemeData of(BuildContext context) {
+// my imports
+
+ ThemeData of(BuildContext context) {
     final theme = Theme.of(context);
     return theme.copyWith(
       colorScheme: theme.colorScheme.copyWith(
-        primary: AppColors.skyBlue,
-        secondary: AppColors.orange,
-        error: AppColors.red,
+        primary: skyBlue,
+        secondary: orange,
+        error: red,
       ),
       brightness: Brightness.light,
-      primaryColor: AppColors.dark,
-      backgroundColor: AppColors.light,
-      scaffoldBackgroundColor: AppColors.light,
-      errorColor: AppColors.red,
-      shadowColor: AppColors.shadowColor,
+      primaryColor: dark,
+      backgroundColor: light,
+      scaffoldBackgroundColor: light,
+      errorColor: red,
+      shadowColor: shadowColor,
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.light,
+        backgroundColor: light,
         centerTitle: true,
         elevation: 0,
         titleTextStyle: TextStyle(
-          fontFamily: AppFonts.montserrat,
+          fontFamily: montserrat,
           fontSize: 21,
           fontWeight: FontWeight.normal,
-          color: AppColors.dark,
+          color: dark,
         ),
       ),
       textTheme: TextTheme(
         headline1: TextStyle(
-          fontFamily: AppFonts.montserrat,
+          fontFamily: montserrat,
           fontSize: 96,
           fontWeight: FontWeight.w300,
           letterSpacing: -1.5,
-          color: AppColors.dark,
+          color: dark,
           overflow: TextOverflow.ellipsis,
         ),
         headline2: TextStyle(
-          fontFamily: AppFonts.montserrat,
+          fontFamily: montserrat,
           fontSize: 60,
           fontWeight: FontWeight.w300,
           letterSpacing: -0.5,
-          color: AppColors.dark,
+          color: dark,
           overflow: TextOverflow.ellipsis,
         ),
         headline3: TextStyle(
-          fontFamily: AppFonts.montserrat,
+          fontFamily: montserrat,
           fontSize: 48,
           fontWeight: FontWeight.w400,
-          color: AppColors.dark,
+          color: dark,
           overflow: TextOverflow.ellipsis,
         ),
         headline4: TextStyle(
-          fontFamily: AppFonts.montserrat,
+          fontFamily: montserrat,
           fontSize: 34,
           fontWeight: FontWeight.w400,
           letterSpacing: 0.25,
-          color: AppColors.dark,
+          color: dark,
           overflow: TextOverflow.ellipsis,
         ),
         headline5: TextStyle(
-          fontFamily: AppFonts.montserrat,
+          fontFamily: montserrat,
           fontSize: 21,
           fontWeight: FontWeight.w700,
           letterSpacing: 0.03,
-          color: AppColors.dark,
+          color: dark,
           overflow: TextOverflow.ellipsis,
         ),
         headline6: TextStyle(
-          fontFamily: AppFonts.montserrat,
+          fontFamily: montserrat,
           fontSize: 17,
           fontWeight: FontWeight.w700,
           letterSpacing: 0.03,
-          color: AppColors.dark,
+          color: dark,
           overflow: TextOverflow.ellipsis,
         ),
         subtitle1: TextStyle(
-          fontFamily: AppFonts.montserrat,
+          fontFamily: montserrat,
           fontSize: 15,
           fontWeight: FontWeight.w600,
           letterSpacing: 0.5,
-          color: AppColors.grey,
+          color: grey,
           overflow: TextOverflow.ellipsis,
         ),
         subtitle2: TextStyle(
-          fontFamily: AppFonts.montserrat,
+          fontFamily: montserrat,
           fontSize: 13,
           fontWeight: FontWeight.w600,
           letterSpacing: 0.5,
-          color: AppColors.grey,
+          color: grey,
           overflow: TextOverflow.ellipsis,
         ),
         bodyText1: TextStyle(
-          fontFamily: AppFonts.montserrat,
+          fontFamily: montserrat,
           fontSize: 15,
           fontWeight: FontWeight.w500,
           // 3% of the original text size
           letterSpacing: 0.5,
-          color: AppColors.dark,
+          color: dark,
           overflow: TextOverflow.ellipsis,
         ),
         bodyText2: TextStyle(
-          fontFamily: AppFonts.montserrat,
+          fontFamily: montserrat,
           fontSize: 13,
           fontWeight: FontWeight.w700,
           letterSpacing: 0.25,
-          color: AppColors.dark,
+          color: dark,
           overflow: TextOverflow.ellipsis,
         ),
         button: TextStyle(
-          fontFamily: AppFonts.montserrat,
+          fontFamily: montserrat,
           fontSize: 17,
           fontWeight: FontWeight.w700,
           letterSpacing: 1.25,
-          color: AppColors.light,
+          color: light,
           overflow: TextOverflow.ellipsis,
         ),
         caption: TextStyle(
-          fontFamily: AppFonts.montserrat,
+          fontFamily: montserrat,
           fontSize: 13,
           fontWeight: FontWeight.w600,
           letterSpacing: 0.2,
-          color: AppColors.grey,
+          color: grey,
           overflow: TextOverflow.ellipsis,
         ),
         overline: TextStyle(
-          fontFamily: AppFonts.montserrat,
+          fontFamily: montserrat,
           fontSize: 15,
           fontWeight: FontWeight.w600,
           // 2% as letter spacing
           letterSpacing: 0.2,
-          color: AppColors.dark,
+          color: dark,
           overflow: TextOverflow.ellipsis,
         ),
       ),
     );
   }
-}

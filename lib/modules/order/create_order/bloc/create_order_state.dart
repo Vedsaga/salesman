@@ -85,4 +85,3 @@ class EmptyAgentProfile extends CreateOrderState{}
 class EmptyItemListState extends CreateOrderState{}
 
 class OrderSuccessfullyCreatedState extends CreateOrderState {}
-

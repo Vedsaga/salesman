@@ -1,10 +1,13 @@
 // third party imports:
+
+// Package imports:
 import 'package:bloc/bloc.dart';
 import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 
-// project imports:
+// Project imports:
+import 'package:salesman/core/db/drift/app_database.dart';
 import 'package:salesman/core/models/validations/double_field.dart';
 import 'package:salesman/core/models/validations/generic_field.dart';
 import 'package:salesman/core/models/validations/unit_field.dart';
@@ -12,7 +15,8 @@ import 'package:salesman/core/utils/feature_monitor.dart';
 import 'package:salesman/main.dart';
 import 'package:salesman/modules/item/query/item_table_queries.dart';
 import 'package:salesman/modules/menu/repositories/menu_repository.dart';
-import 'package:salesman/core/db/drift/app_database.dart';
+
+// project imports:
 
 // part
 part 'add_item_event.dart';
@@ -56,12 +60,12 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
           ? availableQuantity
           : DoubleField.pure(event.availableQuantity),
       status: Formz.validate(
-          [itemName, unit, sellingPrice, buyingPrice, availableQuantity]),
-    ));
+          [itemName, unit, sellingPrice, buyingPrice, availableQuantity],),
+    ),);
   }
 
   void _itemNameUnfocused(
-      ItemNameFieldUnfocused event, Emitter<AddItemState> emit) {
+      ItemNameFieldUnfocused event, Emitter<AddItemState> emit,) {
     final itemName = GenericField.dirty(state.itemName.value);
     emit(
       state.copyWith(
@@ -78,7 +82,7 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
   }
 
   void _unitUnfocused(
-      ItemUnitFieldUnfocused event, Emitter<AddItemState> emit) {
+      ItemUnitFieldUnfocused event, Emitter<AddItemState> emit,) {
     final unit = UnitField.dirty(state.unit.value);
     emit(
       state.copyWith(
@@ -95,7 +99,7 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
   }
 
   void _sellingPriceUnfocused(
-      ItemSellingPriceFieldUnfocused event, Emitter<AddItemState> emit) {
+      ItemSellingPriceFieldUnfocused event, Emitter<AddItemState> emit,) {
     final sellingPrice = DoubleField.dirty(state.sellingPrice.value);
     emit(
       state.copyWith(
@@ -112,7 +116,7 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
   }
 
   void _buyingPriceUnfocused(
-      ItemBuyingPriceFieldUnfocused event, Emitter<AddItemState> emit) {
+      ItemBuyingPriceFieldUnfocused event, Emitter<AddItemState> emit,) {
     final buyingPrice = DoubleField.dirty(state.buyingPrice.value);
     emit(
       state.copyWith(
@@ -129,7 +133,7 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
   }
 
   void _availableQuantityUnfocused(
-      ItemAvailableQuantityFieldUnfocused event, Emitter<AddItemState> emit) {
+      ItemAvailableQuantityFieldUnfocused event, Emitter<AddItemState> emit,) {
     final availableQuantity = DoubleField.dirty(state.availableQuantity.value);
     emit(
       state.copyWith(
@@ -145,8 +149,8 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
     );
   }
 
-  void _itemFormSubmitted(
-      ItemFormSubmitted event, Emitter<AddItemState> emit) async {
+  Future<void> _itemFormSubmitted(
+      ItemFormSubmitted event, Emitter<AddItemState> emit,) async {
     final itemName = GenericField.dirty(state.itemName.value);
     final unit = UnitField.dirty(state.unit.value);
     final sellingPrice = DoubleField.dirty(state.sellingPrice.value);
@@ -161,7 +165,7 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
         buyingPrice: buyingPrice,
         availableQuantity: availableQuantity,
         status: Formz.validate(
-            [itemName, unit, sellingPrice, buyingPrice, availableQuantity]),
+            [itemName, unit, sellingPrice, buyingPrice, availableQuantity],),
       ),
     );
 
@@ -184,8 +188,8 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
     }
   }
 
-  void _onEnableTradeFeature(
-      EnableTradeFeatureEvent event, Emitter<AddItemState> emit) async {
+  Future<void> _onEnableTradeFeature(
+      EnableTradeFeatureEvent event, Emitter<AddItemState> emit,) async {
     final feature = await menuRepository.getActiveFeatures();
 
     if (feature != null && feature.disableTrade) {
@@ -194,8 +198,8 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
     }
   }
 
-  void _onEnableOrderFeature(
-      EnableOrderFeatureEvent event, Emitter<AddItemState> emit) async {
+  Future<void> _onEnableOrderFeature(
+      EnableOrderFeatureEvent event, Emitter<AddItemState> emit,) async {
     final feature = await menuRepository.getActiveFeatures();
 
     if (feature != null && feature.disableOrder) {

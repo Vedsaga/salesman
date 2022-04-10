@@ -8,11 +8,3 @@ abstract class ViewProfileEvent extends Equatable {
 }
 
 class ViewProfileFetchEvent extends ViewProfileEvent {}
-
-
-
-
-
-
-
-

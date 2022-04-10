@@ -1,11 +1,13 @@
 // flutter imports
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 
-// third party imports:
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:salesman/config/layouts/design_values.dart';
 
-// project imports:
+// Project imports:
+import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/layouts/mobile_layout.dart';
 import 'package:salesman/config/routes/route_name.dart';
 import 'package:salesman/config/theme/colors.dart';
@@ -15,6 +17,10 @@ import 'package:salesman/core/components/empty_message.dart';
 import 'package:salesman/core/components/normal_top_app_bar.dart';
 import 'package:salesman/core/components/snackbar_message.dart';
 import 'package:salesman/modules/item/view_list/bloc/view_item_bloc.dart';
+
+// third party imports:
+
+// project imports:
 
 class ViewItemList extends StatefulWidget {
   const ViewItemList({Key? key}) : super(key: key);
@@ -88,7 +94,7 @@ class _ViewItemState extends State<ViewItemList> {
                           trailingInfoAtBottom: "MRP ",
                           trailingDataAtBottom:
                               "${state.items[index].sellingPricePerUnit}",
-                          color: AppColors.grey,
+                          color: grey,
                         ),
                       );
                     },

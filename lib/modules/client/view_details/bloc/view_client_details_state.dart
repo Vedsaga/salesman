@@ -23,4 +23,6 @@ class ReservedQuantityNotZeroState extends ViewClientDetailsState {}
 
 class SuccessfullyDeactivateClientState extends ViewClientDetailsState {}
 
-class FailedToDeactivateClientState extends ViewClientDetailsState {}
+class FailedToDeactivateClientState extends ViewClientDetailsState {} 
+
+class EmptyClientDetailsState extends ViewClientDetailsState {}

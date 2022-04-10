@@ -1,5 +1,9 @@
 // flutter imports
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/layouts/mobile_layout.dart';
 import 'package:salesman/config/theme/colors.dart';
@@ -40,21 +44,24 @@ class _UiTetsState extends State<UiTets> {
                 context,
                 suffixIconWidget: GestureDetector(
                   onTap: () {
-                    !activeIcon;
                     setState(() {});
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      color: AppColors.skyBlue,
+                    color: skyBlue,
                       borderRadius: BorderRadius.only(
                         topRight: Radius.circular(
-                            designValues(context).textCornerRadius),
+                        designValues(context).textCornerRadius,
+                      ),
                         bottomRight: Radius.circular(
-                            designValues(context).textCornerRadius),
+                        designValues(context).textCornerRadius,
+                      ),
                         topLeft: Radius.circular(
-                            designValues(context).textCornerRadius),
+                        designValues(context).textCornerRadius,
+                      ),
                         bottomLeft: Radius.circular(
-                            designValues(context).textCornerRadius),
+                        designValues(context).textCornerRadius,
+                      ),
                       ),
                     ),
                     child: Row(
@@ -65,11 +72,11 @@ class _UiTetsState extends State<UiTets> {
                           padding: const EdgeInsets.only(left: 8),
                           child: Text(
                             "kg",
-                            style: AppTheme.of(context)
+                            style:of(context)
                                 .textTheme
                                 .bodyText1
                                 ?.copyWith(
-                                  color: AppColors.secondaryDark,
+                                color: secondaryDark,
                                   fontWeight: FontWeight.w700,
                                 ),
                           ),
@@ -80,11 +87,11 @@ class _UiTetsState extends State<UiTets> {
                           child: activeIcon
                               ? const Icon(
                                   Icons.keyboard_arrow_up_rounded,
-                                  color: AppColors.light,
+                                color: light,
                                 )
                               : const Icon(
                                   Icons.keyboard_arrow_down_rounded,
-                                  color: AppColors.light,
+                                color: light,
                                 ),
                         ),
                       ],
@@ -97,7 +104,6 @@ class _UiTetsState extends State<UiTets> {
               ),
               keyboardType: TextInputType.number,
               onChanged: (value) {},
-              readOnly: false,
               textAlignVertical: TextAlignVertical.center,
               textInputAction: TextInputAction.done,
               style: Theme.of(context).textTheme.bodyText1,
@@ -110,11 +116,12 @@ class _UiTetsState extends State<UiTets> {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(
-                      designValues(context).cornerRadius13),
-                  color: AppColors.light,
+                  designValues(context).cornerRadius13,
+                ),
+                color: light,
                   boxShadow: const [
                     BoxShadow(
-                      color: AppColors.shadowColor,
+                    color: shadowColor,
                       blurRadius: 34,
                       offset: Offset(-5, 5),
                     ),
@@ -134,7 +141,8 @@ class _UiTetsState extends State<UiTets> {
                           right: designValues(context).cornerRadius13,
                         ),
                         child: Text(_units[index],
-                            style: AppTheme.of(context).textTheme.bodyText2),
+                        style:of(context).textTheme.bodyText2,
+                      ),
                       ),
                     ),
                   ),
@@ -144,6 +152,7 @@ class _UiTetsState extends State<UiTets> {
             ),
           ],
         ),
-        bottomAppBar: const SizedBox());
+      bottomAppBar: const SizedBox(),
+    );
   }
 }

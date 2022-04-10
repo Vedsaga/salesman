@@ -1,10 +1,14 @@
 // flutter imports
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 
-// project imports
+// Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
+
+// project imports
 
 class InfoDataDuoBox extends StatelessWidget {
   const InfoDataDuoBox({
@@ -33,13 +37,13 @@ class InfoDataDuoBox extends StatelessWidget {
           fit: FlexFit.tight,
           child: Container(
             decoration: BoxDecoration(
-              gradient: infoBoxGradient ?? AppColors.lightGradient,
+              gradient: infoBoxGradient ?? lightGradient,
               boxShadow: const [
                 BoxShadow(
-                    color: AppColors.shadowColor,
+                  color: shadowColor,
                     blurRadius: 34,
-                    spreadRadius: 0,
-                    offset: Offset(-5, 5)),
+                  offset: Offset(-5, 5),
+                ),
               ],
               borderRadius: BorderRadius.circular(8),
             ),
@@ -47,13 +51,14 @@ class InfoDataDuoBox extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: designValues(context).padding21,
-                    vertical: designValues(context).padding21),
+                  vertical: designValues(context).padding21,
+                ),
                 child: Text(
                   infoText,
-                  style: AppTheme.of(context)
+                  style: of(context)
                       .textTheme
                       .caption
-                      ?.copyWith(color: infoTextColor ?? AppColors.grey),
+                      ?.copyWith(color: infoTextColor ?? grey),
                 ),
               ),
             ),
@@ -67,13 +72,13 @@ class InfoDataDuoBox extends StatelessWidget {
           fit: FlexFit.tight,
           child: Container(
             decoration: BoxDecoration(
-              gradient: dataBoxGradient ?? AppColors.lightGradient,
+              gradient: dataBoxGradient ?? lightGradient,
               boxShadow: const [
                 BoxShadow(
-                    color: AppColors.shadowColor,
+                  color: shadowColor,
                     blurRadius: 34,
-                    spreadRadius: 0,
-                    offset: Offset(-5, 5)),
+                  offset: Offset(-5, 5),
+                ),
               ],
               borderRadius: BorderRadius.circular(8),
             ),
@@ -81,11 +86,12 @@ class InfoDataDuoBox extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: designValues(context).padding21,
-                    vertical: designValues(context).padding21),
+                  vertical: designValues(context).padding21,
+                ),
                 child: Text(
                   dataText,
-                  style: AppTheme.of(context).textTheme.overline?.copyWith(
-                        color: dataTextColor ?? AppColors.dark,
+                  style: of(context).textTheme.overline?.copyWith(
+                        color: dataTextColor ?? dark,
                       ),
                 ),
               ),

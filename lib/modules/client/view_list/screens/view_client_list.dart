@@ -1,21 +1,26 @@
 //  flutter imports
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 
-// flutter_bloc imports
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+// Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
-
-
-// package imports:
 import 'package:salesman/config/layouts/mobile_layout.dart';
 import 'package:salesman/config/routes/route_name.dart';
+import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/core/components/bottom_navigation.dart';
 import 'package:salesman/core/components/custom_list_card.dart';
 import 'package:salesman/core/components/empty_message.dart';
 import 'package:salesman/core/components/normal_top_app_bar.dart';
 import 'package:salesman/core/components/snackbar_message.dart';
-import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/modules/client/view_list/bloc/view_client_bloc.dart';
+
+// flutter_bloc imports
+
+// package imports:
 
 class ViewClientList extends StatefulWidget {
   const ViewClientList({Key? key}) : super(key: key);
@@ -89,11 +94,12 @@ class _ViewClientState extends State<ViewClientList> {
                             trailingDataAtBottom:
                                 state.clients[index].dueAmount.toString(),
                             color: state.clients[index].dueAmount > 0
-                                ? AppColors.green
+                              ? green
                                 : state.clients[index].dueAmount < 0
-                                    ? AppColors.red
-                                    : AppColors.grey,
-                          ));
+                                  ? red
+                                  : grey,
+                        ),
+                      );
                     },
                   ),
                 ),

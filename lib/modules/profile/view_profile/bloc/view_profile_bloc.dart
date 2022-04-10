@@ -1,11 +1,15 @@
 // third part imports
+
+// Package imports:
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+
+// Project imports:
 import 'package:salesman/core/db/hive/models/agent_profile_model.dart';
 import 'package:salesman/core/db/hive/models/company_profile_model.dart';
+import 'package:salesman/modules/profile/repositories/profile_repository.dart';
 
 //  project imports:
-import 'package:salesman/modules/profile/repositories/profile_repository.dart';
 
 // parts
 part 'view_profile_event.dart';

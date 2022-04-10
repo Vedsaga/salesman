@@ -1,12 +1,19 @@
 // flutter imports
+
+// Flutter imports:
 import 'package:flutter/material.dart';
-// third party imports:
+
+// Package imports:
 import 'package:flutter_svg/flutter_svg.dart';
-// project imports:
+
+// Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
 import 'package:salesman/core/components/row_flex_close_children.dart';
+
+// third party imports:
+// project imports:
 
 class ItemInfoCard extends StatelessWidget {
   const ItemInfoCard({
@@ -29,10 +36,10 @@ class ItemInfoCard extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius:
             BorderRadius.circular(designValues(context).cornerRadius8),
-        color: AppColors.light,
+        color: light,
         boxShadow: const [
           BoxShadow(
-            color: AppColors.shadowColor,
+            color: shadowColor,
             blurRadius: 34,
             offset: Offset(-5, 5),
           ),
@@ -46,26 +53,30 @@ class ItemInfoCard extends StatelessWidget {
             Align(
               alignment: Alignment.centerLeft,
               child: Text(itemName,
-                  style: AppTheme.of(context).textTheme.overline),
+                style: of(context).textTheme.overline,
+              ),
             ),
             SizedBox(height: designValues(context).padding13),
             RowFlexCloseChildren(
               firstChild: Text("Quantity: ",
-                  style: AppTheme.of(context)
+                style: of(context)
                       .textTheme
                       .caption
-                      ?.copyWith(fontWeight: FontWeight.normal)),
+                    ?.copyWith(fontWeight: FontWeight.normal),
+              ),
               secondChild: Text("$totalQuantity $itemUnit",
-                  style: AppTheme.of(context).textTheme.caption?.copyWith(
-                        color: AppColors.secondaryDark,
-                      )),
+                style: of(context).textTheme.caption?.copyWith(
+                      color: secondaryDark,
+                    ),
+              ),
             ),
             SizedBox(height: designValues(context).padding13),
             RowFlexCloseChildren(
               firstChild: Text("Rate: ",
-                  style: AppTheme.of(context).textTheme.caption?.copyWith(
+                style: of(context).textTheme.caption?.copyWith(
                         fontWeight: FontWeight.normal,
-                      )),
+                    ),
+              ),
               secondChild: RowFlexCloseChildren(
                   firstChild: SvgPicture.asset(
                     "assets/icons/svgs/inr.svg",
@@ -74,32 +85,35 @@ class ItemInfoCard extends StatelessWidget {
                   ),
                   secondChild: Text(
                     itemPerUnitCost,
-                    style: AppTheme.of(context)
+                  style: of(context)
                         .textTheme
                         .caption
-                        ?.copyWith(color: AppColors.dark),
-                  )),
+                      ?.copyWith(color: dark),
+                ),
+              ),
             ),
             SizedBox(height: designValues(context).padding13),
             RowFlexCloseChildren(
               firstChild: Text("Total: ",
-                  style: AppTheme.of(context).textTheme.caption?.copyWith(
+                style: of(context).textTheme.caption?.copyWith(
                         fontWeight: FontWeight.normal,
-                      )),
+                    ),
+              ),
               secondChild: RowFlexCloseChildren(
                   firstChild: SvgPicture.asset(
                     "assets/icons/svgs/inr.svg",
                     height: 13,
                     width: 13,
-                    color: AppColors.green,
+                  color: green,
                   ),
                   secondChild: Text(
                     totalCost,
-                    style: AppTheme.of(context)
+                  style: of(context)
                         .textTheme
                         .caption
-                        ?.copyWith(color: AppColors.green),
-                  )),
+                      ?.copyWith(color: green),
+                ),
+              ),
             ),
           ],
         ),

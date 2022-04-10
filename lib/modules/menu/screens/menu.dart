@@ -1,23 +1,29 @@
 //  flutter import
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 
-// third party imports:
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+// Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
+import 'package:salesman/config/layouts/mobile_layout.dart';
 import 'package:salesman/config/routes/arguments_models/view_payment_history_list_route_arguments.dart';
 import 'package:salesman/config/routes/route_name.dart';
 import 'package:salesman/core/components/menu_section.dart';
-
-//  project import
+import 'package:salesman/core/components/menu_top_app_bar.dart';
 import 'package:salesman/core/components/snackbar_message.dart';
 import 'package:salesman/core/db/hive/models/active_features_model.dart';
-import 'package:salesman/config/layouts/mobile_layout.dart';
 import 'package:salesman/core/db/hive/models/company_profile_model.dart';
 import 'package:salesman/core/models/designs/menu_button_model.dart';
 import 'package:salesman/main.dart';
 import 'package:salesman/modules/menu/bloc/menu_bloc.dart';
-import 'package:salesman/core/components/menu_top_app_bar.dart';
 import 'package:salesman/modules/payment/query/payment_table_queries.dart';
+
+// third party imports:
+
+//  project import
 
 class Menu extends StatelessWidget {
   Menu({
@@ -25,25 +31,25 @@ class Menu extends StatelessWidget {
   }) : super(key: key);
   final List<MenuButtonModel> listOfMenuButtons = [
     MenuButtonModel(
-        title: "client", iconName: "client", disabled: false, onTap: () {}),
+        title: "client", iconName: "client", disabled: false, onTap: () {},),
     MenuButtonModel(
-        title: "item", iconName: "item", disabled: false, onTap: () {}),
+        title: "item", iconName: "item", disabled: false, onTap: () {},),
     MenuButtonModel(
-        title: "order", iconName: "order", disabled: false, onTap: () {}),
+        title: "order", iconName: "order", disabled: false, onTap: () {},),
     MenuButtonModel(
-        title: "delivery", iconName: "delivery", disabled: false, onTap: () {}),
+        title: "delivery", iconName: "delivery", disabled: false, onTap: () {},),
     MenuButtonModel(
-        title: "return", iconName: "return", disabled: false, onTap: () {}),
+        title: "return", iconName: "return", disabled: false, onTap: () {},),
     MenuButtonModel(
-        title: "records", iconName: "records", disabled: false, onTap: () {}),
+        title: "records", iconName: "records", disabled: false, onTap: () {},),
     MenuButtonModel(
-        title: "receive", iconName: "receive", disabled: false, onTap: () {}),
+        title: "receive", iconName: "receive", disabled: false, onTap: () {},),
     MenuButtonModel(
-        title: "history", iconName: "history", disabled: false, onTap: () {}),
+        title: "history", iconName: "history", disabled: false, onTap: () {},),
     MenuButtonModel(
-        title: "survey", iconName: "survey", disabled: false, onTap: () {}),
+        title: "survey", iconName: "survey", disabled: false, onTap: () {},),
     MenuButtonModel(
-        title: "stats", iconName: "stats", disabled: false, onTap: () {}),
+        title: "stats", iconName: "stats", disabled: false, onTap: () {},),
   ];
 
   @override
@@ -57,7 +63,7 @@ class Menu extends StatelessWidget {
           snackbarMessage(
               context,
               "Something went wrong... Please reach out to us.",
-              MessageType.failed);
+              MessageType.failed,);
           Future.delayed(const Duration(seconds: 1), () {
             Navigator.popAndPushNamed(context, RouteNames.profileCreation);
           });
@@ -76,7 +82,7 @@ class Menu extends StatelessWidget {
           snackbarMessage(
               context,
               "Something went wrong... Please reach out to us.",
-              MessageType.failed);
+              MessageType.failed,);
           Future.delayed(const Duration(seconds: 1), () {
             Navigator.popAndPushNamed(context, RouteNames.profileCreation);
           });
@@ -88,7 +94,7 @@ class Menu extends StatelessWidget {
               if (state is FetchedAllDetailsState) {
                 final CompanyProfileModel companyProfile = state.companyProfile;
                 return MenuTopAppBar(
-                    companyProfile: companyProfile, currentPage: "menu");
+                    companyProfile: companyProfile, currentPage: "menu",);
               }
               return const SizedBox();
             },
@@ -117,7 +123,7 @@ class Menu extends StatelessWidget {
                             disabled: activeFeatures.disableClient,
                             onTap: () {
                               Navigator.pushNamed(
-                                  context, RouteNames.viewClientList);
+                                  context, RouteNames.viewClientList,);
                             },
                           ),
                           MenuButtonModel(
@@ -126,7 +132,7 @@ class Menu extends StatelessWidget {
                             disabled: activeFeatures.disableItem,
                             onTap: () {
                               Navigator.pushNamed(
-                                  context, RouteNames.viewItemList);
+                                  context, RouteNames.viewItemList,);
                             },
                           ),
                         ],
@@ -145,7 +151,7 @@ class Menu extends StatelessWidget {
                             disabled: activeFeatures.disableOrder,
                             onTap: () {
                               Navigator.pushNamed(
-                                  context, RouteNames.viewOrderList);
+                                  context, RouteNames.viewOrderList,);
                             },
                           ),
                           MenuButtonModel(
@@ -154,7 +160,7 @@ class Menu extends StatelessWidget {
                             disabled: activeFeatures.disableDelivery,
                             onTap: () {
                               snackbarMessage(context, "will add soon :D",
-                                  MessageType.normal);
+                                  MessageType.normal,);
                             },
                           ),
                           MenuButtonModel(
@@ -189,10 +195,10 @@ class Menu extends StatelessWidget {
                                       ViewPaymentHistoryListRouteArguments(
                                           paymentHistoryList:
                                               await PaymentTableQueries(
-                                                      appDatabaseInstance)
+                                                      appDatabaseInstance,)
                                                   .getAllPaymentsReceived(),
                                           topBarTitle:
-                                              RouteNames.paymentReceived));
+                                              RouteNames.paymentReceived,),);
                             },
                           ),
                           MenuButtonModel(
@@ -206,9 +212,9 @@ class Menu extends StatelessWidget {
                                       ViewPaymentHistoryListRouteArguments(
                                           paymentHistoryList:
                                               await PaymentTableQueries(
-                                                      appDatabaseInstance)
+                                                      appDatabaseInstance,)
                                                   .getAllPaymentsSent(),
-                                          topBarTitle: RouteNames.paymentSent));
+                                          topBarTitle: RouteNames.paymentSent,),);
                             },
                           ),
                           MenuButtonModel(
@@ -217,7 +223,7 @@ class Menu extends StatelessWidget {
                             disabled: activeFeatures.disableHistory,
                             onTap: () {
                               Navigator.pushNamed(
-                                  context, RouteNames.viewPaymentHistoryList);
+                                  context, RouteNames.viewPaymentHistoryList,);
                             },
                           ),
                         ],
@@ -250,7 +256,7 @@ class Menu extends StatelessWidget {
               }
               return const Center(child: CircularProgressIndicator());
             },
-          )),
+          ),),
     );
   }
 }

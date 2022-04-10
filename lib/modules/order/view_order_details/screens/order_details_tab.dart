@@ -1,7 +1,13 @@
 // flutter imports
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+
+// Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
@@ -42,7 +48,7 @@ class _ViewOrderDetailTabState extends State<OrderDetailsTab> {
               NormalTopAppBar(
                 titleWidget: Text(
                   'STATUS',
-                  style: AppTheme.of(context).textTheme.headline6,
+                  style: of(context).textTheme.headline6,
                 ),
               ),
               SizedBox(height: designValues(context).padding21),
@@ -50,16 +56,16 @@ class _ViewOrderDetailTabState extends State<OrderDetailsTab> {
                 infoText: 'Order',
                 dataText: state.orderDetails.orderStatus,
                 dataBoxGradient: state.orderDetails.orderStatus == "pending"
-                    ? AppColors.skyBlueGradient
+                    ? skyBlueGradient
                     : state.orderDetails.orderStatus == "processing"
-                        ? AppColors.yellowGradient
+                        ? yellowGradient
                         : state.orderDetails.orderStatus == "completed"
-                            ? AppColors.greenGradient
+                            ? greenGradient
                             : state.orderDetails.orderStatus == "cancelled" ||
                                     state.orderDetails.orderStatus == "rejected"
-                                ? AppColors.redGradient
-                                : AppColors.darkGradient,
-                dataTextColor: AppColors.light,
+                                ? redGradient
+                                : darkGradient,
+                dataTextColor: light,
               ),
               SizedBox(height: designValues(context).padding21),
               InfoDataDuoBox(
@@ -68,23 +74,23 @@ class _ViewOrderDetailTabState extends State<OrderDetailsTab> {
                     ? 'not paid'
                     : state.orderDetails.paymentStatus!,
                 dataBoxGradient: state.orderDetails.paymentStatus == null
-                    ? AppColors.darkGradient
+                    ? darkGradient
                     : state.orderDetails.paymentStatus == "unpaid"
-                        ? AppColors.redGradient
+                        ? redGradient
                         : state.orderDetails.paymentStatus == "partial"
-                            ? AppColors.yellowGradient
+                            ? yellowGradient
                             : state.orderDetails.paymentStatus == "paid"
-                                ? AppColors.greenGradient
-                                : AppColors.darkGradient,
+                                ? greenGradient
+                                : darkGradient,
                 dataTextColor: state.orderDetails.paymentStatus == "partial"
-                    ? AppColors.secondaryDark
-                    : AppColors.light,
+                    ? secondaryDark
+                    : light,
               ),
               SizedBox(height: designValues(context).verticalPadding),
               NormalTopAppBar(
                 titleWidget: Text(
                   'ITEMs',
-                  style: AppTheme.of(context).textTheme.headline6,
+                  style: of(context).textTheme.headline6,
                 ),
               ),
               SizedBox(height: designValues(context).padding21),
@@ -104,22 +110,24 @@ class _ViewOrderDetailTabState extends State<OrderDetailsTab> {
                 summaryValuesList: [
                   SummaryCardModel(
                       info: state.itemDetails.itemName,
-                      value: state.orderDetails.totalCost.toStringAsFixed(2))
+                    value: state.orderDetails.totalCost.toStringAsFixed(2),
+                  )
                 ],
                 highlightText: "Total",
                 highlightValue: state.orderDetails.totalCost.toStringAsFixed(2),
-                highlightTextColor: AppColors.deepBlue,
-                highlightValueColor: AppColors.deepBlue,
+                highlightTextColor: deepBlue,
+                highlightValueColor: deepBlue,
               ),
               SizedBox(height: designValues(context).verticalPadding),
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(
-                      designValues(context).cornerRadius8),
-                  color: AppColors.light,
+                    designValues(context).cornerRadius8,
+                  ),
+                  color: light,
                   boxShadow: const [
                     BoxShadow(
-                      color: AppColors.shadowColor,
+                      color: shadowColor,
                       blurRadius: 34,
                       offset: Offset(-5, 5),
                     ),
@@ -134,17 +142,20 @@ class _ViewOrderDetailTabState extends State<OrderDetailsTab> {
                         const Spacer(),
                         Padding(
                           padding: EdgeInsets.only(
-                              top: designValues(context).padding21),
+                            top: designValues(context).padding21,
+                          ),
                           child: RowFlexCloseChildren(
                               firstChild: Text(
                                 "created on",
-                                style: AppTheme.of(context).textTheme.caption,
+                              style: of(context).textTheme.caption,
                               ),
                               secondChild: Text(
                                 DateFormat('dd MMM yyyy').format(
-                                    state.orderDetails.createdAt.toLocal()),
-                                style: AppTheme.of(context).textTheme.overline,
-                              )),
+                                state.orderDetails.createdAt.toLocal(),
+                              ),
+                              style: of(context).textTheme.overline,
+                            ),
+                          ),
                         ),
                         const Spacer(),
                       ],
@@ -155,17 +166,20 @@ class _ViewOrderDetailTabState extends State<OrderDetailsTab> {
                         const Spacer(),
                         Padding(
                           padding: EdgeInsets.only(
-                              top: designValues(context).padding21),
+                            top: designValues(context).padding21,
+                          ),
                           child: RowFlexCloseChildren(
                               firstChild: Text(
                                 "created at",
-                                style: AppTheme.of(context).textTheme.caption,
+                              style: of(context).textTheme.caption,
                               ),
                               secondChild: Text(
                                 DateFormat('hh:mm:ss a').format(
-                                    state.orderDetails.createdAt.toLocal()),
-                                style: AppTheme.of(context).textTheme.overline,
-                              )),
+                                state.orderDetails.createdAt.toLocal(),
+                              ),
+                              style: of(context).textTheme.overline,
+                            ),
+                          ),
                         ),
                         const Spacer(),
                       ],
@@ -176,16 +190,18 @@ class _ViewOrderDetailTabState extends State<OrderDetailsTab> {
                         const Spacer(),
                         Padding(
                           padding: EdgeInsets.symmetric(
-                              vertical: designValues(context).padding21),
+                            vertical: designValues(context).padding21,
+                          ),
                           child: RowFlexCloseChildren(
                               firstChild: Text(
                                 "created by",
-                                style: AppTheme.of(context).textTheme.caption,
+                              style: of(context).textTheme.caption,
                               ),
                               secondChild: Text(
                                 state.orderDetails.createdBy,
-                                style: AppTheme.of(context).textTheme.overline,
-                              )),
+                              style: of(context).textTheme.overline,
+                            ),
+                          ),
                         ),
                         const Spacer(),
                       ],

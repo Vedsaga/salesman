@@ -1,8 +1,12 @@
 //  flutter imports:
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 
-// project imports:
+// Project imports:
 import 'package:salesman/config/theme/theme.dart';
+
+// project imports:
 
 class NormalTopAppBar extends StatelessWidget {
   const NormalTopAppBar({Key? key, this.title, this.titleWidget})
@@ -18,7 +22,7 @@ class NormalTopAppBar extends StatelessWidget {
       child: titleWidget ??
           Text(
             title?.toUpperCase() ?? "",
-            style: AppTheme.of(context).textTheme.headline5,
+            style: of(context).textTheme.headline5,
       ),
     );
   }

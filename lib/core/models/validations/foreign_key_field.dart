@@ -1,6 +1,7 @@
 // third party import
-import 'package:formz/formz.dart';
 
+// Package imports:
+import 'package:formz/formz.dart';
 
 enum ForeignKeyFieldValidationError {
   cannotBeEmpty,
@@ -22,4 +23,3 @@ class ForeignKeyField extends FormzInput<int, ForeignKeyFieldValidationError> {
     return null;
   }
 }
-

@@ -30,4 +30,3 @@ class FetchedOrderDetailsState extends ViewOrderDetailsState {
 }
 
 class ErrorFetchingOrderDetailsState extends ViewOrderDetailsState {}
-

@@ -2,7 +2,7 @@ part of 'view_payment_details_bloc.dart';
 
 abstract class ViewPaymentDetailsState extends Equatable {
   const ViewPaymentDetailsState(
-      {this.orderDetails, this.clientDetails, this.itemDetails});
+      {this.orderDetails, this.clientDetails, this.itemDetails,});
 
   final ModelDeliveryOrderData? orderDetails;
   final ModelClientData? clientDetails;
@@ -42,3 +42,5 @@ class OrderRelatedDetailsFetchedState extends ViewPaymentDetailsState {
 }
 
 class ErrorFetchingOrderRelatedDetailsState extends ViewPaymentDetailsState {}
+
+class EmptyPaymentDetailsState extends ViewPaymentDetailsState {}

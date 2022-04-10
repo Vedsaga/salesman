@@ -1,12 +1,15 @@
 // flutter imports
+
+// Flutter imports:
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-// third party imports
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-// project imports
+// Project imports:
+import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/layouts/mobile_layout.dart';
 import 'package:salesman/config/routes/route_name.dart';
 import 'package:salesman/config/theme/colors.dart';
@@ -20,7 +23,10 @@ import 'package:salesman/core/components/normal_top_app_bar.dart';
 import 'package:salesman/core/components/single_info_box.dart';
 import 'package:salesman/core/components/snackbar_message.dart';
 import 'package:salesman/modules/item/view_details/bloc/view_item_details_bloc.dart';
-import 'package:salesman/config/layouts/design_values.dart';
+
+// third party imports
+
+// project imports
 
 class ViewItemDetails extends StatefulWidget {
   const ViewItemDetails({Key? key}) : super(key: key);
@@ -36,7 +42,10 @@ class _ViewItemDetailsState extends State<ViewItemDetails> {
       listener: (context, state) {
         if (state is SuccessfullyDeactivatedItemState) {
           snackbarMessage(
-              context, "Item removed successfully...", MessageType.success);
+            context,
+            "Item removed successfully...",
+            MessageType.success,
+          );
           Future.delayed(const Duration(seconds: 1), () {
             Navigator.popAndPushNamed(context, RouteNames.viewItemList);
           });
@@ -69,6 +78,17 @@ class _ViewItemDetailsState extends State<ViewItemDetails> {
             MessageType.inProgress,
           );
         }
+
+        if (state is EmptyItemDetailsState) {
+          snackbarMessage(
+            context,
+            "Item details not found...",
+            MessageType.warning,
+          );
+          Future.delayed(const Duration(seconds: 1), () {
+            Navigator.popAndPushNamed(context, RouteNames.viewItemList);
+          });
+        }
       },
       child: MobileLayout(
         topAppBar: const InputTopAppBar(
@@ -97,7 +117,8 @@ class _ViewItemDetailsState extends State<ViewItemDetails> {
                       decoration: inputDecoration(context,
                           labelText: "item name",
                           hintText: "item name",
-                          inFocus: false),
+                        inFocus: false,
+                      ),
                     ),
                     SizedBox(height: designValues(context).cornerRadius34),
                     TextFormField(
@@ -133,10 +154,11 @@ class _ViewItemDetailsState extends State<ViewItemDetails> {
                     NormalTopAppBar(
                       titleWidget: Text(
                         "QUANTITY",
-                        style: AppTheme.of(context).textTheme.headline6,
+                        style: of(context).textTheme.headline6,
                       ),
                     ),
                     SizedBox(height: designValues(context).cornerRadius34),
+                  // ignore: fixme
                   // FIXME: fix overflow error
                     DoubleInfoBox(
                       firstBoxWidget: SingleInfoBox(
@@ -148,7 +170,7 @@ class _ViewItemDetailsState extends State<ViewItemDetails> {
                           style: Theme.of(context)
                               .textTheme
                               .subtitle2
-                              ?.copyWith(color: AppColors.deepBlue),
+                              ?.copyWith(color: deepBlue),
                         ),
                       ),
                       secondBoxWidget: SingleInfoBox(
@@ -160,7 +182,7 @@ class _ViewItemDetailsState extends State<ViewItemDetails> {
                           style: Theme.of(context)
                               .textTheme
                               .subtitle2
-                              ?.copyWith(color: AppColors.orange),
+                              ?.copyWith(color: orange),
                         ),
                       ),
                     ),
@@ -168,7 +190,7 @@ class _ViewItemDetailsState extends State<ViewItemDetails> {
                     NormalTopAppBar(
                       titleWidget: Text(
                         "COST per ${state.itemDetails.unit.substring(0, 1).toUpperCase() + state.itemDetails.unit.substring(1)}",
-                        style: AppTheme.of(context).textTheme.headline6,
+                        style: of(context).textTheme.headline6,
                       ),
                     ),
                     SizedBox(height: designValues(context).cornerRadius34),
@@ -177,24 +199,24 @@ class _ViewItemDetailsState extends State<ViewItemDetails> {
                         info: "sell price",
                         data: state.itemDetails.sellingPricePerUnit
                             .toStringAsFixed(2),
-                        dataColor: AppColors.deepBlue,
+                        dataColor: deepBlue,
                         dataPrefixWidget: SvgPicture.asset(
                           "assets/icons/svgs/inr.svg",
                           height: 13,
                           width: 13,
-                          color: AppColors.deepBlue,
+                          color: deepBlue,
                         ),
                       ),
                       secondBoxWidget: SingleInfoBox(
                         info: "buy price",
                         data: state.itemDetails.buyingPricePerUnit
                             .toStringAsFixed(2),
-                        dataColor: AppColors.orange,
+                        dataColor: orange,
                         dataPrefixWidget: SvgPicture.asset(
                           "assets/icons/svgs/inr.svg",
                           height: 13,
                           width: 13,
-                          color: AppColors.orange,
+                          color: orange,
                         ),
                       ),
                     ),

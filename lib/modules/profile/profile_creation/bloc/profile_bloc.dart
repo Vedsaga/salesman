@@ -1,12 +1,16 @@
 // third party import
+
+// Package imports:
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 
-// project imports
+// Project imports:
 import 'package:salesman/core/models/validations/generic_field.dart';
 import 'package:salesman/core/models/validations/phone_number_field.dart';
 import 'package:salesman/modules/profile/repositories/profile_repository.dart';
+
+// project imports
 
 // part
 part 'profile_event.dart';
@@ -27,12 +31,12 @@ class ProfileCreationBloc
 
   @override
   void onTransition(
-      Transition<ProfileCreationEvent, ProfileCreationState> transition) {
+      Transition<ProfileCreationEvent, ProfileCreationState> transition,) {
     super.onTransition(transition);
   }
 
   void _onProfileChange(
-      ProfileFieldsChange event, Emitter<ProfileCreationState> emit) {
+      ProfileFieldsChange event, Emitter<ProfileCreationState> emit,) {
     final agentName = GenericField.dirty(event.agentName);
     final phone = PhoneNumberField.dirty(event.phone);
     final username = GenericField.dirty(event.username);
@@ -47,51 +51,51 @@ class ProfileCreationBloc
           ? companyName
           : GenericField.pure(event.companyName),
       status: Formz.validate([agentName, phone, username, companyName]),
-    ));
+    ),);
   }
 
   void _onAgentNameFieldUnfocused(
-      AgentNameFieldUnfocused event, Emitter<ProfileCreationState> emit) {
+      AgentNameFieldUnfocused event, Emitter<ProfileCreationState> emit,) {
     final agentName = GenericField.dirty(state.agentName.value);
     emit(state.copyWith(
       agentName: agentName,
       status: Formz.validate(
-          [agentName, state.phone, state.username, state.companyName]),
-    ));
+          [agentName, state.phone, state.username, state.companyName],),
+    ),);
   }
 
   void _onPhoneFieldUnfocused(
-      PhoneFieldUnfocused event, Emitter<ProfileCreationState> emit) {
+      PhoneFieldUnfocused event, Emitter<ProfileCreationState> emit,) {
     final phone = PhoneNumberField.dirty(state.phone.value);
     emit(state.copyWith(
       phone: phone,
       status: Formz.validate(
-          [state.agentName, phone, state.username, state.companyName]),
-    ));
+          [state.agentName, phone, state.username, state.companyName],),
+    ),);
   }
 
   void _onUsernameFieldUnfocused(
-      UsernameFieldUnfocused event, Emitter<ProfileCreationState> emit) {
+      UsernameFieldUnfocused event, Emitter<ProfileCreationState> emit,) {
     final username = GenericField.dirty(state.username.value);
     emit(state.copyWith(
       username: username,
       status: Formz.validate(
-          [state.agentName, state.phone, username, state.companyName]),
-    ));
+          [state.agentName, state.phone, username, state.companyName],),
+    ),);
   }
 
   void _onCompanyNameFieldUnfocused(
-      CompanyNameFieldUnfocused event, Emitter<ProfileCreationState> emit) {
+      CompanyNameFieldUnfocused event, Emitter<ProfileCreationState> emit,) {
     final companyName = GenericField.dirty(state.companyName.value);
     emit(state.copyWith(
       companyName: companyName,
       status: Formz.validate(
-          [state.agentName, state.phone, state.username, companyName]),
-    ));
+          [state.agentName, state.phone, state.username, companyName],),
+    ),);
   }
 
-  void _onProfileFormSubmitted(
-      ProfileFormSubmitted event, Emitter<ProfileCreationState> emit) async {
+  Future<void> _onProfileFormSubmitted(
+      ProfileFormSubmitted event, Emitter<ProfileCreationState> emit,) async {
     final agentName = GenericField.dirty(state.agentName.value);
     final phone = PhoneNumberField.dirty(state.phone.value);
     final username = GenericField.dirty(state.username.value);
@@ -102,7 +106,7 @@ class ProfileCreationBloc
       username: username,
       companyName: companyName,
       status: Formz.validate([agentName, phone, username, companyName]),
-    ));
+    ),);
     if (state.status.isValidated) {
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
       final bool? responseForAgent = await profileRepository.addAgentProfile(

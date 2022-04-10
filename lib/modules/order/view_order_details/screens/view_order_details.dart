@@ -1,15 +1,22 @@
 // flutter import
+
+// Flutter imports:
 import 'package:flutter/material.dart';
-// third party imports:
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+// Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/layouts/mobile_layout_for_tab.dart';
-// project imports:
 import 'package:salesman/config/routes/route_name.dart';
 import 'package:salesman/core/components/snackbar_message.dart';
 import 'package:salesman/modules/order/view_order_details/bloc/view_order_details_bloc.dart';
 import 'package:salesman/modules/order/view_order_details/screens/order_details_tab.dart';
 import 'package:salesman/modules/order/view_order_details/screens/order_payments_tab.dart';
+
+// third party imports:
+// project imports:
 
 class ViewOrderDetails extends StatefulWidget {
   const ViewOrderDetails({Key? key}) : super(key: key);
@@ -42,7 +49,7 @@ class _ViewOrderDetailsState extends State<ViewOrderDetails>
         listener: (context, state) {
           if (state is ErrorFetchingOrderDetailsState) {
             snackbarMessage(
-                context, "error fetching order details", MessageType.failed);
+                context, "error fetching order details", MessageType.failed,);
             Navigator.popAndPushNamed(context, RouteNames.viewOrderList);
           }
         },
@@ -69,9 +76,8 @@ class _ViewOrderDetailsState extends State<ViewOrderDetails>
             ],
           ),
           const OrderPaymentsTab(),
-        ]),
+        ],),
       ),
     );
   }
 }
-

@@ -1,4 +1,4 @@
-
+// Project imports:
 import 'package:salesman/core/db/drift/app_database.dart';
 
 class ViewOrderDetailsRouteArguments {

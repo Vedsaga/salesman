@@ -1,17 +1,20 @@
 // project imports:
+
+// Package imports:
 import 'package:hive/hive.dart';
 
-
-// project imports
+// Project imports:
 import 'package:salesman/core/db/hive/boxes.dart';
 import 'package:salesman/core/db/hive/models/agent_profile_model.dart';
 import 'package:salesman/core/db/hive/models/company_profile_model.dart';
 
+// project imports
+
 // project imports:
 
 class ProfileRepository {
-  final _agentProfileBox = Boxes.agentProfileBox();
-  final _companyProfileBox = Boxes.companyProfileBox();
+  final _agentProfileBox = agentProfileBox();
+  final _companyProfileBox = companyProfileBox();
 
   // add agent profile
   Future<bool?> addAgentProfile(
@@ -19,13 +22,13 @@ class ProfileRepository {
       required String phone,
       required String username,
       required DateTime lastUpdated,
-      required DateTime createdAt}) async {
+      required DateTime createdAt,}) async {
     final agentProfile = AgentProfileModel(
         name: name,
         phone: phone,
         username: username,
         lastUpdated: lastUpdated,
-        createdAt: createdAt);
+        createdAt: createdAt,);
 
     await _agentProfileBox.add(agentProfile);
     return true;
@@ -72,9 +75,9 @@ class ProfileRepository {
   Future<bool?> addCompanyProfile(
       {required String name,
       required DateTime lastUpdated,
-      required DateTime createdAt}) async {
+      required DateTime createdAt,}) async {
     final companyProfile = CompanyProfileModel(
-        name: name, lastUpdated: lastUpdated, createdAt: createdAt);
+        name: name, lastUpdated: lastUpdated, createdAt: createdAt,);
     await _companyProfileBox.add(companyProfile);
     return true;
   }

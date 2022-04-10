@@ -1,13 +1,16 @@
 // third party import
+
+// Package imports:
 import 'package:bloc/bloc.dart';
 import 'package:drift/drift.dart';
 import 'package:equatable/equatable.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
+// Project imports:
 import 'package:salesman/config/routes/arguments_models/add_payment_details_route_arguments.dart';
 import 'package:salesman/config/routes/arguments_models/view_payment_history_list_route_arguments.dart';
 import 'package:salesman/config/routes/route_name.dart';
-// project's imports
 import 'package:salesman/core/db/drift/app_database.dart';
 import 'package:salesman/core/db/hive/models/agent_profile_model.dart';
 import 'package:salesman/core/models/validations/date_time_field.dart';
@@ -22,6 +25,7 @@ import 'package:salesman/modules/order/query/delivery_order_table_queries.dart';
 import 'package:salesman/modules/payment/query/payment_table_queries.dart';
 import 'package:salesman/modules/profile/repositories/profile_repository.dart';
 import 'package:salesman/modules/return/query/return_order_table_queries.dart';
+
 // part
 part 'add_payment_details_event.dart';
 part 'add_payment_details_state.dart';
@@ -46,43 +50,58 @@ class AddPaymentDetailsBloc
     on<NavigateToScreenEvent>(_navigateToScreen);
   }
 
-  void _getOrderDetails(FetchingOrderDetailsEvent event,
-      Emitter<AddPaymentDetailsState> emit) async {
+  Future<void> _getOrderDetails(
+    FetchingOrderDetailsEvent event,
+    Emitter<AddPaymentDetailsState> emit,
+  ) async {
     emit(FetchingRequiredDetailsState());
+    final AddPaymentDetailsRouteArguments _argument;
+    if (event.routeArguments == null) {
+      emit(EmptyAddPaymentDetailsRouteArgumentsState());
+      return;
+    } else {
+      _argument = event.routeArguments!;
+    }
     try {
       final AgentProfileModel? agentProfile =
           await profileRepository.getAgentProfile();
       if (agentProfile == null) {
         emit(EmptyAgentProfileState());
       } else {
-        if (event.routeArguments.deliveryOrderList != null &&
-            event.routeArguments.returnOrderList == null) {
-          emit(AddPaymentDetailsState(
-            deliveryOrderList: event.routeArguments.deliveryOrderList!,
-            receivedBy: GenericField.dirty(agentProfile.name),
-            paymentDate: state.paymentDate,
-            comingFrom: event.routeArguments.comingFrom,
-            paymentType: StatusTypeField.dirty(
-                event.routeArguments.comingFrom == RouteNames.paymentReceived
+        if (_argument.deliveryOrderList != null &&
+            _argument.returnOrderList == null) {
+          emit(
+            AddPaymentDetailsState(
+              deliveryOrderList: _argument.deliveryOrderList!,
+              receivedBy: GenericField.dirty(agentProfile.name),
+              paymentDate: state.paymentDate,
+              comingFrom: _argument.comingFrom,
+              paymentType: StatusTypeField.dirty(
+                _argument.comingFrom == RouteNames.paymentReceived
                     ? "receive"
-                    : event.routeArguments.comingFrom == RouteNames.paymentSent
+                    : _argument.comingFrom == RouteNames.paymentSent
                         ? "send"
-                        : ""),
-          ));
-        } else if (event.routeArguments.returnOrderList != null &&
-            event.routeArguments.deliveryOrderList == null) {
-          emit(AddPaymentDetailsState(
-            returnOrderList: event.routeArguments.returnOrderList!,
-            receivedBy: GenericField.dirty(agentProfile.name),
-            paymentDate: state.paymentDate,
-            comingFrom: event.routeArguments.comingFrom,
-            paymentType: StatusTypeField.dirty(
-                event.routeArguments.comingFrom == RouteNames.paymentReceived
+                        : "",
+              ),
+            ),
+          );
+        } else if (_argument.returnOrderList != null &&
+            _argument.deliveryOrderList == null) {
+          emit(
+            AddPaymentDetailsState(
+              returnOrderList: _argument.returnOrderList!,
+              receivedBy: GenericField.dirty(agentProfile.name),
+              paymentDate: state.paymentDate,
+              comingFrom: _argument.comingFrom,
+              paymentType: StatusTypeField.dirty(
+                _argument.comingFrom == RouteNames.paymentReceived
                     ? "receive"
-                    : event.routeArguments.comingFrom == RouteNames.paymentSent
+                    : _argument.comingFrom == RouteNames.paymentSent
                         ? "send"
-                        : ""),
-          ));
+                        : "",
+              ),
+            ),
+          );
         } else {
           final List<ModelDeliveryOrderData>? deliveryOrderList =
               await DeliveryOrderTableQueries(appDatabaseInstance)
@@ -93,20 +112,23 @@ class AddPaymentDetailsBloc
           if (deliveryOrderList == null && returnOrderList == null) {
             emit(EmptyOrderDetailsState());
           } else {
-            emit(AddPaymentDetailsState(
-              deliveryOrderList: deliveryOrderList!,
-              returnOrderList: returnOrderList!,
-              receivedBy: GenericField.dirty(agentProfile.name),
-              comingFrom: event.routeArguments.comingFrom,
-              paymentDate: state.paymentDate,
-              paymentType: StatusTypeField.dirty(event
-                          .routeArguments.comingFrom ==
-                      RouteNames.paymentReceived
-                  ? "receive"
-                  : event.routeArguments.comingFrom == RouteNames.paymentSent
-                      ? "send"
-                      : ""),
-            ));
+            emit(
+              AddPaymentDetailsState(
+                deliveryOrderList: deliveryOrderList!,
+                returnOrderList: returnOrderList!,
+                receivedBy: GenericField.dirty(agentProfile.name),
+                comingFrom: _argument.comingFrom,
+                paymentDate: state.paymentDate,
+                paymentType: StatusTypeField.dirty(
+                  _argument.comingFrom == RouteNames.paymentReceived
+                      ? "receive"
+                      : _argument.comingFrom ==
+                              RouteNames.paymentSent
+                          ? "send"
+                          : "",
+                ),
+              ),
+            );
           }
         }
       }
@@ -116,7 +138,9 @@ class AddPaymentDetailsBloc
   }
 
   void _paymentFieldsChange(
-      PaymentFieldsChangeEvent event, Emitter<AddPaymentDetailsState> emit) {
+    PaymentFieldsChangeEvent event,
+    Emitter<AddPaymentDetailsState> emit,
+  ) {
     final deliveryOrderId = ForeignKeyField.dirty(event.deliveryOrderId);
     final returnOrderId = ForeignKeyField.dirty(event.returnOrderId);
     final amount = DoubleFieldNotZero.dirty(event.amount);
@@ -125,154 +149,182 @@ class AddPaymentDetailsBloc
     final paymentFor = StatusTypeField.dirty(event.paymentFor);
     final paymentDate = DateTimeField.dirty(event.paymentDate);
     final receivedBy = GenericField.dirty(event.receivedBy);
-    emit(AddPaymentDetailsState(
-      deliveryOrderList: state.deliveryOrderList,
-      returnOrderList: state.returnOrderList,
-      deliveryOrderId: deliveryOrderId.valid
-          ? deliveryOrderId
-          : ForeignKeyField.pure(event.deliveryOrderId),
-      returnOrderId: returnOrderId.valid
-          ? returnOrderId
-          : ForeignKeyField.pure(event.returnOrderId),
-      amount: amount.valid ? amount : DoubleFieldNotZero.pure(event.amount),
-      paymentMode: paymentMode.valid
-          ? paymentMode
-          : StatusTypeField.pure(event.paymentMode),
-      paymentType: paymentType.valid
-          ? paymentType
-          : StatusTypeField.pure(event.paymentType),
-      paymentFor: paymentFor.valid
-          ? paymentFor
-          : StatusTypeField.pure(event.paymentFor),
-      paymentDate: paymentDate.valid
-          ? paymentDate
-          : DateTimeField.pure(event.paymentDate),
-      receivedBy:
-          receivedBy.valid ? receivedBy : GenericField.pure(event.receivedBy),
-      status: Formz.validate([
-        deliveryOrderId,
-        returnOrderId,
-        amount,
-        paymentMode,
-        paymentType,
-        paymentFor,
-        receivedBy,
-        paymentDate
-      ]),
-      comingFrom: state.comingFrom,
-    ));
+    emit(
+      AddPaymentDetailsState(
+        deliveryOrderList: state.deliveryOrderList,
+        returnOrderList: state.returnOrderList,
+        deliveryOrderId: deliveryOrderId.valid
+            ? deliveryOrderId
+            : ForeignKeyField.pure(event.deliveryOrderId),
+        returnOrderId: returnOrderId.valid
+            ? returnOrderId
+            : ForeignKeyField.pure(event.returnOrderId),
+        amount: amount.valid ? amount : DoubleFieldNotZero.pure(event.amount),
+        paymentMode: paymentMode.valid
+            ? paymentMode
+            : StatusTypeField.pure(event.paymentMode),
+        paymentType: paymentType.valid
+            ? paymentType
+            : StatusTypeField.pure(event.paymentType),
+        paymentFor: paymentFor.valid
+            ? paymentFor
+            : StatusTypeField.pure(event.paymentFor),
+        paymentDate: paymentDate.valid
+            ? paymentDate
+            : DateTimeField.pure(event.paymentDate),
+        receivedBy:
+            receivedBy.valid ? receivedBy : GenericField.pure(event.receivedBy),
+        status: Formz.validate([
+          deliveryOrderId,
+          returnOrderId,
+          amount,
+          paymentMode,
+          paymentType,
+          paymentFor,
+          receivedBy,
+          paymentDate
+        ]),
+        comingFrom: state.comingFrom,
+      ),
+    );
   }
 
   void _orderIdFieldUnfocused(
-      OrderIdFieldUnfocusedEvent event, Emitter<AddPaymentDetailsState> emit) {
+    OrderIdFieldUnfocusedEvent event,
+    Emitter<AddPaymentDetailsState> emit,
+  ) {
     final deliveryOrderId = ForeignKeyField.dirty(state.deliveryOrderId.value);
-    emit(state.copyWith(
-      deliveryOrderId: deliveryOrderId,
-      status: Formz.validate([
-        deliveryOrderId,
-        state.returnOrderId,
-        state.amount,
-        state.paymentMode,
-        state.paymentType,
-        state.paymentFor,
-        state.receivedBy,
-        state.paymentDate
-      ]),
-    ));
+    emit(
+      state.copyWith(
+        deliveryOrderId: deliveryOrderId,
+        status: Formz.validate([
+          deliveryOrderId,
+          state.returnOrderId,
+          state.amount,
+          state.paymentMode,
+          state.paymentType,
+          state.paymentFor,
+          state.receivedBy,
+          state.paymentDate
+        ]),
+      ),
+    );
   }
 
   void _amountFieldUnfocused(
-      AmountFieldUnfocusedEvent event, Emitter<AddPaymentDetailsState> emit) {
+    AmountFieldUnfocusedEvent event,
+    Emitter<AddPaymentDetailsState> emit,
+  ) {
     final amount = DoubleFieldNotZero.dirty(state.amount.value);
-    emit(state.copyWith(
-      amount: amount,
-      status: Formz.validate([
-        state.deliveryOrderId,
-        state.returnOrderId,
-        amount,
-        state.paymentMode,
-        state.paymentType,
-        state.paymentFor,
-        state.receivedBy,
-        state.paymentDate
-      ]),
-    ));
+    emit(
+      state.copyWith(
+        amount: amount,
+        status: Formz.validate([
+          state.deliveryOrderId,
+          state.returnOrderId,
+          amount,
+          state.paymentMode,
+          state.paymentType,
+          state.paymentFor,
+          state.receivedBy,
+          state.paymentDate
+        ]),
+      ),
+    );
   }
 
-  void _paymentModeFieldUnfocused(PaymentModeFieldUnfocusedEvent event,
-      Emitter<AddPaymentDetailsState> emit) {
+  void _paymentModeFieldUnfocused(
+    PaymentModeFieldUnfocusedEvent event,
+    Emitter<AddPaymentDetailsState> emit,
+  ) {
     final paymentMode = StatusTypeField.dirty(state.paymentMode.value);
-    emit(state.copyWith(
-      paymentMode: paymentMode,
-      status: Formz.validate([
-        state.deliveryOrderId,
-        state.returnOrderId,
-        state.amount,
-        paymentMode,
-        state.paymentType,
-        state.paymentFor,
-        state.receivedBy,
-        state.paymentDate
-      ]),
-    ));
+    emit(
+      state.copyWith(
+        paymentMode: paymentMode,
+        status: Formz.validate([
+          state.deliveryOrderId,
+          state.returnOrderId,
+          state.amount,
+          paymentMode,
+          state.paymentType,
+          state.paymentFor,
+          state.receivedBy,
+          state.paymentDate
+        ]),
+      ),
+    );
   }
 
-  void _paymentTypeFieldUnfocused(PaymentTypeFieldUnfocusedEvent event,
-      Emitter<AddPaymentDetailsState> emit) {
+  void _paymentTypeFieldUnfocused(
+    PaymentTypeFieldUnfocusedEvent event,
+    Emitter<AddPaymentDetailsState> emit,
+  ) {
     final paymentType = StatusTypeField.dirty(state.paymentType.value);
-    emit(state.copyWith(
-      paymentType: paymentType,
-      status: Formz.validate([
-        state.deliveryOrderId,
-        state.returnOrderId,
-        state.amount,
-        state.paymentMode,
-        paymentType,
-        state.paymentFor,
-        state.receivedBy,
-        state.paymentDate
-      ]),
-    ));
+    emit(
+      state.copyWith(
+        paymentType: paymentType,
+        status: Formz.validate([
+          state.deliveryOrderId,
+          state.returnOrderId,
+          state.amount,
+          state.paymentMode,
+          paymentType,
+          state.paymentFor,
+          state.receivedBy,
+          state.paymentDate
+        ]),
+      ),
+    );
   }
 
-  void _paymentForFieldUnfocused(PaymentForFieldUnfocusedEvent event,
-      Emitter<AddPaymentDetailsState> emit) {
+  void _paymentForFieldUnfocused(
+    PaymentForFieldUnfocusedEvent event,
+    Emitter<AddPaymentDetailsState> emit,
+  ) {
     final paymentFor = StatusTypeField.dirty(state.paymentFor.value);
-    emit(state.copyWith(
-      paymentFor: paymentFor,
-      status: Formz.validate([
-        state.deliveryOrderId,
-        state.returnOrderId,
-        state.amount,
-        state.paymentMode,
-        state.paymentType,
-        paymentFor,
-        state.receivedBy,
-        state.paymentDate
-      ]),
-    ));
+    emit(
+      state.copyWith(
+        paymentFor: paymentFor,
+        status: Formz.validate([
+          state.deliveryOrderId,
+          state.returnOrderId,
+          state.amount,
+          state.paymentMode,
+          state.paymentType,
+          paymentFor,
+          state.receivedBy,
+          state.paymentDate
+        ]),
+      ),
+    );
   }
 
-  void _paymentDateFieldUnfocused(PaymentDateFieldUnfocusedEvent event,
-      Emitter<AddPaymentDetailsState> emit) {
+  void _paymentDateFieldUnfocused(
+    PaymentDateFieldUnfocusedEvent event,
+    Emitter<AddPaymentDetailsState> emit,
+  ) {
     final paymentDate = DateTimeField.dirty(state.paymentDate.value);
-    emit(state.copyWith(
-      paymentDate: paymentDate,
-      status: Formz.validate([
-        state.deliveryOrderId,
-        state.returnOrderId,
-        state.amount,
-        state.paymentMode,
-        state.paymentType,
-        state.paymentFor,
-        state.receivedBy,
-        paymentDate
-      ]),
-    ));
+    emit(
+      state.copyWith(
+        paymentDate: paymentDate,
+        status: Formz.validate([
+          state.deliveryOrderId,
+          state.returnOrderId,
+          state.amount,
+          state.paymentMode,
+          state.paymentType,
+          state.paymentFor,
+          state.receivedBy,
+          paymentDate
+        ]),
+      ),
+    );
   }
 
-  void _addPaymentReceiveSubmit(AddPaymentReceiveSubmitEvent event,
-      Emitter<AddPaymentDetailsState> emit) async {
+  Future<void> _addPaymentReceiveSubmit(
+    AddPaymentReceiveSubmitEvent event,
+    Emitter<AddPaymentDetailsState> emit,
+  ) async {
     final deliveryOrderId = ForeignKeyField.dirty(state.deliveryOrderId.value);
     final returnOrderId = ForeignKeyField.dirty(state.returnOrderId.value);
     final amount = DoubleFieldNotZero.dirty(state.amount.value);
@@ -281,24 +333,26 @@ class AddPaymentDetailsBloc
     final paymentFor = StatusTypeField.dirty(state.paymentFor.value);
     final paymentDate = DateTimeField.dirty(state.paymentDate.value);
     final receivedBy = GenericField.dirty(state.receivedBy.value);
-    emit(state.copyWith(
-      deliveryOrderId: deliveryOrderId,
-      returnOrderId: returnOrderId,
-      amount: amount,
-      paymentMode: paymentMode,
-      paymentType: paymentType,
-      paymentFor: paymentFor,
-      paymentDate: paymentDate,
-      receivedBy: receivedBy,
-      status: Formz.validate([
-        deliveryOrderId,
-        amount,
-        paymentMode,
-        paymentFor,
-        receivedBy,
-        paymentDate
-      ]),
-    ));
+    emit(
+      state.copyWith(
+        deliveryOrderId: deliveryOrderId,
+        returnOrderId: returnOrderId,
+        amount: amount,
+        paymentMode: paymentMode,
+        paymentType: paymentType,
+        paymentFor: paymentFor,
+        paymentDate: paymentDate,
+        receivedBy: receivedBy,
+        status: Formz.validate([
+          deliveryOrderId,
+          amount,
+          paymentMode,
+          paymentFor,
+          receivedBy,
+          paymentDate
+        ]),
+      ),
+    );
     if (state.status.isValidated) {
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
       final ModelPaymentCompanion newPayment;
@@ -332,14 +386,17 @@ class AddPaymentDetailsBloc
         final int paymentId = await PaymentTableQueries(appDatabaseInstance)
             .insertPaymentReceived(newPayment);
         if (paymentId < 1) {
-          emit(state.copyWith(
-            status: FormzStatus.submissionFailure,
-          ));
+          emit(
+            state.copyWith(
+              status: FormzStatus.submissionFailure,
+            ),
+          );
         } else {
           // ? in future there because db could be updated by multiple entities so, when must mitigate this by fetching order directly from db
-          final ModelDeliveryOrderData orderData = state.deliveryOrderList
-              .singleWhere((order) =>
-                  order.deliveryOrderId == state.deliveryOrderId.value);
+          final ModelDeliveryOrderData orderData =
+              state.deliveryOrderList.singleWhere(
+            (order) => order.deliveryOrderId == state.deliveryOrderId.value,
+          );
           if (state.paymentType.value == "receive") {
             final int deliveryOrderId =
                 await DeliveryOrderTableQueries(appDatabaseInstance)
@@ -367,13 +424,17 @@ class AddPaymentDetailsBloc
               currentAmount: orderData.totalReceivedAmount,
             );
             if (deliveryOrderId < 1) {
-              emit(state.copyWith(
-                status: FormzStatus.submissionFailure,
-              ));
+              emit(
+                state.copyWith(
+                  status: FormzStatus.submissionFailure,
+                ),
+              );
             } else {
-              emit(state.copyWith(
-                status: FormzStatus.submissionSuccess,
-              ));
+              emit(
+                state.copyWith(
+                  status: FormzStatus.submissionSuccess,
+                ),
+              );
             }
           }
           if (state.paymentType.value == "send") {
@@ -405,13 +466,17 @@ class AddPaymentDetailsBloc
               amountSend: state.amount.value,
             );
             if (deliveryOrderId < 1) {
-              emit(state.copyWith(
-                status: FormzStatus.submissionFailure,
-              ));
+              emit(
+                state.copyWith(
+                  status: FormzStatus.submissionFailure,
+                ),
+              );
             } else {
-              emit(state.copyWith(
-                status: FormzStatus.submissionSuccess,
-              ));
+              emit(
+                state.copyWith(
+                  status: FormzStatus.submissionSuccess,
+                ),
+              );
             }
           }
         }
@@ -421,8 +486,10 @@ class AddPaymentDetailsBloc
     }
   }
 
-  void _enableHistoryFeature(EnableHistoryFeatureEvent event,
-      Emitter<AddPaymentDetailsState> emit) async {
+  Future<void> _enableHistoryFeature(
+    EnableHistoryFeatureEvent event,
+    Emitter<AddPaymentDetailsState> emit,
+  ) async {
     final feature = await menuRepository.getActiveFeatures();
     if (feature != null && feature.disableHistory) {
       FeatureMonitor(menuRepository: menuRepository)
@@ -430,22 +497,30 @@ class AddPaymentDetailsBloc
     }
   }
 
-  void _navigateToScreen(
-      NavigateToScreenEvent event, Emitter<AddPaymentDetailsState> emit) async {
+  Future<void> _navigateToScreen(
+    NavigateToScreenEvent event,
+    Emitter<AddPaymentDetailsState> emit,
+  ) async {
     if (state.comingFrom == RouteNames.paymentReceived) {
       Navigator.popAndPushNamed(
-          event.context, RouteNames.viewPaymentHistoryList,
-          arguments: ViewPaymentHistoryListRouteArguments(
-              paymentHistoryList: await PaymentTableQueries(appDatabaseInstance)
-                  .getAllPaymentsReceived(),
-              topBarTitle: RouteNames.paymentReceived));
+        event.context,
+        RouteNames.viewPaymentHistoryList,
+        arguments: ViewPaymentHistoryListRouteArguments(
+          paymentHistoryList: await PaymentTableQueries(appDatabaseInstance)
+              .getAllPaymentsReceived(),
+          topBarTitle: RouteNames.paymentReceived,
+        ),
+      );
     } else if (state.comingFrom == RouteNames.paymentSent) {
       Navigator.popAndPushNamed(
-          event.context, RouteNames.viewPaymentHistoryList,
-          arguments: ViewPaymentHistoryListRouteArguments(
-              paymentHistoryList: await PaymentTableQueries(appDatabaseInstance)
-                  .getAllPaymentsSent(),
-              topBarTitle: RouteNames.paymentSent));
+        event.context,
+        RouteNames.viewPaymentHistoryList,
+        arguments: ViewPaymentHistoryListRouteArguments(
+          paymentHistoryList: await PaymentTableQueries(appDatabaseInstance)
+              .getAllPaymentsSent(),
+          topBarTitle: RouteNames.paymentSent,
+        ),
+      );
     } else {
       Navigator.popAndPushNamed(event.context, state.comingFrom);
     }

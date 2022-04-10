@@ -1,3 +1,4 @@
+// Project imports:
 import 'package:salesman/core/db/drift/app_database.dart';
 
 class GlobalFunction {
@@ -8,7 +9,7 @@ class GlobalFunction {
 
 
   String? getClientName(int clientId) {
-    for (var client in clientList) {
+    for (final client in clientList) {
       if (client.clientId == clientId) {
         return client.clientName;
       }
@@ -17,7 +18,7 @@ class GlobalFunction {
   }
 
   String? getClientId(String clientName) {
-    for (var client in clientList) {
+    for (final client in clientList) {
       if (client.clientName == clientName) {
         return client.clientId.toString();
       }
@@ -26,7 +27,7 @@ class GlobalFunction {
   }
 
   ModelClientData? getClientDetails(int clientId) {
-    for (var client in clientList) {
+    for (final client in clientList) {
       if (client.clientId == clientId) {
         return client;
       }
@@ -35,7 +36,7 @@ class GlobalFunction {
   }
 
   String? getItemName(int itemId) {
-    for (var item in itemList) {
+    for (final item in itemList) {
       if (item.itemId == itemId) {
         return item.itemName;
       }
@@ -44,7 +45,7 @@ class GlobalFunction {
   }
 
   String? getItemId(String itemName) {
-    for (var item in itemList) {
+    for (final item in itemList) {
       if (item.itemName == itemName) {
         return item.itemId.toString();
       }
@@ -53,7 +54,7 @@ class GlobalFunction {
   }
 
   double? getItemSellingPricePerUnit(int itemId) {
-    for (var item in itemList) {
+    for (final item in itemList) {
       if (item.itemId == itemId) {
         return item.sellingPricePerUnit;
       }
@@ -62,7 +63,7 @@ class GlobalFunction {
   }
 
   double? getItemBuyingPricePerUnit(int itemId) {
-    for (var item in itemList) {
+    for (final item in itemList) {
       if (item.itemId == itemId) {
         return item.buyingPricePerUnit;
       }
@@ -71,7 +72,7 @@ class GlobalFunction {
   }
 
   String? getItemUnit(int itemId) {
-    for (var item in itemList) {
+    for (final item in itemList) {
       if (item.itemId == itemId) {
         return item.unit;
       }
@@ -80,7 +81,7 @@ class GlobalFunction {
   }
 
   double? getItemAvailable(int itemId) {
-    for (var item in itemList) {
+    for (final item in itemList) {
       if (item.itemId == itemId) {
         return item.availableQuantity;
       }
@@ -89,7 +90,7 @@ class GlobalFunction {
   }
 
   ModelItemData? getItemDetails(int itemId) {
-    for (var item in itemList) {
+    for (final item in itemList) {
       if (item.itemId == itemId) {
         return item;
       }

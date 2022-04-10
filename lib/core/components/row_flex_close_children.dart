@@ -1,8 +1,12 @@
 // flutter imports
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 
-// project imports:
+// Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
+
+// project imports:
 
 class RowFlexCloseChildren extends StatelessWidget {
   const RowFlexCloseChildren({

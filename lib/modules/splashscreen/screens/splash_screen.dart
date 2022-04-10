@@ -1,15 +1,21 @@
 // flutter import
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 
-// third party imports:
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-// project imports:
+// Project imports:
 import 'package:salesman/config/routes/route_name.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/fonts.dart';
 import 'package:salesman/core/components/custom_round_button.dart';
 import 'package:salesman/modules/splashscreen/bloc/profile_check_bloc.dart';
+
+// third party imports:
+
+// project imports:
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -17,7 +23,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: white,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 34),
         child: Column(
@@ -32,8 +38,8 @@ class SplashScreen extends StatelessWidget {
             Text(
               "Bitecope",
               style: Theme.of(context).textTheme.headline4?.copyWith(
-                    color: AppColors.secondaryDark,
-                    fontFamily: AppFonts.righteous,
+                    color: secondaryDark,
+                    fontFamily: righteous,
                   ),
             ),
             FittedBox(
@@ -41,7 +47,7 @@ class SplashScreen extends StatelessWidget {
                 text: TextSpan(
                   text: "connecting",
                   style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                        fontFamily: AppFonts.montserrat,
+                        fontFamily: montserrat,
                         fontSize: 34,
                         fontWeight: FontWeight.w500,
                       ),
@@ -49,7 +55,7 @@ class SplashScreen extends StatelessWidget {
                     TextSpan(
                       text: ' every',
                       style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                            fontFamily: AppFonts.montserrat,
+                            fontFamily: montserrat,
                             fontSize: 34,
                             fontWeight: FontWeight.w400,
                           ),
@@ -57,7 +63,7 @@ class SplashScreen extends StatelessWidget {
                     TextSpan(
                       text: ' bit',
                       style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                            fontFamily: AppFonts.montserrat,
+                            fontFamily: montserrat,
                             fontSize: 34,
                             fontWeight: FontWeight.w300,
                           ),
@@ -65,7 +71,7 @@ class SplashScreen extends StatelessWidget {
                     TextSpan(
                       text: '...',
                       style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                            fontFamily: AppFonts.montserrat,
+                            fontFamily: montserrat,
                             fontSize: 34,
                             fontWeight: FontWeight.w200,
                           ),
@@ -94,8 +100,10 @@ class SplashScreen extends StatelessWidget {
                             svgPath: "profile",
                             onPressed: () {
                               Navigator.pushNamed(context, RouteNames.profileCreation);
-                            }),
-                      ));
+                        },
+                      ),
+                    ),
+                  );
                 }
                 return const Padding(
                   padding: EdgeInsets.only(bottom: 55),

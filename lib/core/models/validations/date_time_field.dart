@@ -1,6 +1,7 @@
 // third party import
-import 'package:formz/formz.dart';
 
+// Package imports:
+import 'package:formz/formz.dart';
 
 enum DateTimeFieldValidationError {
   cannotBeEmpty,
@@ -19,4 +20,3 @@ enum DateTimeFieldValidationError {
     return null;
   }
 }
-

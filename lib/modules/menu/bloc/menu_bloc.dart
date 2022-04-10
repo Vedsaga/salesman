@@ -1,12 +1,13 @@
-// third party imports:
+
+// Package imports:
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-// project imports:
-import 'package:salesman/modules/menu/repositories/menu_repository.dart';
-import 'package:salesman/modules/profile/repositories/profile_repository.dart';
+// Project imports:
 import 'package:salesman/core/db/hive/models/active_features_model.dart';
 import 'package:salesman/core/db/hive/models/company_profile_model.dart';
+import 'package:salesman/modules/menu/repositories/menu_repository.dart';
+import 'package:salesman/modules/profile/repositories/profile_repository.dart';
 
 part 'menu_event.dart';
 part 'menu_state.dart';
@@ -22,8 +23,10 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
     on<FetchAllDetailsEvent>(_onFetchAllDetails);
   }
 
-  void _onFetchCompanyProfile(
-      FetchCompanyProfileEvent event, Emitter<MenuState> emit) async {
+  Future<void> _onFetchCompanyProfile(
+    FetchCompanyProfileEvent event,
+    Emitter<MenuState> emit,
+  ) async {
     emit(MenuCompanyProfileFetchingState());
     final CompanyProfileModel? companyProfile =
         await profileRepository.getCompanyProfile();
@@ -35,8 +38,10 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
     }
   }
 
-  void _onFetchedActiveFeatures(
-      FetchActiveFeaturesEvent event, Emitter<MenuState> emit) async {
+  Future<void> _onFetchedActiveFeatures(
+    FetchActiveFeaturesEvent event,
+    Emitter<MenuState> emit,
+  ) async {
     emit(FetchingActiveFeaturesState());
     final ActiveFeaturesModel? activeFeatures =
         await menuRepository.getActiveFeatures();
@@ -48,8 +53,10 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
     }
   }
 
-  void _onAddFeatures(
-      AddActiveFeaturesEvent event, Emitter<MenuState> emit) async {
+  Future<void> _onAddFeatures(
+    AddActiveFeaturesEvent event,
+    Emitter<MenuState> emit,
+  ) async {
     emit(FetchingActiveFeaturesState());
     final bool? addActiveFeatures =
         await menuRepository.addActiveFeatures(event.activeFeatures);
@@ -60,8 +67,10 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
     }
   }
 
-  void _onFetchAllDetails(
-      FetchAllDetailsEvent event, Emitter<MenuState> emit) async {
+  Future<void> _onFetchAllDetails(
+    FetchAllDetailsEvent event,
+    Emitter<MenuState> emit,
+  ) async {
     final CompanyProfileModel? companyProfile =
         await profileRepository.getCompanyProfile();
     final ActiveFeaturesModel? activeFeatures =
@@ -71,7 +80,8 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
       emit(FetchedAllDetailsState(
         companyProfile: companyProfile,
         activeFeatures: activeFeatures,
-      ));
+        ),
+      );
     } else {
       emit(ErrorAllDetailsState());
     }

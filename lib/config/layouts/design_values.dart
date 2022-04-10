@@ -1,8 +1,12 @@
 // flutter imports:
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 
-// project import
+// Project imports:
 import 'package:salesman/core/models/designs/design_values_model.dart';
+
+// project import
 
 DesignValuesModel designValues(BuildContext context) {
   return DesignValuesModel(
