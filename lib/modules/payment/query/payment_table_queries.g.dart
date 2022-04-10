@@ -1,11 +1,11 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'delivery_table_queries.dart';
+part of 'payment_table_queries.dart';
 
 // **************************************************************************
 // DaoGenerator
 // **************************************************************************
 
-mixin _$DeliveryTableQueriesMixin on DatabaseAccessor<AppDatabase> {
-  $ModelDeliveryTable get modelDelivery => attachedDatabase.modelDelivery;
+mixin _$PaymentTableQueriesMixin on DatabaseAccessor<AppDatabase> {
+  $ModelPaymentTable get modelPayment => attachedDatabase.modelPayment;
 }

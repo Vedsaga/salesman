@@ -16,13 +16,13 @@ class ViewProfileBloc extends Bloc<ViewProfileEvent, ViewProfileState> {
   ViewProfileBloc(this.profileRepository) : super(ViewProfileInitialState()) {
     on<ViewProfileFetchEvent>((event, emit) async {
       emit(ViewProfileFetchingState());
-      final AgentProfileModel? _agentProfile =
+      final AgentProfileModel? agentProfile =
           await profileRepository.getAgentProfile();
 
-      final CompanyProfileModel? _companyProfile =
+      final companyProfile =
           await profileRepository.getCompanyProfile();
-      if (_agentProfile != null && _companyProfile != null) {
-        emit(ViewProfileFetchedState(_agentProfile, _companyProfile));
+      if (agentProfile != null && companyProfile != null) {
+        emit(ViewProfileFetchedState(agentProfile, companyProfile));
       } else {
         emit(ViewProfileEmptyState());
       }

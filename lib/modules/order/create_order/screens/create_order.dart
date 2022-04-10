@@ -36,10 +36,8 @@ class _CreateOrderState extends State<CreateOrder> {
   final FocusNode _totalQuantityFocusNode = FocusNode();
   final TextEditingController _totalCostController = TextEditingController();
   final TextEditingController _perUnitCostController = TextEditingController();
-  final TextEditingController _orderTypeController = TextEditingController();
   final TextEditingController _paymentStatusController =
       TextEditingController();
-  DateTime? _expectedDeliveryDate;
 
   @override
   void initState() {
@@ -91,8 +89,8 @@ class _CreateOrderState extends State<CreateOrder> {
   }
 
   String? _totalQuantityErrorText() {
-    final _totalQuantity = context.read<CreateOrderBloc>().state.totalQuantity;
-    if (_totalQuantity.value >
+    final totalQuantity = context.read<CreateOrderBloc>().state.totalQuantity;
+    if (totalQuantity.value >
         _returnKeyFromList(
           collection: context.read<CreateOrderBloc>().state.itemList,
           name: _itemIdController.text,
@@ -101,7 +99,7 @@ class _CreateOrderState extends State<CreateOrder> {
         )) {
       return 'Selling quantity is greater than available quantity';
     }
-    switch (_totalQuantity.error) {
+    switch (totalQuantity.error) {
       case DoubleFieldNotZeroValidationError.cannotBeEmpty:
         return 'Quantity cannot be empty';
       case DoubleFieldNotZeroValidationError.cannotBeZero:
@@ -123,9 +121,7 @@ class _CreateOrderState extends State<CreateOrder> {
     _totalQuantityFocusNode.dispose();
     _totalCostController.dispose();
     _perUnitCostController.dispose();
-    _orderTypeController.dispose();
     _paymentStatusController.dispose();
-    _expectedDeliveryDate = null;
     super.dispose();
   }
 
@@ -165,7 +161,9 @@ class _CreateOrderState extends State<CreateOrder> {
           snackbarMessage(
               context, "Order successfully created!", MessageType.success);
           context.read<CreateOrderBloc>().add(EnableDeliveryFeatureEvent());
-          context.read<CreateOrderBloc>().add(EnableReturnFeatureEvent());
+          context.read<CreateOrderBloc>().add(EnablePaymentFeatureEvent());
+          context.read<CreateOrderBloc>().add(EnableReceiveFeatureEvent());
+          context.read<CreateOrderBloc>().add(EnableSendFeatureEvent());
           Future.delayed(const Duration(seconds: 1), () {
             Navigator.popAndPushNamed(context, RouteNames.viewOrderList);
           });
@@ -202,355 +200,291 @@ class _CreateOrderState extends State<CreateOrder> {
             return const CircularProgressIndicator();
           }
           if (state.clientList.isNotEmpty && state.itemList.isNotEmpty) {
-            return Flex(
-              direction: Axis.vertical,
-              children: <Widget>[
-                CustomDropdown(
-                  labelText: "Select Client",
-                  value: _clientIdController.text == ""
-                      ? null
-                      : _clientIdController.text,
-                  items: state.clientList
-                      .map((_client) => DropdownMenuItem<String>(
-                          value: _client.clientName,
-                          child: Text(
-                            _client.clientName,
-                            style: AppTheme.of(context).textTheme.caption,
-                          )))
-                      .toList(),
-                  onChanged: (_client) {
-                    setState(() {
-                      _clientIdController.text =
-                          _client ?? _clientIdController.text;
-                    });
-                    BlocProvider.of<CreateOrderBloc>(context)
-                        .add(OrderFieldsChangeEvent(
-                      clientId: _returnKeyFromList(
-                        collection: state.clientList,
-                        name: _clientIdController.text,
-                        searchIn: "client",
-                        askFor: 'clientId',
-                      ),
-                      itemId: state.itemId.value,
-                      perUnitCost: state.perUnitCost.value,
-                      totalCost: state.totalCost.value,
-                      totalQuantity: state.totalQuantity.value,
-                      orderType: state.orderType.value,
-                      orderStatus: state.orderStatus.value,
-                      createdBy: state.createdBy.value,
-                    ));
-                  },
-                ),
-                SizedBox(height: designValues(context).cornerRadius34),
-                CustomDropdown(
-                  labelText: "Select Item",
-                  value: _itemIdController.text == ""
-                      ? null
-                      : _itemIdController.text,
-                  items: state.itemList
-                      .map((_item) => DropdownMenuItem<String>(
-                          value: _item.itemName,
-                          child: Text(
-                            _item.itemName,
-                            style: AppTheme.of(context).textTheme.caption,
-                          )))
-                      .toList(),
-                  onChanged: (_item) {
-                    setState(() {
-                      _itemIdController.text = _item ?? _itemIdController.text;
-                    });
-                    BlocProvider.of<CreateOrderBloc>(context)
-                        .add(OrderFieldsChangeEvent(
-                      clientId: state.clientId.value,
-                      itemId: _returnKeyFromList(
-                        collection: state.itemList,
-                        name: _itemIdController.text,
-                        searchIn: "item",
-                        askFor: 'itemId',
-                      ),
-                      perUnitCost: state.perUnitCost.value,
-                      totalCost: state.totalCost.value,
-                      totalQuantity: state.totalQuantity.value,
-                      orderType: state.orderType.value,
-                      orderStatus: state.orderStatus.value,
-                      createdBy: state.createdBy.value,
-                    ));
-                  },
-                ),
-                SizedBox(height: designValues(context).verticalPadding),
-                NormalTopAppBar(
-                  titleWidget: Text(
-                    "Order Type",
-                    style: AppTheme.of(context).textTheme.headline6,
+            return Container(
+              margin: EdgeInsets.only(
+                left: designValues(context).horizontalPadding,
+                right: designValues(context).horizontalPadding,
+                bottom: designValues(context).verticalPadding,
+                top: 8,
+              ),
+              child: Flex(
+                direction: Axis.vertical,
+                children: <Widget>[
+                  CustomDropdown(
+                    labelText: "Select Client",
+                    value: _clientIdController.text == ""
+                        ? null
+                        : _clientIdController.text,
+                    items: state.clientList
+                        .map((client) => DropdownMenuItem<String>(
+                            value: client.clientName,
+                            child: Text(
+                              client.clientName,
+                              style: AppTheme.of(context).textTheme.caption,
+                            )))
+                        .toList(),
+                    onChanged: (client) {
+                      setState(() {
+                        _clientIdController.text =
+                            client ?? _clientIdController.text;
+                      });
+                      BlocProvider.of<CreateOrderBloc>(context)
+                          .add(OrderFieldsChangeEvent(
+                        clientId: _returnKeyFromList(
+                          collection: state.clientList,
+                          name: _clientIdController.text,
+                          searchIn: "client",
+                          askFor: 'clientId',
+                        ),
+                        itemId: state.itemId.value,
+                        perUnitCost: state.perUnitCost.value,
+                        totalCost: state.totalCost.value,
+                        totalQuantity: state.totalQuantity.value,
+                        orderStatus: state.orderStatus.value,
+                        createdBy: state.createdBy.value,
+                      ));
+                    },
                   ),
-                ),
-                Flex(
-                  direction: Axis.horizontal,
-                  children: [
-                    Flex(
-                      direction: Axis.horizontal,
-                      children: [
-                        Radio<String>(
-                          value: "delivery",
-                          activeColor: AppColors.orange,
-                          groupValue: state.orderType.value,
-                          onChanged: (value) {
-                            BlocProvider.of<CreateOrderBloc>(context)
-                                .add(OrderFieldsChangeEvent(
-                              clientId: state.clientId.value,
-                              itemId: state.itemId.value,
-                              perUnitCost: state.perUnitCost.value,
-                              totalCost: state.totalCost.value,
-                              totalQuantity: state.totalQuantity.value,
-                              orderType: value ?? state.orderType.value,
-                              orderStatus: state.orderStatus.value,
-                              createdBy: state.createdBy.value,
-                            ));
-                          },
+                  SizedBox(height: designValues(context).cornerRadius34),
+                  CustomDropdown(
+                    labelText: "Select Item",
+                    value: _itemIdController.text == ""
+                        ? null
+                        : _itemIdController.text,
+                    items: state.itemList
+                        .map((item) => DropdownMenuItem<String>(
+                            value: item.itemName,
+                            child: Text(
+                              item.itemName,
+                              style: AppTheme.of(context).textTheme.caption,
+                            )))
+                        .toList(),
+                    onChanged: (item) {
+                      setState(() {
+                        _itemIdController.text = item ?? _itemIdController.text;
+                      });
+                      BlocProvider.of<CreateOrderBloc>(context)
+                          .add(OrderFieldsChangeEvent(
+                        clientId: state.clientId.value,
+                        itemId: _returnKeyFromList(
+                          collection: state.itemList,
+                          name: _itemIdController.text,
+                          searchIn: "item",
+                          askFor: 'itemId',
                         ),
-                        Text(
-                          "Delivery",
-                          style:
-                              AppTheme.of(context).textTheme.caption?.copyWith(
-                                    color: state.orderType.value == "delivery"
-                                        ? AppColors.orange
-                                        : AppColors.grey,
-                                  ),
-                        ),
-                      ],
-                    ),
-                    const Spacer(),
-                    Flex(
-                      direction: Axis.horizontal,
-                      children: [
-                        Radio<String>(
-                          value: "return",
-                          activeColor: AppColors.orange,
-                          groupValue: state.orderType.value,
-                          onChanged: (value) {
-                            BlocProvider.of<CreateOrderBloc>(context)
-                                .add(OrderFieldsChangeEvent(
-                              clientId: state.clientId.value,
-                              itemId: state.itemId.value,
-                              perUnitCost: state.perUnitCost.value,
-                              totalCost: state.totalCost.value,
-                              totalQuantity: state.totalQuantity.value,
-                              orderType: value ?? state.orderType.value,
-                              orderStatus: state.orderStatus.value,
-                              createdBy: state.createdBy.value,
-                            ));
-                          },
-                        ),
-                        Text(
-                          "Return",
-                          style: AppTheme.of(context)
-                              .textTheme
-                              .caption
-                              ?.copyWith(
-                                  color: state.orderType.value == "return"
-                                      ? AppColors.orange
-                                      : AppColors.grey),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-                SizedBox(height: designValues(context).verticalPadding),
-                TextFormField(
-                  initialValue: state.totalQuantity.value.toStringAsFixed(2),
-                  keyboardType: TextInputType.number,
-                  focusNode: _totalQuantityFocusNode,
-                  decoration: inputDecoration(
-                    context,
-                    labelText: "total quantity",
-                    hintText: "XXX",
-                    inFocus: state.itemId.valid,
-                    suffixIconWidget: state.itemId.valid
-                        ? ShowUnit(
-                            showUnit: false,
-                            value: _returnKeyFromList(
-                              collection: state.itemList,
-                              name: _itemIdController.text,
-                              searchIn: "item",
-                              askFor: 'unit',
-                            ),
-                            showIcon: false,
-                          )
-                        : null,
-                    errorText: _totalQuantityFocusNode.hasFocus
-                        ? _totalQuantityErrorText()
-                        : null,
+                        perUnitCost: state.perUnitCost.value,
+                        totalCost: state.totalCost.value,
+                        totalQuantity: state.totalQuantity.value,
+                        orderStatus: state.orderStatus.value,
+                        createdBy: state.createdBy.value,
+                      ));
+                    },
                   ),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                      RegExp(r'^[0-9]+(\.[0-9]*)?$'),
-                    ),
-                  ],
-                  readOnly: !state.itemId.valid,
-                  textAlignVertical: TextAlignVertical.center,
-                  textInputAction: TextInputAction.done,
-                  style: Theme.of(context).textTheme.bodyText1,
-                  onFieldSubmitted: (term) {
-                    _totalQuantityFocusNode.unfocus();
-                  },
-                  onChanged: (value) {
-                    BlocProvider.of<CreateOrderBloc>(context)
-                        .add(OrderFieldsChangeEvent(
-                      clientId: state.clientId.value,
-                      itemId: state.itemId.value,
-                      perUnitCost: _returnKeyFromList(
-                        collection: state.itemList,
-                        name: _itemIdController.text,
-                        searchIn: "item",
-                        askFor: 'sellingPricePerUnit',
-                      ),
-                      totalCost: double.tryParse(value) != null
-                          ? _returnKeyFromList(
+                  SizedBox(height: designValues(context).verticalPadding),
+
+                  TextFormField(
+                    initialValue: state.totalQuantity.value.toStringAsFixed(2),
+                    keyboardType: TextInputType.number,
+                    focusNode: _totalQuantityFocusNode,
+                    decoration: inputDecoration(
+                      context,
+                      labelText: "total quantity",
+                      hintText: "XXX",
+                      inFocus: state.itemId.valid,
+                      suffixIconWidget: state.itemId.valid
+                          ? ShowUnit(
+                              showUnit: false,
+                              value: _returnKeyFromList(
                                 collection: state.itemList,
                                 name: _itemIdController.text,
                                 searchIn: "item",
-                                askFor: 'sellingPricePerUnit',
-                              ) *
-                              double.tryParse(value)
-                          : 0,
-                      totalQuantity: double.tryParse(value) ?? 0,
-                      orderType: state.orderType.value,
-                      orderStatus: state.orderStatus.value,
-                      createdBy: state.createdBy.value,
-                    ));
-                  },
-                ),
-                SizedBox(height: designValues(context).sectionSpacing89),
-                const NormalTopAppBar(title: "summary"),
-                SizedBox(height: designValues(context).cornerRadius34),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                        designValues(context).cornerRadius8),
-                    color: AppColors.light,
-                    boxShadow: const [
-                      BoxShadow(
-                        color: AppColors.shadowColor,
-                        blurRadius: 34,
-                        offset: Offset(-5, 5),
+                                askFor: 'unit',
+                              ),
+                              showIcon: false,
+                            )
+                          : null,
+                      errorText: _totalQuantityFocusNode.hasFocus
+                          ? _totalQuantityErrorText()
+                          : null,
+                    ),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(
+                        RegExp(r'^[0-9]+(\.[0-9]*)?$'),
                       ),
                     ],
+                    readOnly: !state.itemId.valid,
+                    textAlignVertical: TextAlignVertical.center,
+                    textInputAction: TextInputAction.done,
+                    style: Theme.of(context).textTheme.bodyText1,
+                    onFieldSubmitted: (term) {
+                      _totalQuantityFocusNode.unfocus();
+                    },
+                    onChanged: (value) {
+                      BlocProvider.of<CreateOrderBloc>(context)
+                          .add(OrderFieldsChangeEvent(
+                        clientId: state.clientId.value,
+                        itemId: state.itemId.value,
+                        perUnitCost: _returnKeyFromList(
+                          collection: state.itemList,
+                          name: _itemIdController.text,
+                          searchIn: "item",
+                          askFor: 'sellingPricePerUnit',
+                        ),
+                        totalCost: double.tryParse(value) != null
+                            ? _returnKeyFromList(
+                                  collection: state.itemList,
+                                  name: _itemIdController.text,
+                                  searchIn: "item",
+                                  askFor: 'sellingPricePerUnit',
+                                ) *
+                                double.tryParse(value)
+                            : 0,
+                        totalQuantity: double.tryParse(value) ?? 0,
+                        orderStatus: state.orderStatus.value,
+                        createdBy: state.createdBy.value,
+                      ));
+                    },
                   ),
-                  child: Flex(
-                    direction: Axis.vertical,
-                    children: <Widget>[
-                      Padding(
-                        padding:
-                            EdgeInsets.all(designValues(context).padding21),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Flex(
-                            direction: Axis.vertical,
-                            children: [
-                              Flex(
-                                direction: Axis.horizontal,
-                                children: [
-                                  Text(
-                                    _itemIdController.text,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1
-                                        ?.copyWith(fontWeight: FontWeight.bold),
-                                  ),
-                                  const Spacer(),
-                                  Text(
-                                    state.perUnitCost.value.toStringAsFixed(2),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1
-                                        ?.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            color: AppColors.grey),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: designValues(context).padding21),
-                              Flex(
-                                direction: Axis.horizontal,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  const Spacer(),
-                                  Text(
-                                    "Qyt: ",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .caption
-                                        ?.copyWith(color: AppColors.grey),
-                                  ),
-                                  SizedBox(
-                                    width: designValues(context).cornerRadius8,
-                                  ),
-                                  Text(
-                                    state.totalQuantity.value.toString(),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1
-                                        ?.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            color: AppColors.dark),
-                                  ),
-                                ],
-                              ),
-                            ],
+                  SizedBox(height: designValues(context).sectionSpacing89),
+                  const NormalTopAppBar(title: "summary"),
+                  SizedBox(height: designValues(context).cornerRadius34),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                          designValues(context).cornerRadius8),
+                      color: AppColors.light,
+                      boxShadow: const [
+                        BoxShadow(
+                          color: AppColors.shadowColor,
+                          blurRadius: 34,
+                          offset: Offset(-5, 5),
+                        ),
+                      ],
+                    ),
+                    child: Flex(
+                      direction: Axis.vertical,
+                      children: <Widget>[
+                        Padding(
+                          padding:
+                              EdgeInsets.all(designValues(context).padding21),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Flex(
+                              direction: Axis.vertical,
+                              children: [
+                                Flex(
+                                  direction: Axis.horizontal,
+                                  children: [
+                                    Text(
+                                      _itemIdController.text,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          ?.copyWith(
+                                              fontWeight: FontWeight.bold),
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      state.perUnitCost.value
+                                          .toStringAsFixed(2),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          ?.copyWith(
+                                              fontWeight: FontWeight.bold,
+                                              color: AppColors.grey),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                    height: designValues(context).padding21),
+                                Flex(
+                                  direction: Axis.horizontal,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    const Spacer(),
+                                    Text(
+                                      "Qyt: ",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .caption
+                                          ?.copyWith(color: AppColors.grey),
+                                    ),
+                                    SizedBox(
+                                      width:
+                                          designValues(context).cornerRadius8,
+                                    ),
+                                    Text(
+                                      state.totalQuantity.value.toString(),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          ?.copyWith(
+                                              fontWeight: FontWeight.bold,
+                                              color: AppColors.dark),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      SvgPicture.asset(
-                        "assets/icons/svgs/dash.svg",
-                      ),
-                      Padding(
-                        padding:
-                            EdgeInsets.all(designValues(context).padding21),
-                        child: Flex(
-                          direction: Axis.horizontal,
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  right:
-                                      designValues(context).horizontalPadding),
-                              child: Text(
-                                "Total Cost",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline6
-                                    ?.copyWith(color: AppColors.orange),
-                              ),
-                            ),
-                            const Spacer(),
-                            Flex(
-                                direction: Axis.horizontal,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  SvgPicture.asset(
-                                    "assets/icons/svgs/inr.svg",
-                                    height: 13,
-                                    width: 13,
-                                    color: AppColors.orange,
-                                  ),
-                                  SizedBox(
-                                    width: designValues(context).cornerRadius8,
-                                  ),
-                                  // TODO: in future fix text overflow
-                                  Text(
-                                    state.totalCost.value.toStringAsFixed(2),
-                                    overflow: TextOverflow.ellipsis,
-                                    style:
-                                        Theme.of(context).textTheme.headline6,
-                                  ),
-                                ]),
-                          ],
+                        SvgPicture.asset(
+                          "assets/icons/svgs/dash.svg",
                         ),
-                      )
-                    ],
-                  ),
-                )
-              
-              ],
+                        Padding(
+                          padding:
+                              EdgeInsets.all(designValues(context).padding21),
+                          child: Flex(
+                            direction: Axis.horizontal,
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    right: designValues(context)
+                                        .horizontalPadding),
+                                child: Text(
+                                  "Total Cost",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline6
+                                      ?.copyWith(color: AppColors.orange),
+                                ),
+                              ),
+                              const Spacer(),
+                              Flex(
+                                  direction: Axis.horizontal,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                      "assets/icons/svgs/inr.svg",
+                                      height: 13,
+                                      width: 13,
+                                      color: AppColors.orange,
+                                    ),
+                                    SizedBox(
+                                      width:
+                                          designValues(context).cornerRadius8,
+                                    ),
+                                    LimitedBox(
+                                      maxWidth: 144,
+                                      child: Text(
+                                        state.totalCost.value
+                                            .toStringAsFixed(2),
+                                        overflow: TextOverflow.ellipsis,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline6,
+                                      ),
+                                    ),
+                                  ]),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
             );
           }
           return const CircularProgressIndicator();

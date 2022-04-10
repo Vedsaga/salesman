@@ -30,8 +30,9 @@ class ViewItemDetailsBloc extends Bloc<ViewItemDetailsEvent, ViewItemDetailsStat
       emit(ReservedQuantityNotZeroState());
     } else {
       try {
-        final int _id = await ItemTableQueries(appDatabaseInstance).deActiveItem(itemDetails.itemId);
-        if(_id > 0) {
+        final int id = await ItemTableQueries(appDatabaseInstance)
+            .deActiveItem(itemDetails.itemId);
+        if (id > 0) {
           emit(SuccessfullyDeactivatedItemState());
         }
       } catch(e) {

@@ -55,7 +55,7 @@ class ItemInfoCard extends StatelessWidget {
                       .textTheme
                       .caption
                       ?.copyWith(fontWeight: FontWeight.normal)),
-              secondChild: Text(totalQuantity + " " + itemUnit,
+              secondChild: Text("$totalQuantity $itemUnit",
                   style: AppTheme.of(context).textTheme.caption?.copyWith(
                         color: AppColors.secondaryDark,
                       )),

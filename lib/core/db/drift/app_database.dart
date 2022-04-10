@@ -9,19 +9,20 @@ import 'package:path_provider/path_provider.dart';
 
 // project imports:
 import 'package:salesman/modules/client/query/client_table_queries.dart';
-import 'package:salesman/modules/delivery/query/delivery_table_queries.dart';
 import 'package:salesman/modules/item/query/item_table_queries.dart';
-import 'package:salesman/modules/order/query/order_table_queries.dart';
-import 'package:salesman/modules/payment_receive/query/payment_receive_table_queries.dart';
-import 'package:salesman/modules/return/query/return_table_queries.dart';
+import 'package:salesman/modules/order/query/delivery_order_table_queries.dart';
+import 'package:salesman/modules/payment/query/payment_table_queries.dart';
+import 'package:salesman/modules/return/query/return_order_table_queries.dart';
 import 'package:salesman/modules/survey/query/survey_table_queries.dart';
+import 'package:salesman/modules/transport/query/transport_table_queries.dart';
 
+// models imports:
 import 'models/model_client.dart';
-import 'models/model_delivery.dart';
+import 'models/model_transport.dart';
 import 'models/model_item.dart';
-import 'models/model_order.dart';
-import 'models/model_payment_received.dart';
-import 'models/model_return.dart';
+import 'models/model_delivery_order.dart';
+import 'models/model_payment.dart';
+import 'models/model_return_order.dart';
 import 'models/model_survey.dart';
 
 // part
@@ -30,18 +31,18 @@ part 'app_database.g.dart';
 @DriftDatabase(tables: [
   ModelClient,
   ModelItem,
-  ModelOrder,
-  ModelDelivery,
-  ModelReturn,
-  ModelPaymentReceived,
+  ModelDeliveryOrder,
+  ModelTransport,
+  ModelReturnOrder,
+  ModelPayment,
   ModelSurvey
 ], daos: [
   ClientTableQueries,
   ItemTableQueries,
-  OrderTableQueries,
-  DeliveryTableQueries,
-  ReturnTableQueries,
-  PaymentReceivedTableQueries,
+  DeliveryOrderTableQueries,
+  TransportTableQueries,
+  ReturnOrderTableQueries,
+  PaymentTableQueries,
   SurveyTableQueries
 ])
 class AppDatabase extends _$AppDatabase {

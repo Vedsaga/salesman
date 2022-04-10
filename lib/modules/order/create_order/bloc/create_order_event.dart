@@ -16,7 +16,6 @@ class OrderFieldsChangeEvent extends CreateOrderEvent {
     required this.perUnitCost,
     required this.totalCost,
     required this.totalQuantity,
-    required this.orderType,
     required this.orderStatus,
     this.paymentStatus,
     required this.createdBy,
@@ -28,7 +27,6 @@ class OrderFieldsChangeEvent extends CreateOrderEvent {
   final double perUnitCost;
   final double totalCost;
   final double totalQuantity;
-  final String orderType;
   final String orderStatus;
   final String? paymentStatus;
   final String createdBy;
@@ -41,7 +39,6 @@ class OrderFieldsChangeEvent extends CreateOrderEvent {
         perUnitCost,
         totalCost,
         totalQuantity,
-        orderType,
         orderStatus,
         createdBy,
       ];
@@ -52,5 +49,6 @@ class ItemIdFieldUnfocusedEvent extends CreateOrderEvent{}
 class TotalQuantityFieldUnfocusedEvent extends CreateOrderEvent{}
 class OrderFormSubmitEvent extends CreateOrderEvent {}
 class EnableDeliveryFeatureEvent extends CreateOrderEvent {}
-class EnableReturnFeatureEvent extends CreateOrderEvent {}
-
+class EnablePaymentFeatureEvent extends CreateOrderEvent {}
+class EnableReceiveFeatureEvent extends CreateOrderEvent {}
+class EnableSendFeatureEvent extends CreateOrderEvent {}

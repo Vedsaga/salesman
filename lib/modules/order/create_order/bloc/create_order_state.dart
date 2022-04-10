@@ -9,7 +9,6 @@ class CreateOrderState extends Equatable {
     this.perUnitCost = const DoubleField.pure(),
     this.totalCost = const DoubleField.pure(),
     this.totalQuantity = const DoubleFieldNotZero.pure(),
-    this.orderType = const StatusTypeField.pure(),
     this.orderStatus = const StatusTypeField.pure(),
     this.paymentStatus,
     this.createdBy = const GenericField.pure(),
@@ -24,7 +23,6 @@ class CreateOrderState extends Equatable {
   final DoubleField perUnitCost;
   final DoubleField totalCost;
   final DoubleFieldNotZero totalQuantity;
-  final StatusTypeField orderType;
   final StatusTypeField orderStatus;
   final StatusTypeField? paymentStatus;
   final GenericField createdBy;
@@ -40,7 +38,6 @@ class CreateOrderState extends Equatable {
         perUnitCost,
         totalCost,
         totalQuantity,
-        orderType,
         createdBy,
         status,
       ];
@@ -53,7 +50,6 @@ class CreateOrderState extends Equatable {
     DoubleField? perUnitCost,
     DoubleField? totalCost,
     DoubleFieldNotZero? totalQuantity,
-    StatusTypeField? orderType,
     StatusTypeField? orderStatus,
     StatusTypeField? paymentStatus,
     GenericField? createdBy,
@@ -68,7 +64,6 @@ class CreateOrderState extends Equatable {
       perUnitCost: perUnitCost ?? this.perUnitCost,
       totalCost: totalCost ?? this.totalCost,
       totalQuantity: totalQuantity ?? this.totalQuantity,
-      orderType: orderType ?? this.orderType,
       orderStatus: orderStatus ?? this.orderStatus,
       paymentStatus: paymentStatus ?? this.paymentStatus,
       createdBy: createdBy ?? this.createdBy,

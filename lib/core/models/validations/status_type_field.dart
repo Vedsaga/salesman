@@ -13,23 +13,29 @@ class StatusTypeField
 
   static final List<String> orderStatus = [
     'pending',
-    'approved',
+    'processing',
+    'completed',
+    'cancelled',
     'rejected',
-    'cancelled'
   ];
-  static final List<String> orderType = ['delivery', 'return'];
+  static final List<String> paymentType = ['receive', 'send'];
+  static final List<String> paymentFor = ['delivery', 'return'];
   static final List<String> paymentStatus = ['paid', 'unpaid', 'partial'];
-  static final List<String> paymentType = [
+  static final List<String> paymentMode = [
     'cash',
-    'credit',
-    'debit',
+    'credit card',
+    'debit card',
     'cheque',
-    'upi'
+    'bank transfer',
+    'UPI',
+    'others'
   ];
   static final List<String> deliveryStatus = [
-    'pending',
+    'in-transit',
+    'out-for-delivery',
     'delivered',
-    'cancelled'
+    'cancelled',
+    'rejected'
   ];
   static final List<String> returnStatus = [
     'pending',
@@ -45,10 +51,11 @@ class StatusTypeField
     }
     // if value is available in any of the list then return null else return invalidStatusType
     if (orderStatus.contains(value) ||
-        orderType.contains(value) ||
-        paymentStatus.contains(value) ||
         paymentType.contains(value) ||
+        paymentStatus.contains(value) ||
+        paymentMode.contains(value) ||
         deliveryStatus.contains(value) ||
+        paymentFor.contains(value) ||
         returnStatus.contains(value)) {
       return null;
     } else {

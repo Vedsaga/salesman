@@ -18,10 +18,10 @@ class ViewItemBloc extends Bloc<ViewItemEvent, ViewItemState> {
   void _fetchItem(FetchItemEvent event, Emitter<ViewItemState> emit) async {
     emit(FetchingItemState());
     try {
-      final List<ModelItemData>? _items =
+      final items =
           await ItemTableQueries(appDatabaseInstance).getAllActiveItems();
-      if (_items != null && _items.isNotEmpty) {
-        emit(FetchedItemState(_items));
+      if (items.isNotEmpty) {
+        emit(FetchedItemState(items));
       } else {
         emit(EmptyItemState());
       }
@@ -32,8 +32,8 @@ class ViewItemBloc extends Bloc<ViewItemEvent, ViewItemState> {
 
   void _disableOrderFeature(
       DisableOrderFeatureEvent event, Emitter<ViewItemState> emit) async {
-    final _feature = await menuRepository.getActiveFeatures();
-    if (_feature != null && !_feature.disableOrder) {
+    final feature = await menuRepository.getActiveFeatures();
+    if (feature != null && !feature.disableOrder) {
       FeatureMonitor(menuRepository: menuRepository)
           .disableFeature("disableOrder");
     }

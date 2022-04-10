@@ -78,121 +78,128 @@ class _ViewItemDetailsState extends State<ViewItemDetails> {
         body: BlocBuilder<ViewItemDetailsBloc, ViewItemDetailsState>(
           builder: (context, state) {
             if (state is ViewingItemDetailsState) {
-              return Flex(
-                direction: Axis.vertical,
-                children: [
-                  TextFormField(
-                    initialValue: state.itemDetails.itemName,
-                    keyboardType: TextInputType.text,
-                    readOnly: true,
-                    textAlignVertical: TextAlignVertical.center,
-                    style: Theme.of(context).textTheme.bodyText1,
-                    decoration: inputDecoration(context,
-                        labelText: "item name",
-                        hintText: "item name",
-                        inFocus: false),
-                  ),
-                  SizedBox(height: designValues(context).cornerRadius34),
-                  TextFormField(
-                    initialValue:
-                        state.itemDetails.sellingPricePerUnit.toString(),
-                    keyboardType: TextInputType.text,
-                    readOnly: true,
-                    textAlignVertical: TextAlignVertical.center,
-                    style: Theme.of(context).textTheme.bodyText1,
-                    decoration: inputDecoration(
-                      context,
-                      labelText: "selling price per unit",
-                      hintText: "selling price per unit",
-                      inFocus: false,
+              return Container(
+                margin: EdgeInsets.only(
+                  left: designValues(context).horizontalPadding,
+                  right: designValues(context).horizontalPadding,
+                  bottom: designValues(context).verticalPadding,
+                  top: 8,
+                ),
+                child: Flex(
+                  direction: Axis.vertical,
+                  children: [
+                    TextFormField(
+                      initialValue: state.itemDetails.itemName,
+                      keyboardType: TextInputType.text,
+                      readOnly: true,
+                      textAlignVertical: TextAlignVertical.center,
+                      style: Theme.of(context).textTheme.bodyText1,
+                      decoration: inputDecoration(context,
+                          labelText: "item name",
+                          hintText: "item name",
+                          inFocus: false),
                     ),
-                  ),
-                  SizedBox(height: designValues(context).cornerRadius34),
-                  TextFormField(
-                    initialValue:
-                        state.itemDetails.buyingPricePerUnit.toString(),
-                    keyboardType: TextInputType.text,
-                    readOnly: true,
-                    textAlignVertical: TextAlignVertical.center,
-                    style: Theme.of(context).textTheme.bodyText1,
-                    decoration: inputDecoration(
-                      context,
-                      labelText: "buying price per unit",
-                      hintText: "buying price per unit",
-                      inFocus: false,
-                    ),
-                  ),
-                  SizedBox(height: designValues(context).verticalPadding),
-                  
-                  NormalTopAppBar(
-                    titleWidget: Text(
-                      "QUANTITY",
-                      style: AppTheme.of(context).textTheme.headline6,
-                    ),
-                  ),
-                  SizedBox(height: designValues(context).cornerRadius34),
-                  DoubleInfoBox(
-                    firstBoxWidget: SingleInfoBox(
-                      info: "available",
-                      data: state.itemDetails.availableQuantity
-                          .toStringAsFixed(2),
-                      dataSuffixWidget: Text(
-                        state.itemDetails.unit,
-                        style: Theme.of(context)
-                            .textTheme
-                            .subtitle2
-                            ?.copyWith(color: AppColors.deepBlue),
+                    SizedBox(height: designValues(context).cornerRadius34),
+                    TextFormField(
+                      initialValue:
+                          state.itemDetails.sellingPricePerUnit.toString(),
+                      keyboardType: TextInputType.text,
+                      readOnly: true,
+                      textAlignVertical: TextAlignVertical.center,
+                      style: Theme.of(context).textTheme.bodyText1,
+                      decoration: inputDecoration(
+                        context,
+                        labelText: "selling price per unit",
+                        hintText: "selling price per unit",
+                        inFocus: false,
                       ),
                     ),
-                    secondBoxWidget: SingleInfoBox(
-                      info: "reserved",
-                      data:
-                          state.itemDetails.reservedQuantity.toStringAsFixed(2),
-                      dataSuffixWidget: Text(
-                        state.itemDetails.unit,
-                        style: Theme.of(context)
-                            .textTheme
-                            .subtitle2
-                            ?.copyWith(color: AppColors.orange),
+                    SizedBox(height: designValues(context).cornerRadius34),
+                    TextFormField(
+                      initialValue:
+                          state.itemDetails.buyingPricePerUnit.toString(),
+                      keyboardType: TextInputType.text,
+                      readOnly: true,
+                      textAlignVertical: TextAlignVertical.center,
+                      style: Theme.of(context).textTheme.bodyText1,
+                      decoration: inputDecoration(
+                        context,
+                        labelText: "buying price per unit",
+                        hintText: "buying price per unit",
+                        inFocus: false,
                       ),
                     ),
-                  ),
-                  SizedBox(height: designValues(context).verticalPadding),
-                  NormalTopAppBar(
-                    titleWidget: Text(
-                      "COST per ${state.itemDetails.unit.substring(0, 1).toUpperCase() + state.itemDetails.unit.substring(1)}",
-                      style: AppTheme.of(context).textTheme.headline6,
-                  ),
-                  ),
-                  
-                  SizedBox(height: designValues(context).cornerRadius34),
-                  DoubleInfoBox(
-                    firstBoxWidget: SingleInfoBox(
-                      info: "selling price",
-                      data: state.itemDetails.sellingPricePerUnit
-                          .toStringAsFixed(2),
-                      dataColor: AppColors.deepBlue,
-                      dataPrefixWidget: SvgPicture.asset(
-                        "assets/icons/svgs/inr.svg",
-                        height: 13,
-                        width: 13,
-                        color: AppColors.deepBlue,
+                    SizedBox(height: designValues(context).verticalPadding),
+                    NormalTopAppBar(
+                      titleWidget: Text(
+                        "QUANTITY",
+                        style: AppTheme.of(context).textTheme.headline6,
                       ),
                     ),
-                    secondBoxWidget: SingleInfoBox(
-                      info: "buying price",
-                      data: state.itemDetails.buyingPricePerUnit
-                          .toStringAsFixed(2),
-                      dataColor: AppColors.orange,
-                      dataPrefixWidget: SvgPicture.asset(
-                        "assets/icons/svgs/inr.svg",
-                        height: 13,
-                        width: 13,
-                        color: AppColors.orange,
+                    SizedBox(height: designValues(context).cornerRadius34),
+                  // FIXME: fix overflow error
+                    DoubleInfoBox(
+                      firstBoxWidget: SingleInfoBox(
+                        info: "available",
+                        data: state.itemDetails.availableQuantity
+                            .toStringAsFixed(2),
+                        dataSuffixWidget: Text(
+                          state.itemDetails.unit,
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle2
+                              ?.copyWith(color: AppColors.deepBlue),
+                        ),
+                      ),
+                      secondBoxWidget: SingleInfoBox(
+                        info: "reserved",
+                        data: state.itemDetails.reservedQuantity
+                            .toStringAsFixed(2),
+                        dataSuffixWidget: Text(
+                          state.itemDetails.unit,
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle2
+                              ?.copyWith(color: AppColors.orange),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                    SizedBox(height: designValues(context).verticalPadding),
+                    NormalTopAppBar(
+                      titleWidget: Text(
+                        "COST per ${state.itemDetails.unit.substring(0, 1).toUpperCase() + state.itemDetails.unit.substring(1)}",
+                        style: AppTheme.of(context).textTheme.headline6,
+                      ),
+                    ),
+                    SizedBox(height: designValues(context).cornerRadius34),
+                    DoubleInfoBox(
+                      firstBoxWidget: SingleInfoBox(
+                        info: "sell price",
+                        data: state.itemDetails.sellingPricePerUnit
+                            .toStringAsFixed(2),
+                        dataColor: AppColors.deepBlue,
+                        dataPrefixWidget: SvgPicture.asset(
+                          "assets/icons/svgs/inr.svg",
+                          height: 13,
+                          width: 13,
+                          color: AppColors.deepBlue,
+                        ),
+                      ),
+                      secondBoxWidget: SingleInfoBox(
+                        info: "buy price",
+                        data: state.itemDetails.buyingPricePerUnit
+                            .toStringAsFixed(2),
+                        dataColor: AppColors.orange,
+                        dataPrefixWidget: SvgPicture.asset(
+                          "assets/icons/svgs/inr.svg",
+                          height: 13,
+                          width: 13,
+                          color: AppColors.orange,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               );
             }
             return const CircularProgressIndicator();
@@ -214,7 +221,7 @@ class _ViewItemDetailsState extends State<ViewItemDetails> {
                     title: 'Remove the item?',
                   ).build,
                 );
-                if (confirmation == "remove") {
+                if (mounted && confirmation == "remove") {
                   context
                       .read<ViewItemDetailsBloc>()
                       .add(DeactivateItemEvent());

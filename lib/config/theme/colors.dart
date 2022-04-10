@@ -8,7 +8,7 @@ class AppColors {
   static const Color secondaryLight = Color(0xFFEDF3FE);
   static const Color white = Color(0xFFFFFFFF);
   static const Color orange = Color(0xFFFF7F00);
-  static const Color red = Color(0xFFFF3D00);
+  static const Color red = Color(0xFFDA0000);
   static const Color green = Color(0xFF49C969);
   static const Color skyBlue = Color(0xFF2CCEFF);
   static const Color deepBlue = Color(0xFF3253FF);
@@ -53,21 +53,14 @@ static const LinearGradient redGradient = LinearGradient(
 
   static const LinearGradient skyBlueGradient = LinearGradient(
     colors: [
-      Color(0xFF2CCEFF),
-      Color(0xFF30AAFF),
       Color(0xFF30AAFF),
       Color(0xFF30ABFF),
-      Color(0xFF30ACFF),
       Color(0xFF30ADFF),
       Color(0xFF31B5FF),
       Color(0xFF31B9FF),
       Color(0xFF32C3FF),
       Color(0xFF32C6FF),
       Color(0xFF33C9FF),
-      Color(0xFF33CDFF),
-      Color(0xFF33CEFF),
-      Color(0xFF33CFFF),
-      Color(0xFF33CEFF),
     ],
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,

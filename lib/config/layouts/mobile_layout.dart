@@ -1,9 +1,9 @@
 // flutter imports:
 import 'package:flutter/material.dart';
-import 'package:salesman/config/layouts/design_values.dart';
 
 // project import:
 import 'package:salesman/config/theme/colors.dart';
+import 'package:salesman/config/layouts/design_values.dart';
 
 class MobileLayout extends StatelessWidget {
   const MobileLayout(
@@ -32,33 +32,21 @@ class MobileLayout extends StatelessWidget {
           child: topAppBar,
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: designValues(context).horizontalPadding,
-        ),
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                  child: Padding(
-                padding: EdgeInsets.only(
-                  bottom: designValues(context).verticalPadding,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: body,
-                ),
-              )),
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: body,
             ),
-            if (bottomAppBarRequired)
-              Container(
-                color: AppColors.light,
-                child: Center(child:bottomAppBar),
-                height: designValues(context).bottomAppBarHeight,
-                width: designValues(context).screenWidth,
-              ),
-          ],
-        ),
+          ),
+          if (bottomAppBarRequired)
+            Container(
+              color: AppColors.light,
+              height: designValues(context).bottomAppBarHeight,
+              width: designValues(context).screenWidth,
+              child: Center(child: bottomAppBar),
+            ),
+        ],
       ),
       // use if statement to check if bottomAppBar is null
     );

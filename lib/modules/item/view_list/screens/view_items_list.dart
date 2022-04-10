@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // third party imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:salesman/config/layouts/design_values.dart';
 
 // project imports:
 import 'package:salesman/config/layouts/mobile_layout.dart';
@@ -58,32 +59,40 @@ class _ViewItemState extends State<ViewItemList> {
             }
             if (state is FetchedItemState) {
               return SingleChildScrollView(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: state.items.length,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).popAndPushNamed(
-                          RouteNames.viewItemDetails,
-                          arguments: state.items[index],
-                        );
-                      },
-                      child: CustomListCard(
-                        leadingDataAtTop: state.items[index].itemName,
-                        trailingDataAtTop:
-                            state.items[index].totalTrade.toString(),
-                        leadingInfoAtBottom: "stock ",
-                        leadingDataAtBottom:
-                            "${state.items[index].availableQuantity} ${state.items[index].unit}",
-                        trailingInfoAtBottom: "MRP ",
-                        trailingDataAtBottom:
-                            "${state.items[index].sellingPricePerUnit}",
-                        color: AppColors.grey,
-                      ),
-                    );
-                  },
+                child: Container(
+                  margin: EdgeInsets.only(
+                    left: designValues(context).horizontalPadding,
+                    right: designValues(context).horizontalPadding,
+                    bottom: designValues(context).verticalPadding,
+                    top: 8,
+                  ),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: state.items.length,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).popAndPushNamed(
+                            RouteNames.viewItemDetails,
+                            arguments: state.items[index],
+                          );
+                        },
+                        child: CustomListCard(
+                          leadingDataAtTop: state.items[index].itemName,
+                          trailingDataAtTop:
+                              state.items[index].totalTrade.toString(),
+                          leadingInfoAtBottom: "stock ",
+                          leadingDataAtBottom:
+                              "${state.items[index].availableQuantity} ${state.items[index].unit}",
+                          trailingInfoAtBottom: "MRP ",
+                          trailingDataAtBottom:
+                              "${state.items[index].sellingPricePerUnit}",
+                          color: AppColors.grey,
+                        ),
+                      );
+                    },
+                  ),
                 ),
               );
             }

@@ -13,7 +13,6 @@ import 'package:salesman/core/db/hive/models/agent_profile_model.dart';
 import 'package:salesman/core/db/hive/models/company_profile_model.dart';
 
 AppDatabase appDatabaseInstance = AppDatabase();
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();

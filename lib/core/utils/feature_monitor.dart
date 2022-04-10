@@ -10,26 +10,27 @@ class FeatureMonitor {
   void enableFeature(
     String featureName,
   ) async {
-    final _featuresMap = await menuRepository.getFeatureMap();
-    if (_featuresMap != null) {
-      if (_featuresMap.containsKey(featureName)) {
-        _featuresMap[featureName] = false;
+    final featuresMap = await menuRepository.getFeatureMap();
+    if (featuresMap != null) {
+      if (featuresMap.containsKey(featureName)) {
+        featuresMap[featureName] = false;
         await menuRepository.setActiveFeatures(
           ActiveFeaturesModel(
-            disableDetails: _featuresMap['disableDetails'],
-            disableClient: _featuresMap['disableClient'],
-            disableItem: _featuresMap['disableItem'],
-            disableTrade: _featuresMap['disableTrade'],
-            disableOrder: _featuresMap['disableOrder'],
-            disableDelivery: _featuresMap['disableDelivery'],
-            disableReturn: _featuresMap['disableReturn'],
-            disableRecords: _featuresMap['disableRecords'],
-            disablePayment: _featuresMap['disablePayment'],
-            disableReceive: _featuresMap['disableReceive'],
-            disableHistory: _featuresMap['disableHistory'],
-            disableReport: _featuresMap['disableReport'],
-            disableSurvey: _featuresMap['disableSurvey'],
-            disableStats: _featuresMap['disableStats'],
+            disableDetails: featuresMap['disableDetails'],
+            disableClient: featuresMap['disableClient'],
+            disableItem: featuresMap['disableItem'],
+            disableTrade: featuresMap['disableTrade'],
+            disableOrder: featuresMap['disableOrder'],
+            disableDelivery: featuresMap['disableDelivery'],
+            disableReturn: featuresMap['disableReturn'],
+            disableRecords: featuresMap['disableRecords'],
+            disablePayment: featuresMap['disablePayment'],
+            disableReceive: featuresMap['disableReceive'],
+            disableHistory: featuresMap['disableHistory'],
+            disableReport: featuresMap['disableReport'],
+            disableSurvey: featuresMap['disableSurvey'],
+            disableStats: featuresMap['disableStats'],
+            disableSend: featuresMap['disableSend'],
           ),
         );
       }
@@ -39,26 +40,27 @@ class FeatureMonitor {
   void disableFeature(
     String featureName,
   ) async {
-    final _featuresMap = await menuRepository.getFeatureMap();
-    if (_featuresMap != null) {
-      if (_featuresMap.containsKey(featureName)) {
-        _featuresMap[featureName] = true;
+    final featuresMap = await menuRepository.getFeatureMap();
+    if (featuresMap != null) {
+      if (featuresMap.containsKey(featureName)) {
+        featuresMap[featureName] = true;
         await menuRepository.setActiveFeatures(
           ActiveFeaturesModel(
-            disableDetails: _featuresMap['disableDetails'],
-            disableClient: _featuresMap['disableClient'],
-            disableItem: _featuresMap['disableItem'],
-            disableTrade: _featuresMap['disableTrade'],
-            disableOrder: _featuresMap['disableOrder'],
-            disableDelivery: _featuresMap['disableDelivery'],
-            disableReturn: _featuresMap['disableReturn'],
-            disableRecords: _featuresMap['disableRecords'],
-            disablePayment: _featuresMap['disablePayment'],
-            disableReceive: _featuresMap['disableReceive'],
-            disableHistory: _featuresMap['disableHistory'],
-            disableReport: _featuresMap['disableReport'],
-            disableSurvey: _featuresMap['disableSurvey'],
-            disableStats: _featuresMap['disableStats'],
+            disableDetails: featuresMap['disableDetails'],
+            disableClient: featuresMap['disableClient'],
+            disableItem: featuresMap['disableItem'],
+            disableTrade: featuresMap['disableTrade'],
+            disableOrder: featuresMap['disableOrder'],
+            disableDelivery: featuresMap['disableDelivery'],
+            disableReturn: featuresMap['disableReturn'],
+            disableRecords: featuresMap['disableRecords'],
+            disablePayment: featuresMap['disablePayment'],
+            disableReceive: featuresMap['disableReceive'],
+            disableHistory: featuresMap['disableHistory'],
+            disableReport: featuresMap['disableReport'],
+            disableSurvey: featuresMap['disableSurvey'],
+            disableStats: featuresMap['disableStats'],
+            disableSend: featuresMap['disableSend'],
           ),
         );
       }

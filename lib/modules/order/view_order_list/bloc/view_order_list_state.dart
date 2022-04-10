@@ -14,7 +14,7 @@ class ViewOrderListInitial extends ViewOrderListState {}
 class FetchingOrderListState extends ViewOrderListState {}
 
 class FetchedOrderListState extends ViewOrderListState {
-  final List<ModelOrderData> orders;
+  final List<ModelDeliveryOrderData> orders;
   final List<ModelClientData> clientList;
   final List<ModelItemData> itemList;
   const FetchedOrderListState({required this.orders, required this.clientList, required this.itemList});
@@ -23,7 +23,5 @@ class FetchedOrderListState extends ViewOrderListState {
 }
 
 class EmptyOrderListState extends ViewOrderListState {}
-
 class ErrorFetchingOrderListState extends ViewOrderListState {}
-
 class ErrorFetchingAllOrderListState extends ViewOrderListState {}

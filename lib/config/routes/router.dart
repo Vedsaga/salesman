@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 
 // third party imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:salesman/config/routes/arguments_models/add_payment_details_route_arguments.dart';
 import 'package:salesman/config/routes/arguments_models/view_order_details_route_arguments.dart';
+import 'package:salesman/config/routes/arguments_models/view_payment_history_list_route_arguments.dart';
 
 // Package imports:
 import 'package:salesman/config/routes/route_name.dart';
@@ -30,6 +32,12 @@ import 'package:salesman/modules/order/view_order_details/bloc/view_order_detail
 import 'package:salesman/modules/order/view_order_details/screens/view_order_details.dart';
 import 'package:salesman/modules/order/view_order_list/bloc/view_order_list_bloc.dart';
 import 'package:salesman/modules/order/view_order_list/screens/view_order_list.dart';
+import 'package:salesman/modules/payment/add/bloc/add_payment_details_bloc.dart';
+import 'package:salesman/modules/payment/add/screens/add_payment_details.dart';
+import 'package:salesman/modules/payment/view_payment_details/bloc/view_payment_details_bloc.dart';
+import 'package:salesman/modules/payment/view_payment_details/screens/view_payment_details.dart';
+import 'package:salesman/modules/payment/view_payment_history_list/bloc/view_payment_history_list_bloc.dart';
+import 'package:salesman/modules/payment/view_payment_history_list/screens/view_payment_history_list.dart';
 import 'package:salesman/modules/profile/profile_creation/bloc/profile_bloc.dart';
 import 'package:salesman/modules/profile/profile_creation/screens/profile_creation.dart';
 import 'package:salesman/modules/profile/repositories/profile_repository.dart';
@@ -89,20 +97,20 @@ class AppRouter {
           );
         });
       case RouteNames.viewClientDetails:
-        final _clientDetail = settings.arguments as ModelClientData;
+        final clientDetail = settings.arguments as ModelClientData;
         return MaterialPageRoute(
             builder: (_) => BlocProvider<ViewClientDetailsBloc>(
                   create: (context) =>
-                      ViewClientDetailsBloc(clientDetails: _clientDetail)
+                      ViewClientDetailsBloc(clientDetails: clientDetail)
                         ..add(GetClientDetailsEvent()),
                   child: const ViewClientDetails(),
                 ));
       case RouteNames.viewItemDetails:
-        final _itemDetail = settings.arguments as ModelItemData;
+        final itemDetail = settings.arguments as ModelItemData;
         return MaterialPageRoute(
             builder: (_) => BlocProvider<ViewItemDetailsBloc>(
                   create: (context) =>
-                      ViewItemDetailsBloc(itemDetails: _itemDetail)
+                      ViewItemDetailsBloc(itemDetails: itemDetail)
                         ..add(GetItemDetailsEvent()),
                   child: const ViewItemDetails(),
                 ));
@@ -124,17 +132,44 @@ class AppRouter {
           );
         });
       case RouteNames.viewOrderDetails:
-        final _routeArgument =
+        final routeArgument =
             settings.arguments as ViewOrderDetailsRouteArguments;
         return MaterialPageRoute(
             builder: (_) => BlocProvider<ViewOrderDetailsBloc>(
                   create: (context) => ViewOrderDetailsBloc(
-                    clientDetails: _routeArgument.clientDetails,
-                    orderDetails: _routeArgument.orderDetails,
-                    itemDetails: _routeArgument.itemDetails,
+                    clientDetails: routeArgument.clientDetails,
+                    orderDetails: routeArgument.orderDetails,
+                    itemDetails: routeArgument.itemDetails,
                   )..add(GetOrderDetailsEvent()),
                   child: const ViewOrderDetails(),
                 ));
+      case RouteNames.addPaymentDetails:
+        final routeArgument = settings.arguments as AddPaymentDetailsRouteArguments;
+        return MaterialPageRoute(builder: (_) {
+          return BlocProvider<AddPaymentDetailsBloc>(
+            create: (context) => AddPaymentDetailsBloc(ProfileRepository(), MenuRepository())
+              ..add(FetchingOrderDetailsEvent(routeArguments: routeArgument)),
+            child: const AddPaymentDetails(),
+          );
+        });
+      case RouteNames.viewPaymentHistoryList:
+      final routeArgument = settings.arguments as ViewPaymentHistoryListRouteArguments?;
+        return MaterialPageRoute(builder: (_) {
+          return BlocProvider<ViewPaymentHistoryListBloc>(
+            create: (context) => ViewPaymentHistoryListBloc()
+              ..add(FetchPaymentHistoryListEvent(routeArgument: routeArgument)),
+            child: const ViewPaymentHistoryList(),
+          );
+        });
+      case RouteNames.viewPaymentDetails:
+      final ModelPaymentData paymentDetails = settings.arguments as ModelPaymentData;
+        return MaterialPageRoute(builder: (_) {
+          return BlocProvider<ViewPaymentDetailsBloc>(
+            create: (context) => ViewPaymentDetailsBloc(paymentDetails: paymentDetails)
+              ..add(GetPaymentDetailsEvent()),
+            child: const ViewPaymentDetails(),
+          );
+        }); 
 
       default:
         return MaterialPageRoute(builder: (_) {

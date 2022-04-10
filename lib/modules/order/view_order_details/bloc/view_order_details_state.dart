@@ -12,12 +12,21 @@ class ViewOrderDetailsInitialState extends ViewOrderDetailsState {}
 class FetchingOrderDetailsState extends ViewOrderDetailsState {}
 
 class FetchedOrderDetailsState extends ViewOrderDetailsState {
-  final ModelOrderData orderDetails;
+  final ModelDeliveryOrderData orderDetails;
   final ModelClientData clientDetails;
   final ModelItemData itemDetails;
-  const FetchedOrderDetailsState({required this.orderDetails, required this.clientDetails, required this.itemDetails});
+  final List<ModelPaymentData> paymentReceivedList;
+
+  const FetchedOrderDetailsState({
+    required this.orderDetails,
+    required this.clientDetails,
+    required this.itemDetails,
+    required this.paymentReceivedList,
+  });
+
   @override
-  List<Object> get props => [orderDetails, clientDetails, itemDetails];
+  List<Object> get props =>
+      [orderDetails, clientDetails, itemDetails, paymentReceivedList];
 }
 
 class ErrorFetchingOrderDetailsState extends ViewOrderDetailsState {}

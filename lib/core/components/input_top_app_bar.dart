@@ -10,9 +10,9 @@ import 'package:salesman/config/theme/theme.dart';
 
 //  created an AppBar widget
 class InputTopAppBar extends StatelessWidget {
-  final String title;
   const InputTopAppBar({Key? key, required this.title, this.routeName}) : super(key: key);
   final String? routeName;
+  final String title;
 
   @override
   Widget build(BuildContext context) {

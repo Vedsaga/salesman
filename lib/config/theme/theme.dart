@@ -9,6 +9,11 @@ class AppTheme {
   static ThemeData of(BuildContext context) {
     final theme = Theme.of(context);
     return theme.copyWith(
+      colorScheme: theme.colorScheme.copyWith(
+        primary: AppColors.skyBlue,
+        secondary: AppColors.orange,
+        error: AppColors.red,
+      ),
       brightness: Brightness.light,
       primaryColor: AppColors.dark,
       backgroundColor: AppColors.light,

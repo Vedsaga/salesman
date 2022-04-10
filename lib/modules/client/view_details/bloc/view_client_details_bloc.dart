@@ -26,9 +26,9 @@ class ViewClientDetailsBloc
       DeactivateClientEvent event, Emitter<ViewClientDetailsState> emit) async {
     emit(DeactivationInProgress());
     try {
-      final int _id = await ClientTableQueries(appDatabaseInstance)
+      final int id = await ClientTableQueries(appDatabaseInstance)
           .deActiveClient(clientDetails.clientId);
-      if (_id > 0) {
+      if (id > 0) {
         emit(SuccessfullyDeactivateClientState());
       }
     } catch (e) {

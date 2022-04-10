@@ -46,7 +46,7 @@ class InfoDataDuoBox extends StatelessWidget {
             child: Center(
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: designValues(context).cornerRadius34,
+                    horizontal: designValues(context).padding21,
                     vertical: designValues(context).padding21),
                 child: Text(
                   infoText,
@@ -80,7 +80,7 @@ class InfoDataDuoBox extends StatelessWidget {
             child: Center(
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: designValues(context).cornerRadius34,
+                    horizontal: designValues(context).padding21,
                     vertical: designValues(context).padding21),
                 child: Text(
                   dataText,

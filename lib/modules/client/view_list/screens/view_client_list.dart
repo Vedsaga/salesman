@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // flutter_bloc imports
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:salesman/config/layouts/design_values.dart';
 
 
 // package imports:
@@ -58,37 +59,43 @@ class _ViewClientState extends State<ViewClientList> {
             }
             if (state is FetchedClientState) {
               return SingleChildScrollView(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: state.clients.length,
+                child: Container(
+                  margin: EdgeInsets.only(
+                    left: designValues(context).horizontalPadding,
+                    right: designValues(context).horizontalPadding,
+                    bottom: designValues(context).verticalPadding,
+                    top: 8,
+                  ),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: state.clients.length,
                     physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).popAndPushNamed(
-                          RouteNames.viewClientDetails,
-                          arguments: state.clients[index],
-                        );
-                      },
-                        child: CustomListCard(
-                          leadingDataAtTop: state.clients[index].clientName,
-                          trailingDataAtTop:
-                              state.clients[index].totalTrade.toString(),
-                          leadingInfoAtBottom: "last trade ",
-                          leadingDataAtBottom:
-                              state.clients[index].lastTradeOn.toString(),
-                          trailingInfoAtBottom: "due ",
-                          trailingDataAtBottom:
-                              state.clients[index].dueAmount.toString(),
-                          color: state.clients[index].dueAmount > 0
-                              ? AppColors.green
-                              : state.clients[index].dueAmount < 0
-                                  ? AppColors.red
-                                  : AppColors.grey,
-                        )
-                       
-                    );
-                  },
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).popAndPushNamed(
+                              RouteNames.viewClientDetails,
+                              arguments: state.clients[index],
+                            );
+                          },
+                          child: CustomListCard(
+                            leadingDataAtTop: state.clients[index].clientName,
+                            trailingDataAtTop:
+                                state.clients[index].totalTrade.toString(),
+                            leadingInfoAtBottom: "last trade ",
+                            leadingDataAtBottom:
+                                state.clients[index].lastTradeOn.toString(),
+                            trailingInfoAtBottom: "due ",
+                            trailingDataAtBottom:
+                                state.clients[index].dueAmount.toString(),
+                            color: state.clients[index].dueAmount > 0
+                                ? AppColors.green
+                                : state.clients[index].dueAmount < 0
+                                    ? AppColors.red
+                                    : AppColors.grey,
+                          ));
+                    },
+                  ),
                 ),
               );
             }

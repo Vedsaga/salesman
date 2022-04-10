@@ -9,7 +9,7 @@ ScaffoldFeatureController snackbarMessage(
   String message,
   MessageType type,
 ) {
-  final Color _color = _getColor(type);
+  final Color color = _getColor(type);
   return ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       duration: const Duration(milliseconds: 1000),
@@ -19,14 +19,14 @@ ScaffoldFeatureController snackbarMessage(
       content: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(_getIcon(type), color: _color),
+          Icon(_getIcon(type), color: color),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(left: 8),
               child: Text(
                 message,
                 style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                      color: _color,
+                      color: color,
                       fontWeight: FontWeight.w700,
                       fontSize: 13,
                     ),

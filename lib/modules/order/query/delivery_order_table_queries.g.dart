@@ -1,11 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'order_table_queries.dart';
+part of 'delivery_order_table_queries.dart';
 
 // **************************************************************************
 // DaoGenerator
 // **************************************************************************
 
-mixin _$OrderTableQueriesMixin on DatabaseAccessor<AppDatabase> {
-  $ModelOrderTable get modelOrder => attachedDatabase.modelOrder;
+mixin _$DeliveryOrderTableQueriesMixin on DatabaseAccessor<AppDatabase> {
+  $ModelDeliveryOrderTable get modelDeliveryOrder =>
+      attachedDatabase.modelDeliveryOrder;
 }

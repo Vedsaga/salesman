@@ -48,7 +48,7 @@ class CustomRoundButton extends StatelessWidget {
               SvgPicture.asset(
                 "assets/icons/svgs/$svgPath.svg",
                 color: AppColors.light,
-                height: 20,
+                height: 13,
               ),
             ],
           ),

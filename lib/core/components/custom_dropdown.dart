@@ -21,7 +21,8 @@ class CustomDropdown extends StatelessWidget {
       children: [
         Align(
           alignment: Alignment.centerLeft,
-          child: dropdownLabel(context, labelText: labelText),
+          child:
+              dropdownLabel(context, labelText: labelText, isRequired: false),
         ),
         Container(
           decoration: BoxDecoration(

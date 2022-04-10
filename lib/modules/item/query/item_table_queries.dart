@@ -60,7 +60,6 @@ class ItemTableQueries extends DatabaseAccessor<AppDatabase>
               ..where((table) => table.itemId.equals(itemId)))
             .getSingle())
         .reservedQuantity;
-      
 
     if (availableQuantity < quantity) {
       return -1;
@@ -96,5 +95,12 @@ class ItemTableQueries extends DatabaseAccessor<AppDatabase>
         reservedQuantity: Value(reservedQuantity - quantity),
       ),
     );
+  }
+
+  // get item details
+  Future<ModelItemData> getItemDetails(int itemId) async {
+    return await (select(modelItem)
+          ..where((table) => table.itemId.equals(itemId)))
+        .getSingle();
   }
 }

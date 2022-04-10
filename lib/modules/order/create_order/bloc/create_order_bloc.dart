@@ -17,7 +17,7 @@ import 'package:salesman/main.dart';
 import 'package:salesman/modules/client/query/client_table_queries.dart';
 import 'package:salesman/modules/item/query/item_table_queries.dart';
 import 'package:salesman/modules/menu/repositories/menu_repository.dart';
-import 'package:salesman/modules/order/query/order_table_queries.dart';
+import 'package:salesman/modules/order/query/delivery_order_table_queries.dart';
 import 'package:salesman/modules/profile/repositories/profile_repository.dart';
 
 // part
@@ -37,7 +37,9 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
     on<TotalQuantityFieldUnfocusedEvent>(_totalQuantityFieldUnfocused);
     on<OrderFormSubmitEvent>(_submitOrder);
     on<EnableDeliveryFeatureEvent>(_enableDeliveryFeature);
-    on<EnableReturnFeatureEvent>(_enableReturnFeature);
+    on<EnablePaymentFeatureEvent>(_enablePaymentFeature);
+    on<EnableReceiveFeatureEvent>(_enableReceiveFeature);
+    on<EnableSendFeatureEvent>(_enableSendFeature);
   }
   @override
   void onTransition(Transition<CreateOrderEvent, CreateOrderState> transition) {
@@ -48,23 +50,23 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
       FetchRequiredListEvent event, Emitter<CreateOrderState> emit) async {
     emit(FetchingRequiredListState());
     try {
-      final AgentProfileModel? _agentProfile =
+      final AgentProfileModel? agentProfile =
           await profileRepository.getAgentProfile();
-      final List<ModelClientData> _clients =
+      final List<ModelClientData> clients =
           await ClientTableQueries(appDatabaseInstance).getAllActiveClients();
-      final List<ModelItemData> _items =
+      final List<ModelItemData> items =
           await ItemTableQueries(appDatabaseInstance).getAllActiveItems();
-      if (_agentProfile == null) {
+      if (agentProfile == null) {
         emit(EmptyAgentProfile());
-      } else if (_clients.isEmpty) {
+      } else if (clients.isEmpty) {
         emit(EmptyClientListState());
-      } else if (_items.isEmpty) {
+      } else if (items.isEmpty) {
         emit(EmptyItemListState());
       } else {
         emit(CreateOrderState(
-          clientList: _clients,
-          itemList: _items,
-          createdBy: GenericField.dirty(_agentProfile.name),
+          clientList: clients,
+          itemList: items,
+          createdBy: GenericField.dirty(agentProfile.name),
           orderStatus: StatusTypeField.dirty(orderStatus.first),
         ));
       }
@@ -75,67 +77,62 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
 
   void _orderFieldsChange(
       OrderFieldsChangeEvent event, Emitter<CreateOrderState> emit) {
-    final _clientId = ForeignKeyField.dirty(event.clientId);
-    final _itemId = ForeignKeyField.dirty(event.itemId);
-    final _totalQuantity = DoubleFieldNotZero.dirty(event.totalQuantity);
-    final _perUnitCost = DoubleField.dirty(event.perUnitCost);
-    final _totalCost = DoubleField.dirty(event.totalCost);
-    final _orderType = StatusTypeField.dirty(event.orderType);
-    final _orderStatus = StatusTypeField.dirty(event.orderStatus);
-    final _paymentStatus = event.paymentStatus != null
+    final clientId = ForeignKeyField.dirty(event.clientId);
+    final itemId = ForeignKeyField.dirty(event.itemId);
+    final totalQuantity = DoubleFieldNotZero.dirty(event.totalQuantity);
+    final perUnitCost = DoubleField.dirty(event.perUnitCost);
+    final totalCost = DoubleField.dirty(event.totalCost);
+    final orderStatus = StatusTypeField.dirty(event.orderStatus);
+    final paymentStatus = event.paymentStatus != null
         ? StatusTypeField.dirty(event.paymentStatus!)
         : null;
-    final _createdBy = GenericField.dirty(event.createdBy);
-    final _expectedDeliveryDate = event.expectedDeliveryDate;
+    final createdBy = GenericField.dirty(event.createdBy);
+    final expectedDeliveryDate = event.expectedDeliveryDate;
     emit(state.copyWith(
       clientList: state.clientList,
       itemList: state.itemList,
       clientId:
-          _clientId.valid ? _clientId : ForeignKeyField.pure(event.clientId),
-      itemId: _itemId.valid ? _itemId : ForeignKeyField.pure(event.itemId),
-      totalQuantity: _totalQuantity.valid
-          ? _totalQuantity
+          clientId.valid ? clientId : ForeignKeyField.pure(event.clientId),
+      itemId: itemId.valid ? itemId : ForeignKeyField.pure(event.itemId),
+      totalQuantity: totalQuantity.valid
+          ? totalQuantity
           : DoubleFieldNotZero.pure(event.totalQuantity),
-      perUnitCost: _perUnitCost.valid
-          ? _perUnitCost
+      perUnitCost:
+          perUnitCost.valid ? perUnitCost
           : DoubleField.pure(event.perUnitCost),
       totalCost:
-          _totalCost.valid ? _totalCost : DoubleField.pure(event.totalCost),
-      orderType:
-          _orderType.valid ? _orderType : StatusTypeField.pure(event.orderType),
-      orderStatus: _orderStatus.valid
-          ? _orderStatus
+          totalCost.valid ? totalCost : DoubleField.pure(event.totalCost),
+      orderStatus: orderStatus.valid
+          ? orderStatus
           : StatusTypeField.pure(event.orderStatus),
       paymentStatus:
-          _paymentStatus?.valid ?? true ? _paymentStatus : _paymentStatus,
+          paymentStatus?.valid ?? true ? paymentStatus : paymentStatus,
       createdBy:
-          _createdBy.valid ? _createdBy : GenericField.pure(event.createdBy),
-      expectedDeliveryDate: _expectedDeliveryDate,
+          createdBy.valid ? createdBy : GenericField.pure(event.createdBy),
+      expectedDeliveryDate: expectedDeliveryDate,
       status: Formz.validate([
-        _clientId,
-        _itemId,
-        _totalQuantity,
-        _perUnitCost,
-        _totalCost,
-        _orderType,
-        _orderStatus,
-        _createdBy,
+        clientId,
+        itemId,
+        totalQuantity,
+        perUnitCost,
+        totalCost,
+        orderStatus,
+        createdBy,
       ]),
     ));
   }
 
   void _clientIdFieldUnfocused(
       ClientIdFieldUnfocusedEvent event, Emitter<CreateOrderState> emit) {
-    final _clientId = ForeignKeyField.dirty(state.clientId.value);
+    final clientId = ForeignKeyField.dirty(state.clientId.value);
     emit(state.copyWith(
-      clientId: _clientId,
+      clientId: clientId,
       status: Formz.validate([
-        _clientId,
+        clientId,
         state.itemId,
         state.totalQuantity,
         state.perUnitCost,
         state.totalCost,
-        state.orderType,
         state.orderStatus,
         state.createdBy,
       ]),
@@ -144,16 +141,15 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
 
   void _itemIdFieldUnfocused(
       ItemIdFieldUnfocusedEvent event, Emitter<CreateOrderState> emit) {
-    final _itemId = ForeignKeyField.dirty(state.itemId.value);
+    final itemId = ForeignKeyField.dirty(state.itemId.value);
     emit(state.copyWith(
-      itemId: _itemId,
+      itemId: itemId,
       status: Formz.validate([
         state.clientId,
-        _itemId,
+        itemId,
         state.totalQuantity,
         state.perUnitCost,
         state.totalCost,
-        state.orderType,
         state.orderStatus,
         state.createdBy,
       ]),
@@ -162,16 +158,15 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
 
   void _totalQuantityFieldUnfocused(
       TotalQuantityFieldUnfocusedEvent event, Emitter<CreateOrderState> emit) {
-    final _totalQuantity = DoubleFieldNotZero.dirty(state.totalQuantity.value);
+    final totalQuantity = DoubleFieldNotZero.dirty(state.totalQuantity.value);
     emit(state.copyWith(
-      totalQuantity: _totalQuantity,
+      totalQuantity: totalQuantity,
       status: Formz.validate([
         state.clientId,
         state.itemId,
-        _totalQuantity,
+        totalQuantity,
         state.perUnitCost,
         state.totalCost,
-        state.orderType,
         state.orderStatus,
         state.createdBy,
       ]),
@@ -180,67 +175,63 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
 
   void _submitOrder(
       OrderFormSubmitEvent event, Emitter<CreateOrderState> emit) async {
-    final _clientId = ForeignKeyField.dirty(state.clientId.value);
-    final _itemId = ForeignKeyField.dirty(state.itemId.value);
-    final _totalQuantity = DoubleFieldNotZero.dirty(state.totalQuantity.value);
-    final _perUnitCost = DoubleField.dirty(state.perUnitCost.value);
-    final _totalCost = DoubleField.dirty(state.totalCost.value);
-    final _orderType = StatusTypeField.dirty(state.orderType.value);
-    final _orderStatus = StatusTypeField.dirty(state.orderStatus.value);
-    final _paymentStatus = state.paymentStatus != null
+    final clientId = ForeignKeyField.dirty(state.clientId.value);
+    final itemId = ForeignKeyField.dirty(state.itemId.value);
+    final totalQuantity = DoubleFieldNotZero.dirty(state.totalQuantity.value);
+    final perUnitCost = DoubleField.dirty(state.perUnitCost.value);
+    final totalCost = DoubleField.dirty(state.totalCost.value);
+    final orderStatus = StatusTypeField.dirty(state.orderStatus.value);
+    final paymentStatus = state.paymentStatus != null
         ? StatusTypeField.dirty(state.paymentStatus!.value)
         : state.paymentStatus;
-    final _createdBy = GenericField.dirty(state.createdBy.value);
-    final _expectedDeliveryDate = state.expectedDeliveryDate;
+    final createdBy = GenericField.dirty(state.createdBy.value);
+    final expectedDeliveryDate = state.expectedDeliveryDate;
 
     emit(
       state.copyWith(
-        clientId: _clientId,
-        itemId: _itemId,
-        totalQuantity: _totalQuantity,
-        perUnitCost: _perUnitCost,
-        totalCost: _totalCost,
-        orderType: _orderType,
-        orderStatus: _orderStatus,
-        paymentStatus: _paymentStatus,
-        createdBy: _createdBy,
-        expectedDeliveryDate: _expectedDeliveryDate,
+        clientId: clientId,
+        itemId: itemId,
+        totalQuantity: totalQuantity,
+        perUnitCost: perUnitCost,
+        totalCost: totalCost,
+        orderStatus: orderStatus,
+        paymentStatus: paymentStatus,
+        createdBy: createdBy,
+        expectedDeliveryDate: expectedDeliveryDate,
         status: Formz.validate([
-          _clientId,
-          _itemId,
-          _totalQuantity,
-          _perUnitCost,
-          _totalCost,
-          _orderType,
-          _orderStatus,
-          _createdBy,
+          clientId,
+          itemId,
+          totalQuantity,
+          perUnitCost,
+          totalCost,
+          orderStatus,
+          createdBy,
         ]),
       ),
     );
 
     if (state.status.isValidated) {
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
-      final ModelOrderCompanion orderDetails = ModelOrderCompanion(
-        clientId: Value(_clientId.value),
-        itemId: Value(_itemId.value),
-        totalQuantity: Value(_totalQuantity.value),
-        perUnitCost: Value(_perUnitCost.value),
-        totalCost: Value(_totalCost.value),
-        orderType: Value(_orderType.value),
-        orderStatus: Value(_orderStatus.value),
-        paymentStatus: Value(_paymentStatus?.value),
-        createdBy: Value(_createdBy.value),
-        expectedDeliveryDate: Value(_expectedDeliveryDate),
+      final ModelDeliveryOrderCompanion orderDetails = ModelDeliveryOrderCompanion(
+        clientId: Value(clientId.value),
+        itemId: Value(itemId.value),
+        totalQuantity: Value(totalQuantity.value),
+        perUnitCost: Value(perUnitCost.value),
+        totalCost: Value(totalCost.value),
+        orderStatus: Value(orderStatus.value),
+        paymentStatus: Value(paymentStatus?.value),
+        createdBy: Value(createdBy.value),
+        expectedDeliveryDate: Value(expectedDeliveryDate),
       );
       try {
-        int _id = await ItemTableQueries(appDatabaseInstance)
-            .updateAvailableQuantity(_itemId.value, _totalQuantity.value);
-        if (_id < 1) {
+        final int id = await ItemTableQueries(appDatabaseInstance)
+            .updateAvailableQuantity(itemId.value, totalQuantity.value);
+        if (id < 1) {
           emit(state.copyWith(
-            status: FormzStatus.submissionCanceled,
+            status: FormzStatus.submissionFailure,
           ));
         } else {
-          final orderId = await OrderTableQueries(appDatabaseInstance).newOrder(
+          final orderId = await DeliveryOrderTableQueries(appDatabaseInstance).newOrder(
             orderDetails,
           );
           if (orderId > 0) {
@@ -257,21 +248,39 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
 
   void _enableDeliveryFeature(
       EnableDeliveryFeatureEvent event, Emitter<CreateOrderState> emit) async {
-    final _feature = await menuRepository.getActiveFeatures();
+    final feature = await menuRepository.getActiveFeatures();
 
-    if (_feature != null && _feature.disableDelivery) {
+    if (feature != null && feature.disableDelivery) {
       FeatureMonitor(menuRepository: menuRepository)
           .enableFeature("disableDelivery");
     }
   }
 
-  void _enableReturnFeature(
-      EnableReturnFeatureEvent event, Emitter<CreateOrderState> emit) async {
-    final _feature = await menuRepository.getActiveFeatures();
+  void _enablePaymentFeature(
+      EnablePaymentFeatureEvent event, Emitter<CreateOrderState> emit) async {
+    final feature = await menuRepository.getActiveFeatures();
 
-    if (_feature != null && _feature.disableReturn) {
+    if (feature != null && feature.disablePayment) {
       FeatureMonitor(menuRepository: menuRepository)
-          .enableFeature("disableReturn");
+          .enableFeature("disablePayment");
+    }
+  }
+
+  void _enableReceiveFeature(
+      EnableReceiveFeatureEvent event, Emitter<CreateOrderState> emit) async {
+    final feature = await menuRepository.getActiveFeatures();
+
+    if (feature != null && feature.disableReceive) {
+      FeatureMonitor(menuRepository: menuRepository)
+          .enableFeature("disableReceive");
+    }
+  }
+
+  void _enableSendFeature(EnableSendFeatureEvent event, Emitter<CreateOrderState> emit) async{
+    final feature = await menuRepository.getActiveFeatures();
+    if (feature != null && feature.disableSend) {
+      FeatureMonitor(menuRepository: menuRepository)
+          .enableFeature("disableSend");
     }
   }
 }

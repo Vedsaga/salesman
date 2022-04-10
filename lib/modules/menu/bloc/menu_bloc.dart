@@ -25,10 +25,10 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
   void _onFetchCompanyProfile(
       FetchCompanyProfileEvent event, Emitter<MenuState> emit) async {
     emit(MenuCompanyProfileFetchingState());
-    final CompanyProfileModel? _companyProfile =
+    final CompanyProfileModel? companyProfile =
         await profileRepository.getCompanyProfile();
 
-    if (_companyProfile != null) {
+    if (companyProfile != null) {
       emit(FetchActiveFeaturesState());
     } else {
       emit(CompanyProfileEmptyState());
@@ -38,10 +38,10 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
   void _onFetchedActiveFeatures(
       FetchActiveFeaturesEvent event, Emitter<MenuState> emit) async {
     emit(FetchingActiveFeaturesState());
-    final ActiveFeaturesModel? _activeFeatures =
+    final ActiveFeaturesModel? activeFeatures =
         await menuRepository.getActiveFeatures();
 
-    if (_activeFeatures != null) {
+    if (activeFeatures != null) {
       emit(FetchedActiveFeaturesState());
     } else {
       emit(EmptyActiveFeaturesState());
@@ -51,9 +51,9 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
   void _onAddFeatures(
       AddActiveFeaturesEvent event, Emitter<MenuState> emit) async {
     emit(FetchingActiveFeaturesState());
-    final bool? _addActiveFeatures =
+    final bool? addActiveFeatures =
         await menuRepository.addActiveFeatures(event.activeFeatures);
-    if (_addActiveFeatures == true) {
+    if (addActiveFeatures == true) {
       emit(FetchActiveFeaturesState());
     } else {
       emit(ErrorAddingActiveFeaturesState());
@@ -62,15 +62,15 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
 
   void _onFetchAllDetails(
       FetchAllDetailsEvent event, Emitter<MenuState> emit) async {
-    final CompanyProfileModel? _companyProfile =
+    final CompanyProfileModel? companyProfile =
         await profileRepository.getCompanyProfile();
-    final ActiveFeaturesModel? _activeFeatures =
+    final ActiveFeaturesModel? activeFeatures =
         await menuRepository.getActiveFeatures();
 
-    if (_companyProfile != null && _activeFeatures != null) {
+    if (companyProfile != null && activeFeatures != null) {
       emit(FetchedAllDetailsState(
-        companyProfile: _companyProfile,
-        activeFeatures: _activeFeatures,
+        companyProfile: companyProfile,
+        activeFeatures: activeFeatures,
       ));
     } else {
       emit(ErrorAllDetailsState());

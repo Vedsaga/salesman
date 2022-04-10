@@ -52,4 +52,11 @@ class ClientTableQueries extends DatabaseAccessor<AppDatabase>
       ),
     );
   }
+
+  // get client details by id
+  Future<ModelClientData> getClientDetails(int clientId) async {
+    return await (select(modelClient)
+          ..where((table) => table.clientId.equals(clientId)))
+        .getSingle();
+  }
 }

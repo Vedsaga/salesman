@@ -12,6 +12,7 @@ InputDecoration inputDecoration(
   required String labelText,
   required String hintText,
   bool showCurrency = false,
+  Color? currencyColor,
   Widget? suffixIconWidget,
   bool usernameSuffix = false,
   String? errorText,
@@ -30,7 +31,7 @@ InputDecoration inputDecoration(
             padding: const EdgeInsets.symmetric(vertical: 13),
             child: SvgPicture.asset(
               "assets/icons/svgs/inr.svg",
-              color: AppColors.secondaryDark,
+              color: currencyColor ?? AppColors.secondaryDark,
             ),
           )
         : null,

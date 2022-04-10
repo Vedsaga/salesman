@@ -55,66 +55,74 @@ class _ViewClientDetailsState extends State<ViewClientDetails> {
         child: BlocBuilder<ViewClientDetailsBloc, ViewClientDetailsState>(
           builder: (context, state) {
             if (state is ViewingClientDetailsState) {
-              return Flex(
-                direction: Axis.vertical,
-                children: [
-                  TextFormField(
-                    initialValue: state.clientDetails.clientName,
-                    keyboardType: TextInputType.text,
-                    readOnly: true,
-                    textAlignVertical: TextAlignVertical.center,
-                    style: Theme.of(context).textTheme.bodyText1,
-                    decoration: inputDecoration(context,
-                        labelText: "client name",
-                        hintText: "client name",
-                        inFocus: false),
-                  ),
-                  SizedBox(height: designValues(context).cornerRadius34),
-                  TextFormField(
-                    initialValue: state.clientDetails.clientPhone,
-                    keyboardType: TextInputType.text,
-                    readOnly: true,
-                    textAlignVertical: TextAlignVertical.center,
-                    style: Theme.of(context).textTheme.bodyText1,
-                    decoration: inputDecoration(
-                      context,
-                      labelText: "client phone no.",
-                      hintText: "client phone no.",
-                      inFocus: false,
+              return Container(
+                margin: EdgeInsets.only(
+                  left: designValues(context).horizontalPadding,
+                  right: designValues(context).horizontalPadding,
+                  bottom: designValues(context).verticalPadding,
+                  top: 8,
+                ),
+                child: Flex(
+                  direction: Axis.vertical,
+                  children: [
+                    TextFormField(
+                      initialValue: state.clientDetails.clientName,
+                      keyboardType: TextInputType.text,
+                      readOnly: true,
+                      textAlignVertical: TextAlignVertical.center,
+                      style: Theme.of(context).textTheme.bodyText1,
+                      decoration: inputDecoration(context,
+                          labelText: "client name",
+                          hintText: "client name",
+                          inFocus: false),
                     ),
-                  ),
-                  SizedBox(height: designValues(context).cornerRadius34),
-                  DoubleInfoBox(
-                    firstBoxWidget: SingleInfoBox(
-                      info: "trade volume",
-                      data: state.clientDetails.totalTrade.toString(),
-                      dataPrefixWidget: SvgPicture.asset(
-                        "assets/icons/svgs/inr.svg",
-                        height: 13,
-                        width: 13,
+                    SizedBox(height: designValues(context).cornerRadius34),
+                    TextFormField(
+                      initialValue: state.clientDetails.clientPhone,
+                      keyboardType: TextInputType.text,
+                      readOnly: true,
+                      textAlignVertical: TextAlignVertical.center,
+                      style: Theme.of(context).textTheme.bodyText1,
+                      decoration: inputDecoration(
+                        context,
+                        labelText: "client phone no.",
+                        hintText: "client phone no.",
+                        inFocus: false,
                       ),
                     ),
-                    secondBoxWidget: SingleInfoBox(
-                      info: "due amount",
-                      data: state.clientDetails.dueAmount.toString(),
-                      dataColor: state.clientDetails.dueAmount > 0
-                          ? AppColors.red
-                          : state.clientDetails.dueAmount > 0
-                              ? AppColors.green
-                              : AppColors.grey,
-                      dataPrefixWidget: SvgPicture.asset(
-                        "assets/icons/svgs/inr.svg",
-                        height: 13,
-                        width: 13,
-                        color: state.clientDetails.dueAmount > 0
+                    SizedBox(height: designValues(context).cornerRadius34),
+                    DoubleInfoBox(
+                      firstBoxWidget: SingleInfoBox(
+                        info: "trade volume",
+                        data: state.clientDetails.totalTrade.toString(),
+                        dataPrefixWidget: SvgPicture.asset(
+                          "assets/icons/svgs/inr.svg",
+                          height: 13,
+                          width: 13,
+                        ),
+                      ),
+                      secondBoxWidget: SingleInfoBox(
+                        info: "due amount",
+                        data: state.clientDetails.dueAmount.toString(),
+                        dataColor: state.clientDetails.dueAmount > 0
                             ? AppColors.red
                             : state.clientDetails.dueAmount > 0
                                 ? AppColors.green
                                 : AppColors.grey,
+                        dataPrefixWidget: SvgPicture.asset(
+                          "assets/icons/svgs/inr.svg",
+                          height: 13,
+                          width: 13,
+                          color: state.clientDetails.dueAmount > 0
+                              ? AppColors.red
+                              : state.clientDetails.dueAmount > 0
+                                  ? AppColors.green
+                                  : AppColors.grey,
+                        ),
                       ),
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               );
             }
             return const CircularProgressIndicator();
@@ -137,10 +145,11 @@ class _ViewClientDetailsState extends State<ViewClientDetails> {
                   message: 'are you sure to remove this client?',
                 ).build,
               );
-              if (confirmation == "remove") {
+              if (mounted && confirmation == 'remove') {
                 context
                     .read<ViewClientDetailsBloc>()
                     .add(DeactivateClientEvent());
+                
               }
             },
           ),

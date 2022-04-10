@@ -186,9 +186,9 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
 
   void _onEnableTradeFeature(
       EnableTradeFeatureEvent event, Emitter<AddItemState> emit) async {
-    final _feature = await menuRepository.getActiveFeatures();
+    final feature = await menuRepository.getActiveFeatures();
 
-    if (_feature != null && _feature.disableTrade) {
+    if (feature != null && feature.disableTrade) {
       FeatureMonitor(menuRepository: menuRepository)
           .enableFeature("disableTrade");
     }
@@ -196,9 +196,9 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
 
   void _onEnableOrderFeature(
       EnableOrderFeatureEvent event, Emitter<AddItemState> emit) async {
-    final _feature = await menuRepository.getActiveFeatures();
+    final feature = await menuRepository.getActiveFeatures();
 
-    if (_feature != null && _feature.disableOrder) {
+    if (feature != null && feature.disableOrder) {
       FeatureMonitor(menuRepository: menuRepository)
           .enableFeature("disableOrder");
     }

@@ -3,14 +3,15 @@ import 'package:drift/drift.dart';
 import 'model_client.dart';
 import 'model_item.dart';
 
-class ModelOrder extends Table {
-  IntColumn get orderId => integer().autoIncrement()();
+class ModelDeliveryOrder extends Table {
+  IntColumn get deliveryOrderId => integer().autoIncrement()();
   IntColumn get clientId => integer().references(ModelClient, #clientId)();
   IntColumn get itemId => integer().references(ModelItem, #itemId)();
   RealColumn get perUnitCost => real()();
   RealColumn get totalQuantity => real()();
   RealColumn get totalCost => real()();
-  TextColumn get orderType => text().withLength(min: 3, max: 20)();
+  RealColumn get totalReceivedAmount => real().withDefault(const Constant(0.0))();
+  RealColumn get totalSendAmount => real().withDefault(const Constant(0.0))();
   TextColumn get paymentStatus => text().nullable()();
   TextColumn get orderStatus => text().withLength(min: 3, max: 20)();
   TextColumn get createdBy => text().withLength(min: 3, max: 20)();

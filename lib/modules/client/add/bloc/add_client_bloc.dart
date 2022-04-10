@@ -76,13 +76,13 @@ class AddClientBloc extends Bloc<AddClientEvent, AddClientState> {
     );
     if (state.status.isValidated) {
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
-      final _client = ModelClientCompanion(
+      final client = ModelClientCompanion(
         clientName: Value(state.clientName.value),
         clientPhone: Value(state.clientPhone.value),
       );
       try {
         final clientId = await ClientTableQueries(appDatabaseInstance)
-            .insertClient(client: _client);
+            .insertClient(client: client);
         
         emit(ClientAddedSuccessfullyState(clientId: clientId));
       }catch (e) {
@@ -93,8 +93,8 @@ class AddClientBloc extends Bloc<AddClientEvent, AddClientState> {
 
   void _onEnableItemFeature(
       EnableItemFeatureEvent event, Emitter<AddClientState> emit) async {
-    final _feature = await menuRepository.getActiveFeatures();
-    if (_feature != null && _feature.disableItem) {
+    final feature = await menuRepository.getActiveFeatures();
+    if (feature != null && feature.disableItem) {
       FeatureMonitor(menuRepository: menuRepository)
           .enableFeature('disableItem');
     }

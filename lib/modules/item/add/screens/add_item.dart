@@ -96,8 +96,8 @@ class _AddItemState extends State<AddItem> {
   }
 
   String? _itemNameErrorText() {
-    final _itemNameError = context.read<AddItemBloc>().state.itemName.error;
-    switch (_itemNameError) {
+    final itemNameError = context.read<AddItemBloc>().state.itemName.error;
+    switch (itemNameError) {
       case GenericFieldValidationError.cannotBeEmpty:
         return 'Item name is required';
       case GenericFieldValidationError.tooShort:
@@ -112,9 +112,9 @@ class _AddItemState extends State<AddItem> {
   }
 
   String? _itemSellingPriceErrorText() {
-    final _itemSellingPriceError =
+    final itemSellingPriceError =
         context.read<AddItemBloc>().state.sellingPrice.error;
-    switch (_itemSellingPriceError) {
+    switch (itemSellingPriceError) {
       case DoubleFieldValidationError.cannotBeEmpty:
         return 'Selling price is required';
       case DoubleFieldValidationError.cannotBeNegative:
@@ -125,9 +125,9 @@ class _AddItemState extends State<AddItem> {
   }
 
   String? _itemBuyingPriceErrorText() {
-    final _itemBuyingPriceError =
+    final itemBuyingPriceError =
         context.read<AddItemBloc>().state.buyingPrice.error;
-    switch (_itemBuyingPriceError) {
+    switch (itemBuyingPriceError) {
       case DoubleFieldValidationError.cannotBeEmpty:
         return 'Buying price is required';
       case DoubleFieldValidationError.cannotBeNegative:
@@ -138,9 +138,9 @@ class _AddItemState extends State<AddItem> {
   }
 
   String? _itemAvailableQuantityErrorText() {
-    final _itemAvailableQuantityError =
+    final itemAvailableQuantityError =
         context.read<AddItemBloc>().state.availableQuantity.error;
-    switch (_itemAvailableQuantityError) {
+    switch (itemAvailableQuantityError) {
       case DoubleFieldValidationError.cannotBeEmpty:
         return 'Available quantity is required';
       case DoubleFieldValidationError.cannotBeNegative:
@@ -217,222 +217,233 @@ class _AddItemState extends State<AddItem> {
           },
         ),
         body: BlocBuilder<AddItemBloc, AddItemState>(builder: (context, state) {
-          return Column(
-            children: <Widget>[
-              TextFormField(
-                initialValue: state.itemName.value,
-                focusNode: _itemNameFocusNode,
-                decoration: inputDecoration(
-                  context,
-                  inFocus: _itemNameFocusNode.hasFocus,
-                  labelText: "Item name",
-                  hintText: "Item Name",
-                  errorText:
-                      _itemNameFocusNode.hasFocus ? _itemNameErrorText() : null,
-                ),
-                keyboardType: TextInputType.text,
-                onChanged: (value) {
-                  BlocProvider.of<AddItemBloc>(context).add(ItemFieldsChange(
-                    itemName: value,
-                    unit: state.unit.value,
-                    sellingPrice: state.sellingPrice.value,
-                    buyingPrice: state.buyingPrice.value,
-                    availableQuantity: state.availableQuantity.value,
-                  ));
-                },
-                readOnly: false,
-                textAlignVertical: TextAlignVertical.center,
-                textInputAction: TextInputAction.next,
-                style: Theme.of(context).textTheme.bodyText1,
-                onFieldSubmitted: (term) {
-                  _itemNameFocusNode.unfocus();
-                  FocusScope.of(context)
-                      .requestFocus(_itemSellingPriceFocusNode);
-                },
-              ),
-              SizedBox(height: designValues(context).cornerRadius34),
-              TextFormField(
-                initialValue: state.sellingPrice.value.toString(),
-                focusNode: _itemSellingPriceFocusNode,
-                decoration: inputDecoration(
-                  context,
-                  showCurrency: true,
-                  inFocus: _itemSellingPriceFocusNode.hasFocus,
-                  labelText: "Selling price per unit",
-                  hintText: "Selling price per unit",
-                  errorText: _itemSellingPriceFocusNode.hasFocus
-                      ? _itemSellingPriceErrorText()
-                      : null,
-                ),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(
-                    RegExp(r'^[0-9]+(\.[0-9]*)?$'),
+          return Container(
+            margin: EdgeInsets.only(
+              left: designValues(context).horizontalPadding,
+              right: designValues(context).horizontalPadding,
+              bottom: designValues(context).verticalPadding,
+              top: 8,
+            ),
+            child: Column(
+              children: <Widget>[
+                TextFormField(
+                  initialValue: state.itemName.value,
+                  focusNode: _itemNameFocusNode,
+                                      autofocus: true,
+                  decoration: inputDecoration(
+                    context,
+                    inFocus: _itemNameFocusNode.hasFocus,
+                    labelText: "Item name",
+                    hintText: "Item Name",
+                    errorText: _itemNameFocusNode.hasFocus
+                        ? _itemNameErrorText()
+                        : null,
                   ),
-                ],
-                keyboardType: TextInputType.number,
-                onChanged: (value) {
-                  BlocProvider.of<AddItemBloc>(context).add(ItemFieldsChange(
-                    itemName: state.itemName.value,
-                    unit: state.unit.value,
-                    sellingPrice: double.tryParse(value) ?? 0.0,
-                    buyingPrice: state.buyingPrice.value,
-                    availableQuantity: state.availableQuantity.value,
-                  ));
-                },
-                readOnly: false,
-                textAlignVertical: TextAlignVertical.center,
-                textInputAction: TextInputAction.next,
-                style: Theme.of(context).textTheme.bodyText1,
-                onFieldSubmitted: (term) {
-                  _itemSellingPriceFocusNode.unfocus();
-                  FocusScope.of(context)
-                      .requestFocus(_itemBuyingPriceFocusNode);
-                },
-              ),
-              SizedBox(height: designValues(context).cornerRadius34),
-              TextFormField(
-                initialValue: state.buyingPrice.value.toString(),
-                focusNode: _itemBuyingPriceFocusNode,
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(
-                      RegExp(r'^[0-9]+(\.[0-9]*)?$')),
-                ],
-                decoration: inputDecoration(
-                  context,
-                  showCurrency: true,
-                  inFocus: _itemBuyingPriceFocusNode.hasFocus,
-                  labelText: "Buying price per unit",
-                  hintText: "Buying price per unit",
-                  errorText: _itemBuyingPriceFocusNode.hasFocus
-                      ? _itemBuyingPriceErrorText()
-                      : null,
+                  keyboardType: TextInputType.text,
+                  onChanged: (value) {
+                    BlocProvider.of<AddItemBloc>(context).add(ItemFieldsChange(
+                      itemName: value,
+                      unit: state.unit.value,
+                      sellingPrice: state.sellingPrice.value,
+                      buyingPrice: state.buyingPrice.value,
+                      availableQuantity: state.availableQuantity.value,
+                    ));
+                  },
+                  readOnly: false,
+                  textAlignVertical: TextAlignVertical.center,
+                  textInputAction: TextInputAction.next,
+                  style: Theme.of(context).textTheme.bodyText1,
+                  onFieldSubmitted: (term) {
+                    _itemNameFocusNode.unfocus();
+                    FocusScope.of(context)
+                        .requestFocus(_itemSellingPriceFocusNode);
+                  },
                 ),
-                keyboardType: TextInputType.number,
-                onChanged: (value) {
-                  BlocProvider.of<AddItemBloc>(context).add(ItemFieldsChange(
-                    itemName: state.itemName.value,
-                    unit: state.unit.value,
-                    sellingPrice: state.sellingPrice.value,
-                    buyingPrice: double.tryParse(value) ?? 0.0,
-                    availableQuantity: state.availableQuantity.value,
-                  ));
-                },
-                readOnly: false,
-                textAlignVertical: TextAlignVertical.center,
-                textInputAction: TextInputAction.next,
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-              SizedBox(height: designValues(context).cornerRadius34),
-              TextFormField(
-                initialValue: state.availableQuantity.value.toString(),
-                focusNode: _itemAvailableQuantityFocusNode,
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(
-                    RegExp(
-                      r'^[0-9]+(\.[0-9]*)?$',
-                    ),
+                SizedBox(height: designValues(context).cornerRadius34),
+                TextFormField(
+                  initialValue: state.sellingPrice.value.toString(),
+                  focusNode: _itemSellingPriceFocusNode,
+                  decoration: inputDecoration(
+                    context,
+                    showCurrency: true,
+                    inFocus: _itemSellingPriceFocusNode.hasFocus,
+                    labelText: "Selling price",
+                    hintText: "per unit cost",
+                    errorText: _itemSellingPriceFocusNode.hasFocus
+                        ? _itemSellingPriceErrorText()
+                        : null,
                   ),
-                ],
-                decoration: inputDecoration(
-                  context,
-                  inFocus: _itemAvailableQuantityFocusNode.hasFocus,
-                  suffixIconWidget: GestureDetector(
-                    onTap: () {
-                      if (!_unitFocusNode.hasFocus) {
-                        FocusScope.of(context).requestFocus(_unitFocusNode);
-                      }
-                      if (_unitFocusNode.hasFocus) {
-                        _unitFocusNode.unfocus();
-                      }
-                    },
-                    child: ShowUnit(
-                      showUnit: _unitFocusNode.hasFocus,
-                      value: _unitController.text,
-                      showIcon: true,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(
+                      RegExp(r'^[0-9]+(\.[0-9]*)?$'),
                     ),
-                  ),
-                  labelText: "Available quantity",
-                  hintText: "Available quantity",
-                  errorText: _itemAvailableQuantityFocusNode.hasFocus
-                      ? _itemAvailableQuantityErrorText()
-                      : null,
+                  ],
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) {
+                    BlocProvider.of<AddItemBloc>(context).add(ItemFieldsChange(
+                      itemName: state.itemName.value,
+                      unit: state.unit.value,
+                      sellingPrice: double.tryParse(value) ?? 0.0,
+                      buyingPrice: state.buyingPrice.value,
+                      availableQuantity: state.availableQuantity.value,
+                    ));
+                  },
+                  readOnly: false,
+                  textAlignVertical: TextAlignVertical.center,
+                  textInputAction: TextInputAction.next,
+                  style: Theme.of(context).textTheme.bodyText1,
+                  onFieldSubmitted: (term) {
+                    _itemSellingPriceFocusNode.unfocus();
+                    FocusScope.of(context)
+                        .requestFocus(_itemBuyingPriceFocusNode);
+                  },
                 ),
-                keyboardType: TextInputType.number,
-                onChanged: (value) {
-                  BlocProvider.of<AddItemBloc>(context).add(ItemFieldsChange(
-                    itemName: state.itemName.value,
-                    unit: state.unit.value,
-                    sellingPrice: state.sellingPrice.value,
-                    buyingPrice: state.buyingPrice.value,
-                    availableQuantity: double.tryParse(value) ?? 0.0,
-                  ));
-                },
-                readOnly: false,
-                textAlignVertical: TextAlignVertical.center,
-                textInputAction: TextInputAction.done,
-                style: Theme.of(context).textTheme.bodyText1,
-                onFieldSubmitted: (term) {
-                  _itemAvailableQuantityFocusNode.unfocus();
-                },
-              ),
-              SizedBox(height: designValues(context).cornerRadius13),
-              if (_unitFocusNode.hasFocus)
-                Padding(
-                  padding: EdgeInsets.only(
-                      left: designValues(context).unitDropDownLeftPadding),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                          designValues(context).cornerRadius13),
-                      color: AppColors.light,
-                      boxShadow: const [
-                        BoxShadow(
-                          color: AppColors.shadowColor,
-                          blurRadius: 34,
-                          offset: Offset(-5, 5),
-                        ),
-                      ],
+                SizedBox(height: designValues(context).cornerRadius34),
+                TextFormField(
+                  initialValue: state.buyingPrice.value.toString(),
+                  focusNode: _itemBuyingPriceFocusNode,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'^[0-9]+(\.[0-9]*)?$')),
+                  ],
+                  decoration: inputDecoration(
+                    context,
+                    showCurrency: true,
+                    inFocus: _itemBuyingPriceFocusNode.hasFocus,
+                    labelText: "Buying price per unit",
+                    hintText: "Buying price per unit",
+                    errorText: _itemBuyingPriceFocusNode.hasFocus
+                        ? _itemBuyingPriceErrorText()
+                        : null,
+                  ),
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) {
+                    BlocProvider.of<AddItemBloc>(context).add(ItemFieldsChange(
+                      itemName: state.itemName.value,
+                      unit: state.unit.value,
+                      sellingPrice: state.sellingPrice.value,
+                      buyingPrice: double.tryParse(value) ?? 0.0,
+                      availableQuantity: state.availableQuantity.value,
+                    ));
+                  },
+                  readOnly: false,
+                  textAlignVertical: TextAlignVertical.center,
+                  textInputAction: TextInputAction.next,
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                SizedBox(height: designValues(context).cornerRadius34),
+                TextFormField(
+                  initialValue: state.availableQuantity.value.toString(),
+                  focusNode: _itemAvailableQuantityFocusNode,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(
+                      RegExp(
+                        r'^[0-9]+(\.[0-9]*)?$',
+                      ),
                     ),
-                    child: SingleChildScrollView(
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: _units.length,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) => TextButton(
-                          onPressed: () {
-                            _unitController.text = _units[index];
-                            BlocProvider.of<AddItemBloc>(context).add(
-                              ItemFieldsChange(
-                                itemName: state.itemName.value,
-                                unit: _unitController.text,
-                                sellingPrice: state.sellingPrice.value,
-                                buyingPrice: state.buyingPrice.value,
-                                availableQuantity:
-                                    state.availableQuantity.value,
+                  ],
+                  decoration: inputDecoration(
+                    context,
+                    inFocus: _itemAvailableQuantityFocusNode.hasFocus,
+                    suffixIconWidget: GestureDetector(
+                      onTap: () {
+                        if (!_unitFocusNode.hasFocus) {
+                          FocusScope.of(context).requestFocus(_unitFocusNode);
+                        }
+                        if (_unitFocusNode.hasFocus) {
+                          _unitFocusNode.unfocus();
+                        }
+                      },
+                      child: ShowUnit(
+                        showUnit: _unitFocusNode.hasFocus,
+                        value: _unitController.text,
+                        showIcon: true,
+                      ),
+                    ),
+                    labelText: "Available quantity",
+                    hintText: "Available quantity",
+                    errorText: _itemAvailableQuantityFocusNode.hasFocus
+                        ? _itemAvailableQuantityErrorText()
+                        : null,
+                  ),
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) {
+                    BlocProvider.of<AddItemBloc>(context).add(ItemFieldsChange(
+                      itemName: state.itemName.value,
+                      unit: state.unit.value,
+                      sellingPrice: state.sellingPrice.value,
+                      buyingPrice: state.buyingPrice.value,
+                      availableQuantity: double.tryParse(value) ?? 0.0,
+                    ));
+                  },
+                  readOnly: false,
+                  textAlignVertical: TextAlignVertical.center,
+                  textInputAction: TextInputAction.done,
+                  style: Theme.of(context).textTheme.bodyText1,
+                  onFieldSubmitted: (term) {
+                    _itemAvailableQuantityFocusNode.unfocus();
+                  },
+                ),
+                SizedBox(height: designValues(context).cornerRadius13),
+                if (_unitFocusNode.hasFocus)
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: designValues(context).unitDropDownLeftPadding),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                            designValues(context).cornerRadius13),
+                        color: AppColors.light,
+                        boxShadow: const [
+                          BoxShadow(
+                            color: AppColors.shadowColor,
+                            blurRadius: 34,
+                            offset: Offset(-5, 5),
+                          ),
+                        ],
+                      ),
+                      child: SingleChildScrollView(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: _units.length,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) => TextButton(
+                            onPressed: () {
+                              _unitController.text = _units[index];
+                              BlocProvider.of<AddItemBloc>(context).add(
+                                ItemFieldsChange(
+                                  itemName: state.itemName.value,
+                                  unit: _unitController.text,
+                                  sellingPrice: state.sellingPrice.value,
+                                  buyingPrice: state.buyingPrice.value,
+                                  availableQuantity:
+                                      state.availableQuantity.value,
+                                ),
+                              );
+                              _unitFocusNode.unfocus();
+                            },
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                  left: designValues(context).cornerRadius13,
+                                  top: designValues(context).cornerRadius13,
+                                  bottom: designValues(context).cornerRadius13,
+                                  right: designValues(context).cornerRadius13,
+                                ),
+                                child: Text(_units[index],
+                                    style: AppTheme.of(context)
+                                        .textTheme
+                                        .bodyText2),
                               ),
-                            );
-                            _unitFocusNode.unfocus();
-                          },
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                left: designValues(context).cornerRadius13,
-                                top: designValues(context).cornerRadius13,
-                                bottom: designValues(context).cornerRadius13,
-                                right: designValues(context).cornerRadius13,
-                              ),
-                              child: Text(_units[index],
-                                  style:
-                                      AppTheme.of(context).textTheme.bodyText2),
                             ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-            ],
+              ],
+            ),
           );
         }),
       ),

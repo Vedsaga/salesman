@@ -58,6 +58,8 @@ class _AddClientState extends State<AddClient> {
   void dispose() {
     _clientNameFocusNode.removeListener(_onClientNameFocusChange);
     _clientPhoneFocusNode.removeListener(_onClientPhoneFocusChange);
+    _clientNameFocusNode.dispose();
+    _clientPhoneFocusNode.dispose();
     super.dispose();
   }
 
@@ -142,62 +144,75 @@ class _AddClientState extends State<AddClient> {
         ),
         body: BlocBuilder<AddClientBloc, AddClientState>(
           builder: (context, state) {
-            return Column(
-              children: <Widget>[
-                TextFormField(
-                  initialValue: state.clientName.value,
-                  focusNode: _clientNameFocusNode,
-                  decoration: inputDecoration(
-                    context,
-                    labelText: "client name",
-                    hintText: "client name",
-                    inFocus: _clientNameFocusNode.hasFocus,
-                    errorText: _clientNameFocusNode.hasFocus
-                        ? _clientNameErrorText()
-                        : null,
+            return Container(
+              margin: EdgeInsets.only(
+                left: designValues(context).horizontalPadding,
+                right: designValues(context).horizontalPadding,
+                bottom: designValues(context).verticalPadding,
+                top: 8,
+              ),
+              child: Column(
+                children: <Widget>[
+                  TextFormField(
+                    initialValue: state.clientName.value,
+                    focusNode: _clientNameFocusNode,
+                    autofocus: true,
+                    decoration: inputDecoration(
+                      context,
+                      labelText: "client name",
+                      hintText: "client name",
+                      inFocus: _clientNameFocusNode.hasFocus,
+                      errorText: _clientNameFocusNode.hasFocus
+                          ? _clientNameErrorText()
+                          : null,
+                    ),
+                    keyboardType: TextInputType.text,
+                    onChanged: (value) {
+                      context.read<AddClientBloc>().add(
+                            ClientFieldsChange(
+                              clientName: value,
+                              clientPhone: state.clientPhone.value,
+                            ),
+                          );
+                    },
+                    readOnly: false,
+                    textAlignVertical: TextAlignVertical.center,
+                    textInputAction: TextInputAction.next,
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
-                  keyboardType: TextInputType.text,
-                  onChanged: (value) {
-                    context.read<AddClientBloc>().add(
-                          ClientFieldsChange(
-                            clientName: value,
-                            clientPhone: state.clientPhone.value,
-                          ),
-                        );
-                  },
-                  readOnly: false,
-                  textAlignVertical: TextAlignVertical.center,
-                  textInputAction: TextInputAction.next,
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-                SizedBox(height: designValues(context).cornerRadius34),
-                TextFormField(
-                  initialValue: state.clientPhone.value,
-                  focusNode: _clientPhoneFocusNode,
-                  decoration: inputDecoration(
-                    context,
-                    labelText: "client phone no",
-                    hintText: "client phone no",
-                    inFocus: _clientPhoneFocusNode.hasFocus,
-                    errorText: _clientPhoneFocusNode.hasFocus
-                        ? _clientPhoneErrorText()
-                        : null,
+                  SizedBox(height: designValues(context).cornerRadius34),
+                  TextFormField(
+                    initialValue: state.clientPhone.value,
+                    focusNode: _clientPhoneFocusNode,
+                    decoration: inputDecoration(
+                      context,
+                      labelText: "client phone no",
+                      hintText: "client phone no",
+                      inFocus: _clientPhoneFocusNode.hasFocus,
+                      errorText: _clientPhoneFocusNode.hasFocus
+                          ? _clientPhoneErrorText()
+                          : null,
+                    ),
+                    keyboardType: TextInputType.phone,
+                    onChanged: (value) {
+                      context.read<AddClientBloc>().add(
+                            ClientFieldsChange(
+                              clientName: state.clientName.value,
+                              clientPhone: value,
+                            ),
+                          );
+                    },
+                    onSaved: (value) {
+                      // make unfocus
+                      _clientPhoneFocusNode.unfocus();
+                    },
+                    readOnly: false,
+                    textAlignVertical: TextAlignVertical.center,
+                    textInputAction: TextInputAction.done,
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
-                  keyboardType: TextInputType.phone,
-                  onChanged: (value) {
-                    context.read<AddClientBloc>().add(
-                          ClientFieldsChange(
-                            clientName: state.clientName.value,
-                            clientPhone: value,
-                          ),
-                        );
-                  },
-                  readOnly: false,
-                  textAlignVertical: TextAlignVertical.center,
-                  textInputAction: TextInputAction.next,
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-              ],
+                ],
+              ),
             );
           },
         ),

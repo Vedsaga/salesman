@@ -47,3 +47,5 @@ app.*.map.json
 
 # Local Files
 *.txt
+*.todo
+todo.md

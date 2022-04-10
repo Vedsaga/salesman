@@ -136,6 +136,11 @@ class _ProfileCreationState extends State<ProfileCreation> {
     _phoneFocusNode.dispose();
     _usernameFocusNode.dispose();
     _companyNameFocusNode.dispose();
+    context.read<ProfileCreationBloc>().close();
+    _agentNameFocusNode.removeListener(_onAgentNameChanged);
+    _agentNameFocusNode.removeListener(_onPhoneChanged);
+    _usernameFocusNode.removeListener(_onUsernameChanged);
+    _companyNameFocusNode.removeListener(_onCompanyNameChanged);
     super.dispose();
   }
 
@@ -183,121 +188,129 @@ class _ProfileCreationState extends State<ProfileCreation> {
         ),
         body: BlocBuilder<ProfileCreationBloc, ProfileCreationState>(
           builder: (context, state) {
-            return Column(
-              children: <Widget>[
-                TextFormField(
-                  initialValue: state.agentName.value,
-                  focusNode: _agentNameFocusNode,
-                  decoration: inputDecoration(
-                    context,
-                    inFocus: _agentNameFocusNode.hasFocus,
-                    labelText: "Agent name",
-                    hintText: "Agent Name",
-                    errorText: _agentNameFocusNode.hasFocus
-                        ? _agentNameErrorText()
-                        : null,
+            return Container(
+              margin: EdgeInsets.only(
+                left: designValues(context).horizontalPadding,
+                right: designValues(context).horizontalPadding,
+                bottom: designValues(context).verticalPadding,
+                top: 8,
+              ),
+              child: Column(
+                children: <Widget>[
+                  TextFormField(
+                    initialValue: state.agentName.value,
+                    focusNode: _agentNameFocusNode,
+                    decoration: inputDecoration(
+                      context,
+                      inFocus: _agentNameFocusNode.hasFocus,
+                      labelText: "Agent name",
+                      hintText: "Agent Name",
+                      errorText: _agentNameFocusNode.hasFocus
+                          ? _agentNameErrorText()
+                          : null,
+                    ),
+                    keyboardType: TextInputType.text,
+                    onChanged: (value) {
+                      BlocProvider.of<ProfileCreationBloc>(context)
+                          .add(ProfileFieldsChange(
+                        agentName: value,
+                        phone: state.phone.value,
+                        username: state.username.value,
+                        companyName: state.companyName.value,
+                      ));
+                    },
+                    readOnly: false,
+                    textAlignVertical: TextAlignVertical.center,
+                    textInputAction: TextInputAction.next,
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
-                  keyboardType: TextInputType.text,
-                  onChanged: (value) {
-                    BlocProvider.of<ProfileCreationBloc>(context)
-                        .add(ProfileFieldsChange(
-                      agentName: value,
-                      phone: state.phone.value,
-                      username: state.username.value,
-                      companyName: state.companyName.value,
-                    ));
-                  },
-                  readOnly: false,
-                  textAlignVertical: TextAlignVertical.center,
-                  textInputAction: TextInputAction.next,
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-                SizedBox(height: designValues(context).cornerRadius34),
-                TextFormField(
-                  initialValue: state.phone.value,
-                  focusNode: _phoneFocusNode,
-                  onChanged: (value) {
-                    BlocProvider.of<ProfileCreationBloc>(context)
-                        .add(ProfileFieldsChange(
-                      agentName: state.agentName.value,
-                      phone: value,
-                      username: state.username.value,
-                      companyName: state.companyName.value,
-                    ));
-                  },
-                  readOnly: false,
-                  textInputAction: TextInputAction.next,
-                  style: Theme.of(context).textTheme.bodyText1,
-                  keyboardType: TextInputType.phone,
-                  decoration: inputDecoration(
-                    context,
-                    inFocus: _phoneFocusNode.hasFocus,
-                    labelText: "Phone No.",
-                    hintText: "XXXXXXXX",
-                    errorText:
-                        _phoneFocusNode.hasFocus ? _phoneErrorText() : null,
+                  SizedBox(height: designValues(context).cornerRadius34),
+                  TextFormField(
+                    initialValue: state.phone.value,
+                    focusNode: _phoneFocusNode,
+                    onChanged: (value) {
+                      BlocProvider.of<ProfileCreationBloc>(context)
+                          .add(ProfileFieldsChange(
+                        agentName: state.agentName.value,
+                        phone: value,
+                        username: state.username.value,
+                        companyName: state.companyName.value,
+                      ));
+                    },
+                    readOnly: false,
+                    textInputAction: TextInputAction.next,
+                    style: Theme.of(context).textTheme.bodyText1,
+                    keyboardType: TextInputType.phone,
+                    decoration: inputDecoration(
+                      context,
+                      inFocus: _phoneFocusNode.hasFocus,
+                      labelText: "Phone No.",
+                      hintText: "XXXXXXXX",
+                      errorText:
+                          _phoneFocusNode.hasFocus ? _phoneErrorText() : null,
+                    ),
                   ),
-                ),
-                SizedBox(height: designValues(context).cornerRadius34),
-                TextFormField(
-                  initialValue: state.username.value,
-                  focusNode: _usernameFocusNode,
-                  onChanged: (value) {
-                    BlocProvider.of<ProfileCreationBloc>(context)
-                        .add(ProfileFieldsChange(
-                      agentName: state.agentName.value,
-                      phone: state.phone.value,
-                      username: value,
-                      companyName: state.companyName.value,
-                    ));
-                  },
-                  readOnly: false,
-                  textAlignVertical: TextAlignVertical.center,
-                  textInputAction: TextInputAction.done,
-                  style: Theme.of(context).textTheme.bodyText1,
-                  decoration: inputDecoration(
-                    context,
-                    inFocus: _usernameFocusNode.hasFocus,
-                    labelText: "Username",
-                    hintText: "Username",
-                    usernameSuffix: true,
-                    errorText: _usernameFocusNode.hasFocus
-                        ? _usernameErrorText()
-                        : null,
+                  SizedBox(height: designValues(context).cornerRadius34),
+                  TextFormField(
+                    initialValue: state.username.value,
+                    focusNode: _usernameFocusNode,
+                    onChanged: (value) {
+                      BlocProvider.of<ProfileCreationBloc>(context)
+                          .add(ProfileFieldsChange(
+                        agentName: state.agentName.value,
+                        phone: state.phone.value,
+                        username: value,
+                        companyName: state.companyName.value,
+                      ));
+                    },
+                    readOnly: false,
+                    textAlignVertical: TextAlignVertical.center,
+                    textInputAction: TextInputAction.next,
+                    style: Theme.of(context).textTheme.bodyText1,
+                    decoration: inputDecoration(
+                      context,
+                      inFocus: _usernameFocusNode.hasFocus,
+                      labelText: "Username",
+                      hintText: "Username",
+                      usernameSuffix: true,
+                      errorText: _usernameFocusNode.hasFocus
+                          ? _usernameErrorText()
+                          : null,
+                    ),
                   ),
-                ),
-                SizedBox(height: designValues(context).sectionSpacing89),
-                const NormalTopAppBar(
-                  title: "Company",
-                ),
-                SizedBox(height: designValues(context).cornerRadius34),
-                TextFormField(
-                  initialValue: state.companyName.value,
-                  focusNode: _companyNameFocusNode,
-                  onChanged: (value) {
-                    BlocProvider.of<ProfileCreationBloc>(context)
-                        .add(ProfileFieldsChange(
-                      agentName: state.agentName.value,
-                      phone: state.phone.value,
-                      username: state.username.value,
-                      companyName: value,
-                    ));
-                  },
-                  readOnly: false,
-                  textAlignVertical: TextAlignVertical.center,
-                  textInputAction: TextInputAction.done,
-                  style: Theme.of(context).textTheme.bodyText1,
-                  decoration: inputDecoration(
-                    context,
-                    inFocus: _companyNameFocusNode.hasFocus,
-                    labelText: "Company name",
-                    hintText: "Company Name",
-                    errorText: _companyNameFocusNode.hasFocus
-                        ? _companyNameErrorText()
-                        : null,
+                  SizedBox(height: designValues(context).sectionSpacing89),
+                  const NormalTopAppBar(
+                    title: "Company",
                   ),
-                ),
-              ],
+                  SizedBox(height: designValues(context).cornerRadius34),
+                  TextFormField(
+                    initialValue: state.companyName.value,
+                    focusNode: _companyNameFocusNode,
+                    onChanged: (value) {
+                      BlocProvider.of<ProfileCreationBloc>(context)
+                          .add(ProfileFieldsChange(
+                        agentName: state.agentName.value,
+                        phone: state.phone.value,
+                        username: state.username.value,
+                        companyName: value,
+                      ));
+                    },
+                    readOnly: false,
+                    textAlignVertical: TextAlignVertical.center,
+                    textInputAction: TextInputAction.done,
+                    style: Theme.of(context).textTheme.bodyText1,
+                    decoration: inputDecoration(
+                      context,
+                      inFocus: _companyNameFocusNode.hasFocus,
+                      labelText: "Company name",
+                      hintText: "Company Name",
+                      errorText: _companyNameFocusNode.hasFocus
+                          ? _companyNameErrorText()
+                          : null,
+                    ),
+                  ),
+                ],
+              ),
             );
           },
         ),

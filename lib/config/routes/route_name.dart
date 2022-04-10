@@ -15,4 +15,9 @@ class RouteNames {
   static const String viewOrderList = 'viewOrderList';
   static const String createOrder = 'createOrder';
   static const String viewOrderDetails = 'viewOrderDetails';
+  static const String addPaymentDetails = 'addReceivePayment';
+  static const String viewPaymentHistoryList = 'viewPaymentHistoryList';
+  static const String paymentSent = "Payments Sent";
+  static const String paymentReceived = "Payments Received";
+  static const String viewPaymentDetails = 'viewPaymentDetails';
 }
