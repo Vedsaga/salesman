@@ -1,7 +1,7 @@
+// Flutter imports:
 // Package imports:
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-// Flutter imports:
 import 'package:flutter/cupertino.dart';
 // Project imports:
 import 'package:salesman/config/routes/arguments_models/view_order_details_route_arguments.dart';
@@ -9,7 +9,6 @@ import 'package:salesman/config/routes/route_name.dart';
 import 'package:salesman/core/db/drift/app_database.dart';
 import 'package:salesman/main.dart';
 import 'package:salesman/modules/client/query/client_table_queries.dart';
-import 'package:salesman/modules/item/query/item_table_queries.dart';
 import 'package:salesman/modules/order/query/delivery_order_table_queries.dart';
 
 // part of
@@ -58,13 +57,10 @@ class ViewPaymentDetailsBloc
       final ModelClientData clientDetails =
           await ClientTableQueries(appDatabaseInstance)
               .getClientDetails(orderDetails.clientId);
-      final ModelItemData itemDetails =
-          await ItemTableQueries(appDatabaseInstance)
-              .getItemDetails(orderDetails.itemId);
+
       emit(OrderRelatedDetailsFetchedState(
         orderDetails: orderDetails,
         clientDetails: clientDetails,
-        itemDetails: itemDetails,
         ),
       );
     } catch (e) {

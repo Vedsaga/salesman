@@ -26,7 +26,7 @@ import 'package:salesman/modules/item/view_details/bloc/view_item_details_bloc.d
 
 // third party imports
 
-// project imports
+
 
 class ViewItemDetails extends StatefulWidget {
   const ViewItemDetails({Key? key}) : super(key: key);

@@ -44,8 +44,6 @@ import 'package:salesman/modules/profile/repositories/profile_repository.dart';
 import 'package:salesman/modules/splashscreen/bloc/profile_check_bloc.dart';
 import 'package:salesman/modules/splashscreen/screens/splash_screen.dart';
 
-// third party imports:
-
 class AppRouter {
   Route onGenerateRoute(
     RouteSettings settings,
@@ -121,7 +119,7 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) {
           return BlocProvider<ViewOrderListBloc>(
             create: (context) =>
-                ViewOrderListBloc()..add(Fetch10LatestOrderListEvent()),
+                  ViewOrderListBloc()..add(FetchAllPendingOrderListEvent()),
             child: const ViewOrderList(),
           );
         },);
@@ -143,7 +141,7 @@ class AppRouter {
                   create: (context) => ViewOrderDetailsBloc(
                     clientDetails: routeArgument.clientDetails,
                     orderDetails: routeArgument.orderDetails,
-                    itemDetails: routeArgument.itemDetails,
+              itemList: routeArgument.itemList,
                   )..add(GetOrderDetailsEvent()),
                   child: const ViewOrderDetails(),
                 ),);
@@ -174,7 +172,6 @@ class AppRouter {
             child: const ViewPaymentDetails(),
           );
         },); 
-
       default:
         return MaterialPageRoute(builder: (_) {
           return BlocProvider<ProfileCheckBloc>(

@@ -19,10 +19,6 @@ import 'package:salesman/core/models/validations/generic_field.dart';
 import 'package:salesman/core/models/validations/phone_number_field.dart';
 import 'package:salesman/modules/client/add/bloc/add_client_bloc.dart';
 
-// third party imports:
-
-// project imports:
-
 class AddClient extends StatefulWidget {
   const AddClient({Key? key}) : super(key: key);
 

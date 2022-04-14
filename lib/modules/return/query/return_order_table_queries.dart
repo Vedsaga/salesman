@@ -1,4 +1,4 @@
-// third party imports:
+
 
 // Package imports:
 import 'package:drift/drift.dart';
@@ -6,8 +6,6 @@ import 'package:drift/drift.dart';
 // Project imports:
 import 'package:salesman/core/db/drift/app_database.dart';
 import 'package:salesman/core/db/drift/models/model_return_order.dart';
-
-// project imports:
 
 part 'return_order_table_queries.g.dart';
 

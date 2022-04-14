@@ -1,8 +1,46 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// ignore_for_file: require_trailing_commas, avoid_redundant_argument_values, avoid_positional_boolean_parameters
+// ignore_for_file: require_trailing_commas, avoid_positional_boolean_parameters, avoid_redundant_argument_values
 
 part of 'app_database.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+DeliveryOrderList _$DeliveryOrderListFromJson(Map<String, dynamic> json) =>
+    DeliveryOrderList(
+      deliveryList: (json['deliveryList'] as List<dynamic>)
+          .map((e) => OrderMap.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$DeliveryOrderListToJson(DeliveryOrderList instance) =>
+    <String, dynamic>{
+      'deliveryList': instance.deliveryList,
+    };
+
+ReturnOrderList _$ReturnOrderListFromJson(Map<String, dynamic> json) =>
+    ReturnOrderList(
+      returnList: (json['returnList'] as List<dynamic>)
+          .map((e) => OrderMap.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$ReturnOrderListToJson(ReturnOrderList instance) =>
+    <String, dynamic>{
+      'returnList': instance.returnList,
+    };
+
+ItemList _$ItemListFromJson(Map<String, dynamic> json) => ItemList(
+      itemList: (json['itemList'] as List<dynamic>)
+          .map((e) => ItemMap.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$ItemListToJson(ItemList instance) => <String, dynamic>{
+      'itemList': instance.itemList,
+    };
 
 // **************************************************************************
 // MoorGenerator
@@ -717,7 +755,7 @@ class $ModelItemTable extends ModelItem
   late final GeneratedColumn<String?> unit = GeneratedColumn<String?>(
       'unit', aliasedName, false,
       additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 2, maxTextLength: 20),
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 20),
       type: const StringType(),
       requiredDuringInsert: true);
   final VerificationMeta _sellingPricePerUnitMeta =
@@ -859,13 +897,11 @@ class ModelDeliveryOrderData extends DataClass
     implements Insertable<ModelDeliveryOrderData> {
   final int deliveryOrderId;
   final int clientId;
-  final int itemId;
-  final double perUnitCost;
-  final double totalQuantity;
-  final double totalCost;
+  final ItemList itemList;
+  final double netTotal;
   final double totalReceivedAmount;
   final double totalSendAmount;
-  final String? paymentStatus;
+  final String paymentStatus;
   final String orderStatus;
   final String createdBy;
   final DateTime createdAt;
@@ -874,13 +910,11 @@ class ModelDeliveryOrderData extends DataClass
   ModelDeliveryOrderData(
       {required this.deliveryOrderId,
       required this.clientId,
-      required this.itemId,
-      required this.perUnitCost,
-      required this.totalQuantity,
-      required this.totalCost,
+      required this.itemList,
+      required this.netTotal,
       required this.totalReceivedAmount,
       required this.totalSendAmount,
-      this.paymentStatus,
+      required this.paymentStatus,
       required this.orderStatus,
       required this.createdBy,
       required this.createdAt,
@@ -894,20 +928,17 @@ class ModelDeliveryOrderData extends DataClass
           data['${effectivePrefix}delivery_order_id'])!,
       clientId: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}client_id'])!,
-      itemId: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}item_id'])!,
-      perUnitCost: const RealType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}per_unit_cost'])!,
-      totalQuantity: const RealType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}total_quantity'])!,
-      totalCost: const RealType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}total_cost'])!,
+      itemList: $ModelDeliveryOrderTable.$converter0.mapToDart(
+          const StringType()
+              .mapFromDatabaseResponse(data['${effectivePrefix}item_list']))!,
+      netTotal: const RealType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}net_total'])!,
       totalReceivedAmount: const RealType().mapFromDatabaseResponse(
           data['${effectivePrefix}total_received_amount'])!,
       totalSendAmount: const RealType().mapFromDatabaseResponse(
           data['${effectivePrefix}total_send_amount'])!,
       paymentStatus: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}payment_status']),
+          .mapFromDatabaseResponse(data['${effectivePrefix}payment_status'])!,
       orderStatus: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}order_status'])!,
       createdBy: const StringType()
@@ -925,15 +956,14 @@ class ModelDeliveryOrderData extends DataClass
     final map = <String, Expression>{};
     map['delivery_order_id'] = Variable<int>(deliveryOrderId);
     map['client_id'] = Variable<int>(clientId);
-    map['item_id'] = Variable<int>(itemId);
-    map['per_unit_cost'] = Variable<double>(perUnitCost);
-    map['total_quantity'] = Variable<double>(totalQuantity);
-    map['total_cost'] = Variable<double>(totalCost);
+    {
+      final converter = $ModelDeliveryOrderTable.$converter0;
+      map['item_list'] = Variable<String>(converter.mapToSql(itemList)!);
+    }
+    map['net_total'] = Variable<double>(netTotal);
     map['total_received_amount'] = Variable<double>(totalReceivedAmount);
     map['total_send_amount'] = Variable<double>(totalSendAmount);
-    if (!nullToAbsent || paymentStatus != null) {
-      map['payment_status'] = Variable<String?>(paymentStatus);
-    }
+    map['payment_status'] = Variable<String>(paymentStatus);
     map['order_status'] = Variable<String>(orderStatus);
     map['created_by'] = Variable<String>(createdBy);
     map['created_at'] = Variable<DateTime>(createdAt);
@@ -948,15 +978,11 @@ class ModelDeliveryOrderData extends DataClass
     return ModelDeliveryOrderCompanion(
       deliveryOrderId: Value(deliveryOrderId),
       clientId: Value(clientId),
-      itemId: Value(itemId),
-      perUnitCost: Value(perUnitCost),
-      totalQuantity: Value(totalQuantity),
-      totalCost: Value(totalCost),
+      itemList: Value(itemList),
+      netTotal: Value(netTotal),
       totalReceivedAmount: Value(totalReceivedAmount),
       totalSendAmount: Value(totalSendAmount),
-      paymentStatus: paymentStatus == null && nullToAbsent
-          ? const Value.absent()
-          : Value(paymentStatus),
+      paymentStatus: Value(paymentStatus),
       orderStatus: Value(orderStatus),
       createdBy: Value(createdBy),
       createdAt: Value(createdAt),
@@ -973,14 +999,12 @@ class ModelDeliveryOrderData extends DataClass
     return ModelDeliveryOrderData(
       deliveryOrderId: serializer.fromJson<int>(json['deliveryOrderId']),
       clientId: serializer.fromJson<int>(json['clientId']),
-      itemId: serializer.fromJson<int>(json['itemId']),
-      perUnitCost: serializer.fromJson<double>(json['perUnitCost']),
-      totalQuantity: serializer.fromJson<double>(json['totalQuantity']),
-      totalCost: serializer.fromJson<double>(json['totalCost']),
+      itemList: serializer.fromJson<ItemList>(json['itemList']),
+      netTotal: serializer.fromJson<double>(json['netTotal']),
       totalReceivedAmount:
           serializer.fromJson<double>(json['totalReceivedAmount']),
       totalSendAmount: serializer.fromJson<double>(json['totalSendAmount']),
-      paymentStatus: serializer.fromJson<String?>(json['paymentStatus']),
+      paymentStatus: serializer.fromJson<String>(json['paymentStatus']),
       orderStatus: serializer.fromJson<String>(json['orderStatus']),
       createdBy: serializer.fromJson<String>(json['createdBy']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
@@ -995,13 +1019,11 @@ class ModelDeliveryOrderData extends DataClass
     return <String, dynamic>{
       'deliveryOrderId': serializer.toJson<int>(deliveryOrderId),
       'clientId': serializer.toJson<int>(clientId),
-      'itemId': serializer.toJson<int>(itemId),
-      'perUnitCost': serializer.toJson<double>(perUnitCost),
-      'totalQuantity': serializer.toJson<double>(totalQuantity),
-      'totalCost': serializer.toJson<double>(totalCost),
+      'itemList': serializer.toJson<ItemList>(itemList),
+      'netTotal': serializer.toJson<double>(netTotal),
       'totalReceivedAmount': serializer.toJson<double>(totalReceivedAmount),
       'totalSendAmount': serializer.toJson<double>(totalSendAmount),
-      'paymentStatus': serializer.toJson<String?>(paymentStatus),
+      'paymentStatus': serializer.toJson<String>(paymentStatus),
       'orderStatus': serializer.toJson<String>(orderStatus),
       'createdBy': serializer.toJson<String>(createdBy),
       'createdAt': serializer.toJson<DateTime>(createdAt),
@@ -1014,10 +1036,8 @@ class ModelDeliveryOrderData extends DataClass
   ModelDeliveryOrderData copyWith(
           {int? deliveryOrderId,
           int? clientId,
-          int? itemId,
-          double? perUnitCost,
-          double? totalQuantity,
-          double? totalCost,
+          ItemList? itemList,
+          double? netTotal,
           double? totalReceivedAmount,
           double? totalSendAmount,
           String? paymentStatus,
@@ -1029,10 +1049,8 @@ class ModelDeliveryOrderData extends DataClass
       ModelDeliveryOrderData(
         deliveryOrderId: deliveryOrderId ?? this.deliveryOrderId,
         clientId: clientId ?? this.clientId,
-        itemId: itemId ?? this.itemId,
-        perUnitCost: perUnitCost ?? this.perUnitCost,
-        totalQuantity: totalQuantity ?? this.totalQuantity,
-        totalCost: totalCost ?? this.totalCost,
+        itemList: itemList ?? this.itemList,
+        netTotal: netTotal ?? this.netTotal,
         totalReceivedAmount: totalReceivedAmount ?? this.totalReceivedAmount,
         totalSendAmount: totalSendAmount ?? this.totalSendAmount,
         paymentStatus: paymentStatus ?? this.paymentStatus,
@@ -1047,10 +1065,8 @@ class ModelDeliveryOrderData extends DataClass
     return (StringBuffer('ModelDeliveryOrderData(')
           ..write('deliveryOrderId: $deliveryOrderId, ')
           ..write('clientId: $clientId, ')
-          ..write('itemId: $itemId, ')
-          ..write('perUnitCost: $perUnitCost, ')
-          ..write('totalQuantity: $totalQuantity, ')
-          ..write('totalCost: $totalCost, ')
+          ..write('itemList: $itemList, ')
+          ..write('netTotal: $netTotal, ')
           ..write('totalReceivedAmount: $totalReceivedAmount, ')
           ..write('totalSendAmount: $totalSendAmount, ')
           ..write('paymentStatus: $paymentStatus, ')
@@ -1067,10 +1083,8 @@ class ModelDeliveryOrderData extends DataClass
   int get hashCode => Object.hash(
       deliveryOrderId,
       clientId,
-      itemId,
-      perUnitCost,
-      totalQuantity,
-      totalCost,
+      itemList,
+      netTotal,
       totalReceivedAmount,
       totalSendAmount,
       paymentStatus,
@@ -1085,10 +1099,8 @@ class ModelDeliveryOrderData extends DataClass
       (other is ModelDeliveryOrderData &&
           other.deliveryOrderId == this.deliveryOrderId &&
           other.clientId == this.clientId &&
-          other.itemId == this.itemId &&
-          other.perUnitCost == this.perUnitCost &&
-          other.totalQuantity == this.totalQuantity &&
-          other.totalCost == this.totalCost &&
+          other.itemList == this.itemList &&
+          other.netTotal == this.netTotal &&
           other.totalReceivedAmount == this.totalReceivedAmount &&
           other.totalSendAmount == this.totalSendAmount &&
           other.paymentStatus == this.paymentStatus &&
@@ -1103,13 +1115,11 @@ class ModelDeliveryOrderCompanion
     extends UpdateCompanion<ModelDeliveryOrderData> {
   final Value<int> deliveryOrderId;
   final Value<int> clientId;
-  final Value<int> itemId;
-  final Value<double> perUnitCost;
-  final Value<double> totalQuantity;
-  final Value<double> totalCost;
+  final Value<ItemList> itemList;
+  final Value<double> netTotal;
   final Value<double> totalReceivedAmount;
   final Value<double> totalSendAmount;
-  final Value<String?> paymentStatus;
+  final Value<String> paymentStatus;
   final Value<String> orderStatus;
   final Value<String> createdBy;
   final Value<DateTime> createdAt;
@@ -1118,10 +1128,8 @@ class ModelDeliveryOrderCompanion
   const ModelDeliveryOrderCompanion({
     this.deliveryOrderId = const Value.absent(),
     this.clientId = const Value.absent(),
-    this.itemId = const Value.absent(),
-    this.perUnitCost = const Value.absent(),
-    this.totalQuantity = const Value.absent(),
-    this.totalCost = const Value.absent(),
+    this.itemList = const Value.absent(),
+    this.netTotal = const Value.absent(),
     this.totalReceivedAmount = const Value.absent(),
     this.totalSendAmount = const Value.absent(),
     this.paymentStatus = const Value.absent(),
@@ -1134,10 +1142,8 @@ class ModelDeliveryOrderCompanion
   ModelDeliveryOrderCompanion.insert({
     this.deliveryOrderId = const Value.absent(),
     required int clientId,
-    required int itemId,
-    required double perUnitCost,
-    required double totalQuantity,
-    required double totalCost,
+    required ItemList itemList,
+    required double netTotal,
     this.totalReceivedAmount = const Value.absent(),
     this.totalSendAmount = const Value.absent(),
     this.paymentStatus = const Value.absent(),
@@ -1147,22 +1153,18 @@ class ModelDeliveryOrderCompanion
     this.lastUpdated = const Value.absent(),
     this.expectedDeliveryDate = const Value.absent(),
   })  : clientId = Value(clientId),
-        itemId = Value(itemId),
-        perUnitCost = Value(perUnitCost),
-        totalQuantity = Value(totalQuantity),
-        totalCost = Value(totalCost),
+        itemList = Value(itemList),
+        netTotal = Value(netTotal),
         orderStatus = Value(orderStatus),
         createdBy = Value(createdBy);
   static Insertable<ModelDeliveryOrderData> custom({
     Expression<int>? deliveryOrderId,
     Expression<int>? clientId,
-    Expression<int>? itemId,
-    Expression<double>? perUnitCost,
-    Expression<double>? totalQuantity,
-    Expression<double>? totalCost,
+    Expression<ItemList>? itemList,
+    Expression<double>? netTotal,
     Expression<double>? totalReceivedAmount,
     Expression<double>? totalSendAmount,
-    Expression<String?>? paymentStatus,
+    Expression<String>? paymentStatus,
     Expression<String>? orderStatus,
     Expression<String>? createdBy,
     Expression<DateTime>? createdAt,
@@ -1172,10 +1174,8 @@ class ModelDeliveryOrderCompanion
     return RawValuesInsertable({
       if (deliveryOrderId != null) 'delivery_order_id': deliveryOrderId,
       if (clientId != null) 'client_id': clientId,
-      if (itemId != null) 'item_id': itemId,
-      if (perUnitCost != null) 'per_unit_cost': perUnitCost,
-      if (totalQuantity != null) 'total_quantity': totalQuantity,
-      if (totalCost != null) 'total_cost': totalCost,
+      if (itemList != null) 'item_list': itemList,
+      if (netTotal != null) 'net_total': netTotal,
       if (totalReceivedAmount != null)
         'total_received_amount': totalReceivedAmount,
       if (totalSendAmount != null) 'total_send_amount': totalSendAmount,
@@ -1192,13 +1192,11 @@ class ModelDeliveryOrderCompanion
   ModelDeliveryOrderCompanion copyWith(
       {Value<int>? deliveryOrderId,
       Value<int>? clientId,
-      Value<int>? itemId,
-      Value<double>? perUnitCost,
-      Value<double>? totalQuantity,
-      Value<double>? totalCost,
+      Value<ItemList>? itemList,
+      Value<double>? netTotal,
       Value<double>? totalReceivedAmount,
       Value<double>? totalSendAmount,
-      Value<String?>? paymentStatus,
+      Value<String>? paymentStatus,
       Value<String>? orderStatus,
       Value<String>? createdBy,
       Value<DateTime>? createdAt,
@@ -1207,10 +1205,8 @@ class ModelDeliveryOrderCompanion
     return ModelDeliveryOrderCompanion(
       deliveryOrderId: deliveryOrderId ?? this.deliveryOrderId,
       clientId: clientId ?? this.clientId,
-      itemId: itemId ?? this.itemId,
-      perUnitCost: perUnitCost ?? this.perUnitCost,
-      totalQuantity: totalQuantity ?? this.totalQuantity,
-      totalCost: totalCost ?? this.totalCost,
+      itemList: itemList ?? this.itemList,
+      netTotal: netTotal ?? this.netTotal,
       totalReceivedAmount: totalReceivedAmount ?? this.totalReceivedAmount,
       totalSendAmount: totalSendAmount ?? this.totalSendAmount,
       paymentStatus: paymentStatus ?? this.paymentStatus,
@@ -1231,17 +1227,12 @@ class ModelDeliveryOrderCompanion
     if (clientId.present) {
       map['client_id'] = Variable<int>(clientId.value);
     }
-    if (itemId.present) {
-      map['item_id'] = Variable<int>(itemId.value);
+    if (itemList.present) {
+      final converter = $ModelDeliveryOrderTable.$converter0;
+      map['item_list'] = Variable<String>(converter.mapToSql(itemList.value)!);
     }
-    if (perUnitCost.present) {
-      map['per_unit_cost'] = Variable<double>(perUnitCost.value);
-    }
-    if (totalQuantity.present) {
-      map['total_quantity'] = Variable<double>(totalQuantity.value);
-    }
-    if (totalCost.present) {
-      map['total_cost'] = Variable<double>(totalCost.value);
+    if (netTotal.present) {
+      map['net_total'] = Variable<double>(netTotal.value);
     }
     if (totalReceivedAmount.present) {
       map['total_received_amount'] =
@@ -1251,7 +1242,7 @@ class ModelDeliveryOrderCompanion
       map['total_send_amount'] = Variable<double>(totalSendAmount.value);
     }
     if (paymentStatus.present) {
-      map['payment_status'] = Variable<String?>(paymentStatus.value);
+      map['payment_status'] = Variable<String>(paymentStatus.value);
     }
     if (orderStatus.present) {
       map['order_status'] = Variable<String>(orderStatus.value);
@@ -1277,10 +1268,8 @@ class ModelDeliveryOrderCompanion
     return (StringBuffer('ModelDeliveryOrderCompanion(')
           ..write('deliveryOrderId: $deliveryOrderId, ')
           ..write('clientId: $clientId, ')
-          ..write('itemId: $itemId, ')
-          ..write('perUnitCost: $perUnitCost, ')
-          ..write('totalQuantity: $totalQuantity, ')
-          ..write('totalCost: $totalCost, ')
+          ..write('itemList: $itemList, ')
+          ..write('netTotal: $netTotal, ')
           ..write('totalReceivedAmount: $totalReceivedAmount, ')
           ..write('totalSendAmount: $totalSendAmount, ')
           ..write('paymentStatus: $paymentStatus, ')
@@ -1315,29 +1304,16 @@ class $ModelDeliveryOrderTable extends ModelDeliveryOrder
       type: const IntType(),
       requiredDuringInsert: true,
       defaultConstraints: 'REFERENCES model_client (client_id)');
-  final VerificationMeta _itemIdMeta = const VerificationMeta('itemId');
+  final VerificationMeta _itemListMeta = const VerificationMeta('itemList');
   @override
-  late final GeneratedColumn<int?> itemId = GeneratedColumn<int?>(
-      'item_id', aliasedName, false,
-      type: const IntType(),
-      requiredDuringInsert: true,
-      defaultConstraints: 'REFERENCES model_item (item_id)');
-  final VerificationMeta _perUnitCostMeta =
-      const VerificationMeta('perUnitCost');
+  late final GeneratedColumnWithTypeConverter<ItemList, String?> itemList =
+      GeneratedColumn<String?>('item_list', aliasedName, false,
+              type: const StringType(), requiredDuringInsert: true)
+          .withConverter<ItemList>($ModelDeliveryOrderTable.$converter0);
+  final VerificationMeta _netTotalMeta = const VerificationMeta('netTotal');
   @override
-  late final GeneratedColumn<double?> perUnitCost = GeneratedColumn<double?>(
-      'per_unit_cost', aliasedName, false,
-      type: const RealType(), requiredDuringInsert: true);
-  final VerificationMeta _totalQuantityMeta =
-      const VerificationMeta('totalQuantity');
-  @override
-  late final GeneratedColumn<double?> totalQuantity = GeneratedColumn<double?>(
-      'total_quantity', aliasedName, false,
-      type: const RealType(), requiredDuringInsert: true);
-  final VerificationMeta _totalCostMeta = const VerificationMeta('totalCost');
-  @override
-  late final GeneratedColumn<double?> totalCost = GeneratedColumn<double?>(
-      'total_cost', aliasedName, false,
+  late final GeneratedColumn<double?> netTotal = GeneratedColumn<double?>(
+      'net_total', aliasedName, false,
       type: const RealType(), requiredDuringInsert: true);
   final VerificationMeta _totalReceivedAmountMeta =
       const VerificationMeta('totalReceivedAmount');
@@ -1359,15 +1335,17 @@ class $ModelDeliveryOrderTable extends ModelDeliveryOrder
       const VerificationMeta('paymentStatus');
   @override
   late final GeneratedColumn<String?> paymentStatus = GeneratedColumn<String?>(
-      'payment_status', aliasedName, true,
-      type: const StringType(), requiredDuringInsert: false);
+      'payment_status', aliasedName, false,
+      type: const StringType(),
+      requiredDuringInsert: false,
+      defaultValue: const Constant('unpaid'));
   final VerificationMeta _orderStatusMeta =
       const VerificationMeta('orderStatus');
   @override
   late final GeneratedColumn<String?> orderStatus = GeneratedColumn<String?>(
       'order_status', aliasedName, false,
       additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 3, maxTextLength: 20),
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 20),
       type: const StringType(),
       requiredDuringInsert: true);
   final VerificationMeta _createdByMeta = const VerificationMeta('createdBy');
@@ -1403,10 +1381,8 @@ class $ModelDeliveryOrderTable extends ModelDeliveryOrder
   List<GeneratedColumn> get $columns => [
         deliveryOrderId,
         clientId,
-        itemId,
-        perUnitCost,
-        totalQuantity,
-        totalCost,
+        itemList,
+        netTotal,
         totalReceivedAmount,
         totalSendAmount,
         paymentStatus,
@@ -1438,33 +1414,12 @@ class $ModelDeliveryOrderTable extends ModelDeliveryOrder
     } else if (isInserting) {
       context.missing(_clientIdMeta);
     }
-    if (data.containsKey('item_id')) {
-      context.handle(_itemIdMeta,
-          itemId.isAcceptableOrUnknown(data['item_id']!, _itemIdMeta));
+    context.handle(_itemListMeta, const VerificationResult.success());
+    if (data.containsKey('net_total')) {
+      context.handle(_netTotalMeta,
+          netTotal.isAcceptableOrUnknown(data['net_total']!, _netTotalMeta));
     } else if (isInserting) {
-      context.missing(_itemIdMeta);
-    }
-    if (data.containsKey('per_unit_cost')) {
-      context.handle(
-          _perUnitCostMeta,
-          perUnitCost.isAcceptableOrUnknown(
-              data['per_unit_cost']!, _perUnitCostMeta));
-    } else if (isInserting) {
-      context.missing(_perUnitCostMeta);
-    }
-    if (data.containsKey('total_quantity')) {
-      context.handle(
-          _totalQuantityMeta,
-          totalQuantity.isAcceptableOrUnknown(
-              data['total_quantity']!, _totalQuantityMeta));
-    } else if (isInserting) {
-      context.missing(_totalQuantityMeta);
-    }
-    if (data.containsKey('total_cost')) {
-      context.handle(_totalCostMeta,
-          totalCost.isAcceptableOrUnknown(data['total_cost']!, _totalCostMeta));
-    } else if (isInserting) {
-      context.missing(_totalCostMeta);
+      context.missing(_netTotalMeta);
     }
     if (data.containsKey('total_received_amount')) {
       context.handle(
@@ -1529,79 +1484,104 @@ class $ModelDeliveryOrderTable extends ModelDeliveryOrder
   $ModelDeliveryOrderTable createAlias(String alias) {
     return $ModelDeliveryOrderTable(attachedDatabase, alias);
   }
+
+  static TypeConverter<ItemList, String> $converter0 =
+      const ItemListConverter();
 }
 
 class ModelTransportData extends DataClass
     implements Insertable<ModelTransportData> {
   final int transportId;
-  final int orderId;
-  final String deliveryStatus;
-  final String deliveredBy;
-  final String paymentStatus;
-  final double dueAmount;
-  final DateTime startedAt;
+  final DeliveryOrderList? deliveryOrderList;
+  final ReturnOrderList? returnOrderList;
+  final String transportStatus;
+  final String? transportBy;
+  final DateTime scheduleDate;
+  final DateTime? startedAt;
+  final DateTime createdAt;
   final DateTime lastUpdated;
-  final bool isValid;
   ModelTransportData(
       {required this.transportId,
-      required this.orderId,
-      required this.deliveryStatus,
-      required this.deliveredBy,
-      required this.paymentStatus,
-      required this.dueAmount,
-      required this.startedAt,
-      required this.lastUpdated,
-      required this.isValid});
+      this.deliveryOrderList,
+      this.returnOrderList,
+      required this.transportStatus,
+      this.transportBy,
+      required this.scheduleDate,
+      this.startedAt,
+      required this.createdAt,
+      required this.lastUpdated});
   factory ModelTransportData.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return ModelTransportData(
       transportId: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}transport_id'])!,
-      orderId: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}order_id'])!,
-      deliveryStatus: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}delivery_status'])!,
-      deliveredBy: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}delivered_by'])!,
-      paymentStatus: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}payment_status'])!,
-      dueAmount: const RealType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}due_amount'])!,
+      deliveryOrderList: $ModelTransportTable.$converter0.mapToDart(
+          const StringType().mapFromDatabaseResponse(
+              data['${effectivePrefix}delivery_order_list'])),
+      returnOrderList: $ModelTransportTable.$converter1.mapToDart(
+          const StringType().mapFromDatabaseResponse(
+              data['${effectivePrefix}return_order_list'])),
+      transportStatus: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}transport_status'])!,
+      transportBy: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}transport_by']),
+      scheduleDate: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}schedule_date'])!,
       startedAt: const DateTimeType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}started_at'])!,
+          .mapFromDatabaseResponse(data['${effectivePrefix}started_at']),
+      createdAt: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}created_at'])!,
       lastUpdated: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}last_updated'])!,
-      isValid: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}is_valid'])!,
     );
   }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['transport_id'] = Variable<int>(transportId);
-    map['order_id'] = Variable<int>(orderId);
-    map['delivery_status'] = Variable<String>(deliveryStatus);
-    map['delivered_by'] = Variable<String>(deliveredBy);
-    map['payment_status'] = Variable<String>(paymentStatus);
-    map['due_amount'] = Variable<double>(dueAmount);
-    map['started_at'] = Variable<DateTime>(startedAt);
+    if (!nullToAbsent || deliveryOrderList != null) {
+      final converter = $ModelTransportTable.$converter0;
+      map['delivery_order_list'] =
+          Variable<String?>(converter.mapToSql(deliveryOrderList));
+    }
+    if (!nullToAbsent || returnOrderList != null) {
+      final converter = $ModelTransportTable.$converter1;
+      map['return_order_list'] =
+          Variable<String?>(converter.mapToSql(returnOrderList));
+    }
+    map['transport_status'] = Variable<String>(transportStatus);
+    if (!nullToAbsent || transportBy != null) {
+      map['transport_by'] = Variable<String?>(transportBy);
+    }
+    map['schedule_date'] = Variable<DateTime>(scheduleDate);
+    if (!nullToAbsent || startedAt != null) {
+      map['started_at'] = Variable<DateTime?>(startedAt);
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
     map['last_updated'] = Variable<DateTime>(lastUpdated);
-    map['is_valid'] = Variable<bool>(isValid);
     return map;
   }
 
   ModelTransportCompanion toCompanion(bool nullToAbsent) {
     return ModelTransportCompanion(
       transportId: Value(transportId),
-      orderId: Value(orderId),
-      deliveryStatus: Value(deliveryStatus),
-      deliveredBy: Value(deliveredBy),
-      paymentStatus: Value(paymentStatus),
-      dueAmount: Value(dueAmount),
-      startedAt: Value(startedAt),
+      deliveryOrderList: deliveryOrderList == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deliveryOrderList),
+      returnOrderList: returnOrderList == null && nullToAbsent
+          ? const Value.absent()
+          : Value(returnOrderList),
+      transportStatus: Value(transportStatus),
+      transportBy: transportBy == null && nullToAbsent
+          ? const Value.absent()
+          : Value(transportBy),
+      scheduleDate: Value(scheduleDate),
+      startedAt: startedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(startedAt),
+      createdAt: Value(createdAt),
       lastUpdated: Value(lastUpdated),
-      isValid: Value(isValid),
     );
   }
 
@@ -1610,14 +1590,16 @@ class ModelTransportData extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ModelTransportData(
       transportId: serializer.fromJson<int>(json['transportId']),
-      orderId: serializer.fromJson<int>(json['orderId']),
-      deliveryStatus: serializer.fromJson<String>(json['deliveryStatus']),
-      deliveredBy: serializer.fromJson<String>(json['deliveredBy']),
-      paymentStatus: serializer.fromJson<String>(json['paymentStatus']),
-      dueAmount: serializer.fromJson<double>(json['dueAmount']),
-      startedAt: serializer.fromJson<DateTime>(json['startedAt']),
+      deliveryOrderList:
+          serializer.fromJson<DeliveryOrderList?>(json['deliveryOrderList']),
+      returnOrderList:
+          serializer.fromJson<ReturnOrderList?>(json['returnOrderList']),
+      transportStatus: serializer.fromJson<String>(json['transportStatus']),
+      transportBy: serializer.fromJson<String?>(json['transportBy']),
+      scheduleDate: serializer.fromJson<DateTime>(json['scheduleDate']),
+      startedAt: serializer.fromJson<DateTime?>(json['startedAt']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       lastUpdated: serializer.fromJson<DateTime>(json['lastUpdated']),
-      isValid: serializer.fromJson<bool>(json['isValid']),
     );
   }
   @override
@@ -1625,152 +1607,158 @@ class ModelTransportData extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'transportId': serializer.toJson<int>(transportId),
-      'orderId': serializer.toJson<int>(orderId),
-      'deliveryStatus': serializer.toJson<String>(deliveryStatus),
-      'deliveredBy': serializer.toJson<String>(deliveredBy),
-      'paymentStatus': serializer.toJson<String>(paymentStatus),
-      'dueAmount': serializer.toJson<double>(dueAmount),
-      'startedAt': serializer.toJson<DateTime>(startedAt),
+      'deliveryOrderList':
+          serializer.toJson<DeliveryOrderList?>(deliveryOrderList),
+      'returnOrderList': serializer.toJson<ReturnOrderList?>(returnOrderList),
+      'transportStatus': serializer.toJson<String>(transportStatus),
+      'transportBy': serializer.toJson<String?>(transportBy),
+      'scheduleDate': serializer.toJson<DateTime>(scheduleDate),
+      'startedAt': serializer.toJson<DateTime?>(startedAt),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
       'lastUpdated': serializer.toJson<DateTime>(lastUpdated),
-      'isValid': serializer.toJson<bool>(isValid),
     };
   }
 
   ModelTransportData copyWith(
           {int? transportId,
-          int? orderId,
-          String? deliveryStatus,
-          String? deliveredBy,
-          String? paymentStatus,
-          double? dueAmount,
+          DeliveryOrderList? deliveryOrderList,
+          ReturnOrderList? returnOrderList,
+          String? transportStatus,
+          String? transportBy,
+          DateTime? scheduleDate,
           DateTime? startedAt,
-          DateTime? lastUpdated,
-          bool? isValid}) =>
+          DateTime? createdAt,
+          DateTime? lastUpdated}) =>
       ModelTransportData(
         transportId: transportId ?? this.transportId,
-        orderId: orderId ?? this.orderId,
-        deliveryStatus: deliveryStatus ?? this.deliveryStatus,
-        deliveredBy: deliveredBy ?? this.deliveredBy,
-        paymentStatus: paymentStatus ?? this.paymentStatus,
-        dueAmount: dueAmount ?? this.dueAmount,
+        deliveryOrderList: deliveryOrderList ?? this.deliveryOrderList,
+        returnOrderList: returnOrderList ?? this.returnOrderList,
+        transportStatus: transportStatus ?? this.transportStatus,
+        transportBy: transportBy ?? this.transportBy,
+        scheduleDate: scheduleDate ?? this.scheduleDate,
         startedAt: startedAt ?? this.startedAt,
+        createdAt: createdAt ?? this.createdAt,
         lastUpdated: lastUpdated ?? this.lastUpdated,
-        isValid: isValid ?? this.isValid,
       );
   @override
   String toString() {
     return (StringBuffer('ModelTransportData(')
           ..write('transportId: $transportId, ')
-          ..write('orderId: $orderId, ')
-          ..write('deliveryStatus: $deliveryStatus, ')
-          ..write('deliveredBy: $deliveredBy, ')
-          ..write('paymentStatus: $paymentStatus, ')
-          ..write('dueAmount: $dueAmount, ')
+          ..write('deliveryOrderList: $deliveryOrderList, ')
+          ..write('returnOrderList: $returnOrderList, ')
+          ..write('transportStatus: $transportStatus, ')
+          ..write('transportBy: $transportBy, ')
+          ..write('scheduleDate: $scheduleDate, ')
           ..write('startedAt: $startedAt, ')
-          ..write('lastUpdated: $lastUpdated, ')
-          ..write('isValid: $isValid')
+          ..write('createdAt: $createdAt, ')
+          ..write('lastUpdated: $lastUpdated')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(transportId, orderId, deliveryStatus,
-      deliveredBy, paymentStatus, dueAmount, startedAt, lastUpdated, isValid);
+  int get hashCode => Object.hash(
+      transportId,
+      deliveryOrderList,
+      returnOrderList,
+      transportStatus,
+      transportBy,
+      scheduleDate,
+      startedAt,
+      createdAt,
+      lastUpdated);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ModelTransportData &&
           other.transportId == this.transportId &&
-          other.orderId == this.orderId &&
-          other.deliveryStatus == this.deliveryStatus &&
-          other.deliveredBy == this.deliveredBy &&
-          other.paymentStatus == this.paymentStatus &&
-          other.dueAmount == this.dueAmount &&
+          other.deliveryOrderList == this.deliveryOrderList &&
+          other.returnOrderList == this.returnOrderList &&
+          other.transportStatus == this.transportStatus &&
+          other.transportBy == this.transportBy &&
+          other.scheduleDate == this.scheduleDate &&
           other.startedAt == this.startedAt &&
-          other.lastUpdated == this.lastUpdated &&
-          other.isValid == this.isValid);
+          other.createdAt == this.createdAt &&
+          other.lastUpdated == this.lastUpdated);
 }
 
 class ModelTransportCompanion extends UpdateCompanion<ModelTransportData> {
   final Value<int> transportId;
-  final Value<int> orderId;
-  final Value<String> deliveryStatus;
-  final Value<String> deliveredBy;
-  final Value<String> paymentStatus;
-  final Value<double> dueAmount;
-  final Value<DateTime> startedAt;
+  final Value<DeliveryOrderList?> deliveryOrderList;
+  final Value<ReturnOrderList?> returnOrderList;
+  final Value<String> transportStatus;
+  final Value<String?> transportBy;
+  final Value<DateTime> scheduleDate;
+  final Value<DateTime?> startedAt;
+  final Value<DateTime> createdAt;
   final Value<DateTime> lastUpdated;
-  final Value<bool> isValid;
   const ModelTransportCompanion({
     this.transportId = const Value.absent(),
-    this.orderId = const Value.absent(),
-    this.deliveryStatus = const Value.absent(),
-    this.deliveredBy = const Value.absent(),
-    this.paymentStatus = const Value.absent(),
-    this.dueAmount = const Value.absent(),
+    this.deliveryOrderList = const Value.absent(),
+    this.returnOrderList = const Value.absent(),
+    this.transportStatus = const Value.absent(),
+    this.transportBy = const Value.absent(),
+    this.scheduleDate = const Value.absent(),
     this.startedAt = const Value.absent(),
+    this.createdAt = const Value.absent(),
     this.lastUpdated = const Value.absent(),
-    this.isValid = const Value.absent(),
   });
   ModelTransportCompanion.insert({
     this.transportId = const Value.absent(),
-    required int orderId,
-    required String deliveryStatus,
-    required String deliveredBy,
-    required String paymentStatus,
-    required double dueAmount,
+    this.deliveryOrderList = const Value.absent(),
+    this.returnOrderList = const Value.absent(),
+    required String transportStatus,
+    this.transportBy = const Value.absent(),
+    required DateTime scheduleDate,
     this.startedAt = const Value.absent(),
+    this.createdAt = const Value.absent(),
     this.lastUpdated = const Value.absent(),
-    this.isValid = const Value.absent(),
-  })  : orderId = Value(orderId),
-        deliveryStatus = Value(deliveryStatus),
-        deliveredBy = Value(deliveredBy),
-        paymentStatus = Value(paymentStatus),
-        dueAmount = Value(dueAmount);
+  })  : transportStatus = Value(transportStatus),
+        scheduleDate = Value(scheduleDate);
   static Insertable<ModelTransportData> custom({
     Expression<int>? transportId,
-    Expression<int>? orderId,
-    Expression<String>? deliveryStatus,
-    Expression<String>? deliveredBy,
-    Expression<String>? paymentStatus,
-    Expression<double>? dueAmount,
-    Expression<DateTime>? startedAt,
+    Expression<DeliveryOrderList?>? deliveryOrderList,
+    Expression<ReturnOrderList?>? returnOrderList,
+    Expression<String>? transportStatus,
+    Expression<String?>? transportBy,
+    Expression<DateTime>? scheduleDate,
+    Expression<DateTime?>? startedAt,
+    Expression<DateTime>? createdAt,
     Expression<DateTime>? lastUpdated,
-    Expression<bool>? isValid,
   }) {
     return RawValuesInsertable({
       if (transportId != null) 'transport_id': transportId,
-      if (orderId != null) 'order_id': orderId,
-      if (deliveryStatus != null) 'delivery_status': deliveryStatus,
-      if (deliveredBy != null) 'delivered_by': deliveredBy,
-      if (paymentStatus != null) 'payment_status': paymentStatus,
-      if (dueAmount != null) 'due_amount': dueAmount,
+      if (deliveryOrderList != null) 'delivery_order_list': deliveryOrderList,
+      if (returnOrderList != null) 'return_order_list': returnOrderList,
+      if (transportStatus != null) 'transport_status': transportStatus,
+      if (transportBy != null) 'transport_by': transportBy,
+      if (scheduleDate != null) 'schedule_date': scheduleDate,
       if (startedAt != null) 'started_at': startedAt,
+      if (createdAt != null) 'created_at': createdAt,
       if (lastUpdated != null) 'last_updated': lastUpdated,
-      if (isValid != null) 'is_valid': isValid,
     });
   }
 
   ModelTransportCompanion copyWith(
       {Value<int>? transportId,
-      Value<int>? orderId,
-      Value<String>? deliveryStatus,
-      Value<String>? deliveredBy,
-      Value<String>? paymentStatus,
-      Value<double>? dueAmount,
-      Value<DateTime>? startedAt,
-      Value<DateTime>? lastUpdated,
-      Value<bool>? isValid}) {
+      Value<DeliveryOrderList?>? deliveryOrderList,
+      Value<ReturnOrderList?>? returnOrderList,
+      Value<String>? transportStatus,
+      Value<String?>? transportBy,
+      Value<DateTime>? scheduleDate,
+      Value<DateTime?>? startedAt,
+      Value<DateTime>? createdAt,
+      Value<DateTime>? lastUpdated}) {
     return ModelTransportCompanion(
       transportId: transportId ?? this.transportId,
-      orderId: orderId ?? this.orderId,
-      deliveryStatus: deliveryStatus ?? this.deliveryStatus,
-      deliveredBy: deliveredBy ?? this.deliveredBy,
-      paymentStatus: paymentStatus ?? this.paymentStatus,
-      dueAmount: dueAmount ?? this.dueAmount,
+      deliveryOrderList: deliveryOrderList ?? this.deliveryOrderList,
+      returnOrderList: returnOrderList ?? this.returnOrderList,
+      transportStatus: transportStatus ?? this.transportStatus,
+      transportBy: transportBy ?? this.transportBy,
+      scheduleDate: scheduleDate ?? this.scheduleDate,
       startedAt: startedAt ?? this.startedAt,
+      createdAt: createdAt ?? this.createdAt,
       lastUpdated: lastUpdated ?? this.lastUpdated,
-      isValid: isValid ?? this.isValid,
     );
   }
 
@@ -1780,29 +1768,33 @@ class ModelTransportCompanion extends UpdateCompanion<ModelTransportData> {
     if (transportId.present) {
       map['transport_id'] = Variable<int>(transportId.value);
     }
-    if (orderId.present) {
-      map['order_id'] = Variable<int>(orderId.value);
+    if (deliveryOrderList.present) {
+      final converter = $ModelTransportTable.$converter0;
+      map['delivery_order_list'] =
+          Variable<String?>(converter.mapToSql(deliveryOrderList.value));
     }
-    if (deliveryStatus.present) {
-      map['delivery_status'] = Variable<String>(deliveryStatus.value);
+    if (returnOrderList.present) {
+      final converter = $ModelTransportTable.$converter1;
+      map['return_order_list'] =
+          Variable<String?>(converter.mapToSql(returnOrderList.value));
     }
-    if (deliveredBy.present) {
-      map['delivered_by'] = Variable<String>(deliveredBy.value);
+    if (transportStatus.present) {
+      map['transport_status'] = Variable<String>(transportStatus.value);
     }
-    if (paymentStatus.present) {
-      map['payment_status'] = Variable<String>(paymentStatus.value);
+    if (transportBy.present) {
+      map['transport_by'] = Variable<String?>(transportBy.value);
     }
-    if (dueAmount.present) {
-      map['due_amount'] = Variable<double>(dueAmount.value);
+    if (scheduleDate.present) {
+      map['schedule_date'] = Variable<DateTime>(scheduleDate.value);
     }
     if (startedAt.present) {
-      map['started_at'] = Variable<DateTime>(startedAt.value);
+      map['started_at'] = Variable<DateTime?>(startedAt.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
     }
     if (lastUpdated.present) {
       map['last_updated'] = Variable<DateTime>(lastUpdated.value);
-    }
-    if (isValid.present) {
-      map['is_valid'] = Variable<bool>(isValid.value);
     }
     return map;
   }
@@ -1811,14 +1803,14 @@ class ModelTransportCompanion extends UpdateCompanion<ModelTransportData> {
   String toString() {
     return (StringBuffer('ModelTransportCompanion(')
           ..write('transportId: $transportId, ')
-          ..write('orderId: $orderId, ')
-          ..write('deliveryStatus: $deliveryStatus, ')
-          ..write('deliveredBy: $deliveredBy, ')
-          ..write('paymentStatus: $paymentStatus, ')
-          ..write('dueAmount: $dueAmount, ')
+          ..write('deliveryOrderList: $deliveryOrderList, ')
+          ..write('returnOrderList: $returnOrderList, ')
+          ..write('transportStatus: $transportStatus, ')
+          ..write('transportBy: $transportBy, ')
+          ..write('scheduleDate: $scheduleDate, ')
           ..write('startedAt: $startedAt, ')
-          ..write('lastUpdated: $lastUpdated, ')
-          ..write('isValid: $isValid')
+          ..write('createdAt: $createdAt, ')
+          ..write('lastUpdated: $lastUpdated')
           ..write(')'))
         .toString();
   }
@@ -1838,50 +1830,52 @@ class $ModelTransportTable extends ModelTransport
       type: const IntType(),
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _orderIdMeta = const VerificationMeta('orderId');
+  final VerificationMeta _deliveryOrderListMeta =
+      const VerificationMeta('deliveryOrderList');
   @override
-  late final GeneratedColumn<int?> orderId = GeneratedColumn<int?>(
-      'order_id', aliasedName, false,
-      type: const IntType(),
-      requiredDuringInsert: true,
-      defaultConstraints:
-          'REFERENCES model_delivery_order (delivery_order_id)');
-  final VerificationMeta _deliveryStatusMeta =
-      const VerificationMeta('deliveryStatus');
+  late final GeneratedColumnWithTypeConverter<DeliveryOrderList, String?>
+      deliveryOrderList = GeneratedColumn<String?>(
+              'delivery_order_list', aliasedName, true,
+              type: const StringType(), requiredDuringInsert: false)
+          .withConverter<DeliveryOrderList>($ModelTransportTable.$converter0);
+  final VerificationMeta _returnOrderListMeta =
+      const VerificationMeta('returnOrderList');
   @override
-  late final GeneratedColumn<String?> deliveryStatus = GeneratedColumn<String?>(
-      'delivery_status', aliasedName, false,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 3, maxTextLength: 20),
-      type: const StringType(),
-      requiredDuringInsert: true);
-  final VerificationMeta _deliveredByMeta =
-      const VerificationMeta('deliveredBy');
+  late final GeneratedColumnWithTypeConverter<ReturnOrderList, String?>
+      returnOrderList = GeneratedColumn<String?>(
+              'return_order_list', aliasedName, true,
+              type: const StringType(), requiredDuringInsert: false)
+          .withConverter<ReturnOrderList>($ModelTransportTable.$converter1);
+  final VerificationMeta _transportStatusMeta =
+      const VerificationMeta('transportStatus');
   @override
-  late final GeneratedColumn<String?> deliveredBy = GeneratedColumn<String?>(
-      'delivered_by', aliasedName, false,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 3, maxTextLength: 20),
-      type: const StringType(),
-      requiredDuringInsert: true);
-  final VerificationMeta _paymentStatusMeta =
-      const VerificationMeta('paymentStatus');
+  late final GeneratedColumn<String?> transportStatus =
+      GeneratedColumn<String?>('transport_status', aliasedName, false,
+          additionalChecks: GeneratedColumn.checkTextLength(
+              minTextLength: 1, maxTextLength: 20),
+          type: const StringType(),
+          requiredDuringInsert: true);
+  final VerificationMeta _transportByMeta =
+      const VerificationMeta('transportBy');
   @override
-  late final GeneratedColumn<String?> paymentStatus = GeneratedColumn<String?>(
-      'payment_status', aliasedName, false,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 3, maxTextLength: 20),
-      type: const StringType(),
-      requiredDuringInsert: true);
-  final VerificationMeta _dueAmountMeta = const VerificationMeta('dueAmount');
+  late final GeneratedColumn<String?> transportBy = GeneratedColumn<String?>(
+      'transport_by', aliasedName, true,
+      type: const StringType(), requiredDuringInsert: false);
+  final VerificationMeta _scheduleDateMeta =
+      const VerificationMeta('scheduleDate');
   @override
-  late final GeneratedColumn<double?> dueAmount = GeneratedColumn<double?>(
-      'due_amount', aliasedName, false,
-      type: const RealType(), requiredDuringInsert: true);
+  late final GeneratedColumn<DateTime?> scheduleDate =
+      GeneratedColumn<DateTime?>('schedule_date', aliasedName, false,
+          type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _startedAtMeta = const VerificationMeta('startedAt');
   @override
   late final GeneratedColumn<DateTime?> startedAt = GeneratedColumn<DateTime?>(
-      'started_at', aliasedName, false,
+      'started_at', aliasedName, true,
+      type: const IntType(), requiredDuringInsert: false);
+  final VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime?> createdAt = GeneratedColumn<DateTime?>(
+      'created_at', aliasedName, false,
       type: const IntType(),
       requiredDuringInsert: false,
       defaultValue: Constant(DateTime.now()));
@@ -1893,25 +1887,17 @@ class $ModelTransportTable extends ModelTransport
           type: const IntType(),
           requiredDuringInsert: false,
           defaultValue: Constant(DateTime.now()));
-  final VerificationMeta _isValidMeta = const VerificationMeta('isValid');
-  @override
-  late final GeneratedColumn<bool?> isValid = GeneratedColumn<bool?>(
-      'is_valid', aliasedName, false,
-      type: const BoolType(),
-      requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (is_valid IN (0, 1))',
-      defaultValue: const Constant(true));
   @override
   List<GeneratedColumn> get $columns => [
         transportId,
-        orderId,
-        deliveryStatus,
-        deliveredBy,
-        paymentStatus,
-        dueAmount,
+        deliveryOrderList,
+        returnOrderList,
+        transportStatus,
+        transportBy,
+        scheduleDate,
         startedAt,
-        lastUpdated,
-        isValid
+        createdAt,
+        lastUpdated
       ];
   @override
   String get aliasedName => _alias ?? 'model_transport';
@@ -1928,55 +1914,43 @@ class $ModelTransportTable extends ModelTransport
           transportId.isAcceptableOrUnknown(
               data['transport_id']!, _transportIdMeta));
     }
-    if (data.containsKey('order_id')) {
-      context.handle(_orderIdMeta,
-          orderId.isAcceptableOrUnknown(data['order_id']!, _orderIdMeta));
-    } else if (isInserting) {
-      context.missing(_orderIdMeta);
-    }
-    if (data.containsKey('delivery_status')) {
+    context.handle(_deliveryOrderListMeta, const VerificationResult.success());
+    context.handle(_returnOrderListMeta, const VerificationResult.success());
+    if (data.containsKey('transport_status')) {
       context.handle(
-          _deliveryStatusMeta,
-          deliveryStatus.isAcceptableOrUnknown(
-              data['delivery_status']!, _deliveryStatusMeta));
+          _transportStatusMeta,
+          transportStatus.isAcceptableOrUnknown(
+              data['transport_status']!, _transportStatusMeta));
     } else if (isInserting) {
-      context.missing(_deliveryStatusMeta);
+      context.missing(_transportStatusMeta);
     }
-    if (data.containsKey('delivered_by')) {
+    if (data.containsKey('transport_by')) {
       context.handle(
-          _deliveredByMeta,
-          deliveredBy.isAcceptableOrUnknown(
-              data['delivered_by']!, _deliveredByMeta));
-    } else if (isInserting) {
-      context.missing(_deliveredByMeta);
+          _transportByMeta,
+          transportBy.isAcceptableOrUnknown(
+              data['transport_by']!, _transportByMeta));
     }
-    if (data.containsKey('payment_status')) {
+    if (data.containsKey('schedule_date')) {
       context.handle(
-          _paymentStatusMeta,
-          paymentStatus.isAcceptableOrUnknown(
-              data['payment_status']!, _paymentStatusMeta));
+          _scheduleDateMeta,
+          scheduleDate.isAcceptableOrUnknown(
+              data['schedule_date']!, _scheduleDateMeta));
     } else if (isInserting) {
-      context.missing(_paymentStatusMeta);
-    }
-    if (data.containsKey('due_amount')) {
-      context.handle(_dueAmountMeta,
-          dueAmount.isAcceptableOrUnknown(data['due_amount']!, _dueAmountMeta));
-    } else if (isInserting) {
-      context.missing(_dueAmountMeta);
+      context.missing(_scheduleDateMeta);
     }
     if (data.containsKey('started_at')) {
       context.handle(_startedAtMeta,
           startedAt.isAcceptableOrUnknown(data['started_at']!, _startedAtMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
     }
     if (data.containsKey('last_updated')) {
       context.handle(
           _lastUpdatedMeta,
           lastUpdated.isAcceptableOrUnknown(
               data['last_updated']!, _lastUpdatedMeta));
-    }
-    if (data.containsKey('is_valid')) {
-      context.handle(_isValidMeta,
-          isValid.isAcceptableOrUnknown(data['is_valid']!, _isValidMeta));
     }
     return context;
   }
@@ -1993,6 +1967,11 @@ class $ModelTransportTable extends ModelTransport
   $ModelTransportTable createAlias(String alias) {
     return $ModelTransportTable(attachedDatabase, alias);
   }
+
+  static TypeConverter<DeliveryOrderList, String> $converter0 =
+      const DeliveryOrderListConverter();
+  static TypeConverter<ReturnOrderList, String> $converter1 =
+      const ReturnOrderListConverter();
 }
 
 class ModelReturnOrderData extends DataClass
@@ -2316,7 +2295,7 @@ class $ModelReturnOrderTable extends ModelReturnOrder
   late final GeneratedColumn<String?> returnStatus = GeneratedColumn<String?>(
       'return_status', aliasedName, false,
       additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 3, maxTextLength: 20),
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 20),
       type: const StringType(),
       requiredDuringInsert: true);
   final VerificationMeta _paymentStatusMeta =
@@ -2325,7 +2304,7 @@ class $ModelReturnOrderTable extends ModelReturnOrder
   late final GeneratedColumn<String?> paymentStatus = GeneratedColumn<String?>(
       'payment_status', aliasedName, false,
       additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 3, maxTextLength: 20),
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 20),
       type: const StringType(),
       requiredDuringInsert: true);
   final VerificationMeta _dueAmountMeta = const VerificationMeta('dueAmount');
@@ -2823,7 +2802,9 @@ class $ModelPaymentTable extends ModelPayment
   @override
   late final GeneratedColumn<int?> returnOrderId = GeneratedColumn<int?>(
       'return_order_id', aliasedName, true,
-      type: const IntType(), requiredDuringInsert: false);
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'REFERENCES model_return_order (return_order_id)');
   final VerificationMeta _amountMeta = const VerificationMeta('amount');
   @override
   late final GeneratedColumn<double?> amount = GeneratedColumn<double?>(
@@ -2835,7 +2816,7 @@ class $ModelPaymentTable extends ModelPayment
   late final GeneratedColumn<String?> paymentMode = GeneratedColumn<String?>(
       'payment_mode', aliasedName, false,
       additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 3, maxTextLength: 20),
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 20),
       type: const StringType(),
       requiredDuringInsert: true);
   final VerificationMeta _paymentTypeMeta =
@@ -2844,7 +2825,7 @@ class $ModelPaymentTable extends ModelPayment
   late final GeneratedColumn<String?> paymentType = GeneratedColumn<String?>(
       'payment_type', aliasedName, false,
       additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 3, maxTextLength: 20),
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 20),
       type: const StringType(),
       requiredDuringInsert: true);
   final VerificationMeta _paymentNoteMeta =

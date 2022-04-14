@@ -1,4 +1,4 @@
-// third party imports:
+
 
 // Package imports:
 import 'package:bloc/bloc.dart';
@@ -15,8 +15,6 @@ import 'package:salesman/core/utils/feature_monitor.dart';
 import 'package:salesman/main.dart';
 import 'package:salesman/modules/item/query/item_table_queries.dart';
 import 'package:salesman/modules/menu/repositories/menu_repository.dart';
-
-// project imports:
 
 // part
 part 'add_item_event.dart';

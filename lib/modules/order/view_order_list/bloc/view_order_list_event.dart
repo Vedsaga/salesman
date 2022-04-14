@@ -7,6 +7,4 @@ abstract class ViewOrderListEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class Fetch10LatestOrderListEvent extends ViewOrderListEvent {}
-
-class FetchAllOrderListEvent extends ViewOrderListEvent {}
+class FetchAllPendingOrderListEvent extends ViewOrderListEvent {}

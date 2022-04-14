@@ -12,8 +12,6 @@ import 'package:salesman/config/theme/card_box_decoration.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
 
-// project imports:
-
 class CustomListCard extends StatelessWidget {
   const CustomListCard(
       {Key? key,

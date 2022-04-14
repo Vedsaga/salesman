@@ -10,8 +10,6 @@ import 'package:salesman/core/models/validations/generic_field.dart';
 import 'package:salesman/core/models/validations/phone_number_field.dart';
 import 'package:salesman/modules/profile/repositories/profile_repository.dart';
 
-// project imports
-
 // part
 part 'profile_event.dart';
 part 'profile_state.dart';

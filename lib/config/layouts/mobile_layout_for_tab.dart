@@ -10,18 +10,19 @@ import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
 
 class MobileLayoutForTabScreen extends StatelessWidget {
-  const MobileLayoutForTabScreen(
-      {Key? key,
-      required this.body,
-      required this.title,
-      this.routeName,
+  const MobileLayoutForTabScreen({
+    Key? key,
+    required this.body,
+    required this.title,
+    this.routeName,
     required this.tabController,
-  })
-      : super(key: key);
+    required this.tabs,
+  }) : super(key: key);
   final Widget body;
   final String title;
   final String? routeName;
   final TabController tabController;
+  final List<Widget> tabs;
 
   @override
   Widget build(BuildContext context) {
@@ -56,35 +57,11 @@ class MobileLayoutForTabScreen extends StatelessWidget {
         ),
         bottom: TabBar(
           controller: tabController,
-          tabs: [
-            Text(
-              'details',
-              style: tabController.index == 0
-                  ? of(context)
-                      .textTheme
-                      .headline6
-                      ?.copyWith(color: skyBlue)
-                  : of(context)
-                      .textTheme
-                      .overline
-                      ?.copyWith(color: grey),
-            ),
-            Text(
-              'payment',
-              style: tabController.index == 1
-                  ? of(context)
-                      .textTheme
-                      .headline6
-                      ?.copyWith(color: skyBlue)
-                  : of(context)
-                      .textTheme
-                      .overline
-                      ?.copyWith(color: grey),
-            ),
-          ],
+          tabs: tabs,
           indicatorColor: Colors.transparent,
           unselectedLabelColor: grey,
-          labelColor: Colors.black,
+          labelColor: Colors.transparent,
+          splashBorderRadius: BorderRadius.zero,
           // show no indicator
           indicator: const UnderlineTabIndicator(
             borderSide: BorderSide(

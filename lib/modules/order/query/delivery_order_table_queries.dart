@@ -7,8 +7,6 @@ import 'package:drift/drift.dart';
 import 'package:salesman/core/db/drift/app_database.dart';
 import 'package:salesman/core/db/drift/models/model_delivery_order.dart';
 
-// project imports
-
 // part
 part 'delivery_order_table_queries.g.dart';
 
@@ -22,14 +20,13 @@ class DeliveryOrderTableQueries extends DatabaseAccessor<AppDatabase>
     return  into(modelDeliveryOrder).insert(order);
   }
 
-  Future<List<ModelDeliveryOrderData>> getLast10PendingOrders() async {
+  Future<List<ModelDeliveryOrderData>> getAllPendingOrders() async {
     return  (select(modelDeliveryOrder)
           ..where((table) => table.orderStatus.equals("pending"))
           ..orderBy([
             (table) =>
                 OrderingTerm(expression: table.deliveryOrderId, mode: OrderingMode.desc)
-          ])
-          ..limit(10))
+          ]))
         .get();
   }
 

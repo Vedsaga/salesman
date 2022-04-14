@@ -9,8 +9,6 @@ import 'package:salesman/config/theme/box_decoration.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
 
-// project imports
-
 class SingleInfoBox extends StatelessWidget {
   const SingleInfoBox({
     Key? key,

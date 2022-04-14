@@ -18,10 +18,6 @@ import 'package:salesman/core/components/normal_top_app_bar.dart';
 import 'package:salesman/core/components/snackbar_message.dart';
 import 'package:salesman/modules/item/view_list/bloc/view_item_bloc.dart';
 
-// third party imports:
-
-// project imports:
-
 class ViewItemList extends StatefulWidget {
   const ViewItemList({Key? key}) : super(key: key);
 

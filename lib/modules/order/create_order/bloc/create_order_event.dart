@@ -12,43 +12,72 @@ class FetchRequiredListEvent extends CreateOrderEvent {}
 class OrderFieldsChangeEvent extends CreateOrderEvent {
   const OrderFieldsChangeEvent({
     required this.clientId,
+    required this.clientName,
     required this.itemId,
-    required this.perUnitCost,
-    required this.totalCost,
-    required this.totalQuantity,
+    required this.itemName,
+    required this.itemUnit,
+    required this.itemPerUnitCost,
+    required this.itemTotalCost,
+    required this.itemTotalQuantity,
+    required this.listOfItemsForOrder,
     required this.orderStatus,
-    this.paymentStatus,
     required this.createdBy,
-    this.expectedDeliveryDate,
+    required this.expectedDeliveryDate,
   });
 
   final int clientId;
+  final String clientName;
   final int itemId;
-  final double perUnitCost;
-  final double totalCost;
-  final double totalQuantity;
+  final String itemName;
+  final String itemUnit;
+  final double itemPerUnitCost;
+  final double itemTotalCost;
+  final double itemTotalQuantity;
+  final List<ItemMap> listOfItemsForOrder;
   final String orderStatus;
-  final String? paymentStatus;
   final String createdBy;
   final DateTime? expectedDeliveryDate;
 
   @override
   List<Object> get props => [
         clientId,
+        clientName,
         itemId,
-        perUnitCost,
-        totalCost,
-        totalQuantity,
+        itemName,
+        itemUnit,
+        itemPerUnitCost,
+        itemTotalCost,
+        itemTotalQuantity,
+        listOfItemsForOrder,
         orderStatus,
         createdBy,
       ];
 }
 
-class ClientIdFieldUnfocusedEvent extends CreateOrderEvent{}
-class ItemIdFieldUnfocusedEvent extends CreateOrderEvent{}
-class TotalQuantityFieldUnfocusedEvent extends CreateOrderEvent{}
+class ClientIdFieldUnfocusedEvent extends CreateOrderEvent {}
+
+class ItemIdFieldUnfocusedEvent extends CreateOrderEvent {}
+
+class TotalQuantityFieldUnfocusedEvent extends CreateOrderEvent {}
+
+class RemoveItemFromListEvent extends CreateOrderEvent {
+  final int unselectedItemId;
+  const RemoveItemFromListEvent({
+    required this.unselectedItemId,
+  });
+
+  @override
+  List<Object> get props => [unselectedItemId];
+}
+
 class OrderFormSubmitEvent extends CreateOrderEvent {}
+
 class EnableDeliveryFeatureEvent extends CreateOrderEvent {}
+
 class EnablePaymentFeatureEvent extends CreateOrderEvent {}
+
 class EnableReceiveFeatureEvent extends CreateOrderEvent {}
+
 class EnableSendFeatureEvent extends CreateOrderEvent {}
+
+class ResetItemFieldsEvent extends CreateOrderEvent {}

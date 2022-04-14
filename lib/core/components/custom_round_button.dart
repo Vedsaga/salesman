@@ -12,21 +12,22 @@ import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/round_button_decoration.dart';
 import 'package:salesman/config/theme/theme.dart';
 
-// third party imports:
-
-// project imports:
-
 class CustomRoundButton extends StatelessWidget {
-  const CustomRoundButton(
-      {Key? key,
-      required this.label,
-      required this.svgPath,
-      required this.onPressed,
-      })
-      : super(key: key);
+  const CustomRoundButton({
+    Key? key,
+    required this.label,
+    required this.svgPath,
+    required this.onPressed,
+    this.svgColor,
+    this.gradient,
+    this.svgHeight,
+  }) : super(key: key);
   final String label;
   final String svgPath;
   final Function onPressed;
+  final LinearGradient? gradient;
+  final Color? svgColor;
+  final double? svgHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +38,8 @@ class CustomRoundButton extends StatelessWidget {
       },
       child: Container(
         height: designValues(context).roundButtonHeight,
-        decoration: roundButtonDecoration(context),
+        decoration:
+            roundButtonDecoration(context: context, linearGradient: gradient),
         child: Padding(
           padding: EdgeInsets.symmetric(
             horizontal: designValues(context).roundButtonHorizontalPadding,
@@ -48,14 +50,16 @@ class CustomRoundButton extends StatelessWidget {
               Text(
                 label.substring(0, 1).toUpperCase() + label.substring(1),
                 style: of(context).textTheme.subtitle1?.copyWith(
-                      color: white,
+                      color: svgColor ?? white,
                     ),
               ),
-              SizedBox(width: designValues(context).roundButtonHorizontalPadding),
+              SizedBox(
+                width: designValues(context).roundButtonHorizontalPadding,
+              ),
               SvgPicture.asset(
                 "assets/icons/svgs/$svgPath.svg",
-                color: light,
-                height: 13,
+                color: svgColor ?? light,
+                height:svgHeight?? 13,
               ),
             ],
           ),

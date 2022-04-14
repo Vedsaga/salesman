@@ -1,5 +1,3 @@
-// third party import
-
 // Package imports:
 import 'package:formz/formz.dart';
 
@@ -13,10 +11,11 @@ class StatusTypeField
   const StatusTypeField.pure([String value = '']) : super.pure(value);
   const StatusTypeField.dirty([String value = '']) : super.dirty(value);
 
-  static final List<String> orderStatus = [
+  static final List<String> deliveryOrderStatus = [
     'pending',
     'processing',
-    'completed',
+    'out-for-delivery',
+    'delivered',
     'cancelled',
     'rejected',
   ];
@@ -32,16 +31,17 @@ class StatusTypeField
     'UPI',
     'others'
   ];
-  static final List<String> deliveryStatus = [
-    'in-transit',
-    'out-for-delivery',
-    'delivered',
-    'cancelled',
-    'rejected'
+  static final List<String> transportStatus = [
+    'pending',
+    'in-progress',
+    'completed',
+    'cancelled'
   ];
-  static final List<String> returnStatus = [
+  static final List<String> returnOrderStatus = [
     'pending',
     'approved',
+    'collected',
+    'returned',
     'rejected',
     'cancelled'
   ];
@@ -52,13 +52,13 @@ class StatusTypeField
       return StatusTypeFieldValidationError.cannotBeEmpty;
     }
     // if value is available in any of the list then return null else return invalidStatusType
-    if (orderStatus.contains(value) ||
+    if (deliveryOrderStatus.contains(value) ||
         paymentType.contains(value) ||
         paymentStatus.contains(value) ||
         paymentMode.contains(value) ||
-        deliveryStatus.contains(value) ||
+        transportStatus.contains(value) ||
         paymentFor.contains(value) ||
-        returnStatus.contains(value)) {
+        returnOrderStatus.contains(value)) {
       return null;
     } else {
       return StatusTypeFieldValidationError.invalidStatusType;

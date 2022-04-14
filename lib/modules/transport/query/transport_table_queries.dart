@@ -12,4 +12,26 @@ class TransportTableQueries extends DatabaseAccessor<AppDatabase>
     with _$TransportTableQueriesMixin {
   final AppDatabase db;
   TransportTableQueries(this.db) : super(db);
+
+  Future<int> newTransport(ModelTransportCompanion transport) async {
+    return into(modelTransport).insert(transport);
+  }
+
+  Future<List<ModelTransportData>> getAllPendingTransports() async {
+    return (select(modelTransport)
+          ..where((table) => table.transportStatus.equals("pending"))
+          ..orderBy([
+            (table) => OrderingTerm.asc(table.transportId)
+          ])
+          )
+        .get();
+  }
+  Future<List<ModelTransportData>> getAlTransports() async {
+    return (select(modelTransport)
+          ..orderBy([
+            (table) => OrderingTerm.desc(table.transportId)
+          ])
+          )
+        .get();
+  }
 }

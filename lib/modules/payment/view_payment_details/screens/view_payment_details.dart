@@ -23,7 +23,7 @@ import 'package:salesman/core/components/snackbar_message.dart';
 import 'package:salesman/modules/payment/view_payment_details/bloc/view_payment_details_bloc.dart';
 
 // third party imports
-// project imports
+
 
 class ViewPaymentDetails extends StatefulWidget {
   const ViewPaymentDetails({Key? key}) : super(key: key);
@@ -50,7 +50,7 @@ class _ViewPaymentDetailsState extends State<ViewPaymentDetails> {
                 context: context,
                 routeArguments: ViewOrderDetailsRouteArguments(
                   clientDetails: state.clientDetails!,
-                  itemDetails: state.itemDetails!,
+                    itemList: state.orderDetails!.itemList.itemList,
                   orderDetails: state.orderDetails!,
                 ),
                 ),
@@ -176,12 +176,11 @@ class _ViewPaymentDetailsState extends State<ViewPaymentDetails> {
                       },
                       child: DetailsCard(
                         containerGradient: lightGradient,
-                          label: "reason",
-                          firstChild: Text(
-                          "payment ${state.paymentDetails.paymentType} for",
-                        ),
+                        label:
+                            "payment ${state.paymentDetails.paymentType} for",
+                        firstChild: const SizedBox(),
                           secondChild: Text(
-                            "ORDER Id: ${state.paymentDetails.deliveryOrderId}",
+                          "ORDER ID: ${state.paymentDetails.deliveryOrderId}",
                           style: of(context)
                                 .textTheme
                                 .bodyText2
@@ -200,7 +199,7 @@ class _ViewPaymentDetailsState extends State<ViewPaymentDetails> {
                     ),
                     SizedBox(height: designValues(context).cornerRadius34),
                     DetailsCard(
-                        label: "Payment Mode",
+                      label: "Payment Amount",
                         firstChild: SvgPicture.asset(
                           "assets/icons/svgs/inr.svg",
                           height: 13,

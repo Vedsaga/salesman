@@ -1,4 +1,3 @@
-
 // Project imports:
 import 'package:salesman/core/db/hive/models/active_features_model.dart';
 import 'package:salesman/modules/menu/repositories/menu_repository.dart';

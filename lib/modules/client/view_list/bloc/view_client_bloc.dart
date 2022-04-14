@@ -1,4 +1,4 @@
-// third part imports
+
 
 // Package imports:
 import 'package:bloc/bloc.dart';
@@ -8,8 +8,6 @@ import 'package:equatable/equatable.dart';
 import 'package:salesman/core/db/drift/app_database.dart';
 import 'package:salesman/main.dart';
 import 'package:salesman/modules/client/query/client_table_queries.dart';
-
-// project imports
 
 // part
 part 'view_client_event.dart';

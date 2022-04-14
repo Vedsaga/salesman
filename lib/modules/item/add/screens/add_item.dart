@@ -26,7 +26,7 @@ import 'package:salesman/modules/item/add/bloc/add_item_bloc.dart';
 
 // third party import
 
-// project imports
+
 
 class AddItem extends StatefulWidget {
   const AddItem({Key? key}) : super(key: key);

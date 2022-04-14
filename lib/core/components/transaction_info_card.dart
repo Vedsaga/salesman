@@ -2,12 +2,14 @@
 
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 // Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/theme/card_box_decoration.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
+import 'package:salesman/core/components/row_flex_close_children.dart';
 
 class TransactionListCard extends StatelessWidget {
   const TransactionListCard(
@@ -82,13 +84,21 @@ class TransactionListCard extends StatelessWidget {
                             ),
                     ),
                     const Spacer(),
-                    Text(
-                      trailingDataAtTop,
-                        style: of(context).textTheme.subtitle2?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: dark,
-                            ),
-                    )
+                      RowFlexCloseChildren(
+                        firstChild: SvgPicture.asset(
+                          "assets/icons/svgs/inr.svg",
+                          height: 13,
+                          width: 13,
+                        ),
+                        secondChild: Text(
+                          trailingDataAtTop,
+                          style: of(context).textTheme.subtitle2?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: dark,
+                              ),
+                        ),
+                      ),
+
                     ],
                   ),
                   SizedBox(height: designValues(context).padding13),

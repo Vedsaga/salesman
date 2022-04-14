@@ -7,11 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/theme/colors.dart';
 
-// project imports
-
-BoxDecoration roundButtonDecoration(BuildContext context) {
+BoxDecoration roundButtonDecoration({required BuildContext context,
+  required final LinearGradient? linearGradient,}) {
   return BoxDecoration(
-    color: dark,
+    color: linearGradient == null ? dark : null,
+    gradient: linearGradient,
     borderRadius:
         BorderRadius.circular(designValues(context).roundButtonRadius),
     boxShadow: const [

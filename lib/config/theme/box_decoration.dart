@@ -7,8 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/theme/colors.dart';
 
-// project imports
-
 BoxDecoration myBoxDecoration(BuildContext context) {
   return BoxDecoration(
     borderRadius: BorderRadius.circular(designValues(context).containerCornerRadius21),

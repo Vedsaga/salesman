@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 // Project imports:
 import 'package:salesman/core/models/designs/design_values_model.dart';
 
-// project import
-
 DesignValuesModel designValues(BuildContext context) {
   return DesignValuesModel(
     screenWidth: MediaQuery.of(context).size.width,

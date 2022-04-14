@@ -7,8 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/theme/colors.dart';
 
-// project import:
-
 class MobileLayout extends StatelessWidget {
   const MobileLayout(
       {Key? key,

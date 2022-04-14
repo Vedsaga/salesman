@@ -2,11 +2,10 @@ part of 'view_payment_details_bloc.dart';
 
 abstract class ViewPaymentDetailsState extends Equatable {
   const ViewPaymentDetailsState(
-      {this.orderDetails, this.clientDetails, this.itemDetails,});
+      {this.orderDetails, this.clientDetails,});
 
   final ModelDeliveryOrderData? orderDetails;
   final ModelClientData? clientDetails;
-  final ModelItemData? itemDetails;
 
   @override
   List<Object> get props => [];
@@ -33,11 +32,9 @@ class OrderRelatedDetailsFetchedState extends ViewPaymentDetailsState {
   const OrderRelatedDetailsFetchedState({
     ModelDeliveryOrderData? orderDetails,
     ModelClientData? clientDetails,
-    ModelItemData? itemDetails,
   }) : super(
           orderDetails: orderDetails,
           clientDetails: clientDetails,
-          itemDetails: itemDetails,
         );
 }
 

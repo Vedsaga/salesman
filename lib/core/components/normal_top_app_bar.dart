@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 // Project imports:
 import 'package:salesman/config/theme/theme.dart';
 
-// project imports:
-
 class NormalTopAppBar extends StatelessWidget {
   const NormalTopAppBar({Key? key, this.title, this.titleWidget})
       : super(key: key);

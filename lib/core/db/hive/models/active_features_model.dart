@@ -1,5 +1,3 @@
-// third part imports:
-
 // Package imports:
 import 'package:hive/hive.dart';
 

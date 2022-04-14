@@ -10,8 +10,6 @@ import 'package:salesman/config/theme/theme.dart';
 import 'package:salesman/core/components/menu_button.dart';
 import 'package:salesman/core/models/designs/menu_button_model.dart';
 
-// project imports
-
 class MenuSection extends StatelessWidget {
   final List<MenuButtonModel> menuItems;
   final String groupName;

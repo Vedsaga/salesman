@@ -8,20 +8,23 @@ import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
 
-// project import
-
 class ActionButton extends StatelessWidget {
   const ActionButton({
     required this.disabled,
     required this.text,
     Key? key,
     required this.onPressed,
-  })
-      : super(key: key);
+    this.gradient,
+    this.buttonColor,
+    this.textColor,
+  }) : super(key: key);
 
   final bool disabled;
   final String text;
   final Function onPressed;
+  final LinearGradient? gradient;
+  final Color? buttonColor;
+  final Color? textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -43,10 +46,22 @@ class ActionButton extends StatelessWidget {
                 ),
               )
             : BoxDecoration(
-                color: dark,
+                color: buttonColor == null && gradient == null
+                    ? secondaryDark
+                    : buttonColor != null && gradient == null
+                        ? buttonColor
+                        : null,
+                gradient: gradient,
                 borderRadius: BorderRadius.circular(
                   designValues(context).buttonCornerRadius,
                 ),
+                boxShadow: const [
+                  BoxShadow(
+                    color: shadowColor,
+                    blurRadius: 34,
+                    offset: Offset(-5, 5),
+                  ),
+                ],
               ),
         child: Center(
           child: Text(
@@ -57,7 +72,10 @@ class ActionButton extends StatelessWidget {
                     .textTheme
                     .button
                     ?.copyWith(color: grey)
-                : of(context).textTheme.button,
+                : of(context)
+                    .textTheme
+                    .button
+                    ?.copyWith(color: textColor ?? light),
           ),
         ),
       ),

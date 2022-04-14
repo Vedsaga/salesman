@@ -1,13 +1,11 @@
-// flutter import
-
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 // Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
+import 'package:intl/intl.dart';
 
 // Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
@@ -17,18 +15,18 @@ import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
 import 'package:salesman/core/components/action_button.dart';
 import 'package:salesman/core/components/custom_dropdown.dart';
-import 'package:salesman/core/components/input_decoration.dart';
 import 'package:salesman/core/components/input_top_app_bar.dart';
+import 'package:salesman/core/components/item_info_card.dart';
+import 'package:salesman/core/components/label_for_dropdown.dart';
 import 'package:salesman/core/components/normal_top_app_bar.dart';
-import 'package:salesman/core/components/show_unit.dart';
+import 'package:salesman/core/components/row_flex_close_children.dart';
+import 'package:salesman/core/components/row_flex_spaced_children.dart';
 import 'package:salesman/core/components/snackbar_message.dart';
+import 'package:salesman/core/components/summary_card.dart';
 import 'package:salesman/core/db/drift/app_database.dart';
-import 'package:salesman/core/models/validations/double_field_not_zero.dart';
 import 'package:salesman/modules/order/create_order/bloc/create_order_bloc.dart';
-
-// third party import
-
-// project import
+import 'package:salesman/modules/order/create_order/screens/add_item_page.dart';
+import 'package:salesman/modules/order/create_order/screens/edit_item_page.dart';
 
 class CreateOrder extends StatefulWidget {
   const CreateOrder({Key? key}) : super(key: key);
@@ -39,29 +37,20 @@ class CreateOrder extends StatefulWidget {
 
 class _CreateOrderState extends State<CreateOrder> {
   final TextEditingController _clientIdController = TextEditingController();
-  final TextEditingController _itemIdController = TextEditingController();
-  final FocusNode _totalQuantityFocusNode = FocusNode();
-  final TextEditingController _totalCostController = TextEditingController();
-  final TextEditingController _perUnitCostController = TextEditingController();
-  final TextEditingController _paymentStatusController =
-      TextEditingController();
-
+  DateTime? expectedDeliveryDate;
+  TimeOfDay expectedDeliveryTime = TimeOfDay.now();
   @override
   void initState() {
     super.initState();
-    _totalQuantityFocusNode.addListener(_totalQuantityFocusNodeListener);
   }
 
-  void _totalQuantityFocusNodeListener() {
-    if (!_totalQuantityFocusNode.hasFocus) {
-      context.read<CreateOrderBloc>().add(TotalQuantityFieldUnfocusedEvent());
-    }
+  DateTime join(DateTime date, TimeOfDay time) {
+    return DateTime(date.year, date.month, date.day, time.hour, time.minute);
   }
 
   int _returnClientId({
     required List<ModelClientData>? clientList,
     required String name,
-    required String askFor,
   }) {
     if (clientList != null) {
       for (final element in clientList) {
@@ -73,90 +62,9 @@ class _CreateOrderState extends State<CreateOrder> {
     return -1;
   }
 
-  int _returnItemId({
-    required List<ModelItemData>? itemList,
-    required String name,
-  }) {
-    if (itemList != null) {
-      for (final element in itemList) {
-        if (element.itemName == name) {
-          return element.itemId;
-        }
-      }
-    }
-    return -1;
-  }
-
-  String _returnUnitOfItem({
-    required List<ModelItemData>? itemList,
-    required String name,
-  }) {
-    if (itemList != null) {
-      for (final element in itemList) {
-        if (element.itemName == name) {
-          return element.unit;
-        }
-      }
-    }
-    return "";
-  }
-
-  double _returnPerUnitCostOfItem({
-    required List<ModelItemData>? itemList,
-    required String name,
-    required String askedFor,
-  }) {
-    if (itemList != null) {
-      for (final element in itemList) {
-        if (element.itemName == name) {
-          if (askedFor == "sellingPricePerUnit") {
-            return element.sellingPricePerUnit;
-          }
-          if (askedFor == "buyingPricePerUnit") {
-            return element.buyingPricePerUnit;
-          }
-          if (askedFor == "availableQuantity") {
-            return element.availableQuantity;
-          }
-        }
-      }
-    }
-    return 0.0;
-  }
-
-  String? _totalQuantityErrorText() {
-    final totalQuantity = context.read<CreateOrderBloc>().state.totalQuantity;
-    if (totalQuantity.value >
-        _returnPerUnitCostOfItem(
-          itemList: context.read<CreateOrderBloc>().state.itemList,
-          name: _itemIdController.text,
-          askedFor: 'availableQuantity',
-        )) {
-      return 'Selling quantity is greater than available quantity';
-    }
-    switch (totalQuantity.error) {
-      case DoubleFieldNotZeroValidationError.cannotBeEmpty:
-        return 'Quantity cannot be empty';
-      case DoubleFieldNotZeroValidationError.cannotBeZero:
-        return 'Order Quantity cannot be zero';
-      case DoubleFieldNotZeroValidationError.cannotBeNegative:
-        return 'Order Quantity cannot be less than zero';
-      case DoubleFieldNotZeroValidationError.invalidFormat:
-        return 'Please enter a valid quantity';
-      default:
-        return null;
-    }
-  }
-
   @override
   void dispose() {
-    _totalQuantityFocusNode.removeListener(_totalQuantityFocusNodeListener);
     _clientIdController.dispose();
-    _itemIdController.dispose();
-    _totalQuantityFocusNode.dispose();
-    _totalCostController.dispose();
-    _perUnitCostController.dispose();
-    _paymentStatusController.dispose();
     super.dispose();
   }
 
@@ -230,14 +138,7 @@ class _CreateOrderState extends State<CreateOrder> {
         bottomAppBar: BlocBuilder<CreateOrderBloc, CreateOrderState>(
           builder: (context, state) {
             return ActionButton(
-              disabled: !state.status.isValidated ||
-                  state.totalQuantity.value >
-                      _returnPerUnitCostOfItem(
-                        itemList:
-                            context.read<CreateOrderBloc>().state.itemList,
-                        name: _itemIdController.text,
-                        askedFor: 'availableQuantity',
-                      ),
+              disabled: !state.status.isValidated,
               text: "create",
               onPressed: () {
                 if (state.status.isValidated) {
@@ -249,6 +150,9 @@ class _CreateOrderState extends State<CreateOrder> {
         ),
         body: BlocBuilder<CreateOrderBloc, CreateOrderState>(
           builder: (context, state) {
+            // ! state.status.isValidated works well in windows but, in mobile if we move from CreateOrder to AddItemPage,
+            // ! and come back to CreateOrder, then state.status.isValidated is false not sure why?
+            // FIXME: find out why state.status.isValidated is false in mobile
             if (state is FetchingRequiredListState) {
               return const CircularProgressIndicator();
             }
@@ -263,11 +167,23 @@ class _CreateOrderState extends State<CreateOrder> {
                 child: Flex(
                   direction: Axis.vertical,
                   children: <Widget>[
+                    const NormalTopAppBar(title: "summary"),
+                    SizedBox(height: designValues(context).cornerRadius34),
+                    SummaryCard(
+                      summaryValuesList: null,
+                      showCount: true,
+                      listData: state.listOfItemsForOrder.value,
+                      highlightText: "Total",
+                      highlightValue: state.netTotal.value.toStringAsFixed(2),
+                      highlightTextColor: secondaryDark,
+                      highlightValueColor: secondaryDark,
+                    ),
+                    SizedBox(height: designValues(context).cornerRadius34),
                     CustomDropdown(
                       labelText: "Select Client",
-                      value: _clientIdController.text == ""
+                      value: state.clientName.value == ""
                           ? null
-                          : _clientIdController.text,
+                          : state.clientName.value,
                       items: state.clientList
                           .map(
                             (client) => DropdownMenuItem<String>(
@@ -289,261 +205,343 @@ class _CreateOrderState extends State<CreateOrder> {
                             clientId: _returnClientId(
                               clientList: state.clientList,
                               name: _clientIdController.text,
-                              askFor: 'clientId',
                             ),
+                            clientName: _clientIdController.text,
                             itemId: state.itemId.value,
-                            perUnitCost: state.perUnitCost.value,
-                            totalCost: state.totalCost.value,
-                            totalQuantity: state.totalQuantity.value,
+                            itemName: state.itemName.value,
+                            itemUnit: state.itemUnit.value,
+                            itemPerUnitCost: state.itemPerUnitCost.value,
+                            itemTotalQuantity: state.itemTotalQuantity.value,
+                            itemTotalCost: state.itemTotalCost.value,
+                            listOfItemsForOrder:
+                                state.listOfItemsForOrder.value,
                             orderStatus: state.orderStatus.value,
                             createdBy: state.createdBy.value,
-                          ),
-                        );
-                      },
-                    ),
-                    SizedBox(height: designValues(context).cornerRadius34),
-                    CustomDropdown(
-                      labelText: "Select Item",
-                      value: _itemIdController.text == ""
-                          ? null
-                          : _itemIdController.text,
-                      items: state.itemList
-                          .map(
-                            (item) => DropdownMenuItem<String>(
-                              value: item.itemName,
-                              child: Text(
-                                item.itemName,
-                                style: of(context).textTheme.caption,
-                              ),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (item) {
-                        setState(() {
-                          _itemIdController.text =
-                              item ?? _itemIdController.text;
-                        });
-                        BlocProvider.of<CreateOrderBloc>(context).add(
-                          OrderFieldsChangeEvent(
-                            clientId: state.clientId.value,
-                            itemId: _returnItemId(
-                              itemList: state.itemList,
-                              name: _itemIdController.text,
-                            ),
-                            perUnitCost: state.perUnitCost.value,
-                            totalCost: state.totalCost.value,
-                            totalQuantity: state.totalQuantity.value,
-                            orderStatus: state.orderStatus.value,
-                            createdBy: state.createdBy.value,
+                            expectedDeliveryDate:
+                                state.expectedDeliveryDate.value,
                           ),
                         );
                       },
                     ),
                     SizedBox(height: designValues(context).verticalPadding),
-                    TextFormField(
-                      initialValue:
-                          state.totalQuantity.value.toStringAsFixed(2),
-                      keyboardType: TextInputType.number,
-                      focusNode: _totalQuantityFocusNode,
-                      decoration: inputDecoration(
-                        context,
-                        labelText: "total quantity",
-                        hintText: "XXX",
-                        inFocus: state.itemId.valid,
-                        suffixIconWidget: state.itemId.valid
-                            ? ShowUnit(
-                                showUnit: false,
-                                value: _returnUnitOfItem(
-                                  itemList: state.itemList,
-                                  name: _itemIdController.text,
-                                ),
-                                showIcon: false,
-                              )
-                            : null,
-                        errorText: _totalQuantityFocusNode.hasFocus
-                            ? _totalQuantityErrorText()
-                            : null,
-                      ),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(
-                          RegExp(r'^[0-9]+(\.[0-9]*)?$'),
-                        ),
-                      ],
-                      readOnly: !state.itemId.valid,
-                      textAlignVertical: TextAlignVertical.center,
-                      textInputAction: TextInputAction.done,
-                      style: Theme.of(context).textTheme.bodyText1,
-                      onFieldSubmitted: (term) {
-                        _totalQuantityFocusNode.unfocus();
-                      },
-                      onChanged: (value) {
-                        print(value);
-                        BlocProvider.of<CreateOrderBloc>(context).add(
-                          OrderFieldsChangeEvent(
-                            clientId: state.clientId.value,
-                            itemId: state.itemId.value,
-                            perUnitCost: _returnPerUnitCostOfItem(
-                              itemList: state.itemList,
-                              name: _itemIdController.text,
-                              askedFor: 'sellingPricePerUnit',
+                    RowFlexSpacedChildren(
+                      firstChild: GestureDetector(
+                        onTap: () {
+                          showDatePicker(
+                            context: context,
+                            initialDate: expectedDeliveryDate ?? DateTime.now(),
+                            errorFormatText: "Invalid date",
+                            helpText: "Expected delivery date",
+                            errorInvalidText: "Delivery date can't be in past",
+                            firstDate: DateTime.now(),
+                            lastDate: DateTime(2100),
+                          ).then((date) {
+                            setState(() {
+                              if (date != null) {
+                                expectedDeliveryDate = join(
+                                  date,
+                                  expectedDeliveryTime,
+                                );
+                              }
+                            });
+                            OrderFieldsChangeEvent(
+                              clientId: state.clientId.value,
+                              clientName: _clientIdController.text,
+                              itemId: state.itemId.value,
+                              itemName: state.itemName.value,
+                              itemUnit: state.itemUnit.value,
+                              itemPerUnitCost: state.itemPerUnitCost.value,
+                              itemTotalQuantity: state.itemTotalQuantity.value,
+                              itemTotalCost: state.itemTotalCost.value,
+                              listOfItemsForOrder:
+                                  state.listOfItemsForOrder.value,
+                              orderStatus: state.orderStatus.value,
+                              createdBy: state.createdBy.value,
+                              expectedDeliveryDate: expectedDeliveryDate,
+                            );
+                          });
+                        },
+                        child: Flex(
+                          direction: Axis.vertical,
+                          children: [
+                            labelForDropdown(
+                              context,
+                              labelText: "Delivery date",
+                              isRequired: false,
                             ),
-                            totalCost: double.tryParse(value) == null
-                                ? 0
-                                : _returnPerUnitCostOfItem(
-                                      itemList: state.itemList,
-                                      name: _itemIdController.text,
-                                      askedFor: 'sellingPricePerUnit',
-                                    ) *
-                                    double.parse(value),
-                            totalQuantity: double.tryParse(value) ?? 0,
-                            orderStatus: state.orderStatus.value,
-                            createdBy: state.createdBy.value,
-                          ),
-                        );
-                      },
-                    ),
-                    SizedBox(height: designValues(context).sectionSpacing89),
-                    const NormalTopAppBar(title: "summary"),
-                    SizedBox(height: designValues(context).cornerRadius34),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          designValues(context).cornerRadius8,
-                        ),
-                        color: light,
-                        boxShadow: const [
-                          BoxShadow(
-                            color: shadowColor,
-                            blurRadius: 34,
-                            offset: Offset(-5, 5),
-                          ),
-                        ],
-                      ),
-                      child: Flex(
-                        direction: Axis.vertical,
-                        children: <Widget>[
-                          Padding(
-                            padding:
-                                EdgeInsets.all(designValues(context).padding21),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
+                            SizedBox(
+                              height: designValues(context).cornerRadius8,
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(
+                                  designValues(context).cornerRadius8,
+                                ),
+                                color: light,
+                                border: Border.all(
+                                  color: lightGrey,
+                                  width: 2,
+                                ),
+                              ),
                               child: Flex(
-                                direction: Axis.vertical,
+                                direction: Axis.horizontal,
                                 children: [
-                                  Flex(
-                                    direction: Axis.horizontal,
-                                    children: [
-                                      Text(
-                                        _itemIdController.text,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                      const Spacer(),
-                                      Text(
-                                        state.perUnitCost.value
-                                            .toStringAsFixed(2),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                              color: grey,
-                                            ),
-                                      ),
-                                    ],
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      left: designValues(context).padding21,
+                                      right:
+                                          designValues(context).cornerRadius8,
+                                      top: designValues(context).padding21,
+                                      bottom: designValues(context).padding21,
+                                    ),
+                                    child: RowFlexCloseChildren(
+                                      firstChild: expectedDeliveryDate != null
+                                          ? Text(
+                                              DateFormat('EEE,').format(
+                                                expectedDeliveryDate!.toLocal(),
+                                              ),
+                                              style:
+                                                  of(context).textTheme.caption,
+                                            )
+                                          : const Text("No date selected"),
+                                      secondChild: expectedDeliveryDate != null
+                                          ? Text(
+                                              DateFormat('dd/MM/yyyy').format(
+                                                expectedDeliveryDate!.toLocal(),
+                                              ),
+                                              style: of(context)
+                                                  .textTheme
+                                                  .caption
+                                                  ?.copyWith(
+                                                    color: secondaryDark,
+                                                  ),
+                                            )
+                                          : const SizedBox(),
+                                    ),
                                   ),
-                                  SizedBox(
-                                    height: designValues(context).padding21,
-                                  ),
-                                  Flex(
-                                    direction: Axis.horizontal,
-                                    children: [
-                                      const Spacer(),
-                                      Text(
-                                        "Qyt: ",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .caption
-                                            ?.copyWith(color: grey),
-                                      ),
-                                      SizedBox(
-                                        width:
-                                            designValues(context).cornerRadius8,
-                                      ),
-                                      Text(
-                                        state.totalQuantity.value.toString(),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                              color: dark,
-                                            ),
-                                      ),
-                                    ],
-                                  ),
+                                  // icon button to reset the expected delivery date to null
+                                  IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        expectedDeliveryDate = null;
+                                      });
+                                      OrderFieldsChangeEvent(
+                                        clientId: state.clientId.value,
+                                        clientName: _clientIdController.text,
+                                        itemId: state.itemId.value,
+                                        itemName: state.itemName.value,
+                                        itemUnit: state.itemUnit.value,
+                                        itemPerUnitCost:
+                                            state.itemPerUnitCost.value,
+                                        itemTotalQuantity:
+                                            state.itemTotalQuantity.value,
+                                        itemTotalCost:
+                                            state.itemTotalCost.value,
+                                        listOfItemsForOrder:
+                                            state.listOfItemsForOrder.value,
+                                        orderStatus: state.orderStatus.value,
+                                        createdBy: state.createdBy.value,
+                                        expectedDeliveryDate:
+                                            expectedDeliveryDate,
+                                      );
+                                    },
+                                    icon: const Icon(
+                                      Icons.clear_rounded,
+                                      color: red,
+                                    ),
+                                ),
                                 ],
                               ),
                             ),
-                          ),
-                          SvgPicture.asset(
-                            "assets/icons/svgs/dash.svg",
-                          ),
-                          Padding(
-                            padding:
-                                EdgeInsets.all(designValues(context).padding21),
-                            child: Flex(
-                              direction: Axis.horizontal,
-                              children: <Widget>[
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                    right:
-                                        designValues(context).horizontalPadding,
-                                  ),
-                                  child: Text(
-                                    "Total Cost",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline6
-                                        ?.copyWith(color: orange),
-                                  ),
-                                ),
-                                const Spacer(),
-                                Flex(
-                                  direction: Axis.horizontal,
-                                  children: [
-                                    SvgPicture.asset(
-                                      "assets/icons/svgs/inr.svg",
-                                      height: 13,
-                                      width: 13,
-                                      color: orange,
-                                    ),
-                                    SizedBox(
-                                      width:
-                                          designValues(context).cornerRadius8,
-                                    ),
-                                    LimitedBox(
-                                      maxWidth: 144,
-                                      child: Text(
-                                        state.totalCost.value
-                                            .toStringAsFixed(2),
-                                        overflow: TextOverflow.ellipsis,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline6,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
+                          ],
+                        ),
                       ),
+                      secondChild: GestureDetector(
+                        onTap: () {
+                          showTimePicker(
+                            context: context,
+                            initialTime: expectedDeliveryTime,
+                          ).then((time) {
+                            setState(() {
+                              if (time != null) {
+                                if (join(
+                                  expectedDeliveryDate ?? DateTime.now(),
+                                  time,
+                                ).isAfter(DateTime.now())) {
+                                  expectedDeliveryTime = time;
+                                  expectedDeliveryDate = join(
+                                    expectedDeliveryDate ?? DateTime.now(),
+                                    time,
+                                  );
+                                  BlocProvider.of<CreateOrderBloc>(
+                                    context,
+                                  ).add(
+                                    OrderFieldsChangeEvent(
+                                      clientId: state.clientId.value,
+                                      clientName: _clientIdController.text,
+                                      itemId: state.itemId.value,
+                                      itemName: state.itemName.value,
+                                      itemUnit: state.itemUnit.value,
+                                      itemPerUnitCost:
+                                          state.itemPerUnitCost.value,
+                                      itemTotalQuantity:
+                                          state.itemTotalQuantity.value,
+                                      itemTotalCost: state.itemTotalCost.value,
+                                      listOfItemsForOrder:
+                                          state.listOfItemsForOrder.value,
+                                      orderStatus: state.orderStatus.value,
+                                      createdBy: state.createdBy.value,
+                                      expectedDeliveryDate:
+                                          expectedDeliveryDate,
+                                    ),
+                                  );
+                                } else {
+                                  expectedDeliveryTime = TimeOfDay.now();
+                                  snackbarMessage(
+                                    context,
+                                    "Delivery time can't be in past",
+                                    MessageType.warning,
+                                  );
+                                }
+                              }
+                            });
+                          });
+                        },
+                        child: Flex(
+                          direction: Axis.vertical,
+                          children: [
+                            if (expectedDeliveryDate != null)
+                              labelForDropdown(
+                                context,
+                                labelText: "Time",
+                                isRequired: false,
+                              ),
+                            if (expectedDeliveryDate != null)
+                              SizedBox(
+                                height: designValues(context).cornerRadius8,
+                              ),
+                            if (expectedDeliveryDate != null)
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(
+                                    designValues(context).cornerRadius8,
+                                  ),
+                                  color: light,
+                                  border: Border.all(
+                                    color: lightGrey,
+                                    width: 2,
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(
+                                    designValues(context).padding21,
+                                  ),
+                                  child: RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: DateFormat('h:mm ').format(
+                                            (expectedDeliveryDate ??
+                                                    DateTime.now())
+                                                .toLocal(),
+                                          ),
+                                          style: of(context).textTheme.caption,
+                                        ),
+                                        TextSpan(
+                                          text: DateFormat('a').format(
+                                            (expectedDeliveryDate ??
+                                                    DateTime.now())
+                                                .toLocal(),
+                                          ),
+                                          style: of(context)
+                                              .textTheme
+                                              .caption
+                                              ?.copyWith(
+                                                color: orange,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: designValues(context).verticalPadding),
+                    Flex(
+                      direction: Axis.horizontal,
+                      children: <Widget>[
+                        Text(
+                          "ITEMS",
+                          style: of(context).textTheme.headline6,
+                        ),
+                        const Spacer(),
+                        GestureDetector(
+                          onTap: () {
+                            context
+                                .read<CreateOrderBloc>()
+                                .add(ResetItemFieldsEvent());
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) {
+                                  return BlocProvider.value(
+                                    value: context.read<CreateOrderBloc>(),
+                                    child: const AddItemPage(),
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                          child: SvgPicture.asset(
+                            "assets/icons/svgs/add.svg",
+                            color: green,
+                            height: 21,
+                            width: 21,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: designValues(context).verticalPadding),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: state.listOfItemsForOrder.value.length,
+                      itemBuilder: (context, index) {
+                        final item = state.listOfItemsForOrder.value[index];
+                        return Padding(
+                          padding: EdgeInsets.only(
+                            bottom: designValues(context).padding21,
+                          ),
+                          child: ItemInfoCard(
+                            itemName: item.name,
+                            showEditIcon: true,
+                            onEditIconTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) {
+                                    return BlocProvider.value(
+                                      value: context.read<CreateOrderBloc>(),
+                                      child: EditItemPage(
+                                        itemMap: item,
+                                        itemData: state.itemList.firstWhere(
+                                          (element) =>
+                                              element.itemId == item.id,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                            itemPerUnitCost: item.rate.toStringAsFixed(2),
+                            totalCost: item.totalWorth.toStringAsFixed(2),
+                            totalQuantity: item.quantity.toStringAsFixed(2),
+                            itemUnit: item.unit,
+                          ),
+                        );
+                      },
                     )
                   ],
                 ),

@@ -9,8 +9,6 @@ import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
 import 'package:salesman/core/components/row_flex_close_children.dart';
 
-// project imports
-
 class DetailsCard extends StatelessWidget {
   const DetailsCard({
     Key? key,

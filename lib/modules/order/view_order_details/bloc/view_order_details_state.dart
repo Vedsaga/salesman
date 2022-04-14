@@ -14,19 +14,19 @@ class FetchingOrderDetailsState extends ViewOrderDetailsState {}
 class FetchedOrderDetailsState extends ViewOrderDetailsState {
   final ModelDeliveryOrderData orderDetails;
   final ModelClientData clientDetails;
-  final ModelItemData itemDetails;
+  final List<ItemMap> itemList;
   final List<ModelPaymentData> paymentReceivedList;
 
   const FetchedOrderDetailsState({
     required this.orderDetails,
     required this.clientDetails,
-    required this.itemDetails,
+    required this.itemList,
     required this.paymentReceivedList,
   });
 
   @override
   List<Object> get props =>
-      [orderDetails, clientDetails, itemDetails, paymentReceivedList];
+      [orderDetails, clientDetails, itemList, paymentReceivedList];
 }
 
 class ErrorFetchingOrderDetailsState extends ViewOrderDetailsState {}

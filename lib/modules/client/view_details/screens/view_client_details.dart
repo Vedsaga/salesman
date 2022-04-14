@@ -24,7 +24,7 @@ import 'package:salesman/modules/client/view_details/bloc/view_client_details_bl
 
 // third party imports
 
-// project imports
+
 
 class ViewClientDetails extends StatefulWidget {
   const ViewClientDetails({Key? key}) : super(key: key);

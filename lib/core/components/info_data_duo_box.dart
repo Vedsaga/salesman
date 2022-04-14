@@ -8,8 +8,6 @@ import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
 
-// project imports
-
 class InfoDataDuoBox extends StatelessWidget {
   const InfoDataDuoBox({
     Key? key,

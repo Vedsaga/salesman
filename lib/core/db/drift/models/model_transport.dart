@@ -2,19 +2,19 @@
 import 'package:drift/drift.dart';
 
 // Project imports:
-import 'package:salesman/core/db/drift/models/model_delivery_order.dart';
+import 'package:salesman/core/db/drift/app_database.dart';
 
 class ModelTransport extends Table {
   IntColumn get transportId => integer().autoIncrement()();
-  IntColumn get orderId =>
-      integer().references(ModelDeliveryOrder, #deliveryOrderId)();
-  TextColumn get deliveryStatus => text().withLength(min: 3, max: 20)();
-  TextColumn get deliveredBy => text().withLength(min: 3, max: 20)();
-  TextColumn get paymentStatus => text().withLength(min: 3, max: 20)();
-  RealColumn get dueAmount => real()();
-  DateTimeColumn get startedAt =>
+  TextColumn get deliveryOrderList =>
+      text().map(const DeliveryOrderListConverter()).nullable()();
+  TextColumn get returnOrderList =>  text().map(const ReturnOrderListConverter()).nullable()();
+  TextColumn get transportStatus => text().withLength(min: 1, max: 20)();
+  TextColumn get transportBy => text().nullable()();
+  DateTimeColumn get scheduleDate => dateTime()();
+  DateTimeColumn get startedAt => dateTime().nullable()();
+  DateTimeColumn get createdAt =>
       dateTime().withDefault(Constant(DateTime.now()))();
   DateTimeColumn get lastUpdated =>
       dateTime().withDefault(Constant(DateTime.now()))();
-  BoolColumn get isValid => boolean().withDefault(const Constant(true))();
 }

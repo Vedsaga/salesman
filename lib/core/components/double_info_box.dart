@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 // Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
 
-// project imports
-
 class DoubleInfoBox extends StatelessWidget {
   const DoubleInfoBox({
     Key? key,

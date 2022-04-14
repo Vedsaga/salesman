@@ -12,10 +12,6 @@ import 'package:salesman/config/routes/route_name.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/core/components/snackbar_message.dart';
 
-// third part imports
-
-// project imports
-
 class CommonBottomNavigation extends StatelessWidget {
   const CommonBottomNavigation({
     Key? key,

@@ -92,8 +92,8 @@ class OrderPaymentsTab extends StatelessWidget {
                         SummaryCard(
                           summaryValuesList: [
                             SummaryCardModel(
-                              info: "Order Amount",
-                              value: state.orderDetails.totalCost
+                              info: "Net Total",
+                              value: state.orderDetails.netTotal
                                   .toStringAsFixed(2),
                             ),
                             SummaryCardModel(
@@ -109,7 +109,7 @@ class OrderPaymentsTab extends StatelessWidget {
                               color: red,
                             ),
                           ],
-                          highlightText: state.orderDetails.totalCost +
+                          highlightText: state.orderDetails.netTotal +
                                       totalSendAmount(listOfPayments) >
                                   totalReceivedAmount(listOfPayments)
                               ? "Remaining"
@@ -117,19 +117,20 @@ class OrderPaymentsTab extends StatelessWidget {
                           highlightValue: calculateExtraPaidOrRemaining(
                                   listOfPayments: listOfPayments,
                                   totalOrderAmount:
-                                      state.orderDetails.totalCost,
+                                      state.orderDetails.netTotal,
                           )
                               .toStringAsFixed(2),
-                          highlightTextColor: state.orderDetails.totalCost +
+                          highlightTextColor: state.orderDetails.netTotal +
                                       totalSendAmount(listOfPayments) >
                                   totalReceivedAmount(listOfPayments)
                               ? red
                               : green,
-                          highlightValueColor: state.orderDetails.totalCost +
+                          highlightValueColor: state.orderDetails.netTotal +
                                       totalSendAmount(listOfPayments) >
                                   totalReceivedAmount(listOfPayments)
                               ? red
                               : green,
+                          listData: null,
                         ),
                         SizedBox(height: designValues(context).verticalPadding),
                         NormalTopAppBar(

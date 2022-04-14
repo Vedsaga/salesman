@@ -15,8 +15,6 @@ import 'package:salesman/main.dart';
 import 'package:salesman/modules/client/query/client_table_queries.dart';
 import 'package:salesman/modules/menu/repositories/menu_repository.dart';
 
-// project imports:
-
 // part
 part 'add_client_event.dart';
 part 'add_client_state.dart';

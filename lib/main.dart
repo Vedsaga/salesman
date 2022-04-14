@@ -14,10 +14,6 @@ import 'package:salesman/core/db/hive/models/active_features_model.dart';
 import 'package:salesman/core/db/hive/models/agent_profile_model.dart';
 import 'package:salesman/core/db/hive/models/company_profile_model.dart';
 
-// third party imports:
-
-// project import
-
 AppDatabase appDatabaseInstance = AppDatabase();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -22,7 +22,7 @@ import 'package:salesman/core/utils/global_function.dart';
 import 'package:salesman/modules/order/view_order_list/bloc/view_order_list_bloc.dart';
 
 // third party import
-// project imports
+
 
 class ViewOrderList extends StatefulWidget {
   const ViewOrderList({Key? key}) : super(key: key);
@@ -89,7 +89,7 @@ class _ViewOrderListState extends State<ViewOrderList> {
                     top: 8,
                   ),
                   child: ListView.builder(
-                    itemCount: state.orders.length,
+                    itemCount: state.pendingDeliveryOrders.length,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
@@ -99,54 +99,63 @@ class _ViewOrderListState extends State<ViewOrderList> {
                             context,
                             RouteNames.viewOrderDetails,
                             arguments: ViewOrderDetailsRouteArguments(
-                              orderDetails: state.orders[index],
-                              itemDetails: globalFunction
-                                  .getItemDetails(state.orders[index].itemId)!,
+                              orderDetails: state.pendingDeliveryOrders[index],
+                              itemList: state.pendingDeliveryOrders[index].itemList.itemList,
                               clientDetails: globalFunction.getClientDetails(
-                                state.orders[index].clientId,
+                                state.pendingDeliveryOrders[index].clientId,
                               )!,
                             ),
                           );
                         },
                         child: TransactionListCard(
-                          statusColor: state.orders[index].orderStatus ==
+                          statusColor:
+                              state.pendingDeliveryOrders[index].orderStatus ==
                                   "pending"
                               ? skyBlueGradient
-                              : state.orders[index].orderStatus == "approved"
+                                  : state.pendingDeliveryOrders[index]
+                                              .orderStatus ==
+                                          "approved"
                                   ? greenGradient
-                                  : state.orders[index].orderStatus ==
+                                      : state.pendingDeliveryOrders[index]
+                                                  .orderStatus ==
                                           "cancelled"
                                       ? redGradient
                                       : darkGradient,
                           statusTextColor: light,
-                          status: state.orders[index].orderStatus,
+                          status:
+                              state.pendingDeliveryOrders[index].orderStatus,
                           leadingDataAtTop: globalFunction.getClientName(
-                                        state.orders[index].clientId,
+                                        state.pendingDeliveryOrders[index]
+                                            .clientId,
                                       ) !=
                                       null ||
                                   globalFunction
                                       .getClientName(
-                                        state.orders[index].clientId,
+                                        state.pendingDeliveryOrders[index]
+                                            .clientId,
                                       )!
                                       .isNotEmpty
                               ? globalFunction
-                                  .getClientName(state.orders[index].clientId)!
+                                  .getClientName(
+                                  state.pendingDeliveryOrders[index].clientId,
+                                )!
                               : "",
-                          trailingDataAtTop: globalFunction.getItemName(
-                                        state.orders[index].itemId,
-                                      ) !=
-                                      null ||
-                                  globalFunction
-                                      .getItemName(state.orders[index].itemId)!
-                                      .isNotEmpty
-                              ? globalFunction
-                                  .getItemName(state.orders[index].itemId)!
-                              : "",
+                          trailingDataAtTop: state
+                              .pendingDeliveryOrders[index].netTotal
+                              .toStringAsFixed(2),
                           // format like 15 Dec 19
-                          leadingDataAtBottom: DateFormat('dd MMM yy')
-                              .format(state.orders[index].createdAt.toLocal()),
+                          leadingDataAtBottom: state
+                                      .pendingDeliveryOrders[index]
+                                      .expectedDeliveryDate ==
+                                  null
+                              ? "not-provided"
+                              : DateFormat('dd MMM yy').format(
+                                  state.pendingDeliveryOrders[index]
+                                      .expectedDeliveryDate!
+                                      .toLocal(),
+                                ),
                           trailingDataAtBottom:
-                              "${state.orders[index].totalQuantity} ${globalFunction.getItemUnit(state.orders[index].itemId)!}",
+                              "${state.pendingDeliveryOrders[index].itemList.itemList.length} item",
                         ),
                       );
                     },

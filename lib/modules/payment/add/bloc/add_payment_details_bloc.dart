@@ -1,4 +1,3 @@
-// third party import
 
 // Package imports:
 import 'package:bloc/bloc.dart';
@@ -405,14 +404,14 @@ class AddPaymentDetailsBloc
               paymentStatus: (orderData.totalReceivedAmount +
                               state.amount.value) -
                           orderData.totalSendAmount >=
-                      orderData.totalCost
+                      orderData.netTotal
                   ? "paid"
                   : (orderData.totalReceivedAmount + state.amount.value) -
                                   orderData.totalSendAmount >
                               0 &&
                           (orderData.totalReceivedAmount + state.amount.value) -
                                   orderData.totalSendAmount <
-                              orderData.totalCost
+                              orderData.netTotal
                       ? 'partial'
                       : (orderData.totalReceivedAmount + state.amount.value) -
                                   orderData.totalSendAmount <=
@@ -444,7 +443,7 @@ class AddPaymentDetailsBloc
               deliveryOrderId: orderData.deliveryOrderId,
               paymentStatus: orderData.totalReceivedAmount -
                           (orderData.totalSendAmount + state.amount.value) >=
-                      orderData.totalCost
+                      orderData.netTotal
                   ? "paid"
                   : orderData.totalReceivedAmount -
                                   (orderData.totalSendAmount +
@@ -453,7 +452,7 @@ class AddPaymentDetailsBloc
                           orderData.totalReceivedAmount -
                                   (orderData.totalSendAmount +
                                       state.amount.value) <
-                              orderData.totalCost
+                              orderData.netTotal
                       ? 'partial'
                       : orderData.totalReceivedAmount -
                                   (orderData.totalSendAmount +

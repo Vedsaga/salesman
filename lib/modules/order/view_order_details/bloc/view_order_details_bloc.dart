@@ -4,10 +4,9 @@ import 'package:equatable/equatable.dart';
 
 // Project imports:
 import 'package:salesman/core/db/drift/app_database.dart';
+import 'package:salesman/core/utils/item_map.dart';
 import 'package:salesman/main.dart';
 import 'package:salesman/modules/payment/query/payment_table_queries.dart';
-
-// project imports:
 
 // part of
 part 'view_order_details_event.dart';
@@ -15,10 +14,10 @@ part 'view_order_details_state.dart';
 
 class ViewOrderDetailsBloc extends Bloc<ViewOrderDetailsEvent, ViewOrderDetailsState> {
   final ModelDeliveryOrderData orderDetails;
-  final ModelItemData itemDetails;
+  final List<ItemMap> itemList;
   final ModelClientData clientDetails;
   ViewOrderDetailsBloc({required this.orderDetails,
-      required this.itemDetails,
+      required this.itemList,
       required this.clientDetails,}) : super(ViewOrderDetailsInitialState()) {
     on<GetOrderDetailsEvent>(_getOrderDetails);
   }
@@ -32,7 +31,7 @@ class ViewOrderDetailsBloc extends Bloc<ViewOrderDetailsEvent, ViewOrderDetailsS
       emit(FetchedOrderDetailsState(
         orderDetails: orderDetails,
         clientDetails: clientDetails,
-        itemDetails: itemDetails,
+        itemList: itemList,
         paymentReceivedList: paymentReceivedList,
       ),);
     } catch(e) {

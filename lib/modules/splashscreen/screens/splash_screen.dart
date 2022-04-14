@@ -13,10 +13,6 @@ import 'package:salesman/config/theme/fonts.dart';
 import 'package:salesman/core/components/custom_round_button.dart';
 import 'package:salesman/modules/splashscreen/bloc/profile_check_bloc.dart';
 
-// third party imports:
-
-// project imports:
-
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
 

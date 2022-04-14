@@ -19,10 +19,6 @@ import 'package:salesman/core/models/validations/generic_field.dart';
 import 'package:salesman/core/models/validations/phone_number_field.dart';
 import 'package:salesman/modules/profile/profile_creation/bloc/profile_bloc.dart';
 
-// third party imports:
-
-// project imports:
-
 class ProfileCreation extends StatefulWidget {
   const ProfileCreation({Key? key}) : super(key: key);
 
@@ -142,7 +138,6 @@ class _ProfileCreationState extends State<ProfileCreation> {
     _phoneFocusNode.dispose();
     _usernameFocusNode.dispose();
     _companyNameFocusNode.dispose();
-    context.read<ProfileCreationBloc>().close();
     _agentNameFocusNode.removeListener(_onAgentNameChanged);
     _agentNameFocusNode.removeListener(_onPhoneChanged);
     _usernameFocusNode.removeListener(_onUsernameChanged);

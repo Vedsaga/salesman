@@ -8,8 +8,6 @@ import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
 
-// project imports
-
 class EmptyMessage extends StatelessWidget {
   const EmptyMessage({
     Key? key,

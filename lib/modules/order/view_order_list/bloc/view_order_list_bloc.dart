@@ -14,23 +14,24 @@ part 'view_order_list_state.dart';
 
 class ViewOrderListBloc extends Bloc<ViewOrderListEvent, ViewOrderListState> {
   ViewOrderListBloc() : super(ViewOrderListInitial()) {
-    on<Fetch10LatestOrderListEvent>(_fetchOrderList);
+    on<FetchAllPendingOrderListEvent>(_fetchOrderList);
   }
 
-  Future<void> _fetchOrderList(Fetch10LatestOrderListEvent event,
+  Future<void> _fetchOrderList(
+    FetchAllPendingOrderListEvent event,
       Emitter<ViewOrderListState> emit,) async {
     emit(FetchingOrderListState());
     try {
-      final List<ModelDeliveryOrderData> orders =
+      final List<ModelDeliveryOrderData> pendingDeliveryOrders =
           await DeliveryOrderTableQueries(appDatabaseInstance)
-              .getLast10PendingOrders();
+              .getAllPendingOrders();
       final List<ModelClientData> clientList =
           await ClientTableQueries(appDatabaseInstance).getAllClients();
       final List<ModelItemData> itemList =
           await ItemTableQueries(appDatabaseInstance).getAllItems();
-      if (orders.isNotEmpty) {
+      if (pendingDeliveryOrders.isNotEmpty) {
         emit(FetchedOrderListState(
-            orders: orders, clientList: clientList, itemList: itemList,),);
+            pendingDeliveryOrders: pendingDeliveryOrders, clientList: clientList, itemList: itemList,),);
       } else {
         emit(EmptyOrderListState());
       }

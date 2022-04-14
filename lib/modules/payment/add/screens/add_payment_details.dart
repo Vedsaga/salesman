@@ -29,9 +29,6 @@ import 'package:salesman/core/models/validations/double_field_not_zero.dart';
 import 'package:salesman/core/models/validations/status_type_field.dart';
 import 'package:salesman/modules/payment/add/bloc/add_payment_details_bloc.dart';
 
-// third party imports:
-// project imports:
-
 class AddPaymentDetails extends StatefulWidget {
   const AddPaymentDetails({Key? key}) : super(key: key);
 
@@ -185,6 +182,20 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                             setState(() {
                               _paymentDate = join(date!, _paymentTime);
                             });
+                             BlocProvider.of<AddPaymentDetailsBloc>(
+                              context,
+                            ).add(
+                              PaymentFieldsChangeEvent(
+                                deliveryOrderId: state.deliveryOrderId.value,
+                                returnOrderId: state.returnOrderId.value,
+                                amount: state.amount.value,
+                                paymentMode: state.paymentMode.value,
+                                paymentType: state.paymentType.value,
+                                paymentFor: state.paymentFor.value,
+                                receivedBy: state.receivedBy.value,
+                                paymentDate: _paymentDate,
+                              ),
+                            );
                           });
                         },
                         child: Flex(
@@ -242,11 +253,24 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                           showTimePicker(
                             context: context,
                             initialTime: _paymentTime,
-                          )
-                              .then((time) {
+                          ).then((time) {
                             setState(() {
                               _paymentDate = join(_paymentDate, time!);
                             });
+                             BlocProvider.of<AddPaymentDetailsBloc>(
+                              context,
+                            ).add(
+                              PaymentFieldsChangeEvent(
+                                deliveryOrderId: state.deliveryOrderId.value,
+                                returnOrderId: state.returnOrderId.value,
+                                amount: state.amount.value,
+                                paymentMode: state.paymentMode.value,
+                                paymentType:state.paymentType.value,
+                                paymentFor: state.paymentFor.value,
+                                receivedBy: state.receivedBy.value,
+                                paymentDate: _paymentDate,
+                              ),
+                            );
                           });
                         },
                         child: Flex(
@@ -302,6 +326,7 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                         ),
                       ),
                     ),
+                   
                     SizedBox(height: designValues(context).cornerRadius34),
                     NormalTopAppBar(
                       titleWidget: Text(

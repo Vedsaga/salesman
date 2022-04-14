@@ -1,5 +1,3 @@
-// project imports:
-
 // Package imports:
 import 'package:hive/hive.dart';
 
@@ -7,10 +5,6 @@ import 'package:hive/hive.dart';
 import 'package:salesman/core/db/hive/boxes.dart';
 import 'package:salesman/core/db/hive/models/agent_profile_model.dart';
 import 'package:salesman/core/db/hive/models/company_profile_model.dart';
-
-// project imports
-
-// project imports:
 
 class ProfileRepository {
   final _agentProfileBox = agentProfileBox();
