@@ -1,10 +1,11 @@
-// flutter imports
+
 
 // Flutter imports:
 import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
 // Project imports:
@@ -12,6 +13,7 @@ import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
 import 'package:salesman/core/components/custom_round_button.dart';
+import 'package:salesman/core/components/details_card.dart';
 import 'package:salesman/core/components/info_data_duo_box.dart';
 import 'package:salesman/core/components/item_info_card.dart';
 import 'package:salesman/core/components/normal_top_app_bar.dart';
@@ -99,6 +101,27 @@ class _ViewOrderDetailTabState extends State<OrderDetailsTab> {
                               state.orderDetails.paymentStatus == "partial"
                                   ? secondaryDark
                                   : light,
+                        ),
+                        SizedBox(
+                          height: designValues(context).cornerRadius34,
+                        ),
+                        DetailsCard(
+                          label: "Expected Delivery Date",
+                          firstChild: SvgPicture.asset(
+                            "assets/icons/svgs/calendar.svg",
+                          ),
+                          secondChild:
+                              state.orderDetails.expectedDeliveryDate != null
+                                  ? Text(
+                                      DateFormat('dd MMM yyyy').format(
+                                        state.orderDetails.expectedDeliveryDate!
+                                            .toLocal(),
+                                      ),
+                                      style: of(context).textTheme.bodyText1,
+                                    )
+                                  : const Text(
+                                      'Not set',
+                                    ),
                         ),
                         SizedBox(
                           height: designValues(context).verticalPadding,

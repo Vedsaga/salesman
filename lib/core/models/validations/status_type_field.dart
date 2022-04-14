@@ -18,6 +18,7 @@ class StatusTypeField
     'delivered',
     'cancelled',
     'rejected',
+    'delayed',
   ];
   static final List<String> paymentType = ['receive', 'send'];
   static final List<String> paymentFor = ['delivery', 'return'];

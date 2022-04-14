@@ -1,4 +1,4 @@
-// flutter imports
+
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -148,7 +148,7 @@ class _ViewOrderListState extends State<ViewOrderList> {
                                       .pendingDeliveryOrders[index]
                                       .expectedDeliveryDate ==
                                   null
-                              ? "not-provided"
+                              ? "not-set"
                               : DateFormat('dd MMM yy').format(
                                   state.pendingDeliveryOrders[index]
                                       .expectedDeliveryDate!
