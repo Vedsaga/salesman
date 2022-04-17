@@ -47,6 +47,26 @@ class StatusTypeField
     'cancelled'
   ];
 
+  static final List<String> vehicleStatus = ['available', 'unavailable'];
+  static final List<String> vehicleType = [
+    'truck',
+    'mini truck',
+    'auto-rickshaw',
+    'motor cycle',
+    'bicycle',
+    'van',
+    'others'
+  ];
+
+  static final List<String> fuelType = [
+    'petrol',
+    'diesel',
+    'lpg',
+    'cng',
+    'electric',
+    'others'
+  ];
+
   @override
   StatusTypeFieldValidationError? validator(String value) {
     if (value.isEmpty) {
@@ -55,11 +75,14 @@ class StatusTypeField
     // if value is available in any of the list then return null else return invalidStatusType
     if (deliveryOrderStatus.contains(value) ||
         paymentType.contains(value) ||
+        paymentFor.contains(value) ||
         paymentStatus.contains(value) ||
         paymentMode.contains(value) ||
         transportStatus.contains(value) ||
-        paymentFor.contains(value) ||
-        returnOrderStatus.contains(value)) {
+        returnOrderStatus.contains(value) ||
+        vehicleStatus.contains(value) ||
+        vehicleType.contains(value) ||
+        fuelType.contains(value)) {
       return null;
     } else {
       return StatusTypeFieldValidationError.invalidStatusType;

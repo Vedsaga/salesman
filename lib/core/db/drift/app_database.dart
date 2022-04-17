@@ -17,6 +17,7 @@ import 'package:salesman/core/db/drift/models/model_payment.dart';
 import 'package:salesman/core/db/drift/models/model_return_order.dart';
 import 'package:salesman/core/db/drift/models/model_survey.dart';
 import 'package:salesman/core/db/drift/models/model_transport.dart';
+import 'package:salesman/core/db/drift/models/model_vehicle.dart';
 import 'package:salesman/core/utils/item_map.dart';
 import 'package:salesman/core/utils/order_map.dart';
 import 'package:salesman/modules/client/query/client_table_queries.dart';
@@ -26,6 +27,7 @@ import 'package:salesman/modules/payment/query/payment_table_queries.dart';
 import 'package:salesman/modules/return/query/return_order_table_queries.dart';
 import 'package:salesman/modules/survey/query/survey_table_queries.dart';
 import 'package:salesman/modules/transport/query/transport_table_queries.dart';
+import 'package:salesman/modules/vehicle/query/vehicle_table_queries.dart';
 
 part 'app_database.g.dart';
 
@@ -33,20 +35,22 @@ part 'app_database.g.dart';
   tables: [
     ModelClient,
     ModelItem,
+    ModelVehicle,
     ModelDeliveryOrder,
     ModelTransport,
     ModelReturnOrder,
     ModelPayment,
-    ModelSurvey
+    ModelSurvey,
   ],
   daos: [
     ClientTableQueries,
     ItemTableQueries,
+    VehicleTableQueries,
     DeliveryOrderTableQueries,
     TransportTableQueries,
     ReturnOrderTableQueries,
     PaymentTableQueries,
-    SurveyTableQueries
+    SurveyTableQueries,
   ],
 )
 class AppDatabase extends _$AppDatabase {

@@ -15,7 +15,7 @@ import 'package:salesman/core/components/row_flex_close_children.dart';
 import 'package:salesman/core/components/row_flex_spaced_children.dart';
 import 'package:salesman/core/db/drift/app_database.dart';
 
-// third party imports
+
 // project's imports
 
 class PaymentCard extends StatelessWidget {
@@ -46,6 +46,7 @@ class PaymentCard extends StatelessWidget {
         padding: EdgeInsets.all(designValues(context).padding21),
         child: Flex(
           direction: Axis.horizontal,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // if listOfPayments[index].paymentType == "send" then show receive.svg if not show send.svg
             SvgPicture.asset(
@@ -61,6 +62,8 @@ class PaymentCard extends StatelessWidget {
                 child: RowFlexSpacedChildren(
                   firstChild: Flex(
                     direction: Axis.vertical,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+
                     children: [
                       RowFlexCloseChildren(
                         firstChild: SvgPicture.asset(

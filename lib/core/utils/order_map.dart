@@ -7,9 +7,13 @@ part 'order_map.g.dart';
 class OrderMap {
   final int id;
   final String status;
+  final String clientName;
+  final double total;
   OrderMap({
     required this.id,
     required this.status,
+    required this.clientName,
+    required this.total,
   });
 
   factory OrderMap.fromJson(Map<String, dynamic> json) =>

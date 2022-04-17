@@ -6,12 +6,15 @@ class RouteNames {
   static const String editProfile = 'editProfile';
   static const String home = 'home';
   static const String menu = 'menu';
+  static const String addItem = 'addItem';
   static const String viewItemList = 'viewItemList';
   static const String viewItemDetails = 'viewItemDetails';
-  static const String addItem = 'addItem';
-  static const String viewClientList = 'viewClientList';
   static const String addClient = 'addClient';
+  static const String viewClientList = 'viewClientList';
   static const String viewClientDetails = 'viewClientDetails';
+  static const String addVehicle = 'addVehicle';
+  static const String viewVehicleList = 'viewVehicleList';
+  static const String viewVehicleDetails = 'viewVehicleDetails';
   static const String viewOrderList = 'viewOrderList';
   static const String createOrder = 'createOrder';
   static const String viewOrderDetails = 'viewOrderDetails';
@@ -20,4 +23,5 @@ class RouteNames {
   static const String paymentSent = "Payments Sent";
   static const String paymentReceived = "Payments Received";
   static const String viewPaymentDetails = 'viewPaymentDetails';
+  static const String records = 'records';
 }

@@ -5,16 +5,23 @@ import 'package:flutter/material.dart';
 
 // Project imports:
 import 'package:salesman/config/theme/colors.dart';
+import 'package:salesman/config/theme/theme.dart';
 
 class DeleteConfirmation extends StatelessWidget {
   const DeleteConfirmation({
     Key? key,
-    required this.context, required this.title, required this.message,
+    required this.context,
+    required this.title,
+    required this.message,
+    required this.textYes,
+    required this.textNo,
   }) : super(key: key);
 
   final BuildContext context;
   final String title;
   final String message;
+  final String textYes;
+  final String textNo;
 
   @override
   Widget build(BuildContext context) {
@@ -44,14 +51,12 @@ class DeleteConfirmation extends StatelessWidget {
       ),
       actions: [
         TextButton(
-          child: const Text(
-            'No',
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-              color: skyBlue,
-              fontFamily: 'Montserrat',
-            ),
+          child: Text(
+            textNo,
+            style: of(context).textTheme.overline?.copyWith(
+                  color: skyBlue,
+                  fontWeight: FontWeight.bold,
+                ),
           ),
           onPressed: () {
             Navigator.pop(
@@ -60,17 +65,15 @@ class DeleteConfirmation extends StatelessWidget {
           },
         ),
         TextButton(
-          child: const Text(
-            'Remove',
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-              color: red,
-              fontFamily: 'Montserrat',
+          child: Text(
+            textYes,
+            style: of(context).textTheme.overline?.copyWith(
+                  color: red,
+                  fontWeight: FontWeight.bold,
             ),
           ),
           onPressed: () {
-            Navigator.pop(context, 'remove');
+            Navigator.pop(context, textYes);
           },
         ),
       ],

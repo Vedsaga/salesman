@@ -39,17 +39,17 @@ class TransactionListCard extends StatelessWidget {
       child: Flex(
         direction: Axis.horizontal,
         children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
+          RotatedBox(
+            quarterTurns: 3,
+            child: Container(
+              decoration: BoxDecoration(
                 gradient: statusColor,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(designValues(context).cornerRadius8),
-                  bottomLeft:
+                  topRight:
                       Radius.circular(designValues(context).cornerRadius8),
+                ),
               ),
-            ),
-            child: RotatedBox(
-              quarterTurns: 3,
               child: Padding(
                 padding: EdgeInsets.only(
                   left: designValues(context).padding13,

@@ -240,6 +240,8 @@ class _EditItemPageState extends State<EditItemPage> {
                         context: context,
                         builder: DeleteConfirmation(
                           context: context,
+                          textYes: "remove",
+                          textNo: "no",
                           title: "remove item from order?",
                           message: 'this will remove "${widget.itemMap.name}"',
                         ).build,

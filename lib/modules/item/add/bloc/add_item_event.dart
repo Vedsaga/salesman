@@ -43,6 +43,4 @@ class ItemBuyingPriceFieldUnfocused extends AddItemEvent {}
 class ItemAvailableQuantityFieldUnfocused extends AddItemEvent {}
 
 class ItemFormSubmitted extends AddItemEvent {}
-
-class EnableTradeFeatureEvent extends AddItemEvent {}
-class EnableOrderFeatureEvent extends AddItemEvent {}
+class EnableVehicleFeatureEvent extends AddItemEvent {}

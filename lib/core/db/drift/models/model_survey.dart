@@ -13,8 +13,8 @@ class ModelSurvey extends Table {
   TextColumn get surveyDescription => text().withLength(min: 3, max: 50)();
   TextColumn get conductedBy => text().withLength(min: 3, max: 20)();
   DateTimeColumn get createdAt =>
-      dateTime().withDefault(Constant(DateTime.now()))();
+      dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get lastUpdated =>
-      dateTime().withDefault(Constant(DateTime.now()))();
+      dateTime().withDefault(currentDateAndTime)();
   BoolColumn get isValid => boolean().withDefault(const Constant(true))();
 }

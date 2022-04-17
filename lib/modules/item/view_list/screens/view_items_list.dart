@@ -47,7 +47,6 @@ class _ViewItemState extends State<ViewItemList> {
             'No items found! Please Add Item',
             MessageType.warning,
           );
-          context.read<ViewItemBloc>().add(DisableOrderFeatureEvent());
         }
       },
       child: MobileLayout(

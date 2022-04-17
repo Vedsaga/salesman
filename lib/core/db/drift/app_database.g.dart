@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// ignore_for_file: require_trailing_commas, avoid_positional_boolean_parameters, avoid_redundant_argument_values
-
 part of 'app_database.dart';
 
 // **************************************************************************
@@ -51,18 +49,22 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
   final int clientId;
   final String clientName;
   final String clientPhone;
-  final double totalTrade;
-  final double dueAmount;
+  final double totalAmountReceived;
+  final double totalAmountSent;
   final bool isActive;
   final DateTime? lastTradeOn;
+  final DateTime? lastPaymentOn;
+  final DateTime? lastUpdatedOn;
   ModelClientData(
       {required this.clientId,
       required this.clientName,
       required this.clientPhone,
-      required this.totalTrade,
-      required this.dueAmount,
+      required this.totalAmountReceived,
+      required this.totalAmountSent,
       required this.isActive,
-      this.lastTradeOn});
+      this.lastTradeOn,
+      this.lastPaymentOn,
+      this.lastUpdatedOn});
   factory ModelClientData.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -73,14 +75,18 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
           .mapFromDatabaseResponse(data['${effectivePrefix}client_name'])!,
       clientPhone: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}client_phone'])!,
-      totalTrade: const RealType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}total_trade'])!,
-      dueAmount: const RealType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}due_amount'])!,
+      totalAmountReceived: const RealType().mapFromDatabaseResponse(
+          data['${effectivePrefix}total_amount_received'])!,
+      totalAmountSent: const RealType().mapFromDatabaseResponse(
+          data['${effectivePrefix}total_amount_sent'])!,
       isActive: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}is_active'])!,
       lastTradeOn: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}last_trade_on']),
+      lastPaymentOn: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}last_payment_on']),
+      lastUpdatedOn: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}last_updated_on']),
     );
   }
   @override
@@ -89,11 +95,17 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
     map['client_id'] = Variable<int>(clientId);
     map['client_name'] = Variable<String>(clientName);
     map['client_phone'] = Variable<String>(clientPhone);
-    map['total_trade'] = Variable<double>(totalTrade);
-    map['due_amount'] = Variable<double>(dueAmount);
+    map['total_amount_received'] = Variable<double>(totalAmountReceived);
+    map['total_amount_sent'] = Variable<double>(totalAmountSent);
     map['is_active'] = Variable<bool>(isActive);
     if (!nullToAbsent || lastTradeOn != null) {
       map['last_trade_on'] = Variable<DateTime?>(lastTradeOn);
+    }
+    if (!nullToAbsent || lastPaymentOn != null) {
+      map['last_payment_on'] = Variable<DateTime?>(lastPaymentOn);
+    }
+    if (!nullToAbsent || lastUpdatedOn != null) {
+      map['last_updated_on'] = Variable<DateTime?>(lastUpdatedOn);
     }
     return map;
   }
@@ -103,12 +115,18 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
       clientId: Value(clientId),
       clientName: Value(clientName),
       clientPhone: Value(clientPhone),
-      totalTrade: Value(totalTrade),
-      dueAmount: Value(dueAmount),
+      totalAmountReceived: Value(totalAmountReceived),
+      totalAmountSent: Value(totalAmountSent),
       isActive: Value(isActive),
       lastTradeOn: lastTradeOn == null && nullToAbsent
           ? const Value.absent()
           : Value(lastTradeOn),
+      lastPaymentOn: lastPaymentOn == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastPaymentOn),
+      lastUpdatedOn: lastUpdatedOn == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastUpdatedOn),
     );
   }
 
@@ -119,10 +137,13 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
       clientId: serializer.fromJson<int>(json['clientId']),
       clientName: serializer.fromJson<String>(json['clientName']),
       clientPhone: serializer.fromJson<String>(json['clientPhone']),
-      totalTrade: serializer.fromJson<double>(json['totalTrade']),
-      dueAmount: serializer.fromJson<double>(json['dueAmount']),
+      totalAmountReceived:
+          serializer.fromJson<double>(json['totalAmountReceived']),
+      totalAmountSent: serializer.fromJson<double>(json['totalAmountSent']),
       isActive: serializer.fromJson<bool>(json['isActive']),
       lastTradeOn: serializer.fromJson<DateTime?>(json['lastTradeOn']),
+      lastPaymentOn: serializer.fromJson<DateTime?>(json['lastPaymentOn']),
+      lastUpdatedOn: serializer.fromJson<DateTime?>(json['lastUpdatedOn']),
     );
   }
   @override
@@ -132,10 +153,12 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
       'clientId': serializer.toJson<int>(clientId),
       'clientName': serializer.toJson<String>(clientName),
       'clientPhone': serializer.toJson<String>(clientPhone),
-      'totalTrade': serializer.toJson<double>(totalTrade),
-      'dueAmount': serializer.toJson<double>(dueAmount),
+      'totalAmountReceived': serializer.toJson<double>(totalAmountReceived),
+      'totalAmountSent': serializer.toJson<double>(totalAmountSent),
       'isActive': serializer.toJson<bool>(isActive),
       'lastTradeOn': serializer.toJson<DateTime?>(lastTradeOn),
+      'lastPaymentOn': serializer.toJson<DateTime?>(lastPaymentOn),
+      'lastUpdatedOn': serializer.toJson<DateTime?>(lastUpdatedOn),
     };
   }
 
@@ -143,18 +166,22 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
           {int? clientId,
           String? clientName,
           String? clientPhone,
-          double? totalTrade,
-          double? dueAmount,
+          double? totalAmountReceived,
+          double? totalAmountSent,
           bool? isActive,
-          DateTime? lastTradeOn}) =>
+          DateTime? lastTradeOn,
+          DateTime? lastPaymentOn,
+          DateTime? lastUpdatedOn}) =>
       ModelClientData(
         clientId: clientId ?? this.clientId,
         clientName: clientName ?? this.clientName,
         clientPhone: clientPhone ?? this.clientPhone,
-        totalTrade: totalTrade ?? this.totalTrade,
-        dueAmount: dueAmount ?? this.dueAmount,
+        totalAmountReceived: totalAmountReceived ?? this.totalAmountReceived,
+        totalAmountSent: totalAmountSent ?? this.totalAmountSent,
         isActive: isActive ?? this.isActive,
         lastTradeOn: lastTradeOn ?? this.lastTradeOn,
+        lastPaymentOn: lastPaymentOn ?? this.lastPaymentOn,
+        lastUpdatedOn: lastUpdatedOn ?? this.lastUpdatedOn,
       );
   @override
   String toString() {
@@ -162,17 +189,27 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
           ..write('clientId: $clientId, ')
           ..write('clientName: $clientName, ')
           ..write('clientPhone: $clientPhone, ')
-          ..write('totalTrade: $totalTrade, ')
-          ..write('dueAmount: $dueAmount, ')
+          ..write('totalAmountReceived: $totalAmountReceived, ')
+          ..write('totalAmountSent: $totalAmountSent, ')
           ..write('isActive: $isActive, ')
-          ..write('lastTradeOn: $lastTradeOn')
+          ..write('lastTradeOn: $lastTradeOn, ')
+          ..write('lastPaymentOn: $lastPaymentOn, ')
+          ..write('lastUpdatedOn: $lastUpdatedOn')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(clientId, clientName, clientPhone, totalTrade,
-      dueAmount, isActive, lastTradeOn);
+  int get hashCode => Object.hash(
+      clientId,
+      clientName,
+      clientPhone,
+      totalAmountReceived,
+      totalAmountSent,
+      isActive,
+      lastTradeOn,
+      lastPaymentOn,
+      lastUpdatedOn);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -180,56 +217,69 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
           other.clientId == this.clientId &&
           other.clientName == this.clientName &&
           other.clientPhone == this.clientPhone &&
-          other.totalTrade == this.totalTrade &&
-          other.dueAmount == this.dueAmount &&
+          other.totalAmountReceived == this.totalAmountReceived &&
+          other.totalAmountSent == this.totalAmountSent &&
           other.isActive == this.isActive &&
-          other.lastTradeOn == this.lastTradeOn);
+          other.lastTradeOn == this.lastTradeOn &&
+          other.lastPaymentOn == this.lastPaymentOn &&
+          other.lastUpdatedOn == this.lastUpdatedOn);
 }
 
 class ModelClientCompanion extends UpdateCompanion<ModelClientData> {
   final Value<int> clientId;
   final Value<String> clientName;
   final Value<String> clientPhone;
-  final Value<double> totalTrade;
-  final Value<double> dueAmount;
+  final Value<double> totalAmountReceived;
+  final Value<double> totalAmountSent;
   final Value<bool> isActive;
   final Value<DateTime?> lastTradeOn;
+  final Value<DateTime?> lastPaymentOn;
+  final Value<DateTime?> lastUpdatedOn;
   const ModelClientCompanion({
     this.clientId = const Value.absent(),
     this.clientName = const Value.absent(),
     this.clientPhone = const Value.absent(),
-    this.totalTrade = const Value.absent(),
-    this.dueAmount = const Value.absent(),
+    this.totalAmountReceived = const Value.absent(),
+    this.totalAmountSent = const Value.absent(),
     this.isActive = const Value.absent(),
     this.lastTradeOn = const Value.absent(),
+    this.lastPaymentOn = const Value.absent(),
+    this.lastUpdatedOn = const Value.absent(),
   });
   ModelClientCompanion.insert({
     this.clientId = const Value.absent(),
     required String clientName,
     required String clientPhone,
-    this.totalTrade = const Value.absent(),
-    this.dueAmount = const Value.absent(),
+    this.totalAmountReceived = const Value.absent(),
+    this.totalAmountSent = const Value.absent(),
     this.isActive = const Value.absent(),
     this.lastTradeOn = const Value.absent(),
+    this.lastPaymentOn = const Value.absent(),
+    this.lastUpdatedOn = const Value.absent(),
   })  : clientName = Value(clientName),
         clientPhone = Value(clientPhone);
   static Insertable<ModelClientData> custom({
     Expression<int>? clientId,
     Expression<String>? clientName,
     Expression<String>? clientPhone,
-    Expression<double>? totalTrade,
-    Expression<double>? dueAmount,
+    Expression<double>? totalAmountReceived,
+    Expression<double>? totalAmountSent,
     Expression<bool>? isActive,
     Expression<DateTime?>? lastTradeOn,
+    Expression<DateTime?>? lastPaymentOn,
+    Expression<DateTime?>? lastUpdatedOn,
   }) {
     return RawValuesInsertable({
       if (clientId != null) 'client_id': clientId,
       if (clientName != null) 'client_name': clientName,
       if (clientPhone != null) 'client_phone': clientPhone,
-      if (totalTrade != null) 'total_trade': totalTrade,
-      if (dueAmount != null) 'due_amount': dueAmount,
+      if (totalAmountReceived != null)
+        'total_amount_received': totalAmountReceived,
+      if (totalAmountSent != null) 'total_amount_sent': totalAmountSent,
       if (isActive != null) 'is_active': isActive,
       if (lastTradeOn != null) 'last_trade_on': lastTradeOn,
+      if (lastPaymentOn != null) 'last_payment_on': lastPaymentOn,
+      if (lastUpdatedOn != null) 'last_updated_on': lastUpdatedOn,
     });
   }
 
@@ -237,18 +287,22 @@ class ModelClientCompanion extends UpdateCompanion<ModelClientData> {
       {Value<int>? clientId,
       Value<String>? clientName,
       Value<String>? clientPhone,
-      Value<double>? totalTrade,
-      Value<double>? dueAmount,
+      Value<double>? totalAmountReceived,
+      Value<double>? totalAmountSent,
       Value<bool>? isActive,
-      Value<DateTime?>? lastTradeOn}) {
+      Value<DateTime?>? lastTradeOn,
+      Value<DateTime?>? lastPaymentOn,
+      Value<DateTime?>? lastUpdatedOn}) {
     return ModelClientCompanion(
       clientId: clientId ?? this.clientId,
       clientName: clientName ?? this.clientName,
       clientPhone: clientPhone ?? this.clientPhone,
-      totalTrade: totalTrade ?? this.totalTrade,
-      dueAmount: dueAmount ?? this.dueAmount,
+      totalAmountReceived: totalAmountReceived ?? this.totalAmountReceived,
+      totalAmountSent: totalAmountSent ?? this.totalAmountSent,
       isActive: isActive ?? this.isActive,
       lastTradeOn: lastTradeOn ?? this.lastTradeOn,
+      lastPaymentOn: lastPaymentOn ?? this.lastPaymentOn,
+      lastUpdatedOn: lastUpdatedOn ?? this.lastUpdatedOn,
     );
   }
 
@@ -264,17 +318,24 @@ class ModelClientCompanion extends UpdateCompanion<ModelClientData> {
     if (clientPhone.present) {
       map['client_phone'] = Variable<String>(clientPhone.value);
     }
-    if (totalTrade.present) {
-      map['total_trade'] = Variable<double>(totalTrade.value);
+    if (totalAmountReceived.present) {
+      map['total_amount_received'] =
+          Variable<double>(totalAmountReceived.value);
     }
-    if (dueAmount.present) {
-      map['due_amount'] = Variable<double>(dueAmount.value);
+    if (totalAmountSent.present) {
+      map['total_amount_sent'] = Variable<double>(totalAmountSent.value);
     }
     if (isActive.present) {
       map['is_active'] = Variable<bool>(isActive.value);
     }
     if (lastTradeOn.present) {
       map['last_trade_on'] = Variable<DateTime?>(lastTradeOn.value);
+    }
+    if (lastPaymentOn.present) {
+      map['last_payment_on'] = Variable<DateTime?>(lastPaymentOn.value);
+    }
+    if (lastUpdatedOn.present) {
+      map['last_updated_on'] = Variable<DateTime?>(lastUpdatedOn.value);
     }
     return map;
   }
@@ -285,10 +346,12 @@ class ModelClientCompanion extends UpdateCompanion<ModelClientData> {
           ..write('clientId: $clientId, ')
           ..write('clientName: $clientName, ')
           ..write('clientPhone: $clientPhone, ')
-          ..write('totalTrade: $totalTrade, ')
-          ..write('dueAmount: $dueAmount, ')
+          ..write('totalAmountReceived: $totalAmountReceived, ')
+          ..write('totalAmountSent: $totalAmountSent, ')
           ..write('isActive: $isActive, ')
-          ..write('lastTradeOn: $lastTradeOn')
+          ..write('lastTradeOn: $lastTradeOn, ')
+          ..write('lastPaymentOn: $lastPaymentOn, ')
+          ..write('lastUpdatedOn: $lastUpdatedOn')
           ..write(')'))
         .toString();
   }
@@ -324,20 +387,22 @@ class $ModelClientTable extends ModelClient
           GeneratedColumn.checkTextLength(minTextLength: 7, maxTextLength: 15),
       type: const StringType(),
       requiredDuringInsert: true);
-  final VerificationMeta _totalTradeMeta = const VerificationMeta('totalTrade');
+  final VerificationMeta _totalAmountReceivedMeta =
+      const VerificationMeta('totalAmountReceived');
   @override
-  late final GeneratedColumn<double?> totalTrade = GeneratedColumn<double?>(
-      'total_trade', aliasedName, false,
-      type: const RealType(),
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0.0));
-  final VerificationMeta _dueAmountMeta = const VerificationMeta('dueAmount');
+  late final GeneratedColumn<double?> totalAmountReceived =
+      GeneratedColumn<double?>('total_amount_received', aliasedName, false,
+          type: const RealType(),
+          requiredDuringInsert: false,
+          defaultValue: const Constant(0.0));
+  final VerificationMeta _totalAmountSentMeta =
+      const VerificationMeta('totalAmountSent');
   @override
-  late final GeneratedColumn<double?> dueAmount = GeneratedColumn<double?>(
-      'due_amount', aliasedName, false,
-      type: const RealType(),
-      requiredDuringInsert: false,
-      defaultValue: const Constant(0.0));
+  late final GeneratedColumn<double?> totalAmountSent =
+      GeneratedColumn<double?>('total_amount_sent', aliasedName, false,
+          type: const RealType(),
+          requiredDuringInsert: false,
+          defaultValue: const Constant(0.0));
   final VerificationMeta _isActiveMeta = const VerificationMeta('isActive');
   @override
   late final GeneratedColumn<bool?> isActive = GeneratedColumn<bool?>(
@@ -352,15 +417,29 @@ class $ModelClientTable extends ModelClient
   late final GeneratedColumn<DateTime?> lastTradeOn =
       GeneratedColumn<DateTime?>('last_trade_on', aliasedName, true,
           type: const IntType(), requiredDuringInsert: false);
+  final VerificationMeta _lastPaymentOnMeta =
+      const VerificationMeta('lastPaymentOn');
+  @override
+  late final GeneratedColumn<DateTime?> lastPaymentOn =
+      GeneratedColumn<DateTime?>('last_payment_on', aliasedName, true,
+          type: const IntType(), requiredDuringInsert: false);
+  final VerificationMeta _lastUpdatedOnMeta =
+      const VerificationMeta('lastUpdatedOn');
+  @override
+  late final GeneratedColumn<DateTime?> lastUpdatedOn =
+      GeneratedColumn<DateTime?>('last_updated_on', aliasedName, true,
+          type: const IntType(), requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         clientId,
         clientName,
         clientPhone,
-        totalTrade,
-        dueAmount,
+        totalAmountReceived,
+        totalAmountSent,
         isActive,
-        lastTradeOn
+        lastTradeOn,
+        lastPaymentOn,
+        lastUpdatedOn
       ];
   @override
   String get aliasedName => _alias ?? 'model_client';
@@ -391,15 +470,17 @@ class $ModelClientTable extends ModelClient
     } else if (isInserting) {
       context.missing(_clientPhoneMeta);
     }
-    if (data.containsKey('total_trade')) {
+    if (data.containsKey('total_amount_received')) {
       context.handle(
-          _totalTradeMeta,
-          totalTrade.isAcceptableOrUnknown(
-              data['total_trade']!, _totalTradeMeta));
+          _totalAmountReceivedMeta,
+          totalAmountReceived.isAcceptableOrUnknown(
+              data['total_amount_received']!, _totalAmountReceivedMeta));
     }
-    if (data.containsKey('due_amount')) {
-      context.handle(_dueAmountMeta,
-          dueAmount.isAcceptableOrUnknown(data['due_amount']!, _dueAmountMeta));
+    if (data.containsKey('total_amount_sent')) {
+      context.handle(
+          _totalAmountSentMeta,
+          totalAmountSent.isAcceptableOrUnknown(
+              data['total_amount_sent']!, _totalAmountSentMeta));
     }
     if (data.containsKey('is_active')) {
       context.handle(_isActiveMeta,
@@ -410,6 +491,18 @@ class $ModelClientTable extends ModelClient
           _lastTradeOnMeta,
           lastTradeOn.isAcceptableOrUnknown(
               data['last_trade_on']!, _lastTradeOnMeta));
+    }
+    if (data.containsKey('last_payment_on')) {
+      context.handle(
+          _lastPaymentOnMeta,
+          lastPaymentOn.isAcceptableOrUnknown(
+              data['last_payment_on']!, _lastPaymentOnMeta));
+    }
+    if (data.containsKey('last_updated_on')) {
+      context.handle(
+          _lastUpdatedOnMeta,
+          lastUpdatedOn.isAcceptableOrUnknown(
+              data['last_updated_on']!, _lastUpdatedOnMeta));
     }
     return context;
   }
@@ -893,6 +986,480 @@ class $ModelItemTable extends ModelItem
   }
 }
 
+class ModelVehicleData extends DataClass
+    implements Insertable<ModelVehicleData> {
+  final int vehicleId;
+  final String vehicleName;
+  final String vehicleType;
+  final String vehicleNumber;
+  final String vehicleFuelType;
+  final String vehicleStatus;
+  final DateTime createdAt;
+  final DateTime lastUpdated;
+  final bool isActive;
+  ModelVehicleData(
+      {required this.vehicleId,
+      required this.vehicleName,
+      required this.vehicleType,
+      required this.vehicleNumber,
+      required this.vehicleFuelType,
+      required this.vehicleStatus,
+      required this.createdAt,
+      required this.lastUpdated,
+      required this.isActive});
+  factory ModelVehicleData.fromData(Map<String, dynamic> data,
+      {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return ModelVehicleData(
+      vehicleId: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}vehicle_id'])!,
+      vehicleName: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}vehicle_name'])!,
+      vehicleType: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}vehicle_type'])!,
+      vehicleNumber: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}vehicle_number'])!,
+      vehicleFuelType: const StringType().mapFromDatabaseResponse(
+          data['${effectivePrefix}vehicle_fuel_type'])!,
+      vehicleStatus: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}vehicle_status'])!,
+      createdAt: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}created_at'])!,
+      lastUpdated: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}last_updated'])!,
+      isActive: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}is_active'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['vehicle_id'] = Variable<int>(vehicleId);
+    map['vehicle_name'] = Variable<String>(vehicleName);
+    map['vehicle_type'] = Variable<String>(vehicleType);
+    map['vehicle_number'] = Variable<String>(vehicleNumber);
+    map['vehicle_fuel_type'] = Variable<String>(vehicleFuelType);
+    map['vehicle_status'] = Variable<String>(vehicleStatus);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['last_updated'] = Variable<DateTime>(lastUpdated);
+    map['is_active'] = Variable<bool>(isActive);
+    return map;
+  }
+
+  ModelVehicleCompanion toCompanion(bool nullToAbsent) {
+    return ModelVehicleCompanion(
+      vehicleId: Value(vehicleId),
+      vehicleName: Value(vehicleName),
+      vehicleType: Value(vehicleType),
+      vehicleNumber: Value(vehicleNumber),
+      vehicleFuelType: Value(vehicleFuelType),
+      vehicleStatus: Value(vehicleStatus),
+      createdAt: Value(createdAt),
+      lastUpdated: Value(lastUpdated),
+      isActive: Value(isActive),
+    );
+  }
+
+  factory ModelVehicleData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ModelVehicleData(
+      vehicleId: serializer.fromJson<int>(json['vehicleId']),
+      vehicleName: serializer.fromJson<String>(json['vehicleName']),
+      vehicleType: serializer.fromJson<String>(json['vehicleType']),
+      vehicleNumber: serializer.fromJson<String>(json['vehicleNumber']),
+      vehicleFuelType: serializer.fromJson<String>(json['vehicleFuelType']),
+      vehicleStatus: serializer.fromJson<String>(json['vehicleStatus']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      lastUpdated: serializer.fromJson<DateTime>(json['lastUpdated']),
+      isActive: serializer.fromJson<bool>(json['isActive']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'vehicleId': serializer.toJson<int>(vehicleId),
+      'vehicleName': serializer.toJson<String>(vehicleName),
+      'vehicleType': serializer.toJson<String>(vehicleType),
+      'vehicleNumber': serializer.toJson<String>(vehicleNumber),
+      'vehicleFuelType': serializer.toJson<String>(vehicleFuelType),
+      'vehicleStatus': serializer.toJson<String>(vehicleStatus),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'lastUpdated': serializer.toJson<DateTime>(lastUpdated),
+      'isActive': serializer.toJson<bool>(isActive),
+    };
+  }
+
+  ModelVehicleData copyWith(
+          {int? vehicleId,
+          String? vehicleName,
+          String? vehicleType,
+          String? vehicleNumber,
+          String? vehicleFuelType,
+          String? vehicleStatus,
+          DateTime? createdAt,
+          DateTime? lastUpdated,
+          bool? isActive}) =>
+      ModelVehicleData(
+        vehicleId: vehicleId ?? this.vehicleId,
+        vehicleName: vehicleName ?? this.vehicleName,
+        vehicleType: vehicleType ?? this.vehicleType,
+        vehicleNumber: vehicleNumber ?? this.vehicleNumber,
+        vehicleFuelType: vehicleFuelType ?? this.vehicleFuelType,
+        vehicleStatus: vehicleStatus ?? this.vehicleStatus,
+        createdAt: createdAt ?? this.createdAt,
+        lastUpdated: lastUpdated ?? this.lastUpdated,
+        isActive: isActive ?? this.isActive,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('ModelVehicleData(')
+          ..write('vehicleId: $vehicleId, ')
+          ..write('vehicleName: $vehicleName, ')
+          ..write('vehicleType: $vehicleType, ')
+          ..write('vehicleNumber: $vehicleNumber, ')
+          ..write('vehicleFuelType: $vehicleFuelType, ')
+          ..write('vehicleStatus: $vehicleStatus, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('lastUpdated: $lastUpdated, ')
+          ..write('isActive: $isActive')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      vehicleId,
+      vehicleName,
+      vehicleType,
+      vehicleNumber,
+      vehicleFuelType,
+      vehicleStatus,
+      createdAt,
+      lastUpdated,
+      isActive);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ModelVehicleData &&
+          other.vehicleId == this.vehicleId &&
+          other.vehicleName == this.vehicleName &&
+          other.vehicleType == this.vehicleType &&
+          other.vehicleNumber == this.vehicleNumber &&
+          other.vehicleFuelType == this.vehicleFuelType &&
+          other.vehicleStatus == this.vehicleStatus &&
+          other.createdAt == this.createdAt &&
+          other.lastUpdated == this.lastUpdated &&
+          other.isActive == this.isActive);
+}
+
+class ModelVehicleCompanion extends UpdateCompanion<ModelVehicleData> {
+  final Value<int> vehicleId;
+  final Value<String> vehicleName;
+  final Value<String> vehicleType;
+  final Value<String> vehicleNumber;
+  final Value<String> vehicleFuelType;
+  final Value<String> vehicleStatus;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> lastUpdated;
+  final Value<bool> isActive;
+  const ModelVehicleCompanion({
+    this.vehicleId = const Value.absent(),
+    this.vehicleName = const Value.absent(),
+    this.vehicleType = const Value.absent(),
+    this.vehicleNumber = const Value.absent(),
+    this.vehicleFuelType = const Value.absent(),
+    this.vehicleStatus = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.lastUpdated = const Value.absent(),
+    this.isActive = const Value.absent(),
+  });
+  ModelVehicleCompanion.insert({
+    this.vehicleId = const Value.absent(),
+    required String vehicleName,
+    required String vehicleType,
+    required String vehicleNumber,
+    required String vehicleFuelType,
+    this.vehicleStatus = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.lastUpdated = const Value.absent(),
+    this.isActive = const Value.absent(),
+  })  : vehicleName = Value(vehicleName),
+        vehicleType = Value(vehicleType),
+        vehicleNumber = Value(vehicleNumber),
+        vehicleFuelType = Value(vehicleFuelType);
+  static Insertable<ModelVehicleData> custom({
+    Expression<int>? vehicleId,
+    Expression<String>? vehicleName,
+    Expression<String>? vehicleType,
+    Expression<String>? vehicleNumber,
+    Expression<String>? vehicleFuelType,
+    Expression<String>? vehicleStatus,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? lastUpdated,
+    Expression<bool>? isActive,
+  }) {
+    return RawValuesInsertable({
+      if (vehicleId != null) 'vehicle_id': vehicleId,
+      if (vehicleName != null) 'vehicle_name': vehicleName,
+      if (vehicleType != null) 'vehicle_type': vehicleType,
+      if (vehicleNumber != null) 'vehicle_number': vehicleNumber,
+      if (vehicleFuelType != null) 'vehicle_fuel_type': vehicleFuelType,
+      if (vehicleStatus != null) 'vehicle_status': vehicleStatus,
+      if (createdAt != null) 'created_at': createdAt,
+      if (lastUpdated != null) 'last_updated': lastUpdated,
+      if (isActive != null) 'is_active': isActive,
+    });
+  }
+
+  ModelVehicleCompanion copyWith(
+      {Value<int>? vehicleId,
+      Value<String>? vehicleName,
+      Value<String>? vehicleType,
+      Value<String>? vehicleNumber,
+      Value<String>? vehicleFuelType,
+      Value<String>? vehicleStatus,
+      Value<DateTime>? createdAt,
+      Value<DateTime>? lastUpdated,
+      Value<bool>? isActive}) {
+    return ModelVehicleCompanion(
+      vehicleId: vehicleId ?? this.vehicleId,
+      vehicleName: vehicleName ?? this.vehicleName,
+      vehicleType: vehicleType ?? this.vehicleType,
+      vehicleNumber: vehicleNumber ?? this.vehicleNumber,
+      vehicleFuelType: vehicleFuelType ?? this.vehicleFuelType,
+      vehicleStatus: vehicleStatus ?? this.vehicleStatus,
+      createdAt: createdAt ?? this.createdAt,
+      lastUpdated: lastUpdated ?? this.lastUpdated,
+      isActive: isActive ?? this.isActive,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (vehicleId.present) {
+      map['vehicle_id'] = Variable<int>(vehicleId.value);
+    }
+    if (vehicleName.present) {
+      map['vehicle_name'] = Variable<String>(vehicleName.value);
+    }
+    if (vehicleType.present) {
+      map['vehicle_type'] = Variable<String>(vehicleType.value);
+    }
+    if (vehicleNumber.present) {
+      map['vehicle_number'] = Variable<String>(vehicleNumber.value);
+    }
+    if (vehicleFuelType.present) {
+      map['vehicle_fuel_type'] = Variable<String>(vehicleFuelType.value);
+    }
+    if (vehicleStatus.present) {
+      map['vehicle_status'] = Variable<String>(vehicleStatus.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (lastUpdated.present) {
+      map['last_updated'] = Variable<DateTime>(lastUpdated.value);
+    }
+    if (isActive.present) {
+      map['is_active'] = Variable<bool>(isActive.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ModelVehicleCompanion(')
+          ..write('vehicleId: $vehicleId, ')
+          ..write('vehicleName: $vehicleName, ')
+          ..write('vehicleType: $vehicleType, ')
+          ..write('vehicleNumber: $vehicleNumber, ')
+          ..write('vehicleFuelType: $vehicleFuelType, ')
+          ..write('vehicleStatus: $vehicleStatus, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('lastUpdated: $lastUpdated, ')
+          ..write('isActive: $isActive')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ModelVehicleTable extends ModelVehicle
+    with TableInfo<$ModelVehicleTable, ModelVehicleData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ModelVehicleTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _vehicleIdMeta = const VerificationMeta('vehicleId');
+  @override
+  late final GeneratedColumn<int?> vehicleId = GeneratedColumn<int?>(
+      'vehicle_id', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _vehicleNameMeta =
+      const VerificationMeta('vehicleName');
+  @override
+  late final GeneratedColumn<String?> vehicleName = GeneratedColumn<String?>(
+      'vehicle_name', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 3, maxTextLength: 20),
+      type: const StringType(),
+      requiredDuringInsert: true);
+  final VerificationMeta _vehicleTypeMeta =
+      const VerificationMeta('vehicleType');
+  @override
+  late final GeneratedColumn<String?> vehicleType = GeneratedColumn<String?>(
+      'vehicle_type', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 3, maxTextLength: 20),
+      type: const StringType(),
+      requiredDuringInsert: true);
+  final VerificationMeta _vehicleNumberMeta =
+      const VerificationMeta('vehicleNumber');
+  @override
+  late final GeneratedColumn<String?> vehicleNumber = GeneratedColumn<String?>(
+      'vehicle_number', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 3, maxTextLength: 20),
+      type: const StringType(),
+      requiredDuringInsert: true);
+  final VerificationMeta _vehicleFuelTypeMeta =
+      const VerificationMeta('vehicleFuelType');
+  @override
+  late final GeneratedColumn<String?> vehicleFuelType =
+      GeneratedColumn<String?>('vehicle_fuel_type', aliasedName, false,
+          additionalChecks: GeneratedColumn.checkTextLength(
+              minTextLength: 3, maxTextLength: 20),
+          type: const StringType(),
+          requiredDuringInsert: true);
+  final VerificationMeta _vehicleStatusMeta =
+      const VerificationMeta('vehicleStatus');
+  @override
+  late final GeneratedColumn<String?> vehicleStatus = GeneratedColumn<String?>(
+      'vehicle_status', aliasedName, false,
+      type: const StringType(),
+      requiredDuringInsert: false,
+      defaultValue: const Constant('available'));
+  final VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime?> createdAt = GeneratedColumn<DateTime?>(
+      'created_at', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  final VerificationMeta _lastUpdatedMeta =
+      const VerificationMeta('lastUpdated');
+  @override
+  late final GeneratedColumn<DateTime?> lastUpdated =
+      GeneratedColumn<DateTime?>('last_updated', aliasedName, false,
+          type: const IntType(),
+          requiredDuringInsert: false,
+          defaultValue: currentDateAndTime);
+  final VerificationMeta _isActiveMeta = const VerificationMeta('isActive');
+  @override
+  late final GeneratedColumn<bool?> isActive = GeneratedColumn<bool?>(
+      'is_active', aliasedName, false,
+      type: const BoolType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (is_active IN (0, 1))',
+      defaultValue: const Constant(true));
+  @override
+  List<GeneratedColumn> get $columns => [
+        vehicleId,
+        vehicleName,
+        vehicleType,
+        vehicleNumber,
+        vehicleFuelType,
+        vehicleStatus,
+        createdAt,
+        lastUpdated,
+        isActive
+      ];
+  @override
+  String get aliasedName => _alias ?? 'model_vehicle';
+  @override
+  String get actualTableName => 'model_vehicle';
+  @override
+  VerificationContext validateIntegrity(Insertable<ModelVehicleData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('vehicle_id')) {
+      context.handle(_vehicleIdMeta,
+          vehicleId.isAcceptableOrUnknown(data['vehicle_id']!, _vehicleIdMeta));
+    }
+    if (data.containsKey('vehicle_name')) {
+      context.handle(
+          _vehicleNameMeta,
+          vehicleName.isAcceptableOrUnknown(
+              data['vehicle_name']!, _vehicleNameMeta));
+    } else if (isInserting) {
+      context.missing(_vehicleNameMeta);
+    }
+    if (data.containsKey('vehicle_type')) {
+      context.handle(
+          _vehicleTypeMeta,
+          vehicleType.isAcceptableOrUnknown(
+              data['vehicle_type']!, _vehicleTypeMeta));
+    } else if (isInserting) {
+      context.missing(_vehicleTypeMeta);
+    }
+    if (data.containsKey('vehicle_number')) {
+      context.handle(
+          _vehicleNumberMeta,
+          vehicleNumber.isAcceptableOrUnknown(
+              data['vehicle_number']!, _vehicleNumberMeta));
+    } else if (isInserting) {
+      context.missing(_vehicleNumberMeta);
+    }
+    if (data.containsKey('vehicle_fuel_type')) {
+      context.handle(
+          _vehicleFuelTypeMeta,
+          vehicleFuelType.isAcceptableOrUnknown(
+              data['vehicle_fuel_type']!, _vehicleFuelTypeMeta));
+    } else if (isInserting) {
+      context.missing(_vehicleFuelTypeMeta);
+    }
+    if (data.containsKey('vehicle_status')) {
+      context.handle(
+          _vehicleStatusMeta,
+          vehicleStatus.isAcceptableOrUnknown(
+              data['vehicle_status']!, _vehicleStatusMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    if (data.containsKey('last_updated')) {
+      context.handle(
+          _lastUpdatedMeta,
+          lastUpdated.isAcceptableOrUnknown(
+              data['last_updated']!, _lastUpdatedMeta));
+    }
+    if (data.containsKey('is_active')) {
+      context.handle(_isActiveMeta,
+          isActive.isAcceptableOrUnknown(data['is_active']!, _isActiveMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {vehicleId};
+  @override
+  ModelVehicleData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return ModelVehicleData.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $ModelVehicleTable createAlias(String alias) {
+    return $ModelVehicleTable(attachedDatabase, alias);
+  }
+}
+
 class ModelDeliveryOrderData extends DataClass
     implements Insertable<ModelDeliveryOrderData> {
   final int deliveryOrderId;
@@ -1362,7 +1929,7 @@ class $ModelDeliveryOrderTable extends ModelDeliveryOrder
       'created_at', aliasedName, false,
       type: const IntType(),
       requiredDuringInsert: false,
-      defaultValue: Constant(DateTime.now()));
+      defaultValue: currentDateAndTime);
   final VerificationMeta _lastUpdatedMeta =
       const VerificationMeta('lastUpdated');
   @override
@@ -1370,7 +1937,7 @@ class $ModelDeliveryOrderTable extends ModelDeliveryOrder
       GeneratedColumn<DateTime?>('last_updated', aliasedName, false,
           type: const IntType(),
           requiredDuringInsert: false,
-          defaultValue: Constant(DateTime.now()));
+          defaultValue: currentDateAndTime);
   final VerificationMeta _expectedDeliveryDateMeta =
       const VerificationMeta('expectedDeliveryDate');
   @override
@@ -1492,6 +2059,7 @@ class $ModelDeliveryOrderTable extends ModelDeliveryOrder
 class ModelTransportData extends DataClass
     implements Insertable<ModelTransportData> {
   final int transportId;
+  final int? vehicleId;
   final DeliveryOrderList? deliveryOrderList;
   final ReturnOrderList? returnOrderList;
   final String transportStatus;
@@ -1502,6 +2070,7 @@ class ModelTransportData extends DataClass
   final DateTime lastUpdated;
   ModelTransportData(
       {required this.transportId,
+      this.vehicleId,
       this.deliveryOrderList,
       this.returnOrderList,
       required this.transportStatus,
@@ -1516,6 +2085,8 @@ class ModelTransportData extends DataClass
     return ModelTransportData(
       transportId: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}transport_id'])!,
+      vehicleId: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}vehicle_id']),
       deliveryOrderList: $ModelTransportTable.$converter0.mapToDart(
           const StringType().mapFromDatabaseResponse(
               data['${effectivePrefix}delivery_order_list'])),
@@ -1540,6 +2111,9 @@ class ModelTransportData extends DataClass
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['transport_id'] = Variable<int>(transportId);
+    if (!nullToAbsent || vehicleId != null) {
+      map['vehicle_id'] = Variable<int?>(vehicleId);
+    }
     if (!nullToAbsent || deliveryOrderList != null) {
       final converter = $ModelTransportTable.$converter0;
       map['delivery_order_list'] =
@@ -1566,6 +2140,9 @@ class ModelTransportData extends DataClass
   ModelTransportCompanion toCompanion(bool nullToAbsent) {
     return ModelTransportCompanion(
       transportId: Value(transportId),
+      vehicleId: vehicleId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(vehicleId),
       deliveryOrderList: deliveryOrderList == null && nullToAbsent
           ? const Value.absent()
           : Value(deliveryOrderList),
@@ -1590,6 +2167,7 @@ class ModelTransportData extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ModelTransportData(
       transportId: serializer.fromJson<int>(json['transportId']),
+      vehicleId: serializer.fromJson<int?>(json['vehicleId']),
       deliveryOrderList:
           serializer.fromJson<DeliveryOrderList?>(json['deliveryOrderList']),
       returnOrderList:
@@ -1607,6 +2185,7 @@ class ModelTransportData extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'transportId': serializer.toJson<int>(transportId),
+      'vehicleId': serializer.toJson<int?>(vehicleId),
       'deliveryOrderList':
           serializer.toJson<DeliveryOrderList?>(deliveryOrderList),
       'returnOrderList': serializer.toJson<ReturnOrderList?>(returnOrderList),
@@ -1621,6 +2200,7 @@ class ModelTransportData extends DataClass
 
   ModelTransportData copyWith(
           {int? transportId,
+          int? vehicleId,
           DeliveryOrderList? deliveryOrderList,
           ReturnOrderList? returnOrderList,
           String? transportStatus,
@@ -1631,6 +2211,7 @@ class ModelTransportData extends DataClass
           DateTime? lastUpdated}) =>
       ModelTransportData(
         transportId: transportId ?? this.transportId,
+        vehicleId: vehicleId ?? this.vehicleId,
         deliveryOrderList: deliveryOrderList ?? this.deliveryOrderList,
         returnOrderList: returnOrderList ?? this.returnOrderList,
         transportStatus: transportStatus ?? this.transportStatus,
@@ -1644,6 +2225,7 @@ class ModelTransportData extends DataClass
   String toString() {
     return (StringBuffer('ModelTransportData(')
           ..write('transportId: $transportId, ')
+          ..write('vehicleId: $vehicleId, ')
           ..write('deliveryOrderList: $deliveryOrderList, ')
           ..write('returnOrderList: $returnOrderList, ')
           ..write('transportStatus: $transportStatus, ')
@@ -1659,6 +2241,7 @@ class ModelTransportData extends DataClass
   @override
   int get hashCode => Object.hash(
       transportId,
+      vehicleId,
       deliveryOrderList,
       returnOrderList,
       transportStatus,
@@ -1672,6 +2255,7 @@ class ModelTransportData extends DataClass
       identical(this, other) ||
       (other is ModelTransportData &&
           other.transportId == this.transportId &&
+          other.vehicleId == this.vehicleId &&
           other.deliveryOrderList == this.deliveryOrderList &&
           other.returnOrderList == this.returnOrderList &&
           other.transportStatus == this.transportStatus &&
@@ -1684,6 +2268,7 @@ class ModelTransportData extends DataClass
 
 class ModelTransportCompanion extends UpdateCompanion<ModelTransportData> {
   final Value<int> transportId;
+  final Value<int?> vehicleId;
   final Value<DeliveryOrderList?> deliveryOrderList;
   final Value<ReturnOrderList?> returnOrderList;
   final Value<String> transportStatus;
@@ -1694,6 +2279,7 @@ class ModelTransportCompanion extends UpdateCompanion<ModelTransportData> {
   final Value<DateTime> lastUpdated;
   const ModelTransportCompanion({
     this.transportId = const Value.absent(),
+    this.vehicleId = const Value.absent(),
     this.deliveryOrderList = const Value.absent(),
     this.returnOrderList = const Value.absent(),
     this.transportStatus = const Value.absent(),
@@ -1705,18 +2291,19 @@ class ModelTransportCompanion extends UpdateCompanion<ModelTransportData> {
   });
   ModelTransportCompanion.insert({
     this.transportId = const Value.absent(),
+    this.vehicleId = const Value.absent(),
     this.deliveryOrderList = const Value.absent(),
     this.returnOrderList = const Value.absent(),
-    required String transportStatus,
+    this.transportStatus = const Value.absent(),
     this.transportBy = const Value.absent(),
     required DateTime scheduleDate,
     this.startedAt = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.lastUpdated = const Value.absent(),
-  })  : transportStatus = Value(transportStatus),
-        scheduleDate = Value(scheduleDate);
+  }) : scheduleDate = Value(scheduleDate);
   static Insertable<ModelTransportData> custom({
     Expression<int>? transportId,
+    Expression<int?>? vehicleId,
     Expression<DeliveryOrderList?>? deliveryOrderList,
     Expression<ReturnOrderList?>? returnOrderList,
     Expression<String>? transportStatus,
@@ -1728,6 +2315,7 @@ class ModelTransportCompanion extends UpdateCompanion<ModelTransportData> {
   }) {
     return RawValuesInsertable({
       if (transportId != null) 'transport_id': transportId,
+      if (vehicleId != null) 'vehicle_id': vehicleId,
       if (deliveryOrderList != null) 'delivery_order_list': deliveryOrderList,
       if (returnOrderList != null) 'return_order_list': returnOrderList,
       if (transportStatus != null) 'transport_status': transportStatus,
@@ -1741,6 +2329,7 @@ class ModelTransportCompanion extends UpdateCompanion<ModelTransportData> {
 
   ModelTransportCompanion copyWith(
       {Value<int>? transportId,
+      Value<int?>? vehicleId,
       Value<DeliveryOrderList?>? deliveryOrderList,
       Value<ReturnOrderList?>? returnOrderList,
       Value<String>? transportStatus,
@@ -1751,6 +2340,7 @@ class ModelTransportCompanion extends UpdateCompanion<ModelTransportData> {
       Value<DateTime>? lastUpdated}) {
     return ModelTransportCompanion(
       transportId: transportId ?? this.transportId,
+      vehicleId: vehicleId ?? this.vehicleId,
       deliveryOrderList: deliveryOrderList ?? this.deliveryOrderList,
       returnOrderList: returnOrderList ?? this.returnOrderList,
       transportStatus: transportStatus ?? this.transportStatus,
@@ -1767,6 +2357,9 @@ class ModelTransportCompanion extends UpdateCompanion<ModelTransportData> {
     final map = <String, Expression>{};
     if (transportId.present) {
       map['transport_id'] = Variable<int>(transportId.value);
+    }
+    if (vehicleId.present) {
+      map['vehicle_id'] = Variable<int?>(vehicleId.value);
     }
     if (deliveryOrderList.present) {
       final converter = $ModelTransportTable.$converter0;
@@ -1803,6 +2396,7 @@ class ModelTransportCompanion extends UpdateCompanion<ModelTransportData> {
   String toString() {
     return (StringBuffer('ModelTransportCompanion(')
           ..write('transportId: $transportId, ')
+          ..write('vehicleId: $vehicleId, ')
           ..write('deliveryOrderList: $deliveryOrderList, ')
           ..write('returnOrderList: $returnOrderList, ')
           ..write('transportStatus: $transportStatus, ')
@@ -1830,6 +2424,13 @@ class $ModelTransportTable extends ModelTransport
       type: const IntType(),
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _vehicleIdMeta = const VerificationMeta('vehicleId');
+  @override
+  late final GeneratedColumn<int?> vehicleId = GeneratedColumn<int?>(
+      'vehicle_id', aliasedName, true,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'REFERENCES model_vehicle (vehicle_id)');
   final VerificationMeta _deliveryOrderListMeta =
       const VerificationMeta('deliveryOrderList');
   @override
@@ -1851,10 +2452,9 @@ class $ModelTransportTable extends ModelTransport
   @override
   late final GeneratedColumn<String?> transportStatus =
       GeneratedColumn<String?>('transport_status', aliasedName, false,
-          additionalChecks: GeneratedColumn.checkTextLength(
-              minTextLength: 1, maxTextLength: 20),
           type: const StringType(),
-          requiredDuringInsert: true);
+          requiredDuringInsert: false,
+          defaultValue: const Constant('pending'));
   final VerificationMeta _transportByMeta =
       const VerificationMeta('transportBy');
   @override
@@ -1878,7 +2478,7 @@ class $ModelTransportTable extends ModelTransport
       'created_at', aliasedName, false,
       type: const IntType(),
       requiredDuringInsert: false,
-      defaultValue: Constant(DateTime.now()));
+      defaultValue: currentDateAndTime);
   final VerificationMeta _lastUpdatedMeta =
       const VerificationMeta('lastUpdated');
   @override
@@ -1886,10 +2486,11 @@ class $ModelTransportTable extends ModelTransport
       GeneratedColumn<DateTime?>('last_updated', aliasedName, false,
           type: const IntType(),
           requiredDuringInsert: false,
-          defaultValue: Constant(DateTime.now()));
+          defaultValue: currentDateAndTime);
   @override
   List<GeneratedColumn> get $columns => [
         transportId,
+        vehicleId,
         deliveryOrderList,
         returnOrderList,
         transportStatus,
@@ -1914,6 +2515,10 @@ class $ModelTransportTable extends ModelTransport
           transportId.isAcceptableOrUnknown(
               data['transport_id']!, _transportIdMeta));
     }
+    if (data.containsKey('vehicle_id')) {
+      context.handle(_vehicleIdMeta,
+          vehicleId.isAcceptableOrUnknown(data['vehicle_id']!, _vehicleIdMeta));
+    }
     context.handle(_deliveryOrderListMeta, const VerificationResult.success());
     context.handle(_returnOrderListMeta, const VerificationResult.success());
     if (data.containsKey('transport_status')) {
@@ -1921,8 +2526,6 @@ class $ModelTransportTable extends ModelTransport
           _transportStatusMeta,
           transportStatus.isAcceptableOrUnknown(
               data['transport_status']!, _transportStatusMeta));
-    } else if (isInserting) {
-      context.missing(_transportStatusMeta);
     }
     if (data.containsKey('transport_by')) {
       context.handle(
@@ -1984,7 +2587,8 @@ class ModelReturnOrderData extends DataClass
   final String returnedBy;
   final DateTime startedAt;
   final DateTime lastUpdated;
-  final bool isValid;
+  final DateTime completedAt;
+  final DateTime createdAt;
   ModelReturnOrderData(
       {required this.returnOrderId,
       required this.orderId,
@@ -1994,7 +2598,8 @@ class ModelReturnOrderData extends DataClass
       required this.returnedBy,
       required this.startedAt,
       required this.lastUpdated,
-      required this.isValid});
+      required this.completedAt,
+      required this.createdAt});
   factory ModelReturnOrderData.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -2015,8 +2620,10 @@ class ModelReturnOrderData extends DataClass
           .mapFromDatabaseResponse(data['${effectivePrefix}started_at'])!,
       lastUpdated: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}last_updated'])!,
-      isValid: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}is_valid'])!,
+      completedAt: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}completed_at'])!,
+      createdAt: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}created_at'])!,
     );
   }
   @override
@@ -2030,7 +2637,8 @@ class ModelReturnOrderData extends DataClass
     map['returned_by'] = Variable<String>(returnedBy);
     map['started_at'] = Variable<DateTime>(startedAt);
     map['last_updated'] = Variable<DateTime>(lastUpdated);
-    map['is_valid'] = Variable<bool>(isValid);
+    map['completed_at'] = Variable<DateTime>(completedAt);
+    map['created_at'] = Variable<DateTime>(createdAt);
     return map;
   }
 
@@ -2044,7 +2652,8 @@ class ModelReturnOrderData extends DataClass
       returnedBy: Value(returnedBy),
       startedAt: Value(startedAt),
       lastUpdated: Value(lastUpdated),
-      isValid: Value(isValid),
+      completedAt: Value(completedAt),
+      createdAt: Value(createdAt),
     );
   }
 
@@ -2060,7 +2669,8 @@ class ModelReturnOrderData extends DataClass
       returnedBy: serializer.fromJson<String>(json['returnedBy']),
       startedAt: serializer.fromJson<DateTime>(json['startedAt']),
       lastUpdated: serializer.fromJson<DateTime>(json['lastUpdated']),
-      isValid: serializer.fromJson<bool>(json['isValid']),
+      completedAt: serializer.fromJson<DateTime>(json['completedAt']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
   @override
@@ -2075,7 +2685,8 @@ class ModelReturnOrderData extends DataClass
       'returnedBy': serializer.toJson<String>(returnedBy),
       'startedAt': serializer.toJson<DateTime>(startedAt),
       'lastUpdated': serializer.toJson<DateTime>(lastUpdated),
-      'isValid': serializer.toJson<bool>(isValid),
+      'completedAt': serializer.toJson<DateTime>(completedAt),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
     };
   }
 
@@ -2088,7 +2699,8 @@ class ModelReturnOrderData extends DataClass
           String? returnedBy,
           DateTime? startedAt,
           DateTime? lastUpdated,
-          bool? isValid}) =>
+          DateTime? completedAt,
+          DateTime? createdAt}) =>
       ModelReturnOrderData(
         returnOrderId: returnOrderId ?? this.returnOrderId,
         orderId: orderId ?? this.orderId,
@@ -2098,7 +2710,8 @@ class ModelReturnOrderData extends DataClass
         returnedBy: returnedBy ?? this.returnedBy,
         startedAt: startedAt ?? this.startedAt,
         lastUpdated: lastUpdated ?? this.lastUpdated,
-        isValid: isValid ?? this.isValid,
+        completedAt: completedAt ?? this.completedAt,
+        createdAt: createdAt ?? this.createdAt,
       );
   @override
   String toString() {
@@ -2111,14 +2724,24 @@ class ModelReturnOrderData extends DataClass
           ..write('returnedBy: $returnedBy, ')
           ..write('startedAt: $startedAt, ')
           ..write('lastUpdated: $lastUpdated, ')
-          ..write('isValid: $isValid')
+          ..write('completedAt: $completedAt, ')
+          ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(returnOrderId, orderId, returnStatus,
-      paymentStatus, dueAmount, returnedBy, startedAt, lastUpdated, isValid);
+  int get hashCode => Object.hash(
+      returnOrderId,
+      orderId,
+      returnStatus,
+      paymentStatus,
+      dueAmount,
+      returnedBy,
+      startedAt,
+      lastUpdated,
+      completedAt,
+      createdAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2131,7 +2754,8 @@ class ModelReturnOrderData extends DataClass
           other.returnedBy == this.returnedBy &&
           other.startedAt == this.startedAt &&
           other.lastUpdated == this.lastUpdated &&
-          other.isValid == this.isValid);
+          other.completedAt == this.completedAt &&
+          other.createdAt == this.createdAt);
 }
 
 class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
@@ -2143,7 +2767,8 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
   final Value<String> returnedBy;
   final Value<DateTime> startedAt;
   final Value<DateTime> lastUpdated;
-  final Value<bool> isValid;
+  final Value<DateTime> completedAt;
+  final Value<DateTime> createdAt;
   const ModelReturnOrderCompanion({
     this.returnOrderId = const Value.absent(),
     this.orderId = const Value.absent(),
@@ -2153,7 +2778,8 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
     this.returnedBy = const Value.absent(),
     this.startedAt = const Value.absent(),
     this.lastUpdated = const Value.absent(),
-    this.isValid = const Value.absent(),
+    this.completedAt = const Value.absent(),
+    this.createdAt = const Value.absent(),
   });
   ModelReturnOrderCompanion.insert({
     this.returnOrderId = const Value.absent(),
@@ -2164,12 +2790,14 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
     required String returnedBy,
     this.startedAt = const Value.absent(),
     this.lastUpdated = const Value.absent(),
-    this.isValid = const Value.absent(),
+    required DateTime completedAt,
+    this.createdAt = const Value.absent(),
   })  : orderId = Value(orderId),
         returnStatus = Value(returnStatus),
         paymentStatus = Value(paymentStatus),
         dueAmount = Value(dueAmount),
-        returnedBy = Value(returnedBy);
+        returnedBy = Value(returnedBy),
+        completedAt = Value(completedAt);
   static Insertable<ModelReturnOrderData> custom({
     Expression<int>? returnOrderId,
     Expression<int>? orderId,
@@ -2179,7 +2807,8 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
     Expression<String>? returnedBy,
     Expression<DateTime>? startedAt,
     Expression<DateTime>? lastUpdated,
-    Expression<bool>? isValid,
+    Expression<DateTime>? completedAt,
+    Expression<DateTime>? createdAt,
   }) {
     return RawValuesInsertable({
       if (returnOrderId != null) 'return_order_id': returnOrderId,
@@ -2190,7 +2819,8 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
       if (returnedBy != null) 'returned_by': returnedBy,
       if (startedAt != null) 'started_at': startedAt,
       if (lastUpdated != null) 'last_updated': lastUpdated,
-      if (isValid != null) 'is_valid': isValid,
+      if (completedAt != null) 'completed_at': completedAt,
+      if (createdAt != null) 'created_at': createdAt,
     });
   }
 
@@ -2203,7 +2833,8 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
       Value<String>? returnedBy,
       Value<DateTime>? startedAt,
       Value<DateTime>? lastUpdated,
-      Value<bool>? isValid}) {
+      Value<DateTime>? completedAt,
+      Value<DateTime>? createdAt}) {
     return ModelReturnOrderCompanion(
       returnOrderId: returnOrderId ?? this.returnOrderId,
       orderId: orderId ?? this.orderId,
@@ -2213,7 +2844,8 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
       returnedBy: returnedBy ?? this.returnedBy,
       startedAt: startedAt ?? this.startedAt,
       lastUpdated: lastUpdated ?? this.lastUpdated,
-      isValid: isValid ?? this.isValid,
+      completedAt: completedAt ?? this.completedAt,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 
@@ -2244,8 +2876,11 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
     if (lastUpdated.present) {
       map['last_updated'] = Variable<DateTime>(lastUpdated.value);
     }
-    if (isValid.present) {
-      map['is_valid'] = Variable<bool>(isValid.value);
+    if (completedAt.present) {
+      map['completed_at'] = Variable<DateTime>(completedAt.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
     }
     return map;
   }
@@ -2261,7 +2896,8 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
           ..write('returnedBy: $returnedBy, ')
           ..write('startedAt: $startedAt, ')
           ..write('lastUpdated: $lastUpdated, ')
-          ..write('isValid: $isValid')
+          ..write('completedAt: $completedAt, ')
+          ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }
@@ -2326,7 +2962,7 @@ class $ModelReturnOrderTable extends ModelReturnOrder
       'started_at', aliasedName, false,
       type: const IntType(),
       requiredDuringInsert: false,
-      defaultValue: Constant(DateTime.now()));
+      defaultValue: currentDateAndTime);
   final VerificationMeta _lastUpdatedMeta =
       const VerificationMeta('lastUpdated');
   @override
@@ -2334,15 +2970,20 @@ class $ModelReturnOrderTable extends ModelReturnOrder
       GeneratedColumn<DateTime?>('last_updated', aliasedName, false,
           type: const IntType(),
           requiredDuringInsert: false,
-          defaultValue: Constant(DateTime.now()));
-  final VerificationMeta _isValidMeta = const VerificationMeta('isValid');
+          defaultValue: currentDateAndTime);
+  final VerificationMeta _completedAtMeta =
+      const VerificationMeta('completedAt');
   @override
-  late final GeneratedColumn<bool?> isValid = GeneratedColumn<bool?>(
-      'is_valid', aliasedName, false,
-      type: const BoolType(),
+  late final GeneratedColumn<DateTime?> completedAt =
+      GeneratedColumn<DateTime?>('completed_at', aliasedName, false,
+          type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime?> createdAt = GeneratedColumn<DateTime?>(
+      'created_at', aliasedName, false,
+      type: const IntType(),
       requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (is_valid IN (0, 1))',
-      defaultValue: const Constant(true));
+      defaultValue: currentDateAndTime);
   @override
   List<GeneratedColumn> get $columns => [
         returnOrderId,
@@ -2353,7 +2994,8 @@ class $ModelReturnOrderTable extends ModelReturnOrder
         returnedBy,
         startedAt,
         lastUpdated,
-        isValid
+        completedAt,
+        createdAt
       ];
   @override
   String get aliasedName => _alias ?? 'model_return_order';
@@ -2417,9 +3059,17 @@ class $ModelReturnOrderTable extends ModelReturnOrder
           lastUpdated.isAcceptableOrUnknown(
               data['last_updated']!, _lastUpdatedMeta));
     }
-    if (data.containsKey('is_valid')) {
-      context.handle(_isValidMeta,
-          isValid.isAcceptableOrUnknown(data['is_valid']!, _isValidMeta));
+    if (data.containsKey('completed_at')) {
+      context.handle(
+          _completedAtMeta,
+          completedAt.isAcceptableOrUnknown(
+              data['completed_at']!, _completedAtMeta));
+    } else if (isInserting) {
+      context.missing(_completedAtMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
     }
     return context;
   }
@@ -2446,6 +3096,7 @@ class ModelPaymentData extends DataClass
   final double amount;
   final String paymentMode;
   final String paymentType;
+  final String paymentFor;
   final String? paymentNote;
   final String receivedBy;
   final DateTime paymentDate;
@@ -2457,6 +3108,7 @@ class ModelPaymentData extends DataClass
       required this.amount,
       required this.paymentMode,
       required this.paymentType,
+      required this.paymentFor,
       this.paymentNote,
       required this.receivedBy,
       required this.paymentDate,
@@ -2477,6 +3129,8 @@ class ModelPaymentData extends DataClass
           .mapFromDatabaseResponse(data['${effectivePrefix}payment_mode'])!,
       paymentType: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}payment_type'])!,
+      paymentFor: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}payment_for'])!,
       paymentNote: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}payment_note']),
       receivedBy: const StringType()
@@ -2500,6 +3154,7 @@ class ModelPaymentData extends DataClass
     map['amount'] = Variable<double>(amount);
     map['payment_mode'] = Variable<String>(paymentMode);
     map['payment_type'] = Variable<String>(paymentType);
+    map['payment_for'] = Variable<String>(paymentFor);
     if (!nullToAbsent || paymentNote != null) {
       map['payment_note'] = Variable<String?>(paymentNote);
     }
@@ -2521,6 +3176,7 @@ class ModelPaymentData extends DataClass
       amount: Value(amount),
       paymentMode: Value(paymentMode),
       paymentType: Value(paymentType),
+      paymentFor: Value(paymentFor),
       paymentNote: paymentNote == null && nullToAbsent
           ? const Value.absent()
           : Value(paymentNote),
@@ -2540,6 +3196,7 @@ class ModelPaymentData extends DataClass
       amount: serializer.fromJson<double>(json['amount']),
       paymentMode: serializer.fromJson<String>(json['paymentMode']),
       paymentType: serializer.fromJson<String>(json['paymentType']),
+      paymentFor: serializer.fromJson<String>(json['paymentFor']),
       paymentNote: serializer.fromJson<String?>(json['paymentNote']),
       receivedBy: serializer.fromJson<String>(json['receivedBy']),
       paymentDate: serializer.fromJson<DateTime>(json['paymentDate']),
@@ -2556,6 +3213,7 @@ class ModelPaymentData extends DataClass
       'amount': serializer.toJson<double>(amount),
       'paymentMode': serializer.toJson<String>(paymentMode),
       'paymentType': serializer.toJson<String>(paymentType),
+      'paymentFor': serializer.toJson<String>(paymentFor),
       'paymentNote': serializer.toJson<String?>(paymentNote),
       'receivedBy': serializer.toJson<String>(receivedBy),
       'paymentDate': serializer.toJson<DateTime>(paymentDate),
@@ -2570,6 +3228,7 @@ class ModelPaymentData extends DataClass
           double? amount,
           String? paymentMode,
           String? paymentType,
+          String? paymentFor,
           String? paymentNote,
           String? receivedBy,
           DateTime? paymentDate,
@@ -2581,6 +3240,7 @@ class ModelPaymentData extends DataClass
         amount: amount ?? this.amount,
         paymentMode: paymentMode ?? this.paymentMode,
         paymentType: paymentType ?? this.paymentType,
+        paymentFor: paymentFor ?? this.paymentFor,
         paymentNote: paymentNote ?? this.paymentNote,
         receivedBy: receivedBy ?? this.receivedBy,
         paymentDate: paymentDate ?? this.paymentDate,
@@ -2595,6 +3255,7 @@ class ModelPaymentData extends DataClass
           ..write('amount: $amount, ')
           ..write('paymentMode: $paymentMode, ')
           ..write('paymentType: $paymentType, ')
+          ..write('paymentFor: $paymentFor, ')
           ..write('paymentNote: $paymentNote, ')
           ..write('receivedBy: $receivedBy, ')
           ..write('paymentDate: $paymentDate, ')
@@ -2611,6 +3272,7 @@ class ModelPaymentData extends DataClass
       amount,
       paymentMode,
       paymentType,
+      paymentFor,
       paymentNote,
       receivedBy,
       paymentDate,
@@ -2625,6 +3287,7 @@ class ModelPaymentData extends DataClass
           other.amount == this.amount &&
           other.paymentMode == this.paymentMode &&
           other.paymentType == this.paymentType &&
+          other.paymentFor == this.paymentFor &&
           other.paymentNote == this.paymentNote &&
           other.receivedBy == this.receivedBy &&
           other.paymentDate == this.paymentDate &&
@@ -2638,6 +3301,7 @@ class ModelPaymentCompanion extends UpdateCompanion<ModelPaymentData> {
   final Value<double> amount;
   final Value<String> paymentMode;
   final Value<String> paymentType;
+  final Value<String> paymentFor;
   final Value<String?> paymentNote;
   final Value<String> receivedBy;
   final Value<DateTime> paymentDate;
@@ -2649,6 +3313,7 @@ class ModelPaymentCompanion extends UpdateCompanion<ModelPaymentData> {
     this.amount = const Value.absent(),
     this.paymentMode = const Value.absent(),
     this.paymentType = const Value.absent(),
+    this.paymentFor = const Value.absent(),
     this.paymentNote = const Value.absent(),
     this.receivedBy = const Value.absent(),
     this.paymentDate = const Value.absent(),
@@ -2661,6 +3326,7 @@ class ModelPaymentCompanion extends UpdateCompanion<ModelPaymentData> {
     required double amount,
     required String paymentMode,
     required String paymentType,
+    required String paymentFor,
     this.paymentNote = const Value.absent(),
     required String receivedBy,
     required DateTime paymentDate,
@@ -2668,6 +3334,7 @@ class ModelPaymentCompanion extends UpdateCompanion<ModelPaymentData> {
   })  : amount = Value(amount),
         paymentMode = Value(paymentMode),
         paymentType = Value(paymentType),
+        paymentFor = Value(paymentFor),
         receivedBy = Value(receivedBy),
         paymentDate = Value(paymentDate);
   static Insertable<ModelPaymentData> custom({
@@ -2677,6 +3344,7 @@ class ModelPaymentCompanion extends UpdateCompanion<ModelPaymentData> {
     Expression<double>? amount,
     Expression<String>? paymentMode,
     Expression<String>? paymentType,
+    Expression<String>? paymentFor,
     Expression<String?>? paymentNote,
     Expression<String>? receivedBy,
     Expression<DateTime>? paymentDate,
@@ -2689,6 +3357,7 @@ class ModelPaymentCompanion extends UpdateCompanion<ModelPaymentData> {
       if (amount != null) 'amount': amount,
       if (paymentMode != null) 'payment_mode': paymentMode,
       if (paymentType != null) 'payment_type': paymentType,
+      if (paymentFor != null) 'payment_for': paymentFor,
       if (paymentNote != null) 'payment_note': paymentNote,
       if (receivedBy != null) 'received_by': receivedBy,
       if (paymentDate != null) 'payment_date': paymentDate,
@@ -2703,6 +3372,7 @@ class ModelPaymentCompanion extends UpdateCompanion<ModelPaymentData> {
       Value<double>? amount,
       Value<String>? paymentMode,
       Value<String>? paymentType,
+      Value<String>? paymentFor,
       Value<String?>? paymentNote,
       Value<String>? receivedBy,
       Value<DateTime>? paymentDate,
@@ -2714,6 +3384,7 @@ class ModelPaymentCompanion extends UpdateCompanion<ModelPaymentData> {
       amount: amount ?? this.amount,
       paymentMode: paymentMode ?? this.paymentMode,
       paymentType: paymentType ?? this.paymentType,
+      paymentFor: paymentFor ?? this.paymentFor,
       paymentNote: paymentNote ?? this.paymentNote,
       receivedBy: receivedBy ?? this.receivedBy,
       paymentDate: paymentDate ?? this.paymentDate,
@@ -2742,6 +3413,9 @@ class ModelPaymentCompanion extends UpdateCompanion<ModelPaymentData> {
     if (paymentType.present) {
       map['payment_type'] = Variable<String>(paymentType.value);
     }
+    if (paymentFor.present) {
+      map['payment_for'] = Variable<String>(paymentFor.value);
+    }
     if (paymentNote.present) {
       map['payment_note'] = Variable<String?>(paymentNote.value);
     }
@@ -2766,6 +3440,7 @@ class ModelPaymentCompanion extends UpdateCompanion<ModelPaymentData> {
           ..write('amount: $amount, ')
           ..write('paymentMode: $paymentMode, ')
           ..write('paymentType: $paymentType, ')
+          ..write('paymentFor: $paymentFor, ')
           ..write('paymentNote: $paymentNote, ')
           ..write('receivedBy: $receivedBy, ')
           ..write('paymentDate: $paymentDate, ')
@@ -2828,6 +3503,14 @@ class $ModelPaymentTable extends ModelPayment
           GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 20),
       type: const StringType(),
       requiredDuringInsert: true);
+  final VerificationMeta _paymentForMeta = const VerificationMeta('paymentFor');
+  @override
+  late final GeneratedColumn<String?> paymentFor = GeneratedColumn<String?>(
+      'payment_for', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 20),
+      type: const StringType(),
+      requiredDuringInsert: true);
   final VerificationMeta _paymentNoteMeta =
       const VerificationMeta('paymentNote');
   @override
@@ -2854,7 +3537,7 @@ class $ModelPaymentTable extends ModelPayment
       'created_at', aliasedName, false,
       type: const IntType(),
       requiredDuringInsert: false,
-      defaultValue: Constant(DateTime.now()));
+      defaultValue: currentDateAndTime);
   @override
   List<GeneratedColumn> get $columns => [
         paymentId,
@@ -2863,6 +3546,7 @@ class $ModelPaymentTable extends ModelPayment
         amount,
         paymentMode,
         paymentType,
+        paymentFor,
         paymentNote,
         receivedBy,
         paymentDate,
@@ -2914,6 +3598,14 @@ class $ModelPaymentTable extends ModelPayment
               data['payment_type']!, _paymentTypeMeta));
     } else if (isInserting) {
       context.missing(_paymentTypeMeta);
+    }
+    if (data.containsKey('payment_for')) {
+      context.handle(
+          _paymentForMeta,
+          paymentFor.isAcceptableOrUnknown(
+              data['payment_for']!, _paymentForMeta));
+    } else if (isInserting) {
+      context.missing(_paymentForMeta);
     }
     if (data.containsKey('payment_note')) {
       context.handle(
@@ -3307,7 +3999,7 @@ class $ModelSurveyTable extends ModelSurvey
       'created_at', aliasedName, false,
       type: const IntType(),
       requiredDuringInsert: false,
-      defaultValue: Constant(DateTime.now()));
+      defaultValue: currentDateAndTime);
   final VerificationMeta _lastUpdatedMeta =
       const VerificationMeta('lastUpdated');
   @override
@@ -3315,7 +4007,7 @@ class $ModelSurveyTable extends ModelSurvey
       GeneratedColumn<DateTime?>('last_updated', aliasedName, false,
           type: const IntType(),
           requiredDuringInsert: false,
-          defaultValue: Constant(DateTime.now()));
+          defaultValue: currentDateAndTime);
   final VerificationMeta _isValidMeta = const VerificationMeta('isValid');
   @override
   late final GeneratedColumn<bool?> isValid = GeneratedColumn<bool?>(
@@ -3420,6 +4112,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $ModelClientTable modelClient = $ModelClientTable(this);
   late final $ModelItemTable modelItem = $ModelItemTable(this);
+  late final $ModelVehicleTable modelVehicle = $ModelVehicleTable(this);
   late final $ModelDeliveryOrderTable modelDeliveryOrder =
       $ModelDeliveryOrderTable(this);
   late final $ModelTransportTable modelTransport = $ModelTransportTable(this);
@@ -3431,6 +4124,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       ClientTableQueries(this as AppDatabase);
   late final ItemTableQueries itemTableQueries =
       ItemTableQueries(this as AppDatabase);
+  late final VehicleTableQueries vehicleTableQueries =
+      VehicleTableQueries(this as AppDatabase);
   late final DeliveryOrderTableQueries deliveryOrderTableQueries =
       DeliveryOrderTableQueries(this as AppDatabase);
   late final TransportTableQueries transportTableQueries =
@@ -3447,6 +4142,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [
         modelClient,
         modelItem,
+        modelVehicle,
         modelDeliveryOrder,
         modelTransport,
         modelReturnOrder,

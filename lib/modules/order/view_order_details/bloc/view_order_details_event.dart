@@ -8,3 +8,14 @@ abstract class ViewOrderDetailsEvent extends Equatable {
 }
 
 class GetOrderDetailsEvent extends ViewOrderDetailsEvent {}
+
+class CancelOrderEvent extends ViewOrderDetailsEvent {
+  final ModelDeliveryOrderData orderDetails;
+
+  const CancelOrderEvent({required this.orderDetails});
+
+  @override
+  List<Object> get props => [orderDetails];
+}
+
+class EnableRecordsFeature extends ViewOrderDetailsEvent {}

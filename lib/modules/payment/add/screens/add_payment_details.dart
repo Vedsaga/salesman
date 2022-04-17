@@ -1,11 +1,10 @@
-
-
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
 
@@ -25,6 +24,7 @@ import 'package:salesman/core/components/normal_top_app_bar.dart';
 import 'package:salesman/core/components/row_flex_close_children.dart';
 import 'package:salesman/core/components/row_flex_spaced_children.dart';
 import 'package:salesman/core/components/snackbar_message.dart';
+import 'package:salesman/core/db/drift/app_database.dart';
 import 'package:salesman/core/models/validations/double_field_not_zero.dart';
 import 'package:salesman/core/models/validations/status_type_field.dart';
 import 'package:salesman/modules/payment/add/bloc/add_payment_details_bloc.dart';
@@ -37,11 +37,9 @@ class AddPaymentDetails extends StatefulWidget {
 }
 
 class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
-  final TextEditingController _deliveryOrderIdController =
-      TextEditingController();
-  final TextEditingController _returnOrderIdController =
-      TextEditingController();
   final FocusNode _amountFocusNode = FocusNode();
+  ModelDeliveryOrderData? selectedDeliveryOrder;
+  ModelReturnOrderData? selectedReturnOrder;
   final TextEditingController _paymentModeController = TextEditingController();
   final List<String> _paymentModes = StatusTypeField.paymentMode;
   DateTime _paymentDate = DateTime.now();
@@ -73,13 +71,11 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
   @override
   void initState() {
     super.initState();
-    _deliveryOrderIdController.addListener(_amountFocusNodeListener);
     _paymentModeController.addListener(_amountFocusNodeListener);
   }
 
   @override
   void dispose() {
-    _deliveryOrderIdController.dispose();
     _amountFocusNode.removeListener(_amountFocusNodeListener);
     _amountFocusNode.dispose();
     _paymentModeController.dispose();
@@ -182,7 +178,7 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                             setState(() {
                               _paymentDate = join(date!, _paymentTime);
                             });
-                             BlocProvider.of<AddPaymentDetailsBloc>(
+                            BlocProvider.of<AddPaymentDetailsBloc>(
                               context,
                             ).add(
                               PaymentFieldsChangeEvent(
@@ -225,22 +221,20 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                                   designValues(context).padding21,
                                 ),
                                 child: RowFlexCloseChildren(
-                                    firstChild: Text(
-                                      DateFormat('EEE,')
-                                          .format(_paymentDate.toLocal()),
+                                  firstChild: Text(
+                                    DateFormat('EEE,')
+                                        .format(_paymentDate.toLocal()),
+                                    style: of(context).textTheme.caption,
+                                  ),
+                                  secondChild: Text(
+                                    DateFormat('dd MMM yyyy')
+                                        .format(_paymentDate.toLocal()),
                                     style: of(context)
-                                          .textTheme
-                                          .caption,
-                                    ),
-                                    secondChild: Text(
-                                      DateFormat('dd MMM yyyy')
-                                          .format(_paymentDate.toLocal()),
-                                    style: of(context)
-                                          .textTheme
-                                          .bodyText2
-                                          ?.copyWith(
+                                        .textTheme
+                                        .bodyText2
+                                        ?.copyWith(
                                           color: orange,
-                                          ),
+                                        ),
                                   ),
                                 ),
                               ),
@@ -257,7 +251,7 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                             setState(() {
                               _paymentDate = join(_paymentDate, time!);
                             });
-                             BlocProvider.of<AddPaymentDetailsBloc>(
+                            BlocProvider.of<AddPaymentDetailsBloc>(
                               context,
                             ).add(
                               PaymentFieldsChangeEvent(
@@ -265,7 +259,7 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                                 returnOrderId: state.returnOrderId.value,
                                 amount: state.amount.value,
                                 paymentMode: state.paymentMode.value,
-                                paymentType:state.paymentType.value,
+                                paymentType: state.paymentType.value,
                                 paymentFor: state.paymentFor.value,
                                 receivedBy: state.receivedBy.value,
                                 paymentDate: _paymentDate,
@@ -276,7 +270,8 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                         child: Flex(
                           direction: Axis.vertical,
                           children: [
-                            labelForDropdown(context,
+                            labelForDropdown(
+                              context,
                               labelText: "Time",
                               isRequired: false,
                             ),
@@ -299,21 +294,20 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                                   designValues(context).padding21,
                                 ),
                                 child: RichText(
-                                    text: TextSpan(children: [
-                                  TextSpan(
-                                      text: DateFormat('h:mm ')
-                                          .format(_paymentDate.toLocal()),
-                                        style: of(context)
-                                          .textTheme
-                                            .caption,
+                                  text: TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: DateFormat('h:mm ')
+                                            .format(_paymentDate.toLocal()),
+                                        style: of(context).textTheme.caption,
                                       ),
-                                  TextSpan(
-                                      text: DateFormat('a')
-                                          .format(_paymentDate.toLocal()),
+                                      TextSpan(
+                                        text: DateFormat('a')
+                                            .format(_paymentDate.toLocal()),
                                         style: of(context)
-                                          .textTheme
-                                          .caption
-                                          ?.copyWith(
+                                            .textTheme
+                                            .caption
+                                            ?.copyWith(
                                               color: orange,
                                             ),
                                       ),
@@ -326,7 +320,6 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                         ),
                       ),
                     ),
-                   
                     SizedBox(height: designValues(context).cornerRadius34),
                     NormalTopAppBar(
                       titleWidget: Text(
@@ -349,19 +342,17 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                                     RouteNames.paymentSent) {
                                   BlocProvider.of<AddPaymentDetailsBloc>(
                                     context,
-                                  )
-                                      .add(PaymentFieldsChangeEvent(
-                                          deliveryOrderId:
-                                              state.deliveryOrderId.value,
-                                          returnOrderId:
-                                              state.returnOrderId.value,
-                                          amount: state.amount.value,
-                                          paymentMode: state.paymentMode.value,
-                                          paymentType: value!,
-                                          paymentFor: state.paymentFor.value,
-                                          receivedBy: state.receivedBy.value,
-                                          paymentDate:
-                                              state.paymentDate.value ??
+                                  ).add(
+                                    PaymentFieldsChangeEvent(
+                                      deliveryOrderId:
+                                          state.deliveryOrderId.value,
+                                      returnOrderId: state.returnOrderId.value,
+                                      amount: state.amount.value,
+                                      paymentMode: state.paymentMode.value,
+                                      paymentType: value!,
+                                      paymentFor: state.paymentFor.value,
+                                      receivedBy: state.receivedBy.value,
+                                      paymentDate: state.paymentDate.value ??
                                           _paymentDate,
                                     ),
                                   );
@@ -370,10 +361,7 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                             ),
                             Text(
                               "receive",
-                              style: of(context)
-                                  .textTheme
-                                  .caption
-                                  ?.copyWith(
+                              style: of(context).textTheme.caption?.copyWith(
                                     color: state.paymentType.value == "receive"
                                         ? green
                                         : grey,
@@ -394,19 +382,18 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                                     RouteNames.paymentReceived) {
                                   BlocProvider.of<AddPaymentDetailsBloc>(
                                     context,
-                                  )
-                                      .add(PaymentFieldsChangeEvent(
-                                          deliveryOrderId:
-                                              state.deliveryOrderId.value,
-                                          returnOrderId:
-                                              state.returnOrderId.value,
-                                          amount: state.amount.value,
-                                          paymentMode: state.paymentMode.value,
-                                          paymentType: value!,
-                                          paymentFor: state.paymentFor.value,
-                                          receivedBy: state.receivedBy.value,
-                                          paymentDate:
-                                              state.paymentDate.value ??
+                                  ).add(
+                                    PaymentFieldsChangeEvent(
+                                      deliveryOrderId:
+                                          state.deliveryOrderId.value,
+                                      returnOrderId:
+                                          state.deliveryOrderId.value,
+                                      amount: state.amount.value,
+                                      paymentMode: state.paymentMode.value,
+                                      paymentType: value!,
+                                      paymentFor: state.paymentFor.value,
+                                      receivedBy: state.receivedBy.value,
+                                      paymentDate: state.paymentDate.value ??
                                           _paymentDate,
                                     ),
                                   );
@@ -415,11 +402,8 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                             ),
                             Text(
                               "send",
-                              style: of(context)
-                                  .textTheme
-                                  .caption
-                                  ?.copyWith(
-                                      color: state.paymentType.value == "send"
+                              style: of(context).textTheme.caption?.copyWith(
+                                    color: state.paymentType.value == "send"
                                         ? red
                                         : grey,
                                   ),
@@ -446,31 +430,29 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                               activeColor: green,
                               groupValue: state.paymentFor.value,
                               onChanged: (value) {
-                                if (_returnOrderIdController.text != '') {
-                                  _returnOrderIdController.text = "";
+                                if (selectedReturnOrder != null) {
+                                  selectedReturnOrder = null;
                                 }
                                 BlocProvider.of<AddPaymentDetailsBloc>(context)
-                                    .add(PaymentFieldsChangeEvent(
-                                        deliveryOrderId:
-                                            state.deliveryOrderId.value,
-                                        returnOrderId: null,
-                                        amount: state.amount.value,
-                                        paymentMode: state.paymentMode.value,
-                                        paymentType: state.paymentType.value,
-                                        paymentFor: value!,
-                                        receivedBy: state.receivedBy.value,
-                                        paymentDate: state.paymentDate.value ??
-                                            _paymentDate,
+                                    .add(
+                                  PaymentFieldsChangeEvent(
+                                    deliveryOrderId:
+                                        selectedDeliveryOrder?.deliveryOrderId,
+                                    returnOrderId: 0,
+                                    amount: state.amount.value,
+                                    paymentMode: state.paymentMode.value,
+                                    paymentType: state.paymentType.value,
+                                    paymentFor: value!,
+                                    receivedBy: state.receivedBy.value,
+                                    paymentDate:
+                                        state.paymentDate.value ?? _paymentDate,
                                   ),
                                 );
                               },
                             ),
                             Text(
                               "delivery",
-                              style: of(context)
-                                  .textTheme
-                                  .caption
-                                  ?.copyWith(
+                              style: of(context).textTheme.caption?.copyWith(
                                     color: state.paymentFor.value == "delivery"
                                         ? green
                                         : grey,
@@ -487,32 +469,30 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                               activeColor: red,
                               groupValue: state.paymentFor.value,
                               onChanged: (value) {
-                                if (_deliveryOrderIdController.text != '') {
-                                  _deliveryOrderIdController.text = "";
+                                if (selectedDeliveryOrder != null) {
+                                  selectedDeliveryOrder = null;
                                 }
                                 BlocProvider.of<AddPaymentDetailsBloc>(context)
-                                    .add(PaymentFieldsChangeEvent(
-                                        deliveryOrderId: null,
-                                        returnOrderId:
-                                            state.returnOrderId.value,
-                                        amount: state.amount.value,
-                                        paymentMode: state.paymentMode.value,
-                                        paymentType: state.paymentType.value,
-                                        paymentFor: value!,
-                                        receivedBy: state.receivedBy.value,
-                                        paymentDate: state.paymentDate.value ??
-                                            _paymentDate,
+                                    .add(
+                                  PaymentFieldsChangeEvent(
+                                    deliveryOrderId: 0,
+                                    returnOrderId:
+                                        selectedReturnOrder?.returnOrderId,
+                                    amount: state.amount.value,
+                                    paymentMode: state.paymentMode.value,
+                                    paymentType: state.paymentType.value,
+                                    paymentFor: value!,
+                                    receivedBy: state.receivedBy.value,
+                                    paymentDate:
+                                        state.paymentDate.value ?? _paymentDate,
                                   ),
                                 );
                               },
                             ),
                             Text(
                               "return",
-                              style: of(context)
-                                  .textTheme
-                                  .caption
-                                  ?.copyWith(
-                                      color: state.paymentFor.value == "return"
+                              style: of(context).textTheme.caption?.copyWith(
+                                    color: state.paymentFor.value == "return"
                                         ? red
                                         : grey,
                                   ),
@@ -533,74 +513,64 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                         state.deliveryOrderList.isNotEmpty)
                       CustomDropdown(
                         labelText: "Select Delivery Id",
-                        value: _deliveryOrderIdController.text == ''
-                            ? null
-                            : _deliveryOrderIdController.text,
-                        items: state.deliveryOrderList
-                            .map((orderDetails) => DropdownMenuItem(
-                                  value:
-                                      orderDetails.deliveryOrderId.toString(),
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                        right: designValues(context)
-                                            .horizontalPadding,
-                                  ),
-                                    child: Flex(
-                                      direction: Axis.horizontal,
-                                      children: [
-                                        Expanded(
-                                          child: RowFlexSpacedChildren(
-                                              firstChild: RowFlexCloseChildren(
-                                                firstChild: Text(
-                                                  "id:",
-                                              style:
-                                                  of(context)
-                                                      .textTheme
-                                                      .caption,
-                                                ),
-                                                secondChild: Text(
-                                                  orderDetails.deliveryOrderId
-                                                      .toString(),
-                                              style: of(context)
-                                                      .textTheme
-                                                      .overline,
-                                                ),
-                                              ),
-                                              secondChild: Text(
-                                                DateFormat('dd MMM yyyy')
-                                                    .format(orderDetails
-                                                        .createdAt
-                                                        .toLocal(),
-                                            ),
-                                          ),
+                        dropDownWidget: DropdownButton<ModelDeliveryOrderData>(
+                          value: selectedDeliveryOrder,
+                          isExpanded: true,
+                          icon: SvgPicture.asset(
+                            "assets/icons/svgs/dropdown.svg",
+                            color: dark,
+                          ),
+                          onChanged: (ModelDeliveryOrderData? newValue) {
+                            setState(() {
+                              selectedDeliveryOrder = newValue;
+                            });
+                            BlocProvider.of<AddPaymentDetailsBloc>(context).add(
+                              PaymentFieldsChangeEvent(
+                                deliveryOrderId:
+                                    selectedDeliveryOrder?.deliveryOrderId,
+                                returnOrderId: 0,
+                                amount: state.amount.value,
+                                paymentMode: state.paymentMode.value,
+                                paymentType: state.paymentType.value,
+                                paymentFor: state.paymentFor.value,
+                                receivedBy: state.receivedBy.value,
+                                paymentDate:
+                                    state.paymentDate.value ?? _paymentDate,
+                              ),
+                            );
+                          },
+                          items: state.deliveryOrderList
+                              .map((ModelDeliveryOrderData deliveryOrder) {
+                            return DropdownMenuItem<ModelDeliveryOrderData>(
+                              value: deliveryOrder,
+                              child: Flex(
+                                direction: Axis.horizontal,
+                                children: [
+                                  Expanded(
+                                    child: RowFlexSpacedChildren(
+                                      firstChild: RowFlexCloseChildren(
+                                        firstChild: Text(
+                                          "id:",
+                                          style: of(context).textTheme.caption,
                                         ),
+                                        secondChild: Text(
+                                          deliveryOrder.deliveryOrderId
+                                              .toString(),
+                                          style: of(context).textTheme.overline,
                                         ),
-                                      ],
+                                      ),
+                                      secondChild: Text(
+                                        DateFormat('dd MMM yyyy').format(
+                                          deliveryOrder.createdAt.toLocal(),
+                                        ),
+                                      ),
                                     ),
                                   ),
+                                ],
                               ),
-                            )
-                            .toList(),
-                        onChanged: (orderId) {
-                          setState(() {
-                            _deliveryOrderIdController.text =
-                                orderId ?? _deliveryOrderIdController.text;
-                          });
-                          BlocProvider.of<AddPaymentDetailsBloc>(context).add(
-                            PaymentFieldsChangeEvent(
-                              deliveryOrderId:
-                                  orderId != null ? int.parse(orderId) : -1,
-                              returnOrderId: 0,
-                              amount: state.amount.value,
-                              paymentMode: state.paymentMode.value,
-                              paymentType: state.paymentType.value,
-                              paymentFor: state.paymentFor.value,
-                              receivedBy: state.receivedBy.value,
-                              paymentDate:
-                                  state.paymentDate.value ?? _paymentDate,
-                            ),
-                          );
-                        },
+                            );
+                          }).toList(),
+                        ),
                       ),
                     if (state.paymentFor.value == "return" &&
                         state.returnOrderList.isEmpty)
@@ -613,97 +583,82 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                         state.returnOrderList.isNotEmpty)
                       CustomDropdown(
                         labelText: "Select Return Id",
-                        value: _returnOrderIdController.text == ""
-                            ? null
-                            : _returnOrderIdController.text,
-                        items: state.returnOrderList
-                            .map((orderDetails) => DropdownMenuItem(
-                                  value: orderDetails.returnOrderId.toString(),
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                        right: designValues(context)
-                                            .horizontalPadding,
-                                  ),
-                                    child: Flex(
-                                      direction: Axis.horizontal,
-                                      children: [
-                                        Expanded(
-                                          child: RowFlexSpacedChildren(
-                                              firstChild: RowFlexCloseChildren(
-                                                firstChild: Text(
-                                                  "id:",
-                                              style:
-                                                  of(context)
-                                                      .textTheme
-                                                      .caption,
-                                                ),
-                                                secondChild: Text(
-                                                  orderDetails.returnOrderId
-                                                      .toString(),
-                                              style: of(context)
-                                                      .textTheme
-                                                      .overline,
-                                                ),
-                                              ),
-                                              secondChild: Text(
-                                                DateFormat('dd MMM yyyy')
-                                                    .format(orderDetails
-                                                        .startedAt
-                                                        .toLocal(),
-                                            ),
-                                          ),
+                        dropDownWidget: DropdownButton<ModelReturnOrderData>(
+                          value: selectedReturnOrder,
+                          isExpanded: true,
+                          icon: SvgPicture.asset(
+                            "assets/icons/svgs/dropdown.svg",
+                            color: dark,
+                          ),
+                          onChanged: (ModelReturnOrderData? newValue) {
+                            setState(() {
+                              selectedReturnOrder = newValue;
+                            });
+                            BlocProvider.of<AddPaymentDetailsBloc>(context).add(
+                              PaymentFieldsChangeEvent(
+                                deliveryOrderId: 0,
+                                returnOrderId:
+                                    selectedReturnOrder?.returnOrderId,
+                                amount: state.amount.value,
+                                paymentMode: state.paymentMode.value,
+                                paymentType: state.paymentType.value,
+                                paymentFor: state.paymentFor.value,
+                                receivedBy: state.receivedBy.value,
+                                paymentDate:
+                                    state.paymentDate.value ?? _paymentDate,
+                              ),
+                            );
+                          },
+                          items: state.returnOrderList
+                              .map((ModelReturnOrderData returnOrder) {
+                            return DropdownMenuItem<ModelReturnOrderData>(
+                              value: returnOrder,
+                              child: Flex(
+                                direction: Axis.horizontal,
+                                children: [
+                                  Expanded(
+                                    child: RowFlexSpacedChildren(
+                                      firstChild: RowFlexCloseChildren(
+                                        firstChild: Text(
+                                          "id:",
+                                          style: of(context).textTheme.caption,
                                         ),
+                                        secondChild: Text(
+                                          returnOrder.returnOrderId.toString(),
+                                          style: of(context).textTheme.overline,
                                         ),
-                                      ],
+                                      ),
+                                      secondChild: Text(
+                                        DateFormat('dd MMM yyyy').format(
+                                          returnOrder.createdAt.toLocal(),
+                                        ),
+                                      ),
                                     ),
                                   ),
+                                ],
                               ),
-                            )
-                            .toList(),
-                        onChanged: (returnId) {
-                          setState(() {
-                            _returnOrderIdController.text =
-                                returnId ?? _returnOrderIdController.text;
-                          });
-                          BlocProvider.of<AddPaymentDetailsBloc>(context).add(
-                            PaymentFieldsChangeEvent(
-                              deliveryOrderId: 0,
-                              returnOrderId:
-                                  returnId != null ? int.parse(returnId) : -1,
-                              amount: state.amount.value,
-                              paymentMode: state.paymentMode.value,
-                              paymentType: state.paymentType.value,
-                              paymentFor: state.paymentFor.value,
-                              receivedBy: state.receivedBy.value,
-                              paymentDate:
-                                  state.paymentDate.value ?? _paymentDate,
-                            ),
-                          );
-                        },
+                            );
+                          }).toList(),
+                        ),
                       ),
                     SizedBox(height: designValues(context).cornerRadius34),
                     CustomDropdown(
-                      value: _paymentModeController.text == ''
-                          ? null
-                          : _paymentModeController.text,
-                      items: _paymentModes
-                          .map((mode) => DropdownMenuItem(
-                                value: mode,
-                                child: Text(
-                                  mode,
-                                  style:
-                                     of(context).textTheme.overline,
-                                ),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (paymentMode) {
-                        setState(() {
-                          _paymentModeController.text =
-                              paymentMode ?? _paymentModeController.text;
-                        });
-                        BlocProvider.of<AddPaymentDetailsBloc>(context).add(
-                          PaymentFieldsChangeEvent(
+                      labelText: "Select Payment Mode",
+                      dropDownWidget: DropdownButton<String>(
+                        value: _paymentModeController.text == ''
+                            ? null
+                            : _paymentModeController.text,
+                        isExpanded: true,
+                        icon: SvgPicture.asset(
+                          "assets/icons/svgs/dropdown.svg",
+                          color: dark,
+                        ),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _paymentModeController.text = newValue!;
+                          });
+                          BlocProvider.of<AddPaymentDetailsBloc>(context).add(
+                            PaymentFieldsChangeEvent(
                               deliveryOrderId: state.deliveryOrderId.value,
                               returnOrderId: state.returnOrderId.value,
                               amount: state.amount.value,
@@ -712,11 +667,20 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                               paymentFor: state.paymentFor.value,
                               receivedBy: state.receivedBy.value,
                               paymentDate:
-                                state.paymentDate.value ?? _paymentDate,
-                          ),
-                        );
-                      },
-                      labelText: "Select Payment Mode",
+                                  state.paymentDate.value ?? _paymentDate,
+                            ),
+                          );
+                        },
+                        items: _paymentModes.map((String mode) {
+                          return DropdownMenuItem<String>(
+                            value: mode,
+                            child: Text(
+                              mode,
+                              style: of(context).textTheme.bodyText1,
+                            ),
+                          );
+                        }).toList(),
+                      ),
                     ),
                     SizedBox(height: designValues(context).verticalPadding),
                     TextFormField(
@@ -771,9 +735,9 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
             BlocBuilder<AddPaymentDetailsBloc, AddPaymentDetailsState>(
           builder: (context, state) {
             return ActionButton(
-                disabled: !state.status.isValidated,
-                text: "Add",
-                onPressed: () {
+              disabled: !state.status.isValidated,
+              text: "Add",
+              onPressed: () {
                 if (state.status.isValidated) {
                   BlocProvider.of<AddPaymentDetailsBloc>(context)
                       .add(AddPaymentReceiveSubmitEvent());

@@ -38,7 +38,6 @@ class DetailsCard extends StatelessWidget {
         Align(
           alignment: Alignment.centerLeft,
           child: Container(
-            // expand to fill available space horizontally
             width: double.infinity,
             decoration: BoxDecoration(
               borderRadius:

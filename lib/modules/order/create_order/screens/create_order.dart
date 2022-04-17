@@ -36,7 +36,7 @@ class CreateOrder extends StatefulWidget {
 }
 
 class _CreateOrderState extends State<CreateOrder> {
-  final TextEditingController _clientIdController = TextEditingController();
+  ModelClientData? selectedClient;
   DateTime? expectedDeliveryDate;
   TimeOfDay expectedDeliveryTime = TimeOfDay.now();
   @override
@@ -48,23 +48,8 @@ class _CreateOrderState extends State<CreateOrder> {
     return DateTime(date.year, date.month, date.day, time.hour, time.minute);
   }
 
-  int _returnClientId({
-    required List<ModelClientData>? clientList,
-    required String name,
-  }) {
-    if (clientList != null) {
-      for (final element in clientList) {
-        if (element.clientName == name) {
-          return element.clientId;
-        }
-      }
-    }
-    return -1;
-  }
-
   @override
   void dispose() {
-    _clientIdController.dispose();
     super.dispose();
   }
 
@@ -181,47 +166,47 @@ class _CreateOrderState extends State<CreateOrder> {
                     SizedBox(height: designValues(context).cornerRadius34),
                     CustomDropdown(
                       labelText: "Select Client",
-                      value: state.clientName.value == ""
-                          ? null
-                          : state.clientName.value,
-                      items: state.clientList
-                          .map(
-                            (client) => DropdownMenuItem<String>(
-                              value: client.clientName,
-                              child: Text(
-                                client.clientName,
-                                style: of(context).textTheme.caption,
-                              ),
+                      dropDownWidget: DropdownButton<ModelClientData>(
+                        value: selectedClient,
+                        isExpanded: true,
+                        icon: SvgPicture.asset(
+                          "assets/icons/svgs/dropdown.svg",
+                          color: dark,
+                        ),
+                        onChanged: (ModelClientData? newValue) {
+                          setState(() {
+                            selectedClient = newValue;
+                          });
+                          BlocProvider.of<CreateOrderBloc>(context).add(
+                            OrderFieldsChangeEvent(
+                              clientId: selectedClient!.clientId,
+                              clientName: selectedClient!.clientName,
+                              itemId: state.itemId.value,
+                              itemName: state.itemName.value,
+                              itemUnit: state.itemUnit.value,
+                              itemPerUnitCost: state.itemPerUnitCost.value,
+                              itemTotalQuantity: state.itemTotalQuantity.value,
+                              itemTotalCost: state.itemTotalCost.value,
+                              listOfItemsForOrder:
+                                  state.listOfItemsForOrder.value,
+                              orderStatus: state.orderStatus.value,
+                              createdBy: state.createdBy.value,
+                              // ! here it should be state.expectedDeliveryDate.value
+                              expectedDeliveryDate:
+                                  state.expectedDeliveryDate.value,
                             ),
-                          )
-                          .toList(),
-                      onChanged: (client) {
-                        setState(() {
-                          _clientIdController.text =
-                              client ?? _clientIdController.text;
-                        });
-                        BlocProvider.of<CreateOrderBloc>(context).add(
-                          OrderFieldsChangeEvent(
-                            clientId: _returnClientId(
-                              clientList: state.clientList,
-                              name: _clientIdController.text,
+                          );
+                        },
+                        items: state.clientList.map((ModelClientData client) {
+                          return DropdownMenuItem<ModelClientData>(
+                            value: client,
+                            child: Text(
+                              client.clientName,
+                              style: of(context).textTheme.bodyText1,
                             ),
-                            clientName: _clientIdController.text,
-                            itemId: state.itemId.value,
-                            itemName: state.itemName.value,
-                            itemUnit: state.itemUnit.value,
-                            itemPerUnitCost: state.itemPerUnitCost.value,
-                            itemTotalQuantity: state.itemTotalQuantity.value,
-                            itemTotalCost: state.itemTotalCost.value,
-                            listOfItemsForOrder:
-                                state.listOfItemsForOrder.value,
-                            orderStatus: state.orderStatus.value,
-                            createdBy: state.createdBy.value,
-                            expectedDeliveryDate:
-                                state.expectedDeliveryDate.value,
-                          ),
-                        );
-                      },
+                          );
+                        }).toList(),
+                      ),
                     ),
                     SizedBox(height: designValues(context).verticalPadding),
                     RowFlexSpacedChildren(
@@ -246,7 +231,7 @@ class _CreateOrderState extends State<CreateOrder> {
                             });
                             OrderFieldsChangeEvent(
                               clientId: state.clientId.value,
-                              clientName: _clientIdController.text,
+                              clientName: state.clientName.value,
                               itemId: state.itemId.value,
                               itemName: state.itemName.value,
                               itemUnit: state.itemUnit.value,
@@ -322,12 +307,9 @@ class _CreateOrderState extends State<CreateOrder> {
                                   // icon button to reset the expected delivery date to null
                                   IconButton(
                                     onPressed: () {
-                                      setState(() {
-                                        expectedDeliveryDate = null;
-                                      });
                                       OrderFieldsChangeEvent(
                                         clientId: state.clientId.value,
-                                        clientName: _clientIdController.text,
+                                        clientName: state.clientName.value,
                                         itemId: state.itemId.value,
                                         itemName: state.itemName.value,
                                         itemUnit: state.itemUnit.value,
@@ -344,6 +326,10 @@ class _CreateOrderState extends State<CreateOrder> {
                                         expectedDeliveryDate:
                                             expectedDeliveryDate,
                                       );
+                                      setState(() {
+                                        expectedDeliveryDate = null;
+                                      });
+
                                     },
                                     icon: const Icon(
                                       Icons.clear_rounded,
@@ -373,28 +359,6 @@ class _CreateOrderState extends State<CreateOrder> {
                                     expectedDeliveryDate ?? DateTime.now(),
                                     time,
                                   );
-                                  BlocProvider.of<CreateOrderBloc>(
-                                    context,
-                                  ).add(
-                                    OrderFieldsChangeEvent(
-                                      clientId: state.clientId.value,
-                                      clientName: _clientIdController.text,
-                                      itemId: state.itemId.value,
-                                      itemName: state.itemName.value,
-                                      itemUnit: state.itemUnit.value,
-                                      itemPerUnitCost:
-                                          state.itemPerUnitCost.value,
-                                      itemTotalQuantity:
-                                          state.itemTotalQuantity.value,
-                                      itemTotalCost: state.itemTotalCost.value,
-                                      listOfItemsForOrder:
-                                          state.listOfItemsForOrder.value,
-                                      orderStatus: state.orderStatus.value,
-                                      createdBy: state.createdBy.value,
-                                      expectedDeliveryDate:
-                                          expectedDeliveryDate,
-                                    ),
-                                  );
                                 } else {
                                   expectedDeliveryTime = TimeOfDay.now();
                                   snackbarMessage(
@@ -404,6 +368,26 @@ class _CreateOrderState extends State<CreateOrder> {
                                   );
                                 }
                               }
+                              BlocProvider.of<CreateOrderBloc>(
+                                context,
+                              ).add(
+                                OrderFieldsChangeEvent(
+                                  clientId: state.clientId.value,
+                                  clientName: state.clientName.value,
+                                  itemId: state.itemId.value,
+                                  itemName: state.itemName.value,
+                                  itemUnit: state.itemUnit.value,
+                                  itemPerUnitCost: state.itemPerUnitCost.value,
+                                  itemTotalQuantity:
+                                      state.itemTotalQuantity.value,
+                                  itemTotalCost: state.itemTotalCost.value,
+                                  listOfItemsForOrder:
+                                      state.listOfItemsForOrder.value,
+                                  orderStatus: state.orderStatus.value,
+                                  createdBy: state.createdBy.value,
+                                  expectedDeliveryDate: expectedDeliveryDate,
+                                ),
+                              );
                             });
                           });
                         },

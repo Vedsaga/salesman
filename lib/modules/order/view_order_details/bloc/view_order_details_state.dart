@@ -30,3 +30,9 @@ class FetchedOrderDetailsState extends ViewOrderDetailsState {
 }
 
 class ErrorFetchingOrderDetailsState extends ViewOrderDetailsState {}
+
+class ErrorWhileCancelingOrderState extends ViewOrderDetailsState {}
+
+class OrderSuccessfullyCanceledState extends ViewOrderDetailsState {}
+
+class ErrorWhileUpdatingItemReservedQuantity extends ViewOrderDetailsState {}

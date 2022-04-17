@@ -1,4 +1,3 @@
-
 // Package imports:
 import 'package:bloc/bloc.dart';
 import 'package:drift/drift.dart';
@@ -19,6 +18,7 @@ import 'package:salesman/core/models/validations/generic_field.dart';
 import 'package:salesman/core/models/validations/status_type_field.dart';
 import 'package:salesman/core/utils/feature_monitor.dart';
 import 'package:salesman/main.dart';
+import 'package:salesman/modules/client/query/client_table_queries.dart';
 import 'package:salesman/modules/menu/repositories/menu_repository.dart';
 import 'package:salesman/modules/order/query/delivery_order_table_queries.dart';
 import 'package:salesman/modules/payment/query/payment_table_queries.dart';
@@ -121,8 +121,7 @@ class AddPaymentDetailsBloc
                 paymentType: StatusTypeField.dirty(
                   _argument.comingFrom == RouteNames.paymentReceived
                       ? "receive"
-                      : _argument.comingFrom ==
-                              RouteNames.paymentSent
+                      : _argument.comingFrom == RouteNames.paymentSent
                           ? "send"
                           : "",
                 ),
@@ -363,6 +362,7 @@ class AddPaymentDetailsBloc
           amount: Value(state.amount.value),
           paymentMode: Value(state.paymentMode.value),
           paymentType: Value(state.paymentType.value),
+          paymentFor: Value(state.paymentFor.value),
           paymentDate: Value(state.paymentDate.value!),
           receivedBy: Value(state.receivedBy.value),
         );
@@ -374,6 +374,7 @@ class AddPaymentDetailsBloc
           amount: Value(state.amount.value),
           paymentMode: Value(state.paymentMode.value),
           paymentType: Value(state.paymentType.value),
+          paymentFor: Value(state.paymentFor.value),
           paymentDate: Value(state.paymentDate.value!),
           receivedBy: Value(state.receivedBy.value),
         );
@@ -423,6 +424,8 @@ class AddPaymentDetailsBloc
               currentAmount: orderData.totalReceivedAmount,
             );
             if (deliveryOrderId < 1) {
+              ClientTableQueries(appDatabaseInstance)
+                  .updateTotalAmountPaidByClient(clientId: orderData.clientId , amount: state.amount.value,);
               emit(
                 state.copyWith(
                   status: FormzStatus.submissionFailure,
@@ -471,6 +474,11 @@ class AddPaymentDetailsBloc
                 ),
               );
             } else {
+               ClientTableQueries(appDatabaseInstance)
+                  .updateTotalAmountSentToClient(
+                clientId: orderData.clientId,
+                amount: state.amount.value,
+              );
               emit(
                 state.copyWith(
                   status: FormzStatus.submissionSuccess,

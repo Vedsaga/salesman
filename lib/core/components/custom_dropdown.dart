@@ -3,9 +3,6 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
-// Package imports:
-import 'package:flutter_svg/flutter_svg.dart';
-
 // Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/theme/colors.dart';
@@ -15,16 +12,12 @@ class CustomDropdown extends StatelessWidget {
   const CustomDropdown(
       {
     Key? key,
-    required this.value,
-    required this.items,
-    required this.onChanged,
     required this.labelText,
+    required this.dropDownWidget,
   })
       : super(key: key);
-  final String? value;
-  final List<DropdownMenuItem<String>>? items;
-  final Function(String?)? onChanged;
   final String labelText;
+  final Widget dropDownWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -51,16 +44,7 @@ class CustomDropdown extends StatelessWidget {
               padding: EdgeInsets.symmetric(
                 horizontal: designValues(context).mainAxisSpacing13,
               ),
-              child: DropdownButton<String>(
-                value: value,
-                isExpanded: true,
-                icon: SvgPicture.asset(
-                  "assets/icons/svgs/dropdown.svg",
-                  color: dark,
-                ),
-                items: items,
-                onChanged: onChanged,
-              ),
+              child: dropDownWidget,
             ),
           ),
         ),

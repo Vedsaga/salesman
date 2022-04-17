@@ -46,7 +46,6 @@ class MenuSection extends StatelessWidget {
           slivers: <Widget>[
             SliverGrid(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                // ignore: todo
                 // TODO: make the crossAxisCount dynamic based on screen width.
                 crossAxisCount: 3,
                 mainAxisSpacing: designValues(context).mainAxisSpacing13,
@@ -58,6 +57,7 @@ class MenuSection extends StatelessWidget {
                     title: menuItems[index].title,
                     svgPath:
                         'assets/icons/svgs/${menuItems[index].iconName}.svg',
+                    
                     onTap: menuItems[index].onTap,
                     disabled: menuItems[index].disabled,
                   );

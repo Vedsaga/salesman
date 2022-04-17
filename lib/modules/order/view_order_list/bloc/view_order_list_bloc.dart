@@ -14,29 +14,93 @@ part 'view_order_list_state.dart';
 
 class ViewOrderListBloc extends Bloc<ViewOrderListEvent, ViewOrderListState> {
   ViewOrderListBloc() : super(ViewOrderListInitial()) {
-    on<FetchAllPendingOrderListEvent>(_fetchOrderList);
+    on<FetchAllPendingOrderListEvent>(_fetchPendingAndDelayedOrders);
+    on<FetchOrderHistoryListEvent>(_fetchOrderHistory);
+    on<UpdatePendingDeliveryOrderStatusEvent>(
+      _updatePendingDeliveryOrderStatus,
+    );
   }
 
-  Future<void> _fetchOrderList(
+  Future<void> _fetchPendingAndDelayedOrders(
     FetchAllPendingOrderListEvent event,
       Emitter<ViewOrderListState> emit,) async {
     emit(FetchingOrderListState());
     try {
       final List<ModelDeliveryOrderData> pendingDeliveryOrders =
           await DeliveryOrderTableQueries(appDatabaseInstance)
-              .getAllPendingOrders();
+              .getAllPending();
       final List<ModelClientData> clientList =
           await ClientTableQueries(appDatabaseInstance).getAllClients();
       final List<ModelItemData> itemList =
           await ItemTableQueries(appDatabaseInstance).getAllItems();
       if (pendingDeliveryOrders.isNotEmpty) {
         emit(FetchedOrderListState(
-            pendingDeliveryOrders: pendingDeliveryOrders, clientList: clientList, itemList: itemList,),);
+            orderList: pendingDeliveryOrders,
+            clientList: clientList,
+            itemList: itemList,
+          ),
+        );
       } else {
         emit(EmptyOrderListState());
       }
     } catch (e) {
       emit(ErrorFetchingOrderListState());
     }
+  }
+
+  Future<void> _fetchOrderHistory(FetchOrderHistoryListEvent event,
+      Emitter<ViewOrderListState> emit,) async {
+    emit(FetchingOrderListState());
+    try {
+      final List<ModelDeliveryOrderData> orderHistory =
+          await DeliveryOrderTableQueries(appDatabaseInstance).getAllHistory();
+      final List<ModelClientData> clientList =
+          await ClientTableQueries(appDatabaseInstance).getAllClients();
+      final List<ModelItemData> itemList =
+          await ItemTableQueries(appDatabaseInstance).getAllItems();
+      if (orderHistory.isNotEmpty) {
+        emit(
+          FetchedOrderListState(
+            orderList: orderHistory,
+            clientList: clientList,
+            itemList: itemList,
+          ),
+        );
+      } else {
+        emit(EmptyOrderListState());
+      }
+    } catch (e) {
+      emit(ErrorFetchingOrderListState());
+    }
+  }
+
+  Future<void> _updatePendingDeliveryOrderStatus(
+    UpdatePendingDeliveryOrderStatusEvent event,
+    Emitter<ViewOrderListState> emit,
+  ) async {
+    try {
+      final List<ModelDeliveryOrderData> pendingOrders =
+          await DeliveryOrderTableQueries(appDatabaseInstance)
+              .getAllPendingOrdersExpectedDeliveryDate();
+      if (pendingOrders.isNotEmpty) {
+             final List<int> orderIdList =
+            await DeliveryOrderTableQueries(appDatabaseInstance)
+                .updateOrderStatus(
+          orders: pendingOrders,
+          status: 'delayed',
+        );
+        if (orderIdList.length == pendingOrders.length) {
+          emit(UpdatedOrderStatusSuccessfully());
+        } else {
+          emit(ErrorUpdatingPendingOrderStatusState());
+        }
+      } else {
+         emit(UpdatedOrderStatusSuccessfully());
+      }
+
+    } catch (e) {
+      emit(ErrorUpdatingPendingOrderStatusState());
+    }
+    
   }
 }

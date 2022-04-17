@@ -20,7 +20,7 @@ import 'package:salesman/core/db/drift/app_database.dart';
 import 'package:salesman/core/models/designs/summary_card_model.dart';
 import 'package:salesman/modules/order/view_order_details/bloc/view_order_details_bloc.dart';
 
-// third party imports
+
 // project's imports
 
 class OrderPaymentsTab extends StatelessWidget {

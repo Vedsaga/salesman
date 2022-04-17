@@ -16,9 +16,9 @@ class ModelDeliveryOrder extends Table {
   TextColumn get orderStatus => text().withLength(min: 1, max: 20)();
   TextColumn get createdBy => text().withLength(min: 3, max: 20)();
   DateTimeColumn get createdAt =>
-      dateTime().withDefault(Constant(DateTime.now()))();
+      dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get lastUpdated =>
-      dateTime().withDefault(Constant(DateTime.now()))();
+      dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get expectedDeliveryDate =>
       dateTime().nullable()();
 }

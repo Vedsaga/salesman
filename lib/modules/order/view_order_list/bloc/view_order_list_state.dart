@@ -12,16 +12,16 @@ class ViewOrderListInitial extends ViewOrderListState {}
 class FetchingOrderListState extends ViewOrderListState {}
 
 class FetchedOrderListState extends ViewOrderListState {
-  final List<ModelDeliveryOrderData> pendingDeliveryOrders;
+  final List<ModelDeliveryOrderData> orderList;
   final List<ModelClientData> clientList;
   final List<ModelItemData> itemList;
   const FetchedOrderListState({
-    required this.pendingDeliveryOrders,
+    required this.orderList,
     required this.clientList,
     required this.itemList,
   });
   @override
-  List<Object> get props => [pendingDeliveryOrders, clientList, itemList];
+  List<Object> get props => [orderList, clientList, itemList];
 }
 
 class EmptyOrderListState extends ViewOrderListState {}
@@ -29,3 +29,7 @@ class EmptyOrderListState extends ViewOrderListState {}
 class ErrorFetchingOrderListState extends ViewOrderListState {}
 
 class ErrorFetchingAllOrderListState extends ViewOrderListState {}
+
+class ErrorUpdatingPendingOrderStatusState extends ViewOrderListState {}
+
+class UpdatedOrderStatusSuccessfully extends ViewOrderListState {}

@@ -24,7 +24,7 @@ import 'package:salesman/core/components/single_info_box.dart';
 import 'package:salesman/core/components/snackbar_message.dart';
 import 'package:salesman/modules/item/view_details/bloc/view_item_details_bloc.dart';
 
-// third party imports
+
 
 
 
@@ -239,6 +239,8 @@ class _ViewItemDetailsState extends State<ViewItemDetails> {
                   context: context,
                   builder: DeleteConfirmation(
                     context: context,
+                    textYes: "remove",
+                    textNo: "no",
                     message: 'are you sure to remove this item?',
                     title: 'Remove the item?',
                   ).build,

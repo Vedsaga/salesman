@@ -180,13 +180,12 @@ class _AddItemState extends State<AddItem> {
             "Item added successfully! Item ID: ${state.itemId}",
             MessageType.success,
           );
-          context.read<AddItemBloc>().add(EnableTradeFeatureEvent());
-          context.read<AddItemBloc>().add(EnableOrderFeatureEvent());
+          context.read<AddItemBloc>().add(EnableVehicleFeatureEvent());
           Future.delayed(const Duration(seconds: 1), () {
             Navigator.popAndPushNamed(context, RouteNames.viewItemList);
           });
         }
-        if (state.status.isSubmissionFailure) {
+        if (state.status == FormzStatus.submissionFailure) {
           snackbarMessage(
             context,
             "oh no.. Something went wrong!",

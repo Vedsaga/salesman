@@ -8,5 +8,3 @@ abstract class ViewItemEvent extends Equatable {
 }
 
 class FetchItemEvent extends ViewItemEvent {}
-
-class DisableOrderFeatureEvent extends ViewItemEvent {}

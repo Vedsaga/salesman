@@ -63,6 +63,21 @@ class _ViewOrderListState extends State<ViewOrderList> {
             MessageType.warning,
           );
         }
+        if (state is UpdatedOrderStatusSuccessfully) {
+        // call FetchAllPendingOrderListEvent to update the list
+          BlocProvider.of<ViewOrderListBloc>(context).add(
+            FetchAllPendingOrderListEvent(),
+          );
+        }
+        if (state is ErrorUpdatingPendingOrderStatusState) {
+          snackbarMessage(
+            context,
+            'Error updating order status...',
+            MessageType.failed,
+          );
+          // pop out
+          Navigator.pop(context);
+        }
       },
       child: MobileLayout(
         topAppBar: const NormalTopAppBar(
@@ -89,7 +104,7 @@ class _ViewOrderListState extends State<ViewOrderList> {
                     top: 8,
                   ),
                   child: ListView.builder(
-                    itemCount: state.pendingDeliveryOrders.length,
+                    itemCount: state.orderList.length,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
@@ -99,63 +114,68 @@ class _ViewOrderListState extends State<ViewOrderList> {
                             context,
                             RouteNames.viewOrderDetails,
                             arguments: ViewOrderDetailsRouteArguments(
-                              orderDetails: state.pendingDeliveryOrders[index],
-                              itemList: state.pendingDeliveryOrders[index].itemList.itemList,
+                              orderDetails: state.orderList[index],
+                              itemList: state.orderList[index].itemList.itemList,
                               clientDetails: globalFunction.getClientDetails(
-                                state.pendingDeliveryOrders[index].clientId,
+                                state.orderList[index].clientId,
                               )!,
                             ),
                           );
                         },
                         child: TransactionListCard(
                           statusColor:
-                              state.pendingDeliveryOrders[index].orderStatus ==
+                              state.orderList[index].orderStatus ==
                                   "pending"
                               ? skyBlueGradient
-                                  : state.pendingDeliveryOrders[index]
-                                              .orderStatus ==
-                                          "approved"
-                                  ? greenGradient
-                                      : state.pendingDeliveryOrders[index]
-                                                  .orderStatus ==
-                                          "cancelled"
-                                      ? redGradient
-                                      : darkGradient,
+                              : state.orderList[index].orderStatus == "processing"
+                                  ? yellowGradient
+                                  : state.orderList[index].orderStatus ==
+                                          "out-for-delivery"
+                                      ? orangeGradient
+                                      : state.orderList[index].orderStatus ==
+                                                  "cancelled" ||
+                                              state.orderList[index].orderStatus ==
+                                                  "rejected"
+                                          ? redGradient
+                                          : state.orderList[index].orderStatus ==
+                                                  "delivered"
+                                              ? greenGradient
+                                              : darkGradient,
                           statusTextColor: light,
                           status:
-                              state.pendingDeliveryOrders[index].orderStatus,
+                              state.orderList[index].orderStatus,
                           leadingDataAtTop: globalFunction.getClientName(
-                                        state.pendingDeliveryOrders[index]
+                                        state.orderList[index]
                                             .clientId,
                                       ) !=
                                       null ||
                                   globalFunction
                                       .getClientName(
-                                        state.pendingDeliveryOrders[index]
+                                        state.orderList[index]
                                             .clientId,
                                       )!
                                       .isNotEmpty
                               ? globalFunction
                                   .getClientName(
-                                  state.pendingDeliveryOrders[index].clientId,
+                                  state.orderList[index].clientId,
                                 )!
                               : "",
                           trailingDataAtTop: state
-                              .pendingDeliveryOrders[index].netTotal
+                              .orderList[index].netTotal
                               .toStringAsFixed(2),
                           // format like 15 Dec 19
                           leadingDataAtBottom: state
-                                      .pendingDeliveryOrders[index]
+                                      .orderList[index]
                                       .expectedDeliveryDate ==
                                   null
                               ? "not-set"
                               : DateFormat('dd MMM yy').format(
-                                  state.pendingDeliveryOrders[index]
+                                  state.orderList[index]
                                       .expectedDeliveryDate!
                                       .toLocal(),
                                 ),
                           trailingDataAtBottom:
-                              "${state.pendingDeliveryOrders[index].itemList.itemList.length} item",
+                              "${state.orderList[index].itemList.itemList.length} item",
                         ),
                       );
                     },

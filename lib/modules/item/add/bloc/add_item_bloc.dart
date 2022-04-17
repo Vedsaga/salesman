@@ -30,9 +30,8 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
     on<ItemSellingPriceFieldUnfocused>(_sellingPriceUnfocused);
     on<ItemBuyingPriceFieldUnfocused>(_buyingPriceUnfocused);
     on<ItemAvailableQuantityFieldUnfocused>(_availableQuantityUnfocused);
-    on<ItemFormSubmitted>(_itemFormSubmitted);  
-    on<EnableTradeFeatureEvent>(_onEnableTradeFeature);
-    on<EnableOrderFeatureEvent>(_onEnableOrderFeature);
+    on<ItemFormSubmitted>(_itemFormSubmitted);
+    on<EnableVehicleFeatureEvent>(_enableVehicleFeature);
   }
 
   @override
@@ -186,23 +185,14 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
     }
   }
 
-  Future<void> _onEnableTradeFeature(
-      EnableTradeFeatureEvent event, Emitter<AddItemState> emit,) async {
+    Future<void> _enableVehicleFeature(
+    EnableVehicleFeatureEvent event,
+    Emitter<AddItemState> emit,
+  ) async {
     final feature = await menuRepository.getActiveFeatures();
-
-    if (feature != null && feature.disableTrade) {
+    if (feature != null && feature.disableVehicle) {
       FeatureMonitor(menuRepository: menuRepository)
-          .enableFeature("disableTrade");
-    }
-  }
-
-  Future<void> _onEnableOrderFeature(
-      EnableOrderFeatureEvent event, Emitter<AddItemState> emit,) async {
-    final feature = await menuRepository.getActiveFeatures();
-
-    if (feature != null && feature.disableOrder) {
-      FeatureMonitor(menuRepository: menuRepository)
-          .enableFeature("disableOrder");
+          .enableFeature('disableVehicle');
     }
   }
 }

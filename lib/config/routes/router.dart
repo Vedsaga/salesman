@@ -43,6 +43,12 @@ import 'package:salesman/modules/profile/profile_creation/screens/profile_creati
 import 'package:salesman/modules/profile/repositories/profile_repository.dart';
 import 'package:salesman/modules/splashscreen/bloc/profile_check_bloc.dart';
 import 'package:salesman/modules/splashscreen/screens/splash_screen.dart';
+import 'package:salesman/modules/vehicle/add/bloc/add_vehicle_bloc.dart';
+import 'package:salesman/modules/vehicle/add/screens/add_vehicle.dart';
+import 'package:salesman/modules/vehicle/view_details/bloc/view_vehicle_details_bloc.dart';
+import 'package:salesman/modules/vehicle/view_details/screens/view_vehicle_details.dart';
+import 'package:salesman/modules/vehicle/view_list/bloc/vehicle_list_bloc.dart';
+import 'package:salesman/modules/vehicle/view_list/screens/view_vehicles_list.dart';
 
 class AppRouter {
   Route onGenerateRoute(
@@ -115,11 +121,47 @@ class AppRouter {
                         ..add(GetItemDetailsEvent()),
                   child: const ViewItemDetails(),
                 ),);
+      case RouteNames.viewVehicleList:
+        return MaterialPageRoute(
+          builder: (_) {
+            return BlocProvider<VehicleListBloc>(
+              create: (context) => VehicleListBloc(MenuRepository())
+                ..add(FetchVehicleListEvent()),
+              child: const ViewVehiclesList(),
+            );
+          },
+        );
+      case RouteNames.addVehicle:
+        return MaterialPageRoute(
+          builder: (_) {
+            return BlocProvider<AddVehicleBloc>(
+              create: (context) => AddVehicleBloc(MenuRepository()),
+              child: const AddVehicle(),
+            );
+          },
+        );
+      case RouteNames.viewVehicleDetails:
+        final vehicleDetail = settings.arguments as ModelVehicleData?;
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider<ViewVehicleDetailsBloc>(
+            create: (context) => ViewVehicleDetailsBloc()
+              ..add(GetVehicleDetailsEvent(vehicleDetails: vehicleDetail)),
+            child: const ViewVehicleDetails(),
+          ),
+        );
       case RouteNames.viewOrderList:
         return MaterialPageRoute(builder: (_) {
           return BlocProvider<ViewOrderListBloc>(
             create: (context) =>
-                  ViewOrderListBloc()..add(FetchAllPendingOrderListEvent()),
+                  ViewOrderListBloc()..add(UpdatePendingDeliveryOrderStatusEvent()),
+            child: const ViewOrderList(),
+          );
+        },);
+      case RouteNames.records:
+        return MaterialPageRoute(builder: (_) {
+          return BlocProvider<ViewOrderListBloc>(
+            create: (context) =>
+                  ViewOrderListBloc()..add(FetchOrderHistoryListEvent()),
             child: const ViewOrderList(),
           );
         },);
@@ -142,7 +184,8 @@ class AppRouter {
                     clientDetails: routeArgument.clientDetails,
                     orderDetails: routeArgument.orderDetails,
               itemList: routeArgument.itemList,
-                  )..add(GetOrderDetailsEvent()),
+              menuRepository: MenuRepository(),
+            )..add(GetOrderDetailsEvent()),
                   child: const ViewOrderDetails(),
                 ),);
       case RouteNames.addPaymentDetails:

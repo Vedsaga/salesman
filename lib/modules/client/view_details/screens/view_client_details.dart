@@ -6,25 +6,17 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 // Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/layouts/mobile_layout.dart';
 import 'package:salesman/config/routes/route_name.dart';
-import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/core/components/custom_round_button.dart';
 import 'package:salesman/core/components/delete_confirmation.dart';
-import 'package:salesman/core/components/double_info_box.dart';
 import 'package:salesman/core/components/input_decoration.dart';
 import 'package:salesman/core/components/input_top_app_bar.dart';
-import 'package:salesman/core/components/single_info_box.dart';
 import 'package:salesman/core/components/snackbar_message.dart';
 import 'package:salesman/modules/client/view_details/bloc/view_client_details_bloc.dart';
-
-// third party imports
-
-
 
 class ViewClientDetails extends StatefulWidget {
   const ViewClientDetails({Key? key}) : super(key: key);
@@ -111,36 +103,6 @@ class _ViewClientDetailsState extends State<ViewClientDetails> {
                       ),
                     ),
                     SizedBox(height: designValues(context).cornerRadius34),
-                    DoubleInfoBox(
-                      firstBoxWidget: SingleInfoBox(
-                        info: "trade volume",
-                        data: state.clientDetails.totalTrade.toString(),
-                        dataPrefixWidget: SvgPicture.asset(
-                          "assets/icons/svgs/inr.svg",
-                          height: 13,
-                          width: 13,
-                        ),
-                      ),
-                      secondBoxWidget: SingleInfoBox(
-                        info: "due amount",
-                        data: state.clientDetails.dueAmount.toString(),
-                        dataColor: state.clientDetails.dueAmount > 0
-                            ? red
-                            : state.clientDetails.dueAmount > 0
-                                ? green
-                                : grey,
-                        dataPrefixWidget: SvgPicture.asset(
-                          "assets/icons/svgs/inr.svg",
-                          height: 13,
-                          width: 13,
-                          color: state.clientDetails.dueAmount > 0
-                              ? red
-                              : state.clientDetails.dueAmount > 0
-                                  ? green
-                                  : grey,
-                        ),
-                      ),
-                    )
                   ],
                 ),
               );
@@ -161,6 +123,8 @@ class _ViewClientDetailsState extends State<ViewClientDetails> {
                 context: context,
                 builder: DeleteConfirmation(
                   context: context,
+                  textYes: "remove",
+                  textNo: "no",
                   title: 'Remove the client?',
                   message: 'are you sure to remove this client?',
                 ).build,
@@ -169,7 +133,6 @@ class _ViewClientDetailsState extends State<ViewClientDetails> {
                 context
                     .read<ViewClientDetailsBloc>()
                     .add(DeactivateClientEvent());
-                
               }
             },
           ),

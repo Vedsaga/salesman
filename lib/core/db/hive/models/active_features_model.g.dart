@@ -32,13 +32,14 @@ class ActiveFeaturesModelAdapter extends TypeAdapter<ActiveFeaturesModel> {
       disableSurvey: fields[12] as bool,
       disableStats: fields[13] as bool,
       disableSend: fields[14] as bool,
+      disableVehicle: fields[15] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, ActiveFeaturesModel obj) {
     writer
-      ..writeByte(15)
+      ..writeByte(16)
       ..writeByte(0)
       ..write(obj.disableDetails)
       ..writeByte(1)
@@ -68,7 +69,9 @@ class ActiveFeaturesModelAdapter extends TypeAdapter<ActiveFeaturesModel> {
       ..writeByte(13)
       ..write(obj.disableStats)
       ..writeByte(14)
-      ..write(obj.disableSend);
+      ..write(obj.disableSend)
+      ..writeByte(15)
+      ..write(obj.disableVehicle);
   }
 
   @override

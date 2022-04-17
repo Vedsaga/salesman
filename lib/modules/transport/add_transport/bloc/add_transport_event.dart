@@ -7,27 +7,17 @@ abstract class AddTransportEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class FetchOrderDetailsEvent extends AddTransportEvent {}
 
 class TransportFieldsChange extends AddTransportEvent {
   const TransportFieldsChange({
-    required this.transportId,
-    required this.transportBy,
-    required this.transportStatus,
+    required this.scheduleDate,
   });
 
-  final int transportId;
-  final String transportBy;
-  final String transportStatus;
-
+  final DateTime scheduleDate;
   @override
   List<Object> get props => [
-        transportId,
-        transportBy,
-        transportStatus,
+        scheduleDate,
       ];
 }
-
-class TransportIdFieldUnfocusEvent extends AddTransportEvent {}
 
 class SubmitTransportFieldsEvent extends AddTransportEvent {}

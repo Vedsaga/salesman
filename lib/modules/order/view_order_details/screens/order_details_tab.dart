@@ -1,11 +1,11 @@
 
 
 // Flutter imports:
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
 // Project imports:
@@ -13,11 +13,10 @@ import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
 import 'package:salesman/core/components/custom_round_button.dart';
+import 'package:salesman/core/components/delete_confirmation.dart';
 import 'package:salesman/core/components/details_card.dart';
-import 'package:salesman/core/components/info_data_duo_box.dart';
 import 'package:salesman/core/components/item_info_card.dart';
 import 'package:salesman/core/components/normal_top_app_bar.dart';
-import 'package:salesman/core/components/row_flex_close_children.dart';
 import 'package:salesman/core/components/summary_card.dart';
 import 'package:salesman/modules/order/view_order_details/bloc/view_order_details_bloc.dart';
 
@@ -48,91 +47,157 @@ class _ViewOrderDetailTabState extends State<OrderDetailsTab> {
                     child: Flex(
                       direction: Axis.vertical,
                       children: <Widget>[
-                        InfoDataDuoBox(
-                          infoText: 'Order ID',
-                          dataText:
-                              state.orderDetails.deliveryOrderId.toString(),
-                        ),
-                        SizedBox(height: designValues(context).padding21),
-                        InfoDataDuoBox(
-                          infoText: 'Client',
-                          dataText: state.clientDetails.clientName,
-                        ),
-                        SizedBox(height: designValues(context).verticalPadding),
-                        NormalTopAppBar(
-                          titleWidget: Text(
-                            'STATUS',
-                            style: of(context).textTheme.headline6,
-                          ),
-                        ),
-                        SizedBox(height: designValues(context).padding21),
-                        InfoDataDuoBox(
-                          infoText: 'Order',
-                          dataText: state.orderDetails.orderStatus,
-                          dataBoxGradient: state.orderDetails.orderStatus ==
-                                  "pending"
-                              ? skyBlueGradient
-                              : state.orderDetails.orderStatus == "processing"
-                                  ? yellowGradient
-                                  : state.orderDetails.orderStatus ==
-                                          "completed"
-                                      ? greenGradient
-                                      : state.orderDetails.orderStatus ==
-                                                  "cancelled" ||
-                                              state.orderDetails.orderStatus ==
-                                                  "rejected"
-                                          ? redGradient
-                                          : darkGradient,
-                          dataTextColor: light,
-                        ),
-                        SizedBox(height: designValues(context).padding21),
-                        InfoDataDuoBox(
-                          infoText: 'Payment',
-                          dataText: state.orderDetails.paymentStatus,
-                          dataBoxGradient: state.orderDetails.paymentStatus ==
-                                  "unpaid"
-                              ? redGradient
-                              : state.orderDetails.paymentStatus == "partial"
-                                  ? yellowGradient
-                                  : state.orderDetails.paymentStatus == "paid"
-                                      ? greenGradient
-                                      : darkGradient,
-                          dataTextColor:
-                              state.orderDetails.paymentStatus == "partial"
-                                  ? secondaryDark
-                                  : light,
-                        ),
                         SizedBox(
-                          height: designValues(context).cornerRadius34,
+                          height: designValues(context).padding21,
                         ),
-                        DetailsCard(
-                          label: "Expected Delivery Date",
-                          firstChild: SvgPicture.asset(
-                            "assets/icons/svgs/calendar.svg",
-                          ),
-                          secondChild:
-                              state.orderDetails.expectedDeliveryDate != null
-                                  ? Text(
-                                      DateFormat('dd MMM yyyy').format(
-                                        state.orderDetails.expectedDeliveryDate!
-                                            .toLocal(),
-                                      ),
-                                      style: of(context).textTheme.bodyText1,
-                                    )
-                                  : const Text(
-                                      'Not set',
-                                    ),
+                        Flex(
+                          direction: Axis.horizontal,
+                          children: <Widget>[
+                            Expanded(
+                              child: DetailsCard(
+                                label: "Order Id",
+                                firstChild: Flexible(
+                                  child: Text(
+                                    state.orderDetails.deliveryOrderId
+                                        .toString(),
+                                  ),
+                                ),
+                                secondChild: const Flexible(
+                                  flex: 0,
+                                  child: SizedBox(),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: designValues(context).cornerRadius34,
+                            ),
+                            Expanded(
+                              child: DetailsCard(
+                                label: "Delivery Date",
+                                firstChild: Flexible(
+                                  child: state.orderDetails
+                                              .expectedDeliveryDate !=
+                                          null
+                                      ? Text(
+                                          DateFormat('dd MMM yyyy').format(
+                                            state.orderDetails
+                                                .expectedDeliveryDate!
+                                                .toLocal(),
+                                          ),
+                                          style:
+                                              of(context).textTheme.bodyText1,
+                                        )
+                                      : const Text(
+                                          'Not set',
+                                        ),
+                                ),
+                                secondChild:
+                                    const Flexible(flex: 0, child: SizedBox()),
+                              ),
+                            ),
+                          ],
                         ),
                         SizedBox(
                           height: designValues(context).verticalPadding,
                         ),
                         NormalTopAppBar(
                           titleWidget: Text(
-                            'SUMMARY',
-                            style: of(context).textTheme.headline6,
+                            "STATUS",
+                            style: of(context)
+                                .textTheme
+                                .headline6
+                                ?.copyWith(color: grey),
                           ),
                         ),
                         SizedBox(height: designValues(context).padding21),
+                        Flex(
+                          direction: Axis.horizontal,
+                          children: <Widget>[
+                            Expanded(
+                              child: DetailsCard(
+                                label: "Order",
+                                containerGradient:
+                                    state.orderDetails.orderStatus == "pending"
+                                        ? skyBlueGradient
+                                        : state.orderDetails.orderStatus ==
+                                                "processing"
+                                            ? yellowGradient
+                                            : state.orderDetails.orderStatus ==
+                                                    "out-for-delivery"
+                                                ? orangeGradient
+                                                : state.orderDetails
+                                                                .orderStatus ==
+                                                            "cancelled" ||
+                                                        state.orderDetails
+                                                                .orderStatus ==
+                                                            "rejected"
+                                                    ? redGradient
+                                                    : state.orderDetails
+                                                                .orderStatus ==
+                                                            "delivered"
+                                                        ? greenGradient
+                                                        : darkGradient,
+                                firstChild: Flexible(
+                                  child: Text(
+                                    state.orderDetails.orderStatus,
+                                    style: of(context)
+                                        .textTheme
+                                        .overline
+                                        ?.copyWith(color: light),
+                                  ),
+                                ),
+                                secondChild: const Flexible(
+                                  flex: 0,
+                                  child: SizedBox(),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: designValues(context).cornerRadius34,
+                            ),
+                            Expanded(
+                              child: DetailsCard(
+                                label: "Payment",
+                                containerGradient:
+                                    state.orderDetails.paymentStatus == "unpaid"
+                                        ? redGradient
+                                        : state.orderDetails.paymentStatus ==
+                                                "partial"
+                                            ? yellowGradient
+                                            : state.orderDetails
+                                                        .paymentStatus ==
+                                                    "paid"
+                                                ? greenGradient
+                                                : darkGradient,
+                                firstChild: Flexible(
+                                  child: Text(
+                                    state.orderDetails.paymentStatus,
+                                    style: of(context)
+                                        .textTheme
+                                        .overline
+                                        ?.copyWith(color: light),
+                                  ),
+                                ),
+                                secondChild:
+                                    const Flexible(flex: 0, child: SizedBox()),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: designValues(context).verticalPadding,
+                        ),
+                        NormalTopAppBar(
+                          titleWidget: Text(
+                            "SUMMARY",
+                            style: of(context)
+                                .textTheme
+                                .headline6
+                                ?.copyWith(color: grey),
+                          ),
+                        ),
+                        SizedBox(height: designValues(context).padding21),
+
                         SummaryCard(
                           summaryValuesList: null,
                           showCount: true,
@@ -147,7 +212,10 @@ class _ViewOrderDetailTabState extends State<OrderDetailsTab> {
                         NormalTopAppBar(
                           titleWidget: Text(
                             'ITEMs',
-                            style: of(context).textTheme.headline6,
+                            style: of(context)
+                                .textTheme
+                                .headline6
+                                ?.copyWith(color: grey),
                           ),
                         ),
                         SizedBox(height: designValues(context).padding21),
@@ -178,103 +246,78 @@ class _ViewOrderDetailTabState extends State<OrderDetailsTab> {
                           },
                         ),
                         SizedBox(height: designValues(context).verticalPadding),
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                              designValues(context).cornerRadius8,
-                            ),
-                            color: light,
-                            boxShadow: const [
-                              BoxShadow(
-                                color: shadowColor,
-                                blurRadius: 34,
-                                offset: Offset(-5, 5),
-                              ),
-                            ],
-                          ),
-                          child: Flex(
-                            direction: Axis.vertical,
-                            children: [
-                              Flex(
-                                direction: Axis.horizontal,
-                                children: [
-                                  const Spacer(),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                      top: designValues(context).padding21,
-                                    ),
-                                    child: RowFlexCloseChildren(
-                                      firstChild: Text(
-                                        "created on",
-                                        style: of(context).textTheme.caption,
-                                      ),
-                                      secondChild: Text(
-                                        DateFormat('dd MMM yyyy').format(
-                                          state.orderDetails.createdAt
-                                              .toLocal(),
-                                        ),
-                                        style: of(context).textTheme.overline,
-                                      ),
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                ],
-                              ),
-                              Flex(
-                                direction: Axis.horizontal,
-                                children: [
-                                  const Spacer(),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                      top: designValues(context).padding21,
-                                    ),
-                                    child: RowFlexCloseChildren(
-                                      firstChild: Text(
-                                        "created at",
-                                        style: of(context).textTheme.caption,
-                                      ),
-                                      secondChild: Text(
-                                        DateFormat('hh:mm:ss a').format(
-                                          state.orderDetails.createdAt
-                                              .toLocal(),
-                                        ),
-                                        style: of(context).textTheme.overline,
-                                      ),
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                ],
-                              ),
-                              Flex(
-                                direction: Axis.horizontal,
-                                children: [
-                                  const Spacer(),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: designValues(context).padding21,
-                                    ),
-                                    child: RowFlexCloseChildren(
-                                      firstChild: Text(
-                                        "created by",
-                                        style: of(context).textTheme.caption,
-                                      ),
-                                      secondChild: Text(
-                                        state.orderDetails.createdBy,
-                                        style: of(context).textTheme.overline,
-                                      ),
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                ],
-                              ),
-                            ],
+                        NormalTopAppBar(
+                          titleWidget: Text(
+                            'GENERIC DETAILS',
+                            style: of(context)
+                                .textTheme
+                                .headline6
+                                ?.copyWith(color: grey),
                           ),
                         ),
+                        SizedBox(
+                          height: designValues(context).padding21,
+                        ),
+                        DetailsCard(
+                          label: "Buyer Name",
+                          firstChild: const SizedBox(),
+                          secondChild: Text(state.clientDetails.clientName),
+                        ),
+                        SizedBox(height: designValues(context).padding21),
+                        DetailsCard(
+                          label: "Created By",
+                          firstChild: const SizedBox(),
+                          secondChild: Text(state.orderDetails.createdBy),
+                        ),
+                        SizedBox(
+                          height: designValues(context).cornerRadius34,
+                        ),
+                        Flex(
+                          direction: Axis.horizontal,
+                          children: <Widget>[
+                            Expanded(
+                              child: DetailsCard(
+                                label: "Created On",
+                                firstChild: Flexible(
+                                  child: Text(
+                                    DateFormat("dd MMM yyyy").format(
+                                      state.orderDetails.createdAt.toLocal(),
+                                    ),
+                                  ),
+                                ),
+                                secondChild: const Flexible(
+                                  flex: 0,
+                                  child: SizedBox(),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: designValues(context).cornerRadius34,
+                            ),
+                            Expanded(
+                              child: DetailsCard(
+                                label: "Created at",
+                                firstChild: Flexible(
+                                  child: Text(
+                                    DateFormat("hh:mm a").format(
+                                      state.orderDetails.createdAt.toLocal(),
+                                    ),
+                                  ),
+                                ),
+                                secondChild:
+                                    const Flexible(flex: 0, child: SizedBox()),
+                              ),
+                            ),
+                          ],
+                        ),
+
                       ],
                     ),
                   ),
                 ),
               ),
+              if (state.orderDetails.orderStatus == "pending" ||
+                  state.orderDetails.orderStatus == "delayed")
               Flex(
                 direction: Axis.horizontal,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -289,7 +332,24 @@ class _ViewOrderDetailTabState extends State<OrderDetailsTab> {
                       svgPath: "remove_cross",
                       gradient: lightGradient,
                       svgColor: red,
-                      onPressed: () {},
+                        onPressed: () async {
+                          final confirmation = await showCupertinoDialog(
+                            context: context,
+                            builder: DeleteConfirmation(
+                              context: context,
+                              textYes: "cancel",
+                              textNo: "no",
+                              title: 'Cancel this order?',
+                              message: 'you want to cancel the order?',
+                            ).build,
+                          );
+                          if (mounted && confirmation == "cancel") {
+                            BlocProvider.of<ViewOrderDetailsBloc>(context).add(
+                              CancelOrderEvent(
+                                  orderDetails: state.orderDetails,),
+                            );
+                          }
+                        },
                     ),
                   ),
                   Container(

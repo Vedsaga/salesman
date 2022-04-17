@@ -41,16 +41,49 @@ class _ViewOrderDetailsState extends State<ViewOrderDetails>
     _tabController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<ViewOrderDetailsBloc, ViewOrderDetailsState>(
-        listener: (context, state) {
-          if (state is ErrorFetchingOrderDetailsState) {
-            snackbarMessage(
-                context, "error fetching order details", MessageType.failed,);
+      listener: (context, state) {
+        if (state is ErrorFetchingOrderDetailsState) {
+          snackbarMessage(
+            context,
+            "error fetching order details",
+            MessageType.failed,
+          );
+          Navigator.popAndPushNamed(context, RouteNames.viewOrderList);
+        }
+
+        if (state is ErrorWhileCancelingOrderState) {
+          snackbarMessage(
+            context,
+            "Error! can not cancel order",
+            MessageType.failed,
+          );
+        }
+
+        if (state is ErrorWhileUpdatingItemReservedQuantity) {
+          snackbarMessage(
+            context,
+            "Error! can not update item reserved quantity",
+            MessageType.failed,
+          );
+        }
+
+        if (state is OrderSuccessfullyCanceledState) {
+          snackbarMessage(
+            context,
+            "Order cancelled successfully...",
+            MessageType.success,
+          );
+          BlocProvider.of<ViewOrderDetailsBloc>(context)
+              .add(EnableRecordsFeature());
+          Future.delayed(const Duration(seconds: 1), () {
             Navigator.popAndPushNamed(context, RouteNames.viewOrderList);
-          }
-        },
+          });
+        }
+      },
       child: MobileLayoutForTabScreen(
         tabController: _tabController,
         tabs: [
@@ -82,7 +115,8 @@ class _ViewOrderDetailsState extends State<ViewOrderDetails>
             Container(
               color: orange,
             )
-        ],),
+          ],
+        ),
       ),
     );
   }

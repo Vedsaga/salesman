@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/layouts/mobile_layout.dart';
 import 'package:salesman/config/theme/colors.dart';
@@ -22,8 +23,8 @@ class AddItemPage extends StatefulWidget {
 }
 
 class _AddItemPageState extends State<AddItemPage> {
-  final TextEditingController _itemIdController = TextEditingController();
   final FocusNode _totalQuantityFocusNode = FocusNode();
+   ModelItemData? selectedItem;
   final List<ItemMap> _items = [];
 
   @override
@@ -58,73 +59,15 @@ class _AddItemPageState extends State<AddItemPage> {
     );
   }
 
-  int _returnItemId({
-    required List<ModelItemData>? itemList,
-    required String name,
-  }) {
-    if (itemList != null) {
-      for (final element in itemList) {
-        if (element.itemName == name) {
-          return element.itemId;
-        }
-      }
-    }
-    return -1;
-  }
-
-  String _returnItemStringData({
-    required List<ModelItemData>? itemList,
-    required String name,
-    required String askFor,
-  }) {
-    if (itemList != null) {
-      for (final element in itemList) {
-        if (element.itemName == name) {
-          if (askFor == 'itemName') {
-            return element.itemName;
-          } else if (askFor == 'itemUnit') {
-            return element.unit;
-          }
-        }
-      }
-    }
-    return "";
-  }
-
-  double _returnItemDoubleData({
-    required List<ModelItemData>? itemList,
-    required String name,
-    required String askedFor,
-  }) {
-    if (itemList != null) {
-      for (final element in itemList) {
-        if (element.itemName == name) {
-          if (askedFor == "sellingPricePerUnit") {
-            return element.sellingPricePerUnit;
-          }
-          if (askedFor == "buyingPricePerUnit") {
-            return element.buyingPricePerUnit;
-          }
-          if (askedFor == "availableQuantity") {
-            return element.availableQuantity;
-          }
-        }
-      }
-    }
-    return 0.0;
-  }
-
   String? _totalQuantityErrorText() {
     final totalQuantity =
         context.read<CreateOrderBloc>().state.itemTotalQuantity;
-    if (totalQuantity.value >
-        _returnItemDoubleData(
-          itemList: context.read<CreateOrderBloc>().state.itemList,
-          name: _itemIdController.text,
-          askedFor: 'availableQuantity',
-        )) {
-      return 'Selling quantity is greater than available quantity';
+    if (selectedItem != null) {
+      if (totalQuantity.value > selectedItem!.availableQuantity) {
+        return 'Selling quantity is greater than available quantity';
+      }
     }
+
     switch (totalQuantity.error) {
       case DoubleFieldNotZeroValidationError.cannotBeEmpty:
         return 'Quantity cannot be empty';
@@ -141,7 +84,6 @@ class _AddItemPageState extends State<AddItemPage> {
 
   @override
   void dispose() {
-    _itemIdController.dispose();
     _totalQuantityFocusNode.removeListener(_totalQuantityFocusNodeListener);
     _totalQuantityFocusNode.dispose();
     super.dispose();
@@ -165,65 +107,46 @@ class _AddItemPageState extends State<AddItemPage> {
               children: <Widget>[
                 CustomDropdown(
                   labelText: "Select Item",
-                  value: _itemIdController.text == ""
-                      ? null
-                      : _itemIdController.text,
-                  items: state.itemList
-                      .map(
-                        (item) => DropdownMenuItem<String>(
-                          value: item.itemName,
-                          // if item.itemId is present in listOfItemsForOrder.value then make enabled false
-                          enabled: !state.listOfItemsForOrder.value
-                              .any((element) => element.id == item.itemId),
-                          child: Text(
-                            item.itemName,
-                            style: of(context).textTheme.caption?.copyWith(
-                                  color: !state.listOfItemsForOrder.value.any(
-                                    (element) => element.id == item.itemId,
-                                  )
-                                      ? secondaryDark
-                                      : grey,
-                                ),
-                          ),
+                  dropDownWidget: DropdownButton<ModelItemData>(
+                    value: selectedItem,
+                    isExpanded: true,
+                    icon: SvgPicture.asset(
+                      "assets/icons/svgs/dropdown.svg",
+                      color: dark,
+                    ),
+                    onChanged: (ModelItemData? newValue) {
+                      setState(() {
+                        selectedItem = newValue;
+                      });
+                      BlocProvider.of<CreateOrderBloc>(context).add(
+                        OrderFieldsChangeEvent(
+                          clientId: state.clientId.value,
+                          clientName: state.clientName.value,
+                          itemId: selectedItem!.itemId,
+                          itemName: selectedItem!.itemName,
+                          itemUnit: selectedItem!.unit,
+                          itemPerUnitCost: selectedItem!.sellingPricePerUnit,
+                          itemTotalCost: state.itemTotalCost.value,
+                          itemTotalQuantity: state.itemTotalQuantity.value,
+                          listOfItemsForOrder: state.listOfItemsForOrder.value,
+                          orderStatus: state.orderStatus.value,
+                          createdBy: state.createdBy.value,
+                          expectedDeliveryDate:
+                              state.expectedDeliveryDate.value,
                         ),
-                      )
-                      .toList(),
-                  onChanged: (item) {
-                    setState(() {
-                      _itemIdController.text = item ?? _itemIdController.text;
-                    });
-                    BlocProvider.of<CreateOrderBloc>(context).add(
-                      OrderFieldsChangeEvent(
-                        clientId: state.clientId.value,
-                        clientName: state.clientName.value,
-                        itemId: _returnItemId(
-                          itemList: state.itemList,
-                          name: _itemIdController.text,
+                      );
+                    },
+                    items: state.itemList.map((ModelItemData item) {
+                      return DropdownMenuItem<ModelItemData>(
+                        value: item,
+                      enabled: !state.listOfItemsForOrder.value.any((element) => element.id == item.itemId),
+                        child: Text(
+                          item.itemName,
+                          style: of(context).textTheme.bodyText1,
                         ),
-                        itemName: _returnItemStringData(
-                          itemList: state.itemList,
-                          name: _itemIdController.text,
-                          askFor: 'itemName',
-                        ),
-                        itemUnit: _returnItemStringData(
-                          itemList: state.itemList,
-                          name: _itemIdController.text,
-                          askFor: 'itemUnit',
-                        ),
-                        itemPerUnitCost: _returnItemDoubleData(
-                          itemList: state.itemList,
-                          name: _itemIdController.text,
-                          askedFor: 'sellingPricePerUnit',
-                        ),
-                        itemTotalCost: state.itemTotalCost.value,
-                        itemTotalQuantity: state.itemTotalQuantity.value,
-                        listOfItemsForOrder: state.listOfItemsForOrder.value,
-                        orderStatus: state.orderStatus.value,
-                        createdBy: state.createdBy.value,
-                        expectedDeliveryDate: state.expectedDeliveryDate.value,
-                      ),
-                    );
-                  },
+                      );
+                    }).toList(),
+                  ),
                 ),
                 SizedBox(height: designValues(context).cornerRadius34),
                 TextFormField(
@@ -239,11 +162,8 @@ class _AddItemPageState extends State<AddItemPage> {
                     suffixIconWidget: state.itemId.valid
                         ? ShowUnit(
                             showUnit: false,
-                            value: _returnItemStringData(
-                              itemList: state.itemList,
-                              name: _itemIdController.text,
-                              askFor: 'itemUnit',
-                            ),
+                            value:
+                                selectedItem != null ? selectedItem!.unit : '',
                             showIcon: false,
                           )
                         : null,
@@ -290,13 +210,9 @@ class _AddItemPageState extends State<AddItemPage> {
             builder: (context, state) {
               return ActionButton(
                 disabled: !state.itemTotalQuantity.valid ||
+                    selectedItem == null ||
                     state.itemTotalQuantity.value >
-                        _returnItemDoubleData(
-                          itemList:
-                              context.read<CreateOrderBloc>().state.itemList,
-                          name: _itemIdController.text,
-                          askedFor: 'availableQuantity',
-                        ),
+                        selectedItem!.availableQuantity,
                 text: "add",
                 onPressed: () {
                   _addIntoItem(

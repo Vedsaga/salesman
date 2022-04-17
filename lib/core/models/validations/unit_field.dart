@@ -20,7 +20,7 @@ class UnitField extends FormzInput<String, UnitFieldError> {
     'piece',
     'dozen',
     'box',
-    'pack',
+    'packet',
     'bottle',
   ];
 

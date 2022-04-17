@@ -12,8 +12,9 @@ class ModelReturnOrder extends Table {
   RealColumn get dueAmount => real()();
   TextColumn get returnedBy => text().withLength(min: 3, max: 20)();
   DateTimeColumn get startedAt =>
-      dateTime().withDefault(Constant(DateTime.now()))();
+      dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get lastUpdated =>
-      dateTime().withDefault(Constant(DateTime.now()))();
-  BoolColumn get isValid => boolean().withDefault(const Constant(true))();
+      dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get completedAt => dateTime()();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
 }

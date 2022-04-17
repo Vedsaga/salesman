@@ -22,7 +22,7 @@ import 'package:salesman/core/components/row_flex_close_children.dart';
 import 'package:salesman/core/components/snackbar_message.dart';
 import 'package:salesman/modules/payment/view_payment_details/bloc/view_payment_details_bloc.dart';
 
-// third party imports
+
 
 
 class ViewPaymentDetails extends StatefulWidget {
