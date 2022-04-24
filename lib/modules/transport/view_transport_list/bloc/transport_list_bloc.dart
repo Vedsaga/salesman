@@ -1,19 +1,23 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:salesman/core/db/drift/app_database.dart';
+import 'package:salesman/core/utils/feature_monitor.dart';
 import 'package:salesman/core/utils/order_map.dart';
 import 'package:salesman/main.dart';
+import 'package:salesman/modules/menu/repositories/menu_repository.dart';
 import 'package:salesman/modules/transport/query/transport_table_queries.dart';
 
 part 'transport_list_event.dart';
 part 'transport_list_state.dart';
 
 class TransportListBloc extends Bloc<TransportListEvent, TransportListState> {
-  TransportListBloc() : super(const TransportListState()) {
+  final MenuRepository menuRepository;
+  TransportListBloc(this.menuRepository) : super(const TransportListState()) {
     on<FetchPendingTransportsEvent>(_fetchTransportList);
     on<FetchHistoryTransportsTripsEvent>(_fetchTransportTrips);
     on<UpdateTransportStatusEvent>(_updateTransportStatus);
     on<UpdateTransportStatusCompleteEvent>(_updateTransportStatusComplete);
+    on<EnableTransportTripsFeatureEvent>(_enableTransportTripsFeature);
   }
 
   Future<void> _fetchTransportList(
@@ -109,7 +113,7 @@ class TransportListBloc extends Bloc<TransportListEvent, TransportListState> {
     Emitter<TransportListState> emit,
   ) async {
     emit(state.copyWith(status: TransportListScreenStatus.updatingStatus));
-     emit(state.copyWith(status: TransportListScreenStatus.updatingStatus));
+    emit(state.copyWith(status: TransportListScreenStatus.updatingStatus));
     try {
       final List<ModelTransportData> transportList =
           await TransportTableQueries(
@@ -135,6 +139,7 @@ class TransportListBloc extends Bloc<TransportListEvent, TransportListState> {
           if (completeCount ==
               transport.deliveryOrderList!.deliveryList.length) {
             completeTransports.add(transport);
+            add(const EnableTransportTripsFeatureEvent());
           }
         }
         if (completeTransports.isEmpty) {
@@ -144,11 +149,11 @@ class TransportListBloc extends Bloc<TransportListEvent, TransportListState> {
             ),
           );
         } else {
-          final response =
-              await TransportTableQueries(appDatabaseInstance)
-                  .updateTransportStatusByIdComplete(
-                  transportList :completeTransports,);
-          
+          final response = await TransportTableQueries(appDatabaseInstance)
+              .updateTransportStatusByIdComplete(
+            transportList: completeTransports,
+          );
+
           if (response.length == completeTransports.length) {
             emit(
               state.copyWith(
@@ -168,4 +173,16 @@ class TransportListBloc extends Bloc<TransportListEvent, TransportListState> {
       emit(state.copyWith(status: TransportListScreenStatus.error));
     }
   }
+
+  Future<void> _enableTransportTripsFeature(
+    EnableTransportTripsFeatureEvent event,
+    Emitter<TransportListState> emit,
+  ) async {
+    final feature = await menuRepository.getActiveFeatures();
+
+    if (feature != null && feature.disableTrip) {
+      FeatureMonitor(menuRepository: menuRepository)
+          .enableFeature("disableTrip");
+    }
   }
+}

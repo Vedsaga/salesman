@@ -22,7 +22,6 @@ import 'package:salesman/modules/menu/bloc/menu_bloc.dart';
 import 'package:salesman/modules/payment/query/payment_table_queries.dart';
 
 //  project import
-
 class Menu extends StatelessWidget {
   const Menu({
     Key? key,

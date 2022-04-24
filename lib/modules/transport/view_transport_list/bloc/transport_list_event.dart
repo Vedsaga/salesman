@@ -33,3 +33,7 @@ class UpdateTransportStatusCompleteEvent extends TransportListEvent {
     List<ModelTransportData> transportList = const [],
   }) : super(transportList: transportList);
 }
+
+class EnableTransportTripsFeatureEvent extends TransportListEvent {
+  const EnableTransportTripsFeatureEvent() : super(transportList: const []);
+}

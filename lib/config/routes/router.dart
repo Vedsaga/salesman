@@ -243,7 +243,8 @@ class AppRouter {
           builder: (_) {
             return BlocProvider<TransportListBloc>(
               create: (context) =>
-                  TransportListBloc()..add(const UpdateTransportStatusEvent()),
+                  TransportListBloc(MenuRepository())
+                ..add(const UpdateTransportStatusEvent()),
               child: const ViewTransportList(),
             );
           },
@@ -278,7 +279,8 @@ class AppRouter {
           builder: (_) {
             return BlocProvider<TransportListBloc>(
               create: (context) =>
-                  TransportListBloc()..add(const FetchHistoryTransportsTripsEvent()),
+                  TransportListBloc(MenuRepository())
+                ..add(const FetchHistoryTransportsTripsEvent()),
               child: const ViewTransportList(),
             );
           },

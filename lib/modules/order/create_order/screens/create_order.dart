@@ -120,8 +120,7 @@ class _CreateOrderState extends State<CreateOrder> {
       },
       child: MobileLayout(
                   routeName: RouteNames.viewOrderList,
-                          bottomAppBarRequired: true,
-
+        bottomAppBarRequired: true,
         topAppBar: const InputTopAppBar(title: "new order"),
         bottomAppBar: BlocBuilder<CreateOrderBloc, CreateOrderState>(
           builder: (context, state) {
@@ -167,6 +166,7 @@ class _CreateOrderState extends State<CreateOrder> {
                       highlightValueColor: secondaryDark,
                     ),
                     SizedBox(height: designValues(context).cornerRadius34),
+                    if (state.listOfItemsForOrder.valid)
                     CustomDropdown(
                       labelText: "Select Client",
                       dropDownWidget: DropdownButton<ModelClientData>(
@@ -212,6 +212,8 @@ class _CreateOrderState extends State<CreateOrder> {
                         }).toList(),
                       ),
                     ),
+                    if (state.listOfItemsForOrder.valid)
+
                     SizedBox(height: designValues(context).verticalPadding),
                     RowFlexSpacedChildren(
                       firstChild: GestureDetector(
