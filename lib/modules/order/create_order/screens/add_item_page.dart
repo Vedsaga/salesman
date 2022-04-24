@@ -94,6 +94,9 @@ class _AddItemPageState extends State<AddItemPage> {
     return BlocBuilder<CreateOrderBloc, CreateOrderState>(
       builder: (context, state) {
         return MobileLayout(
+          routeName: null,
+                  bottomAppBarRequired: true,
+
           topAppBar: const InputTopAppBar(title: "add item"),
           body: Container(
             margin: EdgeInsets.only(
@@ -120,6 +123,7 @@ class _AddItemPageState extends State<AddItemPage> {
                       });
                       BlocProvider.of<CreateOrderBloc>(context).add(
                         OrderFieldsChangeEvent(
+                          selectedClient: state.selectedClient,
                           clientId: state.clientId.value,
                           clientName: state.clientName.value,
                           itemId: selectedItem!.itemId,
@@ -142,7 +146,19 @@ class _AddItemPageState extends State<AddItemPage> {
                       enabled: !state.listOfItemsForOrder.value.any((element) => element.id == item.itemId),
                         child: Text(
                           item.itemName,
-                          style: of(context).textTheme.bodyText1,
+                          style: of(context).textTheme.bodyText1?.copyWith(
+                                color: !state.listOfItemsForOrder.value.any(
+                                  (element) => element.id == item.itemId,
+                                )
+                                    ? dark
+                                    : grey,
+                                fontWeight:
+                                    !state.listOfItemsForOrder.value.any(
+                                  (element) => element.id == item.itemId,
+                                )
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
+                              ),
                         ),
                       );
                     }).toList(),
@@ -185,6 +201,8 @@ class _AddItemPageState extends State<AddItemPage> {
                   onChanged: (value) {
                     BlocProvider.of<CreateOrderBloc>(context).add(
                       OrderFieldsChangeEvent(
+                        selectedClient: state.selectedClient,
+
                         clientId: state.clientId.value,
                         clientName: state.clientName.value,
                         itemId: state.itemId.value,
@@ -225,6 +243,8 @@ class _AddItemPageState extends State<AddItemPage> {
                   );
                   BlocProvider.of<CreateOrderBloc>(context).add(
                     OrderFieldsChangeEvent(
+                      selectedClient: state.selectedClient,
+
                       clientId: state.clientId.value,
                       clientName: state.clientName.value,
                       itemId: 0,

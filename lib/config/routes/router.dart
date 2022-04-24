@@ -6,8 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
 import 'package:salesman/config/routes/arguments_models/add_payment_details_route_arguments.dart';
+import 'package:salesman/config/routes/arguments_models/process_order_route_arguments.dart';
 import 'package:salesman/config/routes/arguments_models/view_order_details_route_arguments.dart';
 import 'package:salesman/config/routes/arguments_models/view_payment_history_list_route_arguments.dart';
+import 'package:salesman/config/routes/arguments_models/view_transport_details_route_arguments.dart';
 import 'package:salesman/config/routes/route_name.dart';
 import 'package:salesman/config/theme/test_design.dart';
 import 'package:salesman/core/db/drift/app_database.dart';
@@ -28,6 +30,8 @@ import 'package:salesman/modules/menu/repositories/menu_repository.dart';
 import 'package:salesman/modules/menu/screens/menu.dart';
 import 'package:salesman/modules/order/create_order/bloc/create_order_bloc.dart';
 import 'package:salesman/modules/order/create_order/screens/create_order.dart';
+import 'package:salesman/modules/order/process_order/bloc/process_order_bloc.dart';
+import 'package:salesman/modules/order/process_order/screens/process_order.dart';
 import 'package:salesman/modules/order/view_order_details/bloc/view_order_details_bloc.dart';
 import 'package:salesman/modules/order/view_order_details/screens/view_order_details.dart';
 import 'package:salesman/modules/order/view_order_list/bloc/view_order_list_bloc.dart';
@@ -43,6 +47,12 @@ import 'package:salesman/modules/profile/profile_creation/screens/profile_creati
 import 'package:salesman/modules/profile/repositories/profile_repository.dart';
 import 'package:salesman/modules/splashscreen/bloc/profile_check_bloc.dart';
 import 'package:salesman/modules/splashscreen/screens/splash_screen.dart';
+import 'package:salesman/modules/transport/add_transport/bloc/add_transport_bloc.dart';
+import 'package:salesman/modules/transport/add_transport/screens/create_transport.dart';
+import 'package:salesman/modules/transport/view_transport_details.dart/bloc/transport_details_bloc.dart';
+import 'package:salesman/modules/transport/view_transport_details.dart/screens/view_transport_details.dart';
+import 'package:salesman/modules/transport/view_transport_list/bloc/transport_list_bloc.dart';
+import 'package:salesman/modules/transport/view_transport_list/screens/view_transport_list.dart';
 import 'package:salesman/modules/vehicle/add/bloc/add_vehicle_bloc.dart';
 import 'package:salesman/modules/vehicle/add/screens/add_vehicle.dart';
 import 'package:salesman/modules/vehicle/view_details/bloc/view_vehicle_details_bloc.dart';
@@ -71,7 +81,7 @@ class AppRouter {
           return BlocProvider<MenuBloc>(
             create: (context) => MenuBloc(ProfileRepository(), MenuRepository())
               ..add(FetchCompanyProfileEvent()),
-            child: Menu(),
+              child: const Menu(),
           );
         },);
       case RouteNames.viewItemList:
@@ -188,6 +198,19 @@ class AppRouter {
             )..add(GetOrderDetailsEvent()),
                   child: const ViewOrderDetails(),
                 ),);
+      case RouteNames.processOrder:
+        final routeArgument = settings.arguments as ProcessOrderRouteArguments?;
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider<ProcessOrderBloc>(
+            create: (context) => ProcessOrderBloc()
+              ..add(
+                FetchRequiredDetailsEvent(
+                  processOrderRouteArguments: routeArgument,
+                ),
+              ),
+            child: const ProcessOrder(),
+          ),
+        );
       case RouteNames.addPaymentDetails:
         final AddPaymentDetailsRouteArguments?  routeArgument = settings.arguments as AddPaymentDetailsRouteArguments?;
         return MaterialPageRoute(builder: (_) {
@@ -215,6 +238,51 @@ class AppRouter {
             child: const ViewPaymentDetails(),
           );
         },); 
+      case RouteNames.viewPendingTransportList:
+        return MaterialPageRoute(
+          builder: (_) {
+            return BlocProvider<TransportListBloc>(
+              create: (context) =>
+                  TransportListBloc()..add(const UpdateTransportStatusEvent()),
+              child: const ViewTransportList(),
+            );
+          },
+        );
+      case RouteNames.createTransport:
+        return MaterialPageRoute(
+          builder: (_) {
+            return BlocProvider<AddTransportBloc>(
+              create: (context) => AddTransportBloc()..add(FetchVehicleEvent()),
+              child: const CreateTransport(),
+            );
+          },
+        );
+      case RouteNames.viewTransportDetails:
+        final transportDetails =
+            settings.arguments as ViewTransportDetailsRouteArguments?;
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider<TransportDetailsBloc>(
+            create: (context) => TransportDetailsBloc(
+              profileRepository: ProfileRepository(),
+              menuRepository: MenuRepository(),
+            )..add(
+                FetchTransportDetailsEvent(
+                  transportDetailsRouteArguments: transportDetails,
+                ),
+              ),
+            child: const ViewTransportDetails(),
+          ),
+        );
+      case RouteNames.viewTransportHistoryList:
+        return MaterialPageRoute(
+          builder: (_) {
+            return BlocProvider<TransportListBloc>(
+              create: (context) =>
+                  TransportListBloc()..add(const FetchHistoryTransportsTripsEvent()),
+              child: const ViewTransportList(),
+            );
+          },
+        );
       default:
         return MaterialPageRoute(builder: (_) {
           return BlocProvider<ProfileCheckBloc>(

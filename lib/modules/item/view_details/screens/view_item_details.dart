@@ -91,6 +91,9 @@ class _ViewItemDetailsState extends State<ViewItemDetails> {
         }
       },
       child: MobileLayout(
+                  routeName: RouteNames.viewItemList,
+        bottomAppBarRequired: true,
+
         topAppBar: const InputTopAppBar(
           title: "view item",
           routeName: RouteNames.viewItemList,

@@ -32,6 +32,7 @@ class FeatureMonitor {
             disableStats: featuresMap['disableStats'] ?? true,
             disableSend: featuresMap['disableSend'] ?? true,
             disableVehicle: featuresMap['disableVehicle'] ?? true,
+            disableTrip: featuresMap['disableTrip'] ?? true,
           ),
         );
       }
@@ -63,6 +64,7 @@ class FeatureMonitor {
             disableStats: featuresMap['disableStats'] ?? false,
             disableSend: featuresMap['disableSend'] ?? false,
             disableVehicle: featuresMap['disableVehicle'] ?? false,
+            disableTrip: featuresMap['disableTrip'] ?? false,
           ),
         );
       }

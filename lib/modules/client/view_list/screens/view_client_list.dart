@@ -2,12 +2,10 @@
 
 // Flutter imports:
 import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-
 // Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/layouts/mobile_layout.dart';
@@ -15,8 +13,8 @@ import 'package:salesman/config/routes/route_name.dart';
 import 'package:salesman/config/theme/card_box_decoration.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
-import 'package:salesman/core/components/bottom_navigation.dart';
 import 'package:salesman/core/components/column_flex_closed_children.dart';
+import 'package:salesman/core/components/common_bottom_navigation.dart';
 import 'package:salesman/core/components/empty_message.dart';
 import 'package:salesman/core/components/normal_top_app_bar.dart';
 import 'package:salesman/core/components/row_flex_close_children.dart';
@@ -60,7 +58,10 @@ class _ViewClientState extends State<ViewClientList> {
         }
       },
       child: MobileLayout(
+        routeName: RouteNames.menu,
         topAppBar: const NormalTopAppBar(title: "client"),
+        bottomAppBarRequired: true,
+
         body: BlocBuilder<ViewClientBloc, ViewClientState>(
           builder: (context, state) {
             if (state is FetchingClientState) {
@@ -83,8 +84,7 @@ class _ViewClientState extends State<ViewClientList> {
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
                       final client = state.clients;
-                      if (client[index].totalAmountSent >
-                          client[index].totalAmountReceived) {
+                      if (client[index].pendingDue > 0) {
                         return GestureDetector(
                           onTap: () {
                             Navigator.of(context).popAndPushNamed(
@@ -119,9 +119,9 @@ class _ViewClientState extends State<ViewClientList> {
                                             width: 13,
                                           ),
                                           secondChild: Text(
-                                            (client[index].totalAmountReceived +
+                                            (client[index].totalAmountSent +
                                                     client[index]
-                                                        .totalAmountSent)
+                                                        .totalAmountReceived)
                                                 .toStringAsFixed(2),
                                             style: of(context)
                                                 .textTheme
@@ -135,21 +135,24 @@ class _ViewClientState extends State<ViewClientList> {
                                       secondChild: ColumnFlexClosedChildren(
                                         firstChild: RowFlexCloseChildren(
                                           firstChild: SvgPicture.asset(
-                                            "assets/icons/svgs/inr.svg",
-                                            height: 15,
-                                            width: 15,
+                                            "assets/icons/svgs/receive_inr.svg",
+                                            height:
+                                                designValues(context).padding13,
+                                            width:
+                                                designValues(context).padding13,
                                             color: red,
                                           ),
                                           secondChild: Text(
-                                            (client[index].totalAmountSent -
-                                                    client[index]
-                                                        .totalAmountReceived)
+                                            client[index]
+                                                .pendingDue
                                                 .toStringAsFixed(2),
                                             style: of(context)
                                                 .textTheme
                                                 .subtitle1
                                                 ?.copyWith(
                                                   fontWeight: FontWeight.w600,
+                                                  color: red,
+
                                                 ),
                                           ),
                                         ),
@@ -206,8 +209,9 @@ class _ViewClientState extends State<ViewClientList> {
                                           width: 13,
                                         ),
                                         secondChild: Text(
-                                          (client[index].totalAmountReceived +
-                                                  client[index].totalAmountSent)
+                                          (client[index].totalAmountSent +
+                                                  client[index]
+                                                      .totalAmountReceived)
                                               .toStringAsFixed(2),
                                           style: of(context)
                                               .textTheme
@@ -220,7 +224,11 @@ class _ViewClientState extends State<ViewClientList> {
                                     ),
                                     secondChild: ColumnFlexClosedChildren(
                                       firstChild: RowFlexCloseChildren(
-                                        firstChild: const Text("5"),
+                                        firstChild: Text(
+                                          client[index]
+                                              .noOfPendingOrder
+                                              .toString(),
+                                        ),
                                         secondChild: Text(
                                           "pending",
                                           style: of(context)
@@ -237,13 +245,13 @@ class _ViewClientState extends State<ViewClientList> {
                                           : Text(
                                               DateFormat("dd MMM yyyy").format(
                                                 client[index]
-                                                    .lastPaymentOn!
+                                                    .lastTradeOn!
                                                     .toLocal(),
                                               ),
                                             ),
                                     ),
                                   ),
-                                ),
+                                )
                               ],
                             ),
                           ),

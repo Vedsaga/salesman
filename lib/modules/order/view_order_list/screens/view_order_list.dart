@@ -1,5 +1,3 @@
-
-
 // Flutter imports:
 import 'package:flutter/material.dart';
 
@@ -13,7 +11,7 @@ import 'package:salesman/config/layouts/mobile_layout.dart';
 import 'package:salesman/config/routes/arguments_models/view_order_details_route_arguments.dart';
 import 'package:salesman/config/routes/route_name.dart';
 import 'package:salesman/config/theme/colors.dart';
-import 'package:salesman/core/components/bottom_navigation.dart';
+import 'package:salesman/core/components/common_bottom_navigation.dart';
 import 'package:salesman/core/components/empty_message.dart';
 import 'package:salesman/core/components/normal_top_app_bar.dart';
 import 'package:salesman/core/components/snackbar_message.dart';
@@ -21,7 +19,7 @@ import 'package:salesman/core/components/transaction_info_card.dart';
 import 'package:salesman/core/utils/global_function.dart';
 import 'package:salesman/modules/order/view_order_list/bloc/view_order_list_bloc.dart';
 
-// third party import
+
 
 
 class ViewOrderList extends StatefulWidget {
@@ -53,7 +51,6 @@ class _ViewOrderListState extends State<ViewOrderList> {
             'Error fetching All orders...',
             MessageType.failed,
           );
-          setState(() {});
         }
 
         if (state is EmptyOrderListState) {
@@ -80,9 +77,11 @@ class _ViewOrderListState extends State<ViewOrderList> {
         }
       },
       child: MobileLayout(
+        routeName: RouteNames.menu,
         topAppBar: const NormalTopAppBar(
-          title: "orders",
+          title: "delivery",
         ),
+        bottomAppBarRequired: true,
         body: BlocBuilder<ViewOrderListBloc, ViewOrderListState>(
           builder: (context, state) {
             if (state is FetchingOrderListState) {
@@ -127,21 +126,24 @@ class _ViewOrderListState extends State<ViewOrderList> {
                               state.orderList[index].orderStatus ==
                                   "pending"
                               ? skyBlueGradient
-                              : state.orderList[index].orderStatus == "processing"
-                                  ? yellowGradient
+                              : state.orderList[index].orderStatus == "process"
+                                  ? orangeGradient
                                   : state.orderList[index].orderStatus ==
-                                          "out-for-delivery"
-                                      ? orangeGradient
+                                          "dispatch"
+                                      ? yellowGradient
                                       : state.orderList[index].orderStatus ==
-                                                  "cancelled" ||
+                                                  "cancel" ||
                                               state.orderList[index].orderStatus ==
-                                                  "rejected"
+                                                  "reject"
                                           ? redGradient
                                           : state.orderList[index].orderStatus ==
-                                                  "delivered"
+                                                  "deliver"
                                               ? greenGradient
                                               : darkGradient,
-                          statusTextColor: light,
+                          statusTextColor:
+                              state.orderList[index].orderStatus == "dispatch"
+                                  ? secondaryDark
+                                  : light,
                           status:
                               state.orderList[index].orderStatus,
                           leadingDataAtTop: globalFunction.getClientName(

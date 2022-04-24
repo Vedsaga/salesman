@@ -119,6 +119,9 @@ class _CreateOrderState extends State<CreateOrder> {
         }
       },
       child: MobileLayout(
+                  routeName: RouteNames.viewOrderList,
+                          bottomAppBarRequired: true,
+
         topAppBar: const InputTopAppBar(title: "new order"),
         bottomAppBar: BlocBuilder<CreateOrderBloc, CreateOrderState>(
           builder: (context, state) {
@@ -179,6 +182,7 @@ class _CreateOrderState extends State<CreateOrder> {
                           });
                           BlocProvider.of<CreateOrderBloc>(context).add(
                             OrderFieldsChangeEvent(
+                              selectedClient: selectedClient,
                               clientId: selectedClient!.clientId,
                               clientName: selectedClient!.clientName,
                               itemId: state.itemId.value,
@@ -229,7 +233,9 @@ class _CreateOrderState extends State<CreateOrder> {
                                 );
                               }
                             });
-                            OrderFieldsChangeEvent(
+                             BlocProvider.of<CreateOrderBloc>(context)
+                                .add(OrderFieldsChangeEvent(
+                              selectedClient: state.selectedClient,
                               clientId: state.clientId.value,
                               clientName: state.clientName.value,
                               itemId: state.itemId.value,
@@ -243,7 +249,7 @@ class _CreateOrderState extends State<CreateOrder> {
                               orderStatus: state.orderStatus.value,
                               createdBy: state.createdBy.value,
                               expectedDeliveryDate: expectedDeliveryDate,
-                            );
+                            ),);
                           });
                         },
                         child: Flex(
@@ -307,29 +313,33 @@ class _CreateOrderState extends State<CreateOrder> {
                                   // icon button to reset the expected delivery date to null
                                   IconButton(
                                     onPressed: () {
-                                      OrderFieldsChangeEvent(
-                                        clientId: state.clientId.value,
-                                        clientName: state.clientName.value,
-                                        itemId: state.itemId.value,
-                                        itemName: state.itemName.value,
-                                        itemUnit: state.itemUnit.value,
-                                        itemPerUnitCost:
-                                            state.itemPerUnitCost.value,
-                                        itemTotalQuantity:
-                                            state.itemTotalQuantity.value,
-                                        itemTotalCost:
-                                            state.itemTotalCost.value,
-                                        listOfItemsForOrder:
-                                            state.listOfItemsForOrder.value,
-                                        orderStatus: state.orderStatus.value,
-                                        createdBy: state.createdBy.value,
-                                        expectedDeliveryDate:
-                                            expectedDeliveryDate,
-                                      );
-                                      setState(() {
+                                     setState(() {
                                         expectedDeliveryDate = null;
                                       });
+                                      BlocProvider.of<CreateOrderBloc>(context)
+                                          .add(
+                                        OrderFieldsChangeEvent(
+                                                                        selectedClient: state.selectedClient,
 
+                                          clientId: state.clientId.value,
+                                          clientName: state.clientName.value,
+                                          itemId: state.itemId.value,
+                                          itemName: state.itemName.value,
+                                          itemUnit: state.itemUnit.value,
+                                          itemPerUnitCost:
+                                              state.itemPerUnitCost.value,
+                                          itemTotalQuantity:
+                                              state.itemTotalQuantity.value,
+                                          itemTotalCost:
+                                              state.itemTotalCost.value,
+                                          listOfItemsForOrder:
+                                              state.listOfItemsForOrder.value,
+                                          orderStatus: state.orderStatus.value,
+                                          createdBy: state.createdBy.value,
+                                          expectedDeliveryDate:
+                                              expectedDeliveryDate,
+                                        ),
+                                      );
                                     },
                                     icon: const Icon(
                                       Icons.clear_rounded,
@@ -372,6 +382,8 @@ class _CreateOrderState extends State<CreateOrder> {
                                 context,
                               ).add(
                                 OrderFieldsChangeEvent(
+                                                                selectedClient: state.selectedClient,
+
                                   clientId: state.clientId.value,
                                   clientName: state.clientName.value,
                                   itemId: state.itemId.value,
@@ -453,6 +465,7 @@ class _CreateOrderState extends State<CreateOrder> {
                         ),
                       ),
                     ),
+                    
                     SizedBox(height: designValues(context).verticalPadding),
                     Flex(
                       direction: Axis.horizontal,

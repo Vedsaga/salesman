@@ -13,15 +13,15 @@ class StatusTypeField
 
   static final List<String> deliveryOrderStatus = [
     'pending',
-    'processing',
-    'out-for-delivery',
-    'delivered',
-    'cancelled',
-    'rejected',
+    'process',
+    'dispatch',
+    'deliver',
+    'cancel',
+    'reject',
     'delayed',
   ];
   static final List<String> paymentType = ['receive', 'send'];
-  static final List<String> paymentFor = ['delivery', 'return'];
+  static final List<String> paymentFor = ['delivery', 'return', 'other'];
   static final List<String> paymentStatus = ['paid', 'unpaid', 'partial'];
   static final List<String> paymentMode = [
     'cash',
@@ -34,17 +34,19 @@ class StatusTypeField
   ];
   static final List<String> transportStatus = [
     'pending',
-    'in-progress',
-    'completed',
-    'cancelled'
+    'started',
+    'complete',
+    'cancel',
+    'delayed',
+    'postpone',
   ];
   static final List<String> returnOrderStatus = [
     'pending',
-    'approved',
-    'collected',
-    'returned',
-    'rejected',
-    'cancelled'
+    'approve',
+    'collect',
+    'return',
+    'reject',
+    'cancel'
   ];
 
   static final List<String> vehicleStatus = ['available', 'unavailable'];
@@ -66,6 +68,8 @@ class StatusTypeField
     'electric',
     'others'
   ];
+
+  static final List<String> returnReason = ['damaged', 'expired', 'others'];
 
   @override
   StatusTypeFieldValidationError? validator(String value) {

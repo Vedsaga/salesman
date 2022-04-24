@@ -40,5 +40,6 @@ DesignValuesModel designValues(BuildContext context) {
     cornerRadius8: 0.0089285714285714 * MediaQuery.of(context).size.height,
     padding13: 0.0145089285714286 * MediaQuery.of(context).size.height,
     padding21: 0.0234375 * MediaQuery.of(context).size.height,
+    boxHeightConstrain: 83,
   );
 }

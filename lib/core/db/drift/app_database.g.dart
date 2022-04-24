@@ -51,6 +51,9 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
   final String clientPhone;
   final double totalAmountReceived;
   final double totalAmountSent;
+  final double pendingDue;
+  final double pendingRefund;
+  final int noOfPendingOrder;
   final bool isActive;
   final DateTime? lastTradeOn;
   final DateTime? lastPaymentOn;
@@ -61,6 +64,9 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
       required this.clientPhone,
       required this.totalAmountReceived,
       required this.totalAmountSent,
+      required this.pendingDue,
+      required this.pendingRefund,
+      required this.noOfPendingOrder,
       required this.isActive,
       this.lastTradeOn,
       this.lastPaymentOn,
@@ -79,6 +85,12 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
           data['${effectivePrefix}total_amount_received'])!,
       totalAmountSent: const RealType().mapFromDatabaseResponse(
           data['${effectivePrefix}total_amount_sent'])!,
+      pendingDue: const RealType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}pending_due'])!,
+      pendingRefund: const RealType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}pending_refund'])!,
+      noOfPendingOrder: const IntType().mapFromDatabaseResponse(
+          data['${effectivePrefix}no_of_pending_order'])!,
       isActive: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}is_active'])!,
       lastTradeOn: const DateTimeType()
@@ -97,6 +109,9 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
     map['client_phone'] = Variable<String>(clientPhone);
     map['total_amount_received'] = Variable<double>(totalAmountReceived);
     map['total_amount_sent'] = Variable<double>(totalAmountSent);
+    map['pending_due'] = Variable<double>(pendingDue);
+    map['pending_refund'] = Variable<double>(pendingRefund);
+    map['no_of_pending_order'] = Variable<int>(noOfPendingOrder);
     map['is_active'] = Variable<bool>(isActive);
     if (!nullToAbsent || lastTradeOn != null) {
       map['last_trade_on'] = Variable<DateTime?>(lastTradeOn);
@@ -117,6 +132,9 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
       clientPhone: Value(clientPhone),
       totalAmountReceived: Value(totalAmountReceived),
       totalAmountSent: Value(totalAmountSent),
+      pendingDue: Value(pendingDue),
+      pendingRefund: Value(pendingRefund),
+      noOfPendingOrder: Value(noOfPendingOrder),
       isActive: Value(isActive),
       lastTradeOn: lastTradeOn == null && nullToAbsent
           ? const Value.absent()
@@ -140,6 +158,9 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
       totalAmountReceived:
           serializer.fromJson<double>(json['totalAmountReceived']),
       totalAmountSent: serializer.fromJson<double>(json['totalAmountSent']),
+      pendingDue: serializer.fromJson<double>(json['pendingDue']),
+      pendingRefund: serializer.fromJson<double>(json['pendingRefund']),
+      noOfPendingOrder: serializer.fromJson<int>(json['noOfPendingOrder']),
       isActive: serializer.fromJson<bool>(json['isActive']),
       lastTradeOn: serializer.fromJson<DateTime?>(json['lastTradeOn']),
       lastPaymentOn: serializer.fromJson<DateTime?>(json['lastPaymentOn']),
@@ -155,6 +176,9 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
       'clientPhone': serializer.toJson<String>(clientPhone),
       'totalAmountReceived': serializer.toJson<double>(totalAmountReceived),
       'totalAmountSent': serializer.toJson<double>(totalAmountSent),
+      'pendingDue': serializer.toJson<double>(pendingDue),
+      'pendingRefund': serializer.toJson<double>(pendingRefund),
+      'noOfPendingOrder': serializer.toJson<int>(noOfPendingOrder),
       'isActive': serializer.toJson<bool>(isActive),
       'lastTradeOn': serializer.toJson<DateTime?>(lastTradeOn),
       'lastPaymentOn': serializer.toJson<DateTime?>(lastPaymentOn),
@@ -168,6 +192,9 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
           String? clientPhone,
           double? totalAmountReceived,
           double? totalAmountSent,
+          double? pendingDue,
+          double? pendingRefund,
+          int? noOfPendingOrder,
           bool? isActive,
           DateTime? lastTradeOn,
           DateTime? lastPaymentOn,
@@ -178,6 +205,9 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
         clientPhone: clientPhone ?? this.clientPhone,
         totalAmountReceived: totalAmountReceived ?? this.totalAmountReceived,
         totalAmountSent: totalAmountSent ?? this.totalAmountSent,
+        pendingDue: pendingDue ?? this.pendingDue,
+        pendingRefund: pendingRefund ?? this.pendingRefund,
+        noOfPendingOrder: noOfPendingOrder ?? this.noOfPendingOrder,
         isActive: isActive ?? this.isActive,
         lastTradeOn: lastTradeOn ?? this.lastTradeOn,
         lastPaymentOn: lastPaymentOn ?? this.lastPaymentOn,
@@ -191,6 +221,9 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
           ..write('clientPhone: $clientPhone, ')
           ..write('totalAmountReceived: $totalAmountReceived, ')
           ..write('totalAmountSent: $totalAmountSent, ')
+          ..write('pendingDue: $pendingDue, ')
+          ..write('pendingRefund: $pendingRefund, ')
+          ..write('noOfPendingOrder: $noOfPendingOrder, ')
           ..write('isActive: $isActive, ')
           ..write('lastTradeOn: $lastTradeOn, ')
           ..write('lastPaymentOn: $lastPaymentOn, ')
@@ -206,6 +239,9 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
       clientPhone,
       totalAmountReceived,
       totalAmountSent,
+      pendingDue,
+      pendingRefund,
+      noOfPendingOrder,
       isActive,
       lastTradeOn,
       lastPaymentOn,
@@ -219,6 +255,9 @@ class ModelClientData extends DataClass implements Insertable<ModelClientData> {
           other.clientPhone == this.clientPhone &&
           other.totalAmountReceived == this.totalAmountReceived &&
           other.totalAmountSent == this.totalAmountSent &&
+          other.pendingDue == this.pendingDue &&
+          other.pendingRefund == this.pendingRefund &&
+          other.noOfPendingOrder == this.noOfPendingOrder &&
           other.isActive == this.isActive &&
           other.lastTradeOn == this.lastTradeOn &&
           other.lastPaymentOn == this.lastPaymentOn &&
@@ -231,6 +270,9 @@ class ModelClientCompanion extends UpdateCompanion<ModelClientData> {
   final Value<String> clientPhone;
   final Value<double> totalAmountReceived;
   final Value<double> totalAmountSent;
+  final Value<double> pendingDue;
+  final Value<double> pendingRefund;
+  final Value<int> noOfPendingOrder;
   final Value<bool> isActive;
   final Value<DateTime?> lastTradeOn;
   final Value<DateTime?> lastPaymentOn;
@@ -241,6 +283,9 @@ class ModelClientCompanion extends UpdateCompanion<ModelClientData> {
     this.clientPhone = const Value.absent(),
     this.totalAmountReceived = const Value.absent(),
     this.totalAmountSent = const Value.absent(),
+    this.pendingDue = const Value.absent(),
+    this.pendingRefund = const Value.absent(),
+    this.noOfPendingOrder = const Value.absent(),
     this.isActive = const Value.absent(),
     this.lastTradeOn = const Value.absent(),
     this.lastPaymentOn = const Value.absent(),
@@ -252,6 +297,9 @@ class ModelClientCompanion extends UpdateCompanion<ModelClientData> {
     required String clientPhone,
     this.totalAmountReceived = const Value.absent(),
     this.totalAmountSent = const Value.absent(),
+    this.pendingDue = const Value.absent(),
+    this.pendingRefund = const Value.absent(),
+    this.noOfPendingOrder = const Value.absent(),
     this.isActive = const Value.absent(),
     this.lastTradeOn = const Value.absent(),
     this.lastPaymentOn = const Value.absent(),
@@ -264,6 +312,9 @@ class ModelClientCompanion extends UpdateCompanion<ModelClientData> {
     Expression<String>? clientPhone,
     Expression<double>? totalAmountReceived,
     Expression<double>? totalAmountSent,
+    Expression<double>? pendingDue,
+    Expression<double>? pendingRefund,
+    Expression<int>? noOfPendingOrder,
     Expression<bool>? isActive,
     Expression<DateTime?>? lastTradeOn,
     Expression<DateTime?>? lastPaymentOn,
@@ -276,6 +327,9 @@ class ModelClientCompanion extends UpdateCompanion<ModelClientData> {
       if (totalAmountReceived != null)
         'total_amount_received': totalAmountReceived,
       if (totalAmountSent != null) 'total_amount_sent': totalAmountSent,
+      if (pendingDue != null) 'pending_due': pendingDue,
+      if (pendingRefund != null) 'pending_refund': pendingRefund,
+      if (noOfPendingOrder != null) 'no_of_pending_order': noOfPendingOrder,
       if (isActive != null) 'is_active': isActive,
       if (lastTradeOn != null) 'last_trade_on': lastTradeOn,
       if (lastPaymentOn != null) 'last_payment_on': lastPaymentOn,
@@ -289,6 +343,9 @@ class ModelClientCompanion extends UpdateCompanion<ModelClientData> {
       Value<String>? clientPhone,
       Value<double>? totalAmountReceived,
       Value<double>? totalAmountSent,
+      Value<double>? pendingDue,
+      Value<double>? pendingRefund,
+      Value<int>? noOfPendingOrder,
       Value<bool>? isActive,
       Value<DateTime?>? lastTradeOn,
       Value<DateTime?>? lastPaymentOn,
@@ -299,6 +356,9 @@ class ModelClientCompanion extends UpdateCompanion<ModelClientData> {
       clientPhone: clientPhone ?? this.clientPhone,
       totalAmountReceived: totalAmountReceived ?? this.totalAmountReceived,
       totalAmountSent: totalAmountSent ?? this.totalAmountSent,
+      pendingDue: pendingDue ?? this.pendingDue,
+      pendingRefund: pendingRefund ?? this.pendingRefund,
+      noOfPendingOrder: noOfPendingOrder ?? this.noOfPendingOrder,
       isActive: isActive ?? this.isActive,
       lastTradeOn: lastTradeOn ?? this.lastTradeOn,
       lastPaymentOn: lastPaymentOn ?? this.lastPaymentOn,
@@ -325,6 +385,15 @@ class ModelClientCompanion extends UpdateCompanion<ModelClientData> {
     if (totalAmountSent.present) {
       map['total_amount_sent'] = Variable<double>(totalAmountSent.value);
     }
+    if (pendingDue.present) {
+      map['pending_due'] = Variable<double>(pendingDue.value);
+    }
+    if (pendingRefund.present) {
+      map['pending_refund'] = Variable<double>(pendingRefund.value);
+    }
+    if (noOfPendingOrder.present) {
+      map['no_of_pending_order'] = Variable<int>(noOfPendingOrder.value);
+    }
     if (isActive.present) {
       map['is_active'] = Variable<bool>(isActive.value);
     }
@@ -348,6 +417,9 @@ class ModelClientCompanion extends UpdateCompanion<ModelClientData> {
           ..write('clientPhone: $clientPhone, ')
           ..write('totalAmountReceived: $totalAmountReceived, ')
           ..write('totalAmountSent: $totalAmountSent, ')
+          ..write('pendingDue: $pendingDue, ')
+          ..write('pendingRefund: $pendingRefund, ')
+          ..write('noOfPendingOrder: $noOfPendingOrder, ')
           ..write('isActive: $isActive, ')
           ..write('lastTradeOn: $lastTradeOn, ')
           ..write('lastPaymentOn: $lastPaymentOn, ')
@@ -403,6 +475,29 @@ class $ModelClientTable extends ModelClient
           type: const RealType(),
           requiredDuringInsert: false,
           defaultValue: const Constant(0.0));
+  final VerificationMeta _pendingDueMeta = const VerificationMeta('pendingDue');
+  @override
+  late final GeneratedColumn<double?> pendingDue = GeneratedColumn<double?>(
+      'pending_due', aliasedName, false,
+      type: const RealType(),
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0.0));
+  final VerificationMeta _pendingRefundMeta =
+      const VerificationMeta('pendingRefund');
+  @override
+  late final GeneratedColumn<double?> pendingRefund = GeneratedColumn<double?>(
+      'pending_refund', aliasedName, false,
+      type: const RealType(),
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0.0));
+  final VerificationMeta _noOfPendingOrderMeta =
+      const VerificationMeta('noOfPendingOrder');
+  @override
+  late final GeneratedColumn<int?> noOfPendingOrder = GeneratedColumn<int?>(
+      'no_of_pending_order', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
   final VerificationMeta _isActiveMeta = const VerificationMeta('isActive');
   @override
   late final GeneratedColumn<bool?> isActive = GeneratedColumn<bool?>(
@@ -436,6 +531,9 @@ class $ModelClientTable extends ModelClient
         clientPhone,
         totalAmountReceived,
         totalAmountSent,
+        pendingDue,
+        pendingRefund,
+        noOfPendingOrder,
         isActive,
         lastTradeOn,
         lastPaymentOn,
@@ -481,6 +579,24 @@ class $ModelClientTable extends ModelClient
           _totalAmountSentMeta,
           totalAmountSent.isAcceptableOrUnknown(
               data['total_amount_sent']!, _totalAmountSentMeta));
+    }
+    if (data.containsKey('pending_due')) {
+      context.handle(
+          _pendingDueMeta,
+          pendingDue.isAcceptableOrUnknown(
+              data['pending_due']!, _pendingDueMeta));
+    }
+    if (data.containsKey('pending_refund')) {
+      context.handle(
+          _pendingRefundMeta,
+          pendingRefund.isAcceptableOrUnknown(
+              data['pending_refund']!, _pendingRefundMeta));
+    }
+    if (data.containsKey('no_of_pending_order')) {
+      context.handle(
+          _noOfPendingOrderMeta,
+          noOfPendingOrder.isAcceptableOrUnknown(
+              data['no_of_pending_order']!, _noOfPendingOrderMeta));
     }
     if (data.containsKey('is_active')) {
       context.handle(_isActiveMeta,
@@ -1460,602 +1576,6 @@ class $ModelVehicleTable extends ModelVehicle
   }
 }
 
-class ModelDeliveryOrderData extends DataClass
-    implements Insertable<ModelDeliveryOrderData> {
-  final int deliveryOrderId;
-  final int clientId;
-  final ItemList itemList;
-  final double netTotal;
-  final double totalReceivedAmount;
-  final double totalSendAmount;
-  final String paymentStatus;
-  final String orderStatus;
-  final String createdBy;
-  final DateTime createdAt;
-  final DateTime lastUpdated;
-  final DateTime? expectedDeliveryDate;
-  ModelDeliveryOrderData(
-      {required this.deliveryOrderId,
-      required this.clientId,
-      required this.itemList,
-      required this.netTotal,
-      required this.totalReceivedAmount,
-      required this.totalSendAmount,
-      required this.paymentStatus,
-      required this.orderStatus,
-      required this.createdBy,
-      required this.createdAt,
-      required this.lastUpdated,
-      this.expectedDeliveryDate});
-  factory ModelDeliveryOrderData.fromData(Map<String, dynamic> data,
-      {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return ModelDeliveryOrderData(
-      deliveryOrderId: const IntType().mapFromDatabaseResponse(
-          data['${effectivePrefix}delivery_order_id'])!,
-      clientId: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}client_id'])!,
-      itemList: $ModelDeliveryOrderTable.$converter0.mapToDart(
-          const StringType()
-              .mapFromDatabaseResponse(data['${effectivePrefix}item_list']))!,
-      netTotal: const RealType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}net_total'])!,
-      totalReceivedAmount: const RealType().mapFromDatabaseResponse(
-          data['${effectivePrefix}total_received_amount'])!,
-      totalSendAmount: const RealType().mapFromDatabaseResponse(
-          data['${effectivePrefix}total_send_amount'])!,
-      paymentStatus: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}payment_status'])!,
-      orderStatus: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}order_status'])!,
-      createdBy: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}created_by'])!,
-      createdAt: const DateTimeType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}created_at'])!,
-      lastUpdated: const DateTimeType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}last_updated'])!,
-      expectedDeliveryDate: const DateTimeType().mapFromDatabaseResponse(
-          data['${effectivePrefix}expected_delivery_date']),
-    );
-  }
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['delivery_order_id'] = Variable<int>(deliveryOrderId);
-    map['client_id'] = Variable<int>(clientId);
-    {
-      final converter = $ModelDeliveryOrderTable.$converter0;
-      map['item_list'] = Variable<String>(converter.mapToSql(itemList)!);
-    }
-    map['net_total'] = Variable<double>(netTotal);
-    map['total_received_amount'] = Variable<double>(totalReceivedAmount);
-    map['total_send_amount'] = Variable<double>(totalSendAmount);
-    map['payment_status'] = Variable<String>(paymentStatus);
-    map['order_status'] = Variable<String>(orderStatus);
-    map['created_by'] = Variable<String>(createdBy);
-    map['created_at'] = Variable<DateTime>(createdAt);
-    map['last_updated'] = Variable<DateTime>(lastUpdated);
-    if (!nullToAbsent || expectedDeliveryDate != null) {
-      map['expected_delivery_date'] = Variable<DateTime?>(expectedDeliveryDate);
-    }
-    return map;
-  }
-
-  ModelDeliveryOrderCompanion toCompanion(bool nullToAbsent) {
-    return ModelDeliveryOrderCompanion(
-      deliveryOrderId: Value(deliveryOrderId),
-      clientId: Value(clientId),
-      itemList: Value(itemList),
-      netTotal: Value(netTotal),
-      totalReceivedAmount: Value(totalReceivedAmount),
-      totalSendAmount: Value(totalSendAmount),
-      paymentStatus: Value(paymentStatus),
-      orderStatus: Value(orderStatus),
-      createdBy: Value(createdBy),
-      createdAt: Value(createdAt),
-      lastUpdated: Value(lastUpdated),
-      expectedDeliveryDate: expectedDeliveryDate == null && nullToAbsent
-          ? const Value.absent()
-          : Value(expectedDeliveryDate),
-    );
-  }
-
-  factory ModelDeliveryOrderData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return ModelDeliveryOrderData(
-      deliveryOrderId: serializer.fromJson<int>(json['deliveryOrderId']),
-      clientId: serializer.fromJson<int>(json['clientId']),
-      itemList: serializer.fromJson<ItemList>(json['itemList']),
-      netTotal: serializer.fromJson<double>(json['netTotal']),
-      totalReceivedAmount:
-          serializer.fromJson<double>(json['totalReceivedAmount']),
-      totalSendAmount: serializer.fromJson<double>(json['totalSendAmount']),
-      paymentStatus: serializer.fromJson<String>(json['paymentStatus']),
-      orderStatus: serializer.fromJson<String>(json['orderStatus']),
-      createdBy: serializer.fromJson<String>(json['createdBy']),
-      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
-      lastUpdated: serializer.fromJson<DateTime>(json['lastUpdated']),
-      expectedDeliveryDate:
-          serializer.fromJson<DateTime?>(json['expectedDeliveryDate']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'deliveryOrderId': serializer.toJson<int>(deliveryOrderId),
-      'clientId': serializer.toJson<int>(clientId),
-      'itemList': serializer.toJson<ItemList>(itemList),
-      'netTotal': serializer.toJson<double>(netTotal),
-      'totalReceivedAmount': serializer.toJson<double>(totalReceivedAmount),
-      'totalSendAmount': serializer.toJson<double>(totalSendAmount),
-      'paymentStatus': serializer.toJson<String>(paymentStatus),
-      'orderStatus': serializer.toJson<String>(orderStatus),
-      'createdBy': serializer.toJson<String>(createdBy),
-      'createdAt': serializer.toJson<DateTime>(createdAt),
-      'lastUpdated': serializer.toJson<DateTime>(lastUpdated),
-      'expectedDeliveryDate':
-          serializer.toJson<DateTime?>(expectedDeliveryDate),
-    };
-  }
-
-  ModelDeliveryOrderData copyWith(
-          {int? deliveryOrderId,
-          int? clientId,
-          ItemList? itemList,
-          double? netTotal,
-          double? totalReceivedAmount,
-          double? totalSendAmount,
-          String? paymentStatus,
-          String? orderStatus,
-          String? createdBy,
-          DateTime? createdAt,
-          DateTime? lastUpdated,
-          DateTime? expectedDeliveryDate}) =>
-      ModelDeliveryOrderData(
-        deliveryOrderId: deliveryOrderId ?? this.deliveryOrderId,
-        clientId: clientId ?? this.clientId,
-        itemList: itemList ?? this.itemList,
-        netTotal: netTotal ?? this.netTotal,
-        totalReceivedAmount: totalReceivedAmount ?? this.totalReceivedAmount,
-        totalSendAmount: totalSendAmount ?? this.totalSendAmount,
-        paymentStatus: paymentStatus ?? this.paymentStatus,
-        orderStatus: orderStatus ?? this.orderStatus,
-        createdBy: createdBy ?? this.createdBy,
-        createdAt: createdAt ?? this.createdAt,
-        lastUpdated: lastUpdated ?? this.lastUpdated,
-        expectedDeliveryDate: expectedDeliveryDate ?? this.expectedDeliveryDate,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('ModelDeliveryOrderData(')
-          ..write('deliveryOrderId: $deliveryOrderId, ')
-          ..write('clientId: $clientId, ')
-          ..write('itemList: $itemList, ')
-          ..write('netTotal: $netTotal, ')
-          ..write('totalReceivedAmount: $totalReceivedAmount, ')
-          ..write('totalSendAmount: $totalSendAmount, ')
-          ..write('paymentStatus: $paymentStatus, ')
-          ..write('orderStatus: $orderStatus, ')
-          ..write('createdBy: $createdBy, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('lastUpdated: $lastUpdated, ')
-          ..write('expectedDeliveryDate: $expectedDeliveryDate')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(
-      deliveryOrderId,
-      clientId,
-      itemList,
-      netTotal,
-      totalReceivedAmount,
-      totalSendAmount,
-      paymentStatus,
-      orderStatus,
-      createdBy,
-      createdAt,
-      lastUpdated,
-      expectedDeliveryDate);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is ModelDeliveryOrderData &&
-          other.deliveryOrderId == this.deliveryOrderId &&
-          other.clientId == this.clientId &&
-          other.itemList == this.itemList &&
-          other.netTotal == this.netTotal &&
-          other.totalReceivedAmount == this.totalReceivedAmount &&
-          other.totalSendAmount == this.totalSendAmount &&
-          other.paymentStatus == this.paymentStatus &&
-          other.orderStatus == this.orderStatus &&
-          other.createdBy == this.createdBy &&
-          other.createdAt == this.createdAt &&
-          other.lastUpdated == this.lastUpdated &&
-          other.expectedDeliveryDate == this.expectedDeliveryDate);
-}
-
-class ModelDeliveryOrderCompanion
-    extends UpdateCompanion<ModelDeliveryOrderData> {
-  final Value<int> deliveryOrderId;
-  final Value<int> clientId;
-  final Value<ItemList> itemList;
-  final Value<double> netTotal;
-  final Value<double> totalReceivedAmount;
-  final Value<double> totalSendAmount;
-  final Value<String> paymentStatus;
-  final Value<String> orderStatus;
-  final Value<String> createdBy;
-  final Value<DateTime> createdAt;
-  final Value<DateTime> lastUpdated;
-  final Value<DateTime?> expectedDeliveryDate;
-  const ModelDeliveryOrderCompanion({
-    this.deliveryOrderId = const Value.absent(),
-    this.clientId = const Value.absent(),
-    this.itemList = const Value.absent(),
-    this.netTotal = const Value.absent(),
-    this.totalReceivedAmount = const Value.absent(),
-    this.totalSendAmount = const Value.absent(),
-    this.paymentStatus = const Value.absent(),
-    this.orderStatus = const Value.absent(),
-    this.createdBy = const Value.absent(),
-    this.createdAt = const Value.absent(),
-    this.lastUpdated = const Value.absent(),
-    this.expectedDeliveryDate = const Value.absent(),
-  });
-  ModelDeliveryOrderCompanion.insert({
-    this.deliveryOrderId = const Value.absent(),
-    required int clientId,
-    required ItemList itemList,
-    required double netTotal,
-    this.totalReceivedAmount = const Value.absent(),
-    this.totalSendAmount = const Value.absent(),
-    this.paymentStatus = const Value.absent(),
-    required String orderStatus,
-    required String createdBy,
-    this.createdAt = const Value.absent(),
-    this.lastUpdated = const Value.absent(),
-    this.expectedDeliveryDate = const Value.absent(),
-  })  : clientId = Value(clientId),
-        itemList = Value(itemList),
-        netTotal = Value(netTotal),
-        orderStatus = Value(orderStatus),
-        createdBy = Value(createdBy);
-  static Insertable<ModelDeliveryOrderData> custom({
-    Expression<int>? deliveryOrderId,
-    Expression<int>? clientId,
-    Expression<ItemList>? itemList,
-    Expression<double>? netTotal,
-    Expression<double>? totalReceivedAmount,
-    Expression<double>? totalSendAmount,
-    Expression<String>? paymentStatus,
-    Expression<String>? orderStatus,
-    Expression<String>? createdBy,
-    Expression<DateTime>? createdAt,
-    Expression<DateTime>? lastUpdated,
-    Expression<DateTime?>? expectedDeliveryDate,
-  }) {
-    return RawValuesInsertable({
-      if (deliveryOrderId != null) 'delivery_order_id': deliveryOrderId,
-      if (clientId != null) 'client_id': clientId,
-      if (itemList != null) 'item_list': itemList,
-      if (netTotal != null) 'net_total': netTotal,
-      if (totalReceivedAmount != null)
-        'total_received_amount': totalReceivedAmount,
-      if (totalSendAmount != null) 'total_send_amount': totalSendAmount,
-      if (paymentStatus != null) 'payment_status': paymentStatus,
-      if (orderStatus != null) 'order_status': orderStatus,
-      if (createdBy != null) 'created_by': createdBy,
-      if (createdAt != null) 'created_at': createdAt,
-      if (lastUpdated != null) 'last_updated': lastUpdated,
-      if (expectedDeliveryDate != null)
-        'expected_delivery_date': expectedDeliveryDate,
-    });
-  }
-
-  ModelDeliveryOrderCompanion copyWith(
-      {Value<int>? deliveryOrderId,
-      Value<int>? clientId,
-      Value<ItemList>? itemList,
-      Value<double>? netTotal,
-      Value<double>? totalReceivedAmount,
-      Value<double>? totalSendAmount,
-      Value<String>? paymentStatus,
-      Value<String>? orderStatus,
-      Value<String>? createdBy,
-      Value<DateTime>? createdAt,
-      Value<DateTime>? lastUpdated,
-      Value<DateTime?>? expectedDeliveryDate}) {
-    return ModelDeliveryOrderCompanion(
-      deliveryOrderId: deliveryOrderId ?? this.deliveryOrderId,
-      clientId: clientId ?? this.clientId,
-      itemList: itemList ?? this.itemList,
-      netTotal: netTotal ?? this.netTotal,
-      totalReceivedAmount: totalReceivedAmount ?? this.totalReceivedAmount,
-      totalSendAmount: totalSendAmount ?? this.totalSendAmount,
-      paymentStatus: paymentStatus ?? this.paymentStatus,
-      orderStatus: orderStatus ?? this.orderStatus,
-      createdBy: createdBy ?? this.createdBy,
-      createdAt: createdAt ?? this.createdAt,
-      lastUpdated: lastUpdated ?? this.lastUpdated,
-      expectedDeliveryDate: expectedDeliveryDate ?? this.expectedDeliveryDate,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (deliveryOrderId.present) {
-      map['delivery_order_id'] = Variable<int>(deliveryOrderId.value);
-    }
-    if (clientId.present) {
-      map['client_id'] = Variable<int>(clientId.value);
-    }
-    if (itemList.present) {
-      final converter = $ModelDeliveryOrderTable.$converter0;
-      map['item_list'] = Variable<String>(converter.mapToSql(itemList.value)!);
-    }
-    if (netTotal.present) {
-      map['net_total'] = Variable<double>(netTotal.value);
-    }
-    if (totalReceivedAmount.present) {
-      map['total_received_amount'] =
-          Variable<double>(totalReceivedAmount.value);
-    }
-    if (totalSendAmount.present) {
-      map['total_send_amount'] = Variable<double>(totalSendAmount.value);
-    }
-    if (paymentStatus.present) {
-      map['payment_status'] = Variable<String>(paymentStatus.value);
-    }
-    if (orderStatus.present) {
-      map['order_status'] = Variable<String>(orderStatus.value);
-    }
-    if (createdBy.present) {
-      map['created_by'] = Variable<String>(createdBy.value);
-    }
-    if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
-    }
-    if (lastUpdated.present) {
-      map['last_updated'] = Variable<DateTime>(lastUpdated.value);
-    }
-    if (expectedDeliveryDate.present) {
-      map['expected_delivery_date'] =
-          Variable<DateTime?>(expectedDeliveryDate.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('ModelDeliveryOrderCompanion(')
-          ..write('deliveryOrderId: $deliveryOrderId, ')
-          ..write('clientId: $clientId, ')
-          ..write('itemList: $itemList, ')
-          ..write('netTotal: $netTotal, ')
-          ..write('totalReceivedAmount: $totalReceivedAmount, ')
-          ..write('totalSendAmount: $totalSendAmount, ')
-          ..write('paymentStatus: $paymentStatus, ')
-          ..write('orderStatus: $orderStatus, ')
-          ..write('createdBy: $createdBy, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('lastUpdated: $lastUpdated, ')
-          ..write('expectedDeliveryDate: $expectedDeliveryDate')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $ModelDeliveryOrderTable extends ModelDeliveryOrder
-    with TableInfo<$ModelDeliveryOrderTable, ModelDeliveryOrderData> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $ModelDeliveryOrderTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _deliveryOrderIdMeta =
-      const VerificationMeta('deliveryOrderId');
-  @override
-  late final GeneratedColumn<int?> deliveryOrderId = GeneratedColumn<int?>(
-      'delivery_order_id', aliasedName, false,
-      type: const IntType(),
-      requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _clientIdMeta = const VerificationMeta('clientId');
-  @override
-  late final GeneratedColumn<int?> clientId = GeneratedColumn<int?>(
-      'client_id', aliasedName, false,
-      type: const IntType(),
-      requiredDuringInsert: true,
-      defaultConstraints: 'REFERENCES model_client (client_id)');
-  final VerificationMeta _itemListMeta = const VerificationMeta('itemList');
-  @override
-  late final GeneratedColumnWithTypeConverter<ItemList, String?> itemList =
-      GeneratedColumn<String?>('item_list', aliasedName, false,
-              type: const StringType(), requiredDuringInsert: true)
-          .withConverter<ItemList>($ModelDeliveryOrderTable.$converter0);
-  final VerificationMeta _netTotalMeta = const VerificationMeta('netTotal');
-  @override
-  late final GeneratedColumn<double?> netTotal = GeneratedColumn<double?>(
-      'net_total', aliasedName, false,
-      type: const RealType(), requiredDuringInsert: true);
-  final VerificationMeta _totalReceivedAmountMeta =
-      const VerificationMeta('totalReceivedAmount');
-  @override
-  late final GeneratedColumn<double?> totalReceivedAmount =
-      GeneratedColumn<double?>('total_received_amount', aliasedName, false,
-          type: const RealType(),
-          requiredDuringInsert: false,
-          defaultValue: const Constant(0.0));
-  final VerificationMeta _totalSendAmountMeta =
-      const VerificationMeta('totalSendAmount');
-  @override
-  late final GeneratedColumn<double?> totalSendAmount =
-      GeneratedColumn<double?>('total_send_amount', aliasedName, false,
-          type: const RealType(),
-          requiredDuringInsert: false,
-          defaultValue: const Constant(0.0));
-  final VerificationMeta _paymentStatusMeta =
-      const VerificationMeta('paymentStatus');
-  @override
-  late final GeneratedColumn<String?> paymentStatus = GeneratedColumn<String?>(
-      'payment_status', aliasedName, false,
-      type: const StringType(),
-      requiredDuringInsert: false,
-      defaultValue: const Constant('unpaid'));
-  final VerificationMeta _orderStatusMeta =
-      const VerificationMeta('orderStatus');
-  @override
-  late final GeneratedColumn<String?> orderStatus = GeneratedColumn<String?>(
-      'order_status', aliasedName, false,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 20),
-      type: const StringType(),
-      requiredDuringInsert: true);
-  final VerificationMeta _createdByMeta = const VerificationMeta('createdBy');
-  @override
-  late final GeneratedColumn<String?> createdBy = GeneratedColumn<String?>(
-      'created_by', aliasedName, false,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 3, maxTextLength: 20),
-      type: const StringType(),
-      requiredDuringInsert: true);
-  final VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
-  @override
-  late final GeneratedColumn<DateTime?> createdAt = GeneratedColumn<DateTime?>(
-      'created_at', aliasedName, false,
-      type: const IntType(),
-      requiredDuringInsert: false,
-      defaultValue: currentDateAndTime);
-  final VerificationMeta _lastUpdatedMeta =
-      const VerificationMeta('lastUpdated');
-  @override
-  late final GeneratedColumn<DateTime?> lastUpdated =
-      GeneratedColumn<DateTime?>('last_updated', aliasedName, false,
-          type: const IntType(),
-          requiredDuringInsert: false,
-          defaultValue: currentDateAndTime);
-  final VerificationMeta _expectedDeliveryDateMeta =
-      const VerificationMeta('expectedDeliveryDate');
-  @override
-  late final GeneratedColumn<DateTime?> expectedDeliveryDate =
-      GeneratedColumn<DateTime?>('expected_delivery_date', aliasedName, true,
-          type: const IntType(), requiredDuringInsert: false);
-  @override
-  List<GeneratedColumn> get $columns => [
-        deliveryOrderId,
-        clientId,
-        itemList,
-        netTotal,
-        totalReceivedAmount,
-        totalSendAmount,
-        paymentStatus,
-        orderStatus,
-        createdBy,
-        createdAt,
-        lastUpdated,
-        expectedDeliveryDate
-      ];
-  @override
-  String get aliasedName => _alias ?? 'model_delivery_order';
-  @override
-  String get actualTableName => 'model_delivery_order';
-  @override
-  VerificationContext validateIntegrity(
-      Insertable<ModelDeliveryOrderData> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('delivery_order_id')) {
-      context.handle(
-          _deliveryOrderIdMeta,
-          deliveryOrderId.isAcceptableOrUnknown(
-              data['delivery_order_id']!, _deliveryOrderIdMeta));
-    }
-    if (data.containsKey('client_id')) {
-      context.handle(_clientIdMeta,
-          clientId.isAcceptableOrUnknown(data['client_id']!, _clientIdMeta));
-    } else if (isInserting) {
-      context.missing(_clientIdMeta);
-    }
-    context.handle(_itemListMeta, const VerificationResult.success());
-    if (data.containsKey('net_total')) {
-      context.handle(_netTotalMeta,
-          netTotal.isAcceptableOrUnknown(data['net_total']!, _netTotalMeta));
-    } else if (isInserting) {
-      context.missing(_netTotalMeta);
-    }
-    if (data.containsKey('total_received_amount')) {
-      context.handle(
-          _totalReceivedAmountMeta,
-          totalReceivedAmount.isAcceptableOrUnknown(
-              data['total_received_amount']!, _totalReceivedAmountMeta));
-    }
-    if (data.containsKey('total_send_amount')) {
-      context.handle(
-          _totalSendAmountMeta,
-          totalSendAmount.isAcceptableOrUnknown(
-              data['total_send_amount']!, _totalSendAmountMeta));
-    }
-    if (data.containsKey('payment_status')) {
-      context.handle(
-          _paymentStatusMeta,
-          paymentStatus.isAcceptableOrUnknown(
-              data['payment_status']!, _paymentStatusMeta));
-    }
-    if (data.containsKey('order_status')) {
-      context.handle(
-          _orderStatusMeta,
-          orderStatus.isAcceptableOrUnknown(
-              data['order_status']!, _orderStatusMeta));
-    } else if (isInserting) {
-      context.missing(_orderStatusMeta);
-    }
-    if (data.containsKey('created_by')) {
-      context.handle(_createdByMeta,
-          createdBy.isAcceptableOrUnknown(data['created_by']!, _createdByMeta));
-    } else if (isInserting) {
-      context.missing(_createdByMeta);
-    }
-    if (data.containsKey('created_at')) {
-      context.handle(_createdAtMeta,
-          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
-    }
-    if (data.containsKey('last_updated')) {
-      context.handle(
-          _lastUpdatedMeta,
-          lastUpdated.isAcceptableOrUnknown(
-              data['last_updated']!, _lastUpdatedMeta));
-    }
-    if (data.containsKey('expected_delivery_date')) {
-      context.handle(
-          _expectedDeliveryDateMeta,
-          expectedDeliveryDate.isAcceptableOrUnknown(
-              data['expected_delivery_date']!, _expectedDeliveryDateMeta));
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {deliveryOrderId};
-  @override
-  ModelDeliveryOrderData map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return ModelDeliveryOrderData.fromData(data,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
-  }
-
-  @override
-  $ModelDeliveryOrderTable createAlias(String alias) {
-    return $ModelDeliveryOrderTable(attachedDatabase, alias);
-  }
-
-  static TypeConverter<ItemList, String> $converter0 =
-      const ItemListConverter();
-}
-
 class ModelTransportData extends DataClass
     implements Insertable<ModelTransportData> {
   final int transportId;
@@ -2577,28 +2097,673 @@ class $ModelTransportTable extends ModelTransport
       const ReturnOrderListConverter();
 }
 
+class ModelDeliveryOrderData extends DataClass
+    implements Insertable<ModelDeliveryOrderData> {
+  final int deliveryOrderId;
+  final int clientId;
+  final int? transportId;
+  final ItemList itemList;
+  final double netTotal;
+  final double totalReceivedAmount;
+  final double totalSendAmount;
+  final String paymentStatus;
+  final String orderStatus;
+  final String createdBy;
+  final DateTime createdAt;
+  final DateTime lastUpdated;
+  final DateTime? expectedDeliveryDate;
+  ModelDeliveryOrderData(
+      {required this.deliveryOrderId,
+      required this.clientId,
+      this.transportId,
+      required this.itemList,
+      required this.netTotal,
+      required this.totalReceivedAmount,
+      required this.totalSendAmount,
+      required this.paymentStatus,
+      required this.orderStatus,
+      required this.createdBy,
+      required this.createdAt,
+      required this.lastUpdated,
+      this.expectedDeliveryDate});
+  factory ModelDeliveryOrderData.fromData(Map<String, dynamic> data,
+      {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return ModelDeliveryOrderData(
+      deliveryOrderId: const IntType().mapFromDatabaseResponse(
+          data['${effectivePrefix}delivery_order_id'])!,
+      clientId: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}client_id'])!,
+      transportId: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}transport_id']),
+      itemList: $ModelDeliveryOrderTable.$converter0.mapToDart(
+          const StringType()
+              .mapFromDatabaseResponse(data['${effectivePrefix}item_list']))!,
+      netTotal: const RealType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}net_total'])!,
+      totalReceivedAmount: const RealType().mapFromDatabaseResponse(
+          data['${effectivePrefix}total_received_amount'])!,
+      totalSendAmount: const RealType().mapFromDatabaseResponse(
+          data['${effectivePrefix}total_send_amount'])!,
+      paymentStatus: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}payment_status'])!,
+      orderStatus: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}order_status'])!,
+      createdBy: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}created_by'])!,
+      createdAt: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}created_at'])!,
+      lastUpdated: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}last_updated'])!,
+      expectedDeliveryDate: const DateTimeType().mapFromDatabaseResponse(
+          data['${effectivePrefix}expected_delivery_date']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['delivery_order_id'] = Variable<int>(deliveryOrderId);
+    map['client_id'] = Variable<int>(clientId);
+    if (!nullToAbsent || transportId != null) {
+      map['transport_id'] = Variable<int?>(transportId);
+    }
+    {
+      final converter = $ModelDeliveryOrderTable.$converter0;
+      map['item_list'] = Variable<String>(converter.mapToSql(itemList)!);
+    }
+    map['net_total'] = Variable<double>(netTotal);
+    map['total_received_amount'] = Variable<double>(totalReceivedAmount);
+    map['total_send_amount'] = Variable<double>(totalSendAmount);
+    map['payment_status'] = Variable<String>(paymentStatus);
+    map['order_status'] = Variable<String>(orderStatus);
+    map['created_by'] = Variable<String>(createdBy);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['last_updated'] = Variable<DateTime>(lastUpdated);
+    if (!nullToAbsent || expectedDeliveryDate != null) {
+      map['expected_delivery_date'] = Variable<DateTime?>(expectedDeliveryDate);
+    }
+    return map;
+  }
+
+  ModelDeliveryOrderCompanion toCompanion(bool nullToAbsent) {
+    return ModelDeliveryOrderCompanion(
+      deliveryOrderId: Value(deliveryOrderId),
+      clientId: Value(clientId),
+      transportId: transportId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(transportId),
+      itemList: Value(itemList),
+      netTotal: Value(netTotal),
+      totalReceivedAmount: Value(totalReceivedAmount),
+      totalSendAmount: Value(totalSendAmount),
+      paymentStatus: Value(paymentStatus),
+      orderStatus: Value(orderStatus),
+      createdBy: Value(createdBy),
+      createdAt: Value(createdAt),
+      lastUpdated: Value(lastUpdated),
+      expectedDeliveryDate: expectedDeliveryDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(expectedDeliveryDate),
+    );
+  }
+
+  factory ModelDeliveryOrderData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ModelDeliveryOrderData(
+      deliveryOrderId: serializer.fromJson<int>(json['deliveryOrderId']),
+      clientId: serializer.fromJson<int>(json['clientId']),
+      transportId: serializer.fromJson<int?>(json['transportId']),
+      itemList: serializer.fromJson<ItemList>(json['itemList']),
+      netTotal: serializer.fromJson<double>(json['netTotal']),
+      totalReceivedAmount:
+          serializer.fromJson<double>(json['totalReceivedAmount']),
+      totalSendAmount: serializer.fromJson<double>(json['totalSendAmount']),
+      paymentStatus: serializer.fromJson<String>(json['paymentStatus']),
+      orderStatus: serializer.fromJson<String>(json['orderStatus']),
+      createdBy: serializer.fromJson<String>(json['createdBy']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      lastUpdated: serializer.fromJson<DateTime>(json['lastUpdated']),
+      expectedDeliveryDate:
+          serializer.fromJson<DateTime?>(json['expectedDeliveryDate']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'deliveryOrderId': serializer.toJson<int>(deliveryOrderId),
+      'clientId': serializer.toJson<int>(clientId),
+      'transportId': serializer.toJson<int?>(transportId),
+      'itemList': serializer.toJson<ItemList>(itemList),
+      'netTotal': serializer.toJson<double>(netTotal),
+      'totalReceivedAmount': serializer.toJson<double>(totalReceivedAmount),
+      'totalSendAmount': serializer.toJson<double>(totalSendAmount),
+      'paymentStatus': serializer.toJson<String>(paymentStatus),
+      'orderStatus': serializer.toJson<String>(orderStatus),
+      'createdBy': serializer.toJson<String>(createdBy),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'lastUpdated': serializer.toJson<DateTime>(lastUpdated),
+      'expectedDeliveryDate':
+          serializer.toJson<DateTime?>(expectedDeliveryDate),
+    };
+  }
+
+  ModelDeliveryOrderData copyWith(
+          {int? deliveryOrderId,
+          int? clientId,
+          int? transportId,
+          ItemList? itemList,
+          double? netTotal,
+          double? totalReceivedAmount,
+          double? totalSendAmount,
+          String? paymentStatus,
+          String? orderStatus,
+          String? createdBy,
+          DateTime? createdAt,
+          DateTime? lastUpdated,
+          DateTime? expectedDeliveryDate}) =>
+      ModelDeliveryOrderData(
+        deliveryOrderId: deliveryOrderId ?? this.deliveryOrderId,
+        clientId: clientId ?? this.clientId,
+        transportId: transportId ?? this.transportId,
+        itemList: itemList ?? this.itemList,
+        netTotal: netTotal ?? this.netTotal,
+        totalReceivedAmount: totalReceivedAmount ?? this.totalReceivedAmount,
+        totalSendAmount: totalSendAmount ?? this.totalSendAmount,
+        paymentStatus: paymentStatus ?? this.paymentStatus,
+        orderStatus: orderStatus ?? this.orderStatus,
+        createdBy: createdBy ?? this.createdBy,
+        createdAt: createdAt ?? this.createdAt,
+        lastUpdated: lastUpdated ?? this.lastUpdated,
+        expectedDeliveryDate: expectedDeliveryDate ?? this.expectedDeliveryDate,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('ModelDeliveryOrderData(')
+          ..write('deliveryOrderId: $deliveryOrderId, ')
+          ..write('clientId: $clientId, ')
+          ..write('transportId: $transportId, ')
+          ..write('itemList: $itemList, ')
+          ..write('netTotal: $netTotal, ')
+          ..write('totalReceivedAmount: $totalReceivedAmount, ')
+          ..write('totalSendAmount: $totalSendAmount, ')
+          ..write('paymentStatus: $paymentStatus, ')
+          ..write('orderStatus: $orderStatus, ')
+          ..write('createdBy: $createdBy, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('lastUpdated: $lastUpdated, ')
+          ..write('expectedDeliveryDate: $expectedDeliveryDate')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      deliveryOrderId,
+      clientId,
+      transportId,
+      itemList,
+      netTotal,
+      totalReceivedAmount,
+      totalSendAmount,
+      paymentStatus,
+      orderStatus,
+      createdBy,
+      createdAt,
+      lastUpdated,
+      expectedDeliveryDate);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ModelDeliveryOrderData &&
+          other.deliveryOrderId == this.deliveryOrderId &&
+          other.clientId == this.clientId &&
+          other.transportId == this.transportId &&
+          other.itemList == this.itemList &&
+          other.netTotal == this.netTotal &&
+          other.totalReceivedAmount == this.totalReceivedAmount &&
+          other.totalSendAmount == this.totalSendAmount &&
+          other.paymentStatus == this.paymentStatus &&
+          other.orderStatus == this.orderStatus &&
+          other.createdBy == this.createdBy &&
+          other.createdAt == this.createdAt &&
+          other.lastUpdated == this.lastUpdated &&
+          other.expectedDeliveryDate == this.expectedDeliveryDate);
+}
+
+class ModelDeliveryOrderCompanion
+    extends UpdateCompanion<ModelDeliveryOrderData> {
+  final Value<int> deliveryOrderId;
+  final Value<int> clientId;
+  final Value<int?> transportId;
+  final Value<ItemList> itemList;
+  final Value<double> netTotal;
+  final Value<double> totalReceivedAmount;
+  final Value<double> totalSendAmount;
+  final Value<String> paymentStatus;
+  final Value<String> orderStatus;
+  final Value<String> createdBy;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> lastUpdated;
+  final Value<DateTime?> expectedDeliveryDate;
+  const ModelDeliveryOrderCompanion({
+    this.deliveryOrderId = const Value.absent(),
+    this.clientId = const Value.absent(),
+    this.transportId = const Value.absent(),
+    this.itemList = const Value.absent(),
+    this.netTotal = const Value.absent(),
+    this.totalReceivedAmount = const Value.absent(),
+    this.totalSendAmount = const Value.absent(),
+    this.paymentStatus = const Value.absent(),
+    this.orderStatus = const Value.absent(),
+    this.createdBy = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.lastUpdated = const Value.absent(),
+    this.expectedDeliveryDate = const Value.absent(),
+  });
+  ModelDeliveryOrderCompanion.insert({
+    this.deliveryOrderId = const Value.absent(),
+    required int clientId,
+    this.transportId = const Value.absent(),
+    required ItemList itemList,
+    required double netTotal,
+    this.totalReceivedAmount = const Value.absent(),
+    this.totalSendAmount = const Value.absent(),
+    this.paymentStatus = const Value.absent(),
+    required String orderStatus,
+    required String createdBy,
+    this.createdAt = const Value.absent(),
+    this.lastUpdated = const Value.absent(),
+    this.expectedDeliveryDate = const Value.absent(),
+  })  : clientId = Value(clientId),
+        itemList = Value(itemList),
+        netTotal = Value(netTotal),
+        orderStatus = Value(orderStatus),
+        createdBy = Value(createdBy);
+  static Insertable<ModelDeliveryOrderData> custom({
+    Expression<int>? deliveryOrderId,
+    Expression<int>? clientId,
+    Expression<int?>? transportId,
+    Expression<ItemList>? itemList,
+    Expression<double>? netTotal,
+    Expression<double>? totalReceivedAmount,
+    Expression<double>? totalSendAmount,
+    Expression<String>? paymentStatus,
+    Expression<String>? orderStatus,
+    Expression<String>? createdBy,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? lastUpdated,
+    Expression<DateTime?>? expectedDeliveryDate,
+  }) {
+    return RawValuesInsertable({
+      if (deliveryOrderId != null) 'delivery_order_id': deliveryOrderId,
+      if (clientId != null) 'client_id': clientId,
+      if (transportId != null) 'transport_id': transportId,
+      if (itemList != null) 'item_list': itemList,
+      if (netTotal != null) 'net_total': netTotal,
+      if (totalReceivedAmount != null)
+        'total_received_amount': totalReceivedAmount,
+      if (totalSendAmount != null) 'total_send_amount': totalSendAmount,
+      if (paymentStatus != null) 'payment_status': paymentStatus,
+      if (orderStatus != null) 'order_status': orderStatus,
+      if (createdBy != null) 'created_by': createdBy,
+      if (createdAt != null) 'created_at': createdAt,
+      if (lastUpdated != null) 'last_updated': lastUpdated,
+      if (expectedDeliveryDate != null)
+        'expected_delivery_date': expectedDeliveryDate,
+    });
+  }
+
+  ModelDeliveryOrderCompanion copyWith(
+      {Value<int>? deliveryOrderId,
+      Value<int>? clientId,
+      Value<int?>? transportId,
+      Value<ItemList>? itemList,
+      Value<double>? netTotal,
+      Value<double>? totalReceivedAmount,
+      Value<double>? totalSendAmount,
+      Value<String>? paymentStatus,
+      Value<String>? orderStatus,
+      Value<String>? createdBy,
+      Value<DateTime>? createdAt,
+      Value<DateTime>? lastUpdated,
+      Value<DateTime?>? expectedDeliveryDate}) {
+    return ModelDeliveryOrderCompanion(
+      deliveryOrderId: deliveryOrderId ?? this.deliveryOrderId,
+      clientId: clientId ?? this.clientId,
+      transportId: transportId ?? this.transportId,
+      itemList: itemList ?? this.itemList,
+      netTotal: netTotal ?? this.netTotal,
+      totalReceivedAmount: totalReceivedAmount ?? this.totalReceivedAmount,
+      totalSendAmount: totalSendAmount ?? this.totalSendAmount,
+      paymentStatus: paymentStatus ?? this.paymentStatus,
+      orderStatus: orderStatus ?? this.orderStatus,
+      createdBy: createdBy ?? this.createdBy,
+      createdAt: createdAt ?? this.createdAt,
+      lastUpdated: lastUpdated ?? this.lastUpdated,
+      expectedDeliveryDate: expectedDeliveryDate ?? this.expectedDeliveryDate,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (deliveryOrderId.present) {
+      map['delivery_order_id'] = Variable<int>(deliveryOrderId.value);
+    }
+    if (clientId.present) {
+      map['client_id'] = Variable<int>(clientId.value);
+    }
+    if (transportId.present) {
+      map['transport_id'] = Variable<int?>(transportId.value);
+    }
+    if (itemList.present) {
+      final converter = $ModelDeliveryOrderTable.$converter0;
+      map['item_list'] = Variable<String>(converter.mapToSql(itemList.value)!);
+    }
+    if (netTotal.present) {
+      map['net_total'] = Variable<double>(netTotal.value);
+    }
+    if (totalReceivedAmount.present) {
+      map['total_received_amount'] =
+          Variable<double>(totalReceivedAmount.value);
+    }
+    if (totalSendAmount.present) {
+      map['total_send_amount'] = Variable<double>(totalSendAmount.value);
+    }
+    if (paymentStatus.present) {
+      map['payment_status'] = Variable<String>(paymentStatus.value);
+    }
+    if (orderStatus.present) {
+      map['order_status'] = Variable<String>(orderStatus.value);
+    }
+    if (createdBy.present) {
+      map['created_by'] = Variable<String>(createdBy.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (lastUpdated.present) {
+      map['last_updated'] = Variable<DateTime>(lastUpdated.value);
+    }
+    if (expectedDeliveryDate.present) {
+      map['expected_delivery_date'] =
+          Variable<DateTime?>(expectedDeliveryDate.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ModelDeliveryOrderCompanion(')
+          ..write('deliveryOrderId: $deliveryOrderId, ')
+          ..write('clientId: $clientId, ')
+          ..write('transportId: $transportId, ')
+          ..write('itemList: $itemList, ')
+          ..write('netTotal: $netTotal, ')
+          ..write('totalReceivedAmount: $totalReceivedAmount, ')
+          ..write('totalSendAmount: $totalSendAmount, ')
+          ..write('paymentStatus: $paymentStatus, ')
+          ..write('orderStatus: $orderStatus, ')
+          ..write('createdBy: $createdBy, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('lastUpdated: $lastUpdated, ')
+          ..write('expectedDeliveryDate: $expectedDeliveryDate')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ModelDeliveryOrderTable extends ModelDeliveryOrder
+    with TableInfo<$ModelDeliveryOrderTable, ModelDeliveryOrderData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ModelDeliveryOrderTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _deliveryOrderIdMeta =
+      const VerificationMeta('deliveryOrderId');
+  @override
+  late final GeneratedColumn<int?> deliveryOrderId = GeneratedColumn<int?>(
+      'delivery_order_id', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _clientIdMeta = const VerificationMeta('clientId');
+  @override
+  late final GeneratedColumn<int?> clientId = GeneratedColumn<int?>(
+      'client_id', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: true,
+      defaultConstraints: 'REFERENCES model_client (client_id)');
+  final VerificationMeta _transportIdMeta =
+      const VerificationMeta('transportId');
+  @override
+  late final GeneratedColumn<int?> transportId = GeneratedColumn<int?>(
+      'transport_id', aliasedName, true,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'REFERENCES model_transport (transport_id)');
+  final VerificationMeta _itemListMeta = const VerificationMeta('itemList');
+  @override
+  late final GeneratedColumnWithTypeConverter<ItemList, String?> itemList =
+      GeneratedColumn<String?>('item_list', aliasedName, false,
+              type: const StringType(), requiredDuringInsert: true)
+          .withConverter<ItemList>($ModelDeliveryOrderTable.$converter0);
+  final VerificationMeta _netTotalMeta = const VerificationMeta('netTotal');
+  @override
+  late final GeneratedColumn<double?> netTotal = GeneratedColumn<double?>(
+      'net_total', aliasedName, false,
+      type: const RealType(), requiredDuringInsert: true);
+  final VerificationMeta _totalReceivedAmountMeta =
+      const VerificationMeta('totalReceivedAmount');
+  @override
+  late final GeneratedColumn<double?> totalReceivedAmount =
+      GeneratedColumn<double?>('total_received_amount', aliasedName, false,
+          type: const RealType(),
+          requiredDuringInsert: false,
+          defaultValue: const Constant(0.0));
+  final VerificationMeta _totalSendAmountMeta =
+      const VerificationMeta('totalSendAmount');
+  @override
+  late final GeneratedColumn<double?> totalSendAmount =
+      GeneratedColumn<double?>('total_send_amount', aliasedName, false,
+          type: const RealType(),
+          requiredDuringInsert: false,
+          defaultValue: const Constant(0.0));
+  final VerificationMeta _paymentStatusMeta =
+      const VerificationMeta('paymentStatus');
+  @override
+  late final GeneratedColumn<String?> paymentStatus = GeneratedColumn<String?>(
+      'payment_status', aliasedName, false,
+      type: const StringType(),
+      requiredDuringInsert: false,
+      defaultValue: const Constant('unpaid'));
+  final VerificationMeta _orderStatusMeta =
+      const VerificationMeta('orderStatus');
+  @override
+  late final GeneratedColumn<String?> orderStatus = GeneratedColumn<String?>(
+      'order_status', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 20),
+      type: const StringType(),
+      requiredDuringInsert: true);
+  final VerificationMeta _createdByMeta = const VerificationMeta('createdBy');
+  @override
+  late final GeneratedColumn<String?> createdBy = GeneratedColumn<String?>(
+      'created_by', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 3, maxTextLength: 20),
+      type: const StringType(),
+      requiredDuringInsert: true);
+  final VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime?> createdAt = GeneratedColumn<DateTime?>(
+      'created_at', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  final VerificationMeta _lastUpdatedMeta =
+      const VerificationMeta('lastUpdated');
+  @override
+  late final GeneratedColumn<DateTime?> lastUpdated =
+      GeneratedColumn<DateTime?>('last_updated', aliasedName, false,
+          type: const IntType(),
+          requiredDuringInsert: false,
+          defaultValue: currentDateAndTime);
+  final VerificationMeta _expectedDeliveryDateMeta =
+      const VerificationMeta('expectedDeliveryDate');
+  @override
+  late final GeneratedColumn<DateTime?> expectedDeliveryDate =
+      GeneratedColumn<DateTime?>('expected_delivery_date', aliasedName, true,
+          type: const IntType(), requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        deliveryOrderId,
+        clientId,
+        transportId,
+        itemList,
+        netTotal,
+        totalReceivedAmount,
+        totalSendAmount,
+        paymentStatus,
+        orderStatus,
+        createdBy,
+        createdAt,
+        lastUpdated,
+        expectedDeliveryDate
+      ];
+  @override
+  String get aliasedName => _alias ?? 'model_delivery_order';
+  @override
+  String get actualTableName => 'model_delivery_order';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<ModelDeliveryOrderData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('delivery_order_id')) {
+      context.handle(
+          _deliveryOrderIdMeta,
+          deliveryOrderId.isAcceptableOrUnknown(
+              data['delivery_order_id']!, _deliveryOrderIdMeta));
+    }
+    if (data.containsKey('client_id')) {
+      context.handle(_clientIdMeta,
+          clientId.isAcceptableOrUnknown(data['client_id']!, _clientIdMeta));
+    } else if (isInserting) {
+      context.missing(_clientIdMeta);
+    }
+    if (data.containsKey('transport_id')) {
+      context.handle(
+          _transportIdMeta,
+          transportId.isAcceptableOrUnknown(
+              data['transport_id']!, _transportIdMeta));
+    }
+    context.handle(_itemListMeta, const VerificationResult.success());
+    if (data.containsKey('net_total')) {
+      context.handle(_netTotalMeta,
+          netTotal.isAcceptableOrUnknown(data['net_total']!, _netTotalMeta));
+    } else if (isInserting) {
+      context.missing(_netTotalMeta);
+    }
+    if (data.containsKey('total_received_amount')) {
+      context.handle(
+          _totalReceivedAmountMeta,
+          totalReceivedAmount.isAcceptableOrUnknown(
+              data['total_received_amount']!, _totalReceivedAmountMeta));
+    }
+    if (data.containsKey('total_send_amount')) {
+      context.handle(
+          _totalSendAmountMeta,
+          totalSendAmount.isAcceptableOrUnknown(
+              data['total_send_amount']!, _totalSendAmountMeta));
+    }
+    if (data.containsKey('payment_status')) {
+      context.handle(
+          _paymentStatusMeta,
+          paymentStatus.isAcceptableOrUnknown(
+              data['payment_status']!, _paymentStatusMeta));
+    }
+    if (data.containsKey('order_status')) {
+      context.handle(
+          _orderStatusMeta,
+          orderStatus.isAcceptableOrUnknown(
+              data['order_status']!, _orderStatusMeta));
+    } else if (isInserting) {
+      context.missing(_orderStatusMeta);
+    }
+    if (data.containsKey('created_by')) {
+      context.handle(_createdByMeta,
+          createdBy.isAcceptableOrUnknown(data['created_by']!, _createdByMeta));
+    } else if (isInserting) {
+      context.missing(_createdByMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    if (data.containsKey('last_updated')) {
+      context.handle(
+          _lastUpdatedMeta,
+          lastUpdated.isAcceptableOrUnknown(
+              data['last_updated']!, _lastUpdatedMeta));
+    }
+    if (data.containsKey('expected_delivery_date')) {
+      context.handle(
+          _expectedDeliveryDateMeta,
+          expectedDeliveryDate.isAcceptableOrUnknown(
+              data['expected_delivery_date']!, _expectedDeliveryDateMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {deliveryOrderId};
+  @override
+  ModelDeliveryOrderData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return ModelDeliveryOrderData.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $ModelDeliveryOrderTable createAlias(String alias) {
+    return $ModelDeliveryOrderTable(attachedDatabase, alias);
+  }
+
+  static TypeConverter<ItemList, String> $converter0 =
+      const ItemListConverter();
+}
+
 class ModelReturnOrderData extends DataClass
     implements Insertable<ModelReturnOrderData> {
   final int returnOrderId;
   final int orderId;
+  final int? transportId;
+  final int clientId;
   final String returnStatus;
-  final String paymentStatus;
-  final double dueAmount;
+  final double totalReceivedAmount;
+  final double totalSendAmount;
+  final double netRefund;
+  final String refundStatus;
   final String returnedBy;
-  final DateTime startedAt;
+  final String returnReason;
   final DateTime lastUpdated;
-  final DateTime completedAt;
   final DateTime createdAt;
   ModelReturnOrderData(
       {required this.returnOrderId,
       required this.orderId,
+      this.transportId,
+      required this.clientId,
       required this.returnStatus,
-      required this.paymentStatus,
-      required this.dueAmount,
+      required this.totalReceivedAmount,
+      required this.totalSendAmount,
+      required this.netRefund,
+      required this.refundStatus,
       required this.returnedBy,
-      required this.startedAt,
+      required this.returnReason,
       required this.lastUpdated,
-      required this.completedAt,
       required this.createdAt});
   factory ModelReturnOrderData.fromData(Map<String, dynamic> data,
       {String? prefix}) {
@@ -2608,20 +2773,26 @@ class ModelReturnOrderData extends DataClass
           .mapFromDatabaseResponse(data['${effectivePrefix}return_order_id'])!,
       orderId: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}order_id'])!,
+      transportId: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}transport_id']),
+      clientId: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}client_id'])!,
       returnStatus: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}return_status'])!,
-      paymentStatus: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}payment_status'])!,
-      dueAmount: const RealType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}due_amount'])!,
+      totalReceivedAmount: const RealType().mapFromDatabaseResponse(
+          data['${effectivePrefix}total_received_amount'])!,
+      totalSendAmount: const RealType().mapFromDatabaseResponse(
+          data['${effectivePrefix}total_send_amount'])!,
+      netRefund: const RealType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}net_refund'])!,
+      refundStatus: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}refund_status'])!,
       returnedBy: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}returned_by'])!,
-      startedAt: const DateTimeType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}started_at'])!,
+      returnReason: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}return_reason'])!,
       lastUpdated: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}last_updated'])!,
-      completedAt: const DateTimeType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}completed_at'])!,
       createdAt: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}created_at'])!,
     );
@@ -2631,13 +2802,18 @@ class ModelReturnOrderData extends DataClass
     final map = <String, Expression>{};
     map['return_order_id'] = Variable<int>(returnOrderId);
     map['order_id'] = Variable<int>(orderId);
+    if (!nullToAbsent || transportId != null) {
+      map['transport_id'] = Variable<int?>(transportId);
+    }
+    map['client_id'] = Variable<int>(clientId);
     map['return_status'] = Variable<String>(returnStatus);
-    map['payment_status'] = Variable<String>(paymentStatus);
-    map['due_amount'] = Variable<double>(dueAmount);
+    map['total_received_amount'] = Variable<double>(totalReceivedAmount);
+    map['total_send_amount'] = Variable<double>(totalSendAmount);
+    map['net_refund'] = Variable<double>(netRefund);
+    map['refund_status'] = Variable<String>(refundStatus);
     map['returned_by'] = Variable<String>(returnedBy);
-    map['started_at'] = Variable<DateTime>(startedAt);
+    map['return_reason'] = Variable<String>(returnReason);
     map['last_updated'] = Variable<DateTime>(lastUpdated);
-    map['completed_at'] = Variable<DateTime>(completedAt);
     map['created_at'] = Variable<DateTime>(createdAt);
     return map;
   }
@@ -2646,13 +2822,18 @@ class ModelReturnOrderData extends DataClass
     return ModelReturnOrderCompanion(
       returnOrderId: Value(returnOrderId),
       orderId: Value(orderId),
+      transportId: transportId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(transportId),
+      clientId: Value(clientId),
       returnStatus: Value(returnStatus),
-      paymentStatus: Value(paymentStatus),
-      dueAmount: Value(dueAmount),
+      totalReceivedAmount: Value(totalReceivedAmount),
+      totalSendAmount: Value(totalSendAmount),
+      netRefund: Value(netRefund),
+      refundStatus: Value(refundStatus),
       returnedBy: Value(returnedBy),
-      startedAt: Value(startedAt),
+      returnReason: Value(returnReason),
       lastUpdated: Value(lastUpdated),
-      completedAt: Value(completedAt),
       createdAt: Value(createdAt),
     );
   }
@@ -2663,13 +2844,17 @@ class ModelReturnOrderData extends DataClass
     return ModelReturnOrderData(
       returnOrderId: serializer.fromJson<int>(json['returnOrderId']),
       orderId: serializer.fromJson<int>(json['orderId']),
+      transportId: serializer.fromJson<int?>(json['transportId']),
+      clientId: serializer.fromJson<int>(json['clientId']),
       returnStatus: serializer.fromJson<String>(json['returnStatus']),
-      paymentStatus: serializer.fromJson<String>(json['paymentStatus']),
-      dueAmount: serializer.fromJson<double>(json['dueAmount']),
+      totalReceivedAmount:
+          serializer.fromJson<double>(json['totalReceivedAmount']),
+      totalSendAmount: serializer.fromJson<double>(json['totalSendAmount']),
+      netRefund: serializer.fromJson<double>(json['netRefund']),
+      refundStatus: serializer.fromJson<String>(json['refundStatus']),
       returnedBy: serializer.fromJson<String>(json['returnedBy']),
-      startedAt: serializer.fromJson<DateTime>(json['startedAt']),
+      returnReason: serializer.fromJson<String>(json['returnReason']),
       lastUpdated: serializer.fromJson<DateTime>(json['lastUpdated']),
-      completedAt: serializer.fromJson<DateTime>(json['completedAt']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
@@ -2679,13 +2864,16 @@ class ModelReturnOrderData extends DataClass
     return <String, dynamic>{
       'returnOrderId': serializer.toJson<int>(returnOrderId),
       'orderId': serializer.toJson<int>(orderId),
+      'transportId': serializer.toJson<int?>(transportId),
+      'clientId': serializer.toJson<int>(clientId),
       'returnStatus': serializer.toJson<String>(returnStatus),
-      'paymentStatus': serializer.toJson<String>(paymentStatus),
-      'dueAmount': serializer.toJson<double>(dueAmount),
+      'totalReceivedAmount': serializer.toJson<double>(totalReceivedAmount),
+      'totalSendAmount': serializer.toJson<double>(totalSendAmount),
+      'netRefund': serializer.toJson<double>(netRefund),
+      'refundStatus': serializer.toJson<String>(refundStatus),
       'returnedBy': serializer.toJson<String>(returnedBy),
-      'startedAt': serializer.toJson<DateTime>(startedAt),
+      'returnReason': serializer.toJson<String>(returnReason),
       'lastUpdated': serializer.toJson<DateTime>(lastUpdated),
-      'completedAt': serializer.toJson<DateTime>(completedAt),
       'createdAt': serializer.toJson<DateTime>(createdAt),
     };
   }
@@ -2693,24 +2881,30 @@ class ModelReturnOrderData extends DataClass
   ModelReturnOrderData copyWith(
           {int? returnOrderId,
           int? orderId,
+          int? transportId,
+          int? clientId,
           String? returnStatus,
-          String? paymentStatus,
-          double? dueAmount,
+          double? totalReceivedAmount,
+          double? totalSendAmount,
+          double? netRefund,
+          String? refundStatus,
           String? returnedBy,
-          DateTime? startedAt,
+          String? returnReason,
           DateTime? lastUpdated,
-          DateTime? completedAt,
           DateTime? createdAt}) =>
       ModelReturnOrderData(
         returnOrderId: returnOrderId ?? this.returnOrderId,
         orderId: orderId ?? this.orderId,
+        transportId: transportId ?? this.transportId,
+        clientId: clientId ?? this.clientId,
         returnStatus: returnStatus ?? this.returnStatus,
-        paymentStatus: paymentStatus ?? this.paymentStatus,
-        dueAmount: dueAmount ?? this.dueAmount,
+        totalReceivedAmount: totalReceivedAmount ?? this.totalReceivedAmount,
+        totalSendAmount: totalSendAmount ?? this.totalSendAmount,
+        netRefund: netRefund ?? this.netRefund,
+        refundStatus: refundStatus ?? this.refundStatus,
         returnedBy: returnedBy ?? this.returnedBy,
-        startedAt: startedAt ?? this.startedAt,
+        returnReason: returnReason ?? this.returnReason,
         lastUpdated: lastUpdated ?? this.lastUpdated,
-        completedAt: completedAt ?? this.completedAt,
         createdAt: createdAt ?? this.createdAt,
       );
   @override
@@ -2718,13 +2912,16 @@ class ModelReturnOrderData extends DataClass
     return (StringBuffer('ModelReturnOrderData(')
           ..write('returnOrderId: $returnOrderId, ')
           ..write('orderId: $orderId, ')
+          ..write('transportId: $transportId, ')
+          ..write('clientId: $clientId, ')
           ..write('returnStatus: $returnStatus, ')
-          ..write('paymentStatus: $paymentStatus, ')
-          ..write('dueAmount: $dueAmount, ')
+          ..write('totalReceivedAmount: $totalReceivedAmount, ')
+          ..write('totalSendAmount: $totalSendAmount, ')
+          ..write('netRefund: $netRefund, ')
+          ..write('refundStatus: $refundStatus, ')
           ..write('returnedBy: $returnedBy, ')
-          ..write('startedAt: $startedAt, ')
+          ..write('returnReason: $returnReason, ')
           ..write('lastUpdated: $lastUpdated, ')
-          ..write('completedAt: $completedAt, ')
           ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
@@ -2734,13 +2931,16 @@ class ModelReturnOrderData extends DataClass
   int get hashCode => Object.hash(
       returnOrderId,
       orderId,
+      transportId,
+      clientId,
       returnStatus,
-      paymentStatus,
-      dueAmount,
+      totalReceivedAmount,
+      totalSendAmount,
+      netRefund,
+      refundStatus,
       returnedBy,
-      startedAt,
+      returnReason,
       lastUpdated,
-      completedAt,
       createdAt);
   @override
   bool operator ==(Object other) =>
@@ -2748,78 +2948,96 @@ class ModelReturnOrderData extends DataClass
       (other is ModelReturnOrderData &&
           other.returnOrderId == this.returnOrderId &&
           other.orderId == this.orderId &&
+          other.transportId == this.transportId &&
+          other.clientId == this.clientId &&
           other.returnStatus == this.returnStatus &&
-          other.paymentStatus == this.paymentStatus &&
-          other.dueAmount == this.dueAmount &&
+          other.totalReceivedAmount == this.totalReceivedAmount &&
+          other.totalSendAmount == this.totalSendAmount &&
+          other.netRefund == this.netRefund &&
+          other.refundStatus == this.refundStatus &&
           other.returnedBy == this.returnedBy &&
-          other.startedAt == this.startedAt &&
+          other.returnReason == this.returnReason &&
           other.lastUpdated == this.lastUpdated &&
-          other.completedAt == this.completedAt &&
           other.createdAt == this.createdAt);
 }
 
 class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
   final Value<int> returnOrderId;
   final Value<int> orderId;
+  final Value<int?> transportId;
+  final Value<int> clientId;
   final Value<String> returnStatus;
-  final Value<String> paymentStatus;
-  final Value<double> dueAmount;
+  final Value<double> totalReceivedAmount;
+  final Value<double> totalSendAmount;
+  final Value<double> netRefund;
+  final Value<String> refundStatus;
   final Value<String> returnedBy;
-  final Value<DateTime> startedAt;
+  final Value<String> returnReason;
   final Value<DateTime> lastUpdated;
-  final Value<DateTime> completedAt;
   final Value<DateTime> createdAt;
   const ModelReturnOrderCompanion({
     this.returnOrderId = const Value.absent(),
     this.orderId = const Value.absent(),
+    this.transportId = const Value.absent(),
+    this.clientId = const Value.absent(),
     this.returnStatus = const Value.absent(),
-    this.paymentStatus = const Value.absent(),
-    this.dueAmount = const Value.absent(),
+    this.totalReceivedAmount = const Value.absent(),
+    this.totalSendAmount = const Value.absent(),
+    this.netRefund = const Value.absent(),
+    this.refundStatus = const Value.absent(),
     this.returnedBy = const Value.absent(),
-    this.startedAt = const Value.absent(),
+    this.returnReason = const Value.absent(),
     this.lastUpdated = const Value.absent(),
-    this.completedAt = const Value.absent(),
     this.createdAt = const Value.absent(),
   });
   ModelReturnOrderCompanion.insert({
     this.returnOrderId = const Value.absent(),
     required int orderId,
+    this.transportId = const Value.absent(),
+    required int clientId,
     required String returnStatus,
-    required String paymentStatus,
-    required double dueAmount,
+    this.totalReceivedAmount = const Value.absent(),
+    this.totalSendAmount = const Value.absent(),
+    this.netRefund = const Value.absent(),
+    this.refundStatus = const Value.absent(),
     required String returnedBy,
-    this.startedAt = const Value.absent(),
+    required String returnReason,
     this.lastUpdated = const Value.absent(),
-    required DateTime completedAt,
     this.createdAt = const Value.absent(),
   })  : orderId = Value(orderId),
+        clientId = Value(clientId),
         returnStatus = Value(returnStatus),
-        paymentStatus = Value(paymentStatus),
-        dueAmount = Value(dueAmount),
         returnedBy = Value(returnedBy),
-        completedAt = Value(completedAt);
+        returnReason = Value(returnReason);
   static Insertable<ModelReturnOrderData> custom({
     Expression<int>? returnOrderId,
     Expression<int>? orderId,
+    Expression<int?>? transportId,
+    Expression<int>? clientId,
     Expression<String>? returnStatus,
-    Expression<String>? paymentStatus,
-    Expression<double>? dueAmount,
+    Expression<double>? totalReceivedAmount,
+    Expression<double>? totalSendAmount,
+    Expression<double>? netRefund,
+    Expression<String>? refundStatus,
     Expression<String>? returnedBy,
-    Expression<DateTime>? startedAt,
+    Expression<String>? returnReason,
     Expression<DateTime>? lastUpdated,
-    Expression<DateTime>? completedAt,
     Expression<DateTime>? createdAt,
   }) {
     return RawValuesInsertable({
       if (returnOrderId != null) 'return_order_id': returnOrderId,
       if (orderId != null) 'order_id': orderId,
+      if (transportId != null) 'transport_id': transportId,
+      if (clientId != null) 'client_id': clientId,
       if (returnStatus != null) 'return_status': returnStatus,
-      if (paymentStatus != null) 'payment_status': paymentStatus,
-      if (dueAmount != null) 'due_amount': dueAmount,
+      if (totalReceivedAmount != null)
+        'total_received_amount': totalReceivedAmount,
+      if (totalSendAmount != null) 'total_send_amount': totalSendAmount,
+      if (netRefund != null) 'net_refund': netRefund,
+      if (refundStatus != null) 'refund_status': refundStatus,
       if (returnedBy != null) 'returned_by': returnedBy,
-      if (startedAt != null) 'started_at': startedAt,
+      if (returnReason != null) 'return_reason': returnReason,
       if (lastUpdated != null) 'last_updated': lastUpdated,
-      if (completedAt != null) 'completed_at': completedAt,
       if (createdAt != null) 'created_at': createdAt,
     });
   }
@@ -2827,24 +3045,30 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
   ModelReturnOrderCompanion copyWith(
       {Value<int>? returnOrderId,
       Value<int>? orderId,
+      Value<int?>? transportId,
+      Value<int>? clientId,
       Value<String>? returnStatus,
-      Value<String>? paymentStatus,
-      Value<double>? dueAmount,
+      Value<double>? totalReceivedAmount,
+      Value<double>? totalSendAmount,
+      Value<double>? netRefund,
+      Value<String>? refundStatus,
       Value<String>? returnedBy,
-      Value<DateTime>? startedAt,
+      Value<String>? returnReason,
       Value<DateTime>? lastUpdated,
-      Value<DateTime>? completedAt,
       Value<DateTime>? createdAt}) {
     return ModelReturnOrderCompanion(
       returnOrderId: returnOrderId ?? this.returnOrderId,
       orderId: orderId ?? this.orderId,
+      transportId: transportId ?? this.transportId,
+      clientId: clientId ?? this.clientId,
       returnStatus: returnStatus ?? this.returnStatus,
-      paymentStatus: paymentStatus ?? this.paymentStatus,
-      dueAmount: dueAmount ?? this.dueAmount,
+      totalReceivedAmount: totalReceivedAmount ?? this.totalReceivedAmount,
+      totalSendAmount: totalSendAmount ?? this.totalSendAmount,
+      netRefund: netRefund ?? this.netRefund,
+      refundStatus: refundStatus ?? this.refundStatus,
       returnedBy: returnedBy ?? this.returnedBy,
-      startedAt: startedAt ?? this.startedAt,
+      returnReason: returnReason ?? this.returnReason,
       lastUpdated: lastUpdated ?? this.lastUpdated,
-      completedAt: completedAt ?? this.completedAt,
       createdAt: createdAt ?? this.createdAt,
     );
   }
@@ -2858,26 +3082,36 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
     if (orderId.present) {
       map['order_id'] = Variable<int>(orderId.value);
     }
+    if (transportId.present) {
+      map['transport_id'] = Variable<int?>(transportId.value);
+    }
+    if (clientId.present) {
+      map['client_id'] = Variable<int>(clientId.value);
+    }
     if (returnStatus.present) {
       map['return_status'] = Variable<String>(returnStatus.value);
     }
-    if (paymentStatus.present) {
-      map['payment_status'] = Variable<String>(paymentStatus.value);
+    if (totalReceivedAmount.present) {
+      map['total_received_amount'] =
+          Variable<double>(totalReceivedAmount.value);
     }
-    if (dueAmount.present) {
-      map['due_amount'] = Variable<double>(dueAmount.value);
+    if (totalSendAmount.present) {
+      map['total_send_amount'] = Variable<double>(totalSendAmount.value);
+    }
+    if (netRefund.present) {
+      map['net_refund'] = Variable<double>(netRefund.value);
+    }
+    if (refundStatus.present) {
+      map['refund_status'] = Variable<String>(refundStatus.value);
     }
     if (returnedBy.present) {
       map['returned_by'] = Variable<String>(returnedBy.value);
     }
-    if (startedAt.present) {
-      map['started_at'] = Variable<DateTime>(startedAt.value);
+    if (returnReason.present) {
+      map['return_reason'] = Variable<String>(returnReason.value);
     }
     if (lastUpdated.present) {
       map['last_updated'] = Variable<DateTime>(lastUpdated.value);
-    }
-    if (completedAt.present) {
-      map['completed_at'] = Variable<DateTime>(completedAt.value);
     }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
@@ -2890,13 +3124,16 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
     return (StringBuffer('ModelReturnOrderCompanion(')
           ..write('returnOrderId: $returnOrderId, ')
           ..write('orderId: $orderId, ')
+          ..write('transportId: $transportId, ')
+          ..write('clientId: $clientId, ')
           ..write('returnStatus: $returnStatus, ')
-          ..write('paymentStatus: $paymentStatus, ')
-          ..write('dueAmount: $dueAmount, ')
+          ..write('totalReceivedAmount: $totalReceivedAmount, ')
+          ..write('totalSendAmount: $totalSendAmount, ')
+          ..write('netRefund: $netRefund, ')
+          ..write('refundStatus: $refundStatus, ')
           ..write('returnedBy: $returnedBy, ')
-          ..write('startedAt: $startedAt, ')
+          ..write('returnReason: $returnReason, ')
           ..write('lastUpdated: $lastUpdated, ')
-          ..write('completedAt: $completedAt, ')
           ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
@@ -2925,6 +3162,21 @@ class $ModelReturnOrderTable extends ModelReturnOrder
       requiredDuringInsert: true,
       defaultConstraints:
           'REFERENCES model_delivery_order (delivery_order_id)');
+  final VerificationMeta _transportIdMeta =
+      const VerificationMeta('transportId');
+  @override
+  late final GeneratedColumn<int?> transportId = GeneratedColumn<int?>(
+      'transport_id', aliasedName, true,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'REFERENCES model_transport (transport_id)');
+  final VerificationMeta _clientIdMeta = const VerificationMeta('clientId');
+  @override
+  late final GeneratedColumn<int?> clientId = GeneratedColumn<int?>(
+      'client_id', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: true,
+      defaultConstraints: 'REFERENCES model_client (client_id)');
   final VerificationMeta _returnStatusMeta =
       const VerificationMeta('returnStatus');
   @override
@@ -2934,20 +3186,37 @@ class $ModelReturnOrderTable extends ModelReturnOrder
           GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 20),
       type: const StringType(),
       requiredDuringInsert: true);
-  final VerificationMeta _paymentStatusMeta =
-      const VerificationMeta('paymentStatus');
+  final VerificationMeta _totalReceivedAmountMeta =
+      const VerificationMeta('totalReceivedAmount');
   @override
-  late final GeneratedColumn<String?> paymentStatus = GeneratedColumn<String?>(
-      'payment_status', aliasedName, false,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 20),
+  late final GeneratedColumn<double?> totalReceivedAmount =
+      GeneratedColumn<double?>('total_received_amount', aliasedName, false,
+          type: const RealType(),
+          requiredDuringInsert: false,
+          defaultValue: const Constant(0.0));
+  final VerificationMeta _totalSendAmountMeta =
+      const VerificationMeta('totalSendAmount');
+  @override
+  late final GeneratedColumn<double?> totalSendAmount =
+      GeneratedColumn<double?>('total_send_amount', aliasedName, false,
+          type: const RealType(),
+          requiredDuringInsert: false,
+          defaultValue: const Constant(0.0));
+  final VerificationMeta _netRefundMeta = const VerificationMeta('netRefund');
+  @override
+  late final GeneratedColumn<double?> netRefund = GeneratedColumn<double?>(
+      'net_refund', aliasedName, false,
+      type: const RealType(),
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0.0));
+  final VerificationMeta _refundStatusMeta =
+      const VerificationMeta('refundStatus');
+  @override
+  late final GeneratedColumn<String?> refundStatus = GeneratedColumn<String?>(
+      'refund_status', aliasedName, false,
       type: const StringType(),
-      requiredDuringInsert: true);
-  final VerificationMeta _dueAmountMeta = const VerificationMeta('dueAmount');
-  @override
-  late final GeneratedColumn<double?> dueAmount = GeneratedColumn<double?>(
-      'due_amount', aliasedName, false,
-      type: const RealType(), requiredDuringInsert: true);
+      requiredDuringInsert: false,
+      defaultValue: const Constant('unpaid'));
   final VerificationMeta _returnedByMeta = const VerificationMeta('returnedBy');
   @override
   late final GeneratedColumn<String?> returnedBy = GeneratedColumn<String?>(
@@ -2956,13 +3225,15 @@ class $ModelReturnOrderTable extends ModelReturnOrder
           GeneratedColumn.checkTextLength(minTextLength: 3, maxTextLength: 20),
       type: const StringType(),
       requiredDuringInsert: true);
-  final VerificationMeta _startedAtMeta = const VerificationMeta('startedAt');
+  final VerificationMeta _returnReasonMeta =
+      const VerificationMeta('returnReason');
   @override
-  late final GeneratedColumn<DateTime?> startedAt = GeneratedColumn<DateTime?>(
-      'started_at', aliasedName, false,
-      type: const IntType(),
-      requiredDuringInsert: false,
-      defaultValue: currentDateAndTime);
+  late final GeneratedColumn<String?> returnReason = GeneratedColumn<String?>(
+      'return_reason', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 3, maxTextLength: 20),
+      type: const StringType(),
+      requiredDuringInsert: true);
   final VerificationMeta _lastUpdatedMeta =
       const VerificationMeta('lastUpdated');
   @override
@@ -2971,12 +3242,6 @@ class $ModelReturnOrderTable extends ModelReturnOrder
           type: const IntType(),
           requiredDuringInsert: false,
           defaultValue: currentDateAndTime);
-  final VerificationMeta _completedAtMeta =
-      const VerificationMeta('completedAt');
-  @override
-  late final GeneratedColumn<DateTime?> completedAt =
-      GeneratedColumn<DateTime?>('completed_at', aliasedName, false,
-          type: const IntType(), requiredDuringInsert: true);
   final VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
   @override
   late final GeneratedColumn<DateTime?> createdAt = GeneratedColumn<DateTime?>(
@@ -2988,13 +3253,16 @@ class $ModelReturnOrderTable extends ModelReturnOrder
   List<GeneratedColumn> get $columns => [
         returnOrderId,
         orderId,
+        transportId,
+        clientId,
         returnStatus,
-        paymentStatus,
-        dueAmount,
+        totalReceivedAmount,
+        totalSendAmount,
+        netRefund,
+        refundStatus,
         returnedBy,
-        startedAt,
+        returnReason,
         lastUpdated,
-        completedAt,
         createdAt
       ];
   @override
@@ -3019,6 +3287,18 @@ class $ModelReturnOrderTable extends ModelReturnOrder
     } else if (isInserting) {
       context.missing(_orderIdMeta);
     }
+    if (data.containsKey('transport_id')) {
+      context.handle(
+          _transportIdMeta,
+          transportId.isAcceptableOrUnknown(
+              data['transport_id']!, _transportIdMeta));
+    }
+    if (data.containsKey('client_id')) {
+      context.handle(_clientIdMeta,
+          clientId.isAcceptableOrUnknown(data['client_id']!, _clientIdMeta));
+    } else if (isInserting) {
+      context.missing(_clientIdMeta);
+    }
     if (data.containsKey('return_status')) {
       context.handle(
           _returnStatusMeta,
@@ -3027,19 +3307,27 @@ class $ModelReturnOrderTable extends ModelReturnOrder
     } else if (isInserting) {
       context.missing(_returnStatusMeta);
     }
-    if (data.containsKey('payment_status')) {
+    if (data.containsKey('total_received_amount')) {
       context.handle(
-          _paymentStatusMeta,
-          paymentStatus.isAcceptableOrUnknown(
-              data['payment_status']!, _paymentStatusMeta));
-    } else if (isInserting) {
-      context.missing(_paymentStatusMeta);
+          _totalReceivedAmountMeta,
+          totalReceivedAmount.isAcceptableOrUnknown(
+              data['total_received_amount']!, _totalReceivedAmountMeta));
     }
-    if (data.containsKey('due_amount')) {
-      context.handle(_dueAmountMeta,
-          dueAmount.isAcceptableOrUnknown(data['due_amount']!, _dueAmountMeta));
-    } else if (isInserting) {
-      context.missing(_dueAmountMeta);
+    if (data.containsKey('total_send_amount')) {
+      context.handle(
+          _totalSendAmountMeta,
+          totalSendAmount.isAcceptableOrUnknown(
+              data['total_send_amount']!, _totalSendAmountMeta));
+    }
+    if (data.containsKey('net_refund')) {
+      context.handle(_netRefundMeta,
+          netRefund.isAcceptableOrUnknown(data['net_refund']!, _netRefundMeta));
+    }
+    if (data.containsKey('refund_status')) {
+      context.handle(
+          _refundStatusMeta,
+          refundStatus.isAcceptableOrUnknown(
+              data['refund_status']!, _refundStatusMeta));
     }
     if (data.containsKey('returned_by')) {
       context.handle(
@@ -3049,23 +3337,19 @@ class $ModelReturnOrderTable extends ModelReturnOrder
     } else if (isInserting) {
       context.missing(_returnedByMeta);
     }
-    if (data.containsKey('started_at')) {
-      context.handle(_startedAtMeta,
-          startedAt.isAcceptableOrUnknown(data['started_at']!, _startedAtMeta));
+    if (data.containsKey('return_reason')) {
+      context.handle(
+          _returnReasonMeta,
+          returnReason.isAcceptableOrUnknown(
+              data['return_reason']!, _returnReasonMeta));
+    } else if (isInserting) {
+      context.missing(_returnReasonMeta);
     }
     if (data.containsKey('last_updated')) {
       context.handle(
           _lastUpdatedMeta,
           lastUpdated.isAcceptableOrUnknown(
               data['last_updated']!, _lastUpdatedMeta));
-    }
-    if (data.containsKey('completed_at')) {
-      context.handle(
-          _completedAtMeta,
-          completedAt.isAcceptableOrUnknown(
-              data['completed_at']!, _completedAtMeta));
-    } else if (isInserting) {
-      context.missing(_completedAtMeta);
     }
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
@@ -4108,18 +4392,246 @@ class $ModelSurveyTable extends ModelSurvey
   }
 }
 
+class ModelStatusGroupData extends DataClass
+    implements Insertable<ModelStatusGroupData> {
+  final int statusGroupId;
+  final String value;
+  final String groupName;
+  ModelStatusGroupData(
+      {required this.statusGroupId,
+      required this.value,
+      required this.groupName});
+  factory ModelStatusGroupData.fromData(Map<String, dynamic> data,
+      {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return ModelStatusGroupData(
+      statusGroupId: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}status_group_id'])!,
+      value: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}value'])!,
+      groupName: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}group_name'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['status_group_id'] = Variable<int>(statusGroupId);
+    map['value'] = Variable<String>(value);
+    map['group_name'] = Variable<String>(groupName);
+    return map;
+  }
+
+  ModelStatusGroupCompanion toCompanion(bool nullToAbsent) {
+    return ModelStatusGroupCompanion(
+      statusGroupId: Value(statusGroupId),
+      value: Value(value),
+      groupName: Value(groupName),
+    );
+  }
+
+  factory ModelStatusGroupData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ModelStatusGroupData(
+      statusGroupId: serializer.fromJson<int>(json['statusGroupId']),
+      value: serializer.fromJson<String>(json['value']),
+      groupName: serializer.fromJson<String>(json['groupName']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'statusGroupId': serializer.toJson<int>(statusGroupId),
+      'value': serializer.toJson<String>(value),
+      'groupName': serializer.toJson<String>(groupName),
+    };
+  }
+
+  ModelStatusGroupData copyWith(
+          {int? statusGroupId, String? value, String? groupName}) =>
+      ModelStatusGroupData(
+        statusGroupId: statusGroupId ?? this.statusGroupId,
+        value: value ?? this.value,
+        groupName: groupName ?? this.groupName,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('ModelStatusGroupData(')
+          ..write('statusGroupId: $statusGroupId, ')
+          ..write('value: $value, ')
+          ..write('groupName: $groupName')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(statusGroupId, value, groupName);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ModelStatusGroupData &&
+          other.statusGroupId == this.statusGroupId &&
+          other.value == this.value &&
+          other.groupName == this.groupName);
+}
+
+class ModelStatusGroupCompanion extends UpdateCompanion<ModelStatusGroupData> {
+  final Value<int> statusGroupId;
+  final Value<String> value;
+  final Value<String> groupName;
+  const ModelStatusGroupCompanion({
+    this.statusGroupId = const Value.absent(),
+    this.value = const Value.absent(),
+    this.groupName = const Value.absent(),
+  });
+  ModelStatusGroupCompanion.insert({
+    this.statusGroupId = const Value.absent(),
+    required String value,
+    required String groupName,
+  })  : value = Value(value),
+        groupName = Value(groupName);
+  static Insertable<ModelStatusGroupData> custom({
+    Expression<int>? statusGroupId,
+    Expression<String>? value,
+    Expression<String>? groupName,
+  }) {
+    return RawValuesInsertable({
+      if (statusGroupId != null) 'status_group_id': statusGroupId,
+      if (value != null) 'value': value,
+      if (groupName != null) 'group_name': groupName,
+    });
+  }
+
+  ModelStatusGroupCompanion copyWith(
+      {Value<int>? statusGroupId,
+      Value<String>? value,
+      Value<String>? groupName}) {
+    return ModelStatusGroupCompanion(
+      statusGroupId: statusGroupId ?? this.statusGroupId,
+      value: value ?? this.value,
+      groupName: groupName ?? this.groupName,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (statusGroupId.present) {
+      map['status_group_id'] = Variable<int>(statusGroupId.value);
+    }
+    if (value.present) {
+      map['value'] = Variable<String>(value.value);
+    }
+    if (groupName.present) {
+      map['group_name'] = Variable<String>(groupName.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ModelStatusGroupCompanion(')
+          ..write('statusGroupId: $statusGroupId, ')
+          ..write('value: $value, ')
+          ..write('groupName: $groupName')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ModelStatusGroupTable extends ModelStatusGroup
+    with TableInfo<$ModelStatusGroupTable, ModelStatusGroupData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ModelStatusGroupTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _statusGroupIdMeta =
+      const VerificationMeta('statusGroupId');
+  @override
+  late final GeneratedColumn<int?> statusGroupId = GeneratedColumn<int?>(
+      'status_group_id', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _valueMeta = const VerificationMeta('value');
+  @override
+  late final GeneratedColumn<String?> value = GeneratedColumn<String?>(
+      'value', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 20),
+      type: const StringType(),
+      requiredDuringInsert: true);
+  final VerificationMeta _groupNameMeta = const VerificationMeta('groupName');
+  @override
+  late final GeneratedColumn<String?> groupName = GeneratedColumn<String?>(
+      'group_name', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 20),
+      type: const StringType(),
+      requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [statusGroupId, value, groupName];
+  @override
+  String get aliasedName => _alias ?? 'model_status_group';
+  @override
+  String get actualTableName => 'model_status_group';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<ModelStatusGroupData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('status_group_id')) {
+      context.handle(
+          _statusGroupIdMeta,
+          statusGroupId.isAcceptableOrUnknown(
+              data['status_group_id']!, _statusGroupIdMeta));
+    }
+    if (data.containsKey('value')) {
+      context.handle(
+          _valueMeta, value.isAcceptableOrUnknown(data['value']!, _valueMeta));
+    } else if (isInserting) {
+      context.missing(_valueMeta);
+    }
+    if (data.containsKey('group_name')) {
+      context.handle(_groupNameMeta,
+          groupName.isAcceptableOrUnknown(data['group_name']!, _groupNameMeta));
+    } else if (isInserting) {
+      context.missing(_groupNameMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {statusGroupId};
+  @override
+  ModelStatusGroupData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return ModelStatusGroupData.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $ModelStatusGroupTable createAlias(String alias) {
+    return $ModelStatusGroupTable(attachedDatabase, alias);
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $ModelClientTable modelClient = $ModelClientTable(this);
   late final $ModelItemTable modelItem = $ModelItemTable(this);
   late final $ModelVehicleTable modelVehicle = $ModelVehicleTable(this);
+  late final $ModelTransportTable modelTransport = $ModelTransportTable(this);
   late final $ModelDeliveryOrderTable modelDeliveryOrder =
       $ModelDeliveryOrderTable(this);
-  late final $ModelTransportTable modelTransport = $ModelTransportTable(this);
   late final $ModelReturnOrderTable modelReturnOrder =
       $ModelReturnOrderTable(this);
   late final $ModelPaymentTable modelPayment = $ModelPaymentTable(this);
   late final $ModelSurveyTable modelSurvey = $ModelSurveyTable(this);
+  late final $ModelStatusGroupTable modelStatusGroup =
+      $ModelStatusGroupTable(this);
   late final ClientTableQueries clientTableQueries =
       ClientTableQueries(this as AppDatabase);
   late final ItemTableQueries itemTableQueries =
@@ -4136,6 +4648,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       PaymentTableQueries(this as AppDatabase);
   late final SurveyTableQueries surveyTableQueries =
       SurveyTableQueries(this as AppDatabase);
+  late final StatusGroupTableQueries statusGroupTableQueries =
+      StatusGroupTableQueries(this as AppDatabase);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
@@ -4143,10 +4657,11 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         modelClient,
         modelItem,
         modelVehicle,
-        modelDeliveryOrder,
         modelTransport,
+        modelDeliveryOrder,
         modelReturnOrder,
         modelPayment,
-        modelSurvey
+        modelSurvey,
+        modelStatusGroup
       ];
 }

@@ -15,6 +15,8 @@ class DeleteConfirmation extends StatelessWidget {
     required this.message,
     required this.textYes,
     required this.textNo,
+    this.colorYes,
+    this.colorNo,
   }) : super(key: key);
 
   final BuildContext context;
@@ -22,6 +24,8 @@ class DeleteConfirmation extends StatelessWidget {
   final String message;
   final String textYes;
   final String textNo;
+  final Color? colorYes;
+  final Color? colorNo;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +51,7 @@ class DeleteConfirmation extends StatelessWidget {
           fontWeight: FontWeight.w400,
           color: grey,
           fontFamily: 'Montserrat',
+          // overflow ellipsis
         ),
       ),
       actions: [
@@ -54,7 +59,7 @@ class DeleteConfirmation extends StatelessWidget {
           child: Text(
             textNo,
             style: of(context).textTheme.overline?.copyWith(
-                  color: skyBlue,
+                  color: colorNo ?? skyBlue,
                   fontWeight: FontWeight.bold,
                 ),
           ),
@@ -68,7 +73,7 @@ class DeleteConfirmation extends StatelessWidget {
           child: Text(
             textYes,
             style: of(context).textTheme.overline?.copyWith(
-                  color: red,
+                  color: colorYes ?? red,
                   fontWeight: FontWeight.bold,
             ),
           ),
@@ -78,5 +83,6 @@ class DeleteConfirmation extends StatelessWidget {
         ),
       ],
     );
+  
   }
 }

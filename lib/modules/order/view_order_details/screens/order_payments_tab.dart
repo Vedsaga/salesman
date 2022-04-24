@@ -189,8 +189,8 @@ class OrderPaymentsTab extends StatelessWidget {
                   children: [
                     const Spacer(),
                     CustomRoundButton(
-                      label: "add",
-                      svgPath: "add",
+                      label: "pay",
+                      svgPath: "inr",
                       onPressed: () {
                         Navigator.popAndPushNamed(
                             context, RouteNames.addPaymentDetails,

@@ -29,10 +29,12 @@ class _ViewClientDetailsState extends State<ViewClientDetails> {
   @override
   Widget build(BuildContext context) {
     return MobileLayout(
+      routeName: RouteNames.viewClientList,
       topAppBar: const InputTopAppBar(
         title: "client details",
         routeName: RouteNames.viewClientList,
       ),
+              bottomAppBarRequired: true,
       body: BlocListener<ViewClientDetailsBloc, ViewClientDetailsState>(
         listener: (context, state) {
           if (state is SuccessfullyDeactivateClientState) {

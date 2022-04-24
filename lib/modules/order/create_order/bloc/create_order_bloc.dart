@@ -1,5 +1,3 @@
-
-
 // Package imports:
 import 'package:bloc/bloc.dart';
 import 'package:drift/drift.dart';
@@ -122,6 +120,7 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
       state.copyWith(
         clientList: state.clientList,
         itemList: state.itemList,
+        selectedClient: event.selectedClient,
         clientId:
             clientId.valid ? clientId : ForeignKeyField.pure(event.clientId),
         clientName:
@@ -340,27 +339,16 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
         expectedDeliveryDate: Value(expectedDeliveryDate.value),
       );
       try {
-        final List<int> orderIdsThatWereUpdated = [];
-        for (final item in listOfItemsForOrder.value) {
-          final int id = await ItemTableQueries(appDatabaseInstance)
-              .updateAvailableQuantity(item.id, item.quantity);
-          orderIdsThatWereUpdated.add(id);
-        }
-        if (orderIdsThatWereUpdated.length !=
-            listOfItemsForOrder.value.length) {
-          emit(
-            state.copyWith(
-              status: FormzStatus.submissionFailure,
-            ),
-          );
+        final orderId =
+            await DeliveryOrderTableQueries(appDatabaseInstance).newOrder(
+          orderDetails,
+          listOfItemsForOrder.value,
+          state.selectedClient!,
+        );
+        if (orderId > 0) {
+          emit(OrderSuccessfullyCreatedState());
         } else {
-          final orderId =
-              await DeliveryOrderTableQueries(appDatabaseInstance).newOrder(
-            orderDetails,
-          );
-          if (orderId > 0) {
-            emit(OrderSuccessfullyCreatedState());
-          }
+          emit(ErrorWhileCreatingOrderState());
         }
       } catch (e) {
         emit(

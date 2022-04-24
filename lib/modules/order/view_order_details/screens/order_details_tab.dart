@@ -1,5 +1,3 @@
-
-
 // Flutter imports:
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +8,8 @@ import 'package:intl/intl.dart';
 
 // Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
+import 'package:salesman/config/routes/arguments_models/process_order_route_arguments.dart';
+import 'package:salesman/config/routes/route_name.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
 import 'package:salesman/core/components/custom_round_button.dart';
@@ -17,6 +17,7 @@ import 'package:salesman/core/components/delete_confirmation.dart';
 import 'package:salesman/core/components/details_card.dart';
 import 'package:salesman/core/components/item_info_card.dart';
 import 'package:salesman/core/components/normal_top_app_bar.dart';
+import 'package:salesman/core/components/snackbar_message.dart';
 import 'package:salesman/core/components/summary_card.dart';
 import 'package:salesman/modules/order/view_order_details/bloc/view_order_details_bloc.dart';
 
@@ -120,21 +121,21 @@ class _ViewOrderDetailTabState extends State<OrderDetailsTab> {
                                     state.orderDetails.orderStatus == "pending"
                                         ? skyBlueGradient
                                         : state.orderDetails.orderStatus ==
-                                                "processing"
-                                            ? yellowGradient
+                                                "process"
+                                            ? orangeGradient
                                             : state.orderDetails.orderStatus ==
-                                                    "out-for-delivery"
-                                                ? orangeGradient
+                                                    "dispatch"
+                                                ? yellowGradient
                                                 : state.orderDetails
                                                                 .orderStatus ==
-                                                            "cancelled" ||
+                                                            "cancel" ||
                                                         state.orderDetails
                                                                 .orderStatus ==
-                                                            "rejected"
+                                                            "reject"
                                                     ? redGradient
                                                     : state.orderDetails
                                                                 .orderStatus ==
-                                                            "delivered"
+                                                            "deliver"
                                                         ? greenGradient
                                                         : darkGradient,
                                 firstChild: Flexible(
@@ -143,7 +144,13 @@ class _ViewOrderDetailTabState extends State<OrderDetailsTab> {
                                     style: of(context)
                                         .textTheme
                                         .overline
-                                        ?.copyWith(color: light),
+                                        ?.copyWith(
+                                          color:
+                                              state.orderDetails.orderStatus ==
+                                                      "dispatch"
+                                                  ? secondaryDark
+                                                  : light,
+                                        ),
                                   ),
                                 ),
                                 secondChild: const Flexible(
@@ -175,7 +182,13 @@ class _ViewOrderDetailTabState extends State<OrderDetailsTab> {
                                     style: of(context)
                                         .textTheme
                                         .overline
-                                        ?.copyWith(color: light),
+                                        ?.copyWith(
+                                          color: state.orderDetails
+                                                      .paymentStatus ==
+                                                  "partial"
+                                              ? dark
+                                              : light,
+                                        ),
                                   ),
                                 ),
                                 secondChild:
@@ -197,7 +210,6 @@ class _ViewOrderDetailTabState extends State<OrderDetailsTab> {
                           ),
                         ),
                         SizedBox(height: designValues(context).padding21),
-
                         SummaryCard(
                           summaryValuesList: null,
                           showCount: true,
@@ -236,8 +248,7 @@ class _ViewOrderDetailTabState extends State<OrderDetailsTab> {
                                 totalCost: _itemList[index]
                                     .totalWorth
                                     .toStringAsFixed(2),
-                                totalQuantity:
-                                    _itemList[index]
+                                totalQuantity: _itemList[index]
                                     .quantity
                                     .toStringAsFixed(2),
                                 itemUnit: _itemList[index].unit,
@@ -310,7 +321,6 @@ class _ViewOrderDetailTabState extends State<OrderDetailsTab> {
                             ),
                           ],
                         ),
-
                       ],
                     ),
                   ),
@@ -318,20 +328,21 @@ class _ViewOrderDetailTabState extends State<OrderDetailsTab> {
               ),
               if (state.orderDetails.orderStatus == "pending" ||
                   state.orderDetails.orderStatus == "delayed")
-              Flex(
-                direction: Axis.horizontal,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(
-                      bottom: designValues(context).padding21,
-                      left: designValues(context).padding21,
-                    ),
-                    child: CustomRoundButton(
-                      label: "cancel",
-                      svgPath: "remove_cross",
-                      gradient: lightGradient,
-                      svgColor: red,
+                Flex(
+                  direction: Axis.horizontal,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(
+                        bottom: designValues(context).padding13,
+                        left: designValues(context).padding21,
+                        top: designValues(context).padding13,
+                      ),
+                      child: CustomRoundButton(
+                        label: "cancel",
+                        svgPath: "remove_cross",
+                        gradient: lightGradient,
+                        svgColor: red,
                         onPressed: () async {
                           final confirmation = await showCupertinoDialog(
                             context: context,
@@ -346,28 +357,118 @@ class _ViewOrderDetailTabState extends State<OrderDetailsTab> {
                           if (mounted && confirmation == "cancel") {
                             BlocProvider.of<ViewOrderDetailsBloc>(context).add(
                               CancelOrderEvent(
-                                  orderDetails: state.orderDetails,),
+                                orderDetails: state.orderDetails,
+                                clientDetails: state.clientDetails,
+                              ),
                             );
                           }
                         },
+                      ),
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(
-                      bottom: designValues(context).padding21,
-                      right: designValues(context).padding21,
+                    Container(
+                      margin: EdgeInsets.only(
+                        bottom: designValues(context).padding13,
+                        right: designValues(context).padding21,
+                        top: designValues(context).padding13,
+                      ),
+                      child: CustomRoundButton(
+                        label: "Process",
+                        svgPath: "process",
+                        svgHeight: 21,
+                        onPressed: () {
+                          Navigator.pushNamed(
+                            context,
+                            RouteNames.processOrder,
+                            arguments: ProcessOrderRouteArguments(
+                              deliveryOrder: state.orderDetails,
+                              returnOrder: null,
+                            ),
+                          );
+                        },
+                        gradient: orangeGradient,
+                        svgColor: light,
+                      ),
                     ),
-                    child: CustomRoundButton(
-                      label: "Process",
-                      svgPath: "process",
-                      svgHeight: 21,
-                      onPressed: () {},
-                      gradient: yellowGradient,
-                      svgColor: secondaryDark,
+                  ],
+                ),
+              if (state.orderDetails.orderStatus == "dispatch")
+                Flex(
+                  direction: Axis.horizontal,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(
+                        bottom: designValues(context).padding13,
+                        left: designValues(context).padding21,
+                        top: designValues(context).padding13,
+                      ),
+                      child: CustomRoundButton(
+                        label: "reject",
+                        svgPath: "rejected_order",
+                        gradient: redGradient,
+                        svgColor: light,
+                        onPressed: () async {
+                          final confirmation = await showCupertinoDialog(
+                            context: context,
+                            builder: DeleteConfirmation(
+                              context: context,
+                              textYes: "reject",
+                              textNo: "no",
+                              title: 'Reject this order?',
+                              message: 'you want to reject the order?',
+                            ).build,
+                          );
+                          if (mounted && confirmation == "reject") {
+                            context.read<ViewOrderDetailsBloc>().add(
+                                  RejectOrderEvent(
+                                    orderDetails: state.orderDetails,
+                                    clientDetails: state.clientDetails,
+                                    transportDetails: state.transportDetails!,
+                                  ),
+                                );
+                          }
+                        },
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                    Container(
+                      margin: EdgeInsets.only(
+                        bottom: designValues(context).padding13,
+                        right: designValues(context).padding21,
+                        top: designValues(context).padding13,
+                      ),
+                      child: CustomRoundButton(
+                        label: "Deliver",
+                        svgPath: "completed_order",
+                        svgColor: light,
+                        gradient: greenGradient,
+                        svgHeight: designValues(context).padding21,
+                        onPressed: () async {
+                          final confirmation = await showCupertinoDialog(
+                            context: context,
+                            builder: DeleteConfirmation(
+                              context: context,
+                              textYes: "deliver",
+                              textNo: "no",
+                              colorNo: secondaryDark,
+                              colorYes: green,
+                              title: 'Deliver this order?',
+                              message: 'you want to deliver the order?',
+                            ).build,
+                          );
+                          if (mounted && confirmation == "deliver") {
+                            context.read<ViewOrderDetailsBloc>().add(
+                                  DeliverOrderEvent(
+                                    orderDetails: state.orderDetails,
+                                    clientDetails: state.clientDetails,
+                                    transportDetails: state.transportDetails!,
+                                  ),
+                                );
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
             ],
           );
         }

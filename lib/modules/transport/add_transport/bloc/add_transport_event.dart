@@ -7,13 +7,18 @@ abstract class AddTransportEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class FetchVehicleEvent extends AddTransportEvent {}
 
 class TransportFieldsChange extends AddTransportEvent {
+
   const TransportFieldsChange({
     required this.scheduleDate,
+    required this.selectedVehicle,
   });
 
   final DateTime scheduleDate;
+  final ModelVehicleData? selectedVehicle;
+
   @override
   List<Object> get props => [
         scheduleDate,

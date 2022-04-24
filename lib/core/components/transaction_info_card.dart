@@ -42,6 +42,10 @@ class TransactionListCard extends StatelessWidget {
           RotatedBox(
             quarterTurns: 3,
             child: Container(
+              constraints: BoxConstraints(
+                minWidth: designValues(context).boxHeightConstrain,
+                maxWidth: designValues(context).boxHeightConstrain,
+              ),
               decoration: BoxDecoration(
                 gradient: statusColor,
                 borderRadius: BorderRadius.only(
@@ -51,18 +55,18 @@ class TransactionListCard extends StatelessWidget {
                 ),
               ),
               child: Padding(
-                padding: EdgeInsets.only(
-                  left: designValues(context).padding13,
-                  right: designValues(context).padding13,
-                  top: 3,
-                  bottom: 4,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 4,
+                  vertical: 4,
                 ),
-                child: Text(
-                  status,
-                  style: of(context)
-                      .textTheme
-                      .caption
-                      ?.copyWith(color: statusTextColor),
+                child: Center(
+                  child: Text(
+                    status,
+                    style: of(context)
+                        .textTheme
+                        .caption
+                        ?.copyWith(color: statusTextColor),
+                  ),
                 ),
               ),
             ),

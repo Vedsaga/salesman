@@ -8,14 +8,21 @@ part of 'order_map.dart';
 
 OrderMap _$OrderMapFromJson(Map<String, dynamic> json) => OrderMap(
       id: json['id'] as int,
-      status: json['status'] as String,
-      clientName: json['clientName'] as String,
+      name: json['name'] as String,
       total: (json['total'] as num).toDouble(),
+      status: $enumDecodeNullable(_$OrderStatusEnumMap, json['status']) ??
+          OrderStatus.pending,
     );
 
 Map<String, dynamic> _$OrderMapToJson(OrderMap instance) => <String, dynamic>{
       'id': instance.id,
-      'status': instance.status,
-      'clientName': instance.clientName,
+      'name': instance.name,
+      'status': _$OrderStatusEnumMap[instance.status],
       'total': instance.total,
     };
+
+const _$OrderStatusEnumMap = {
+  OrderStatus.deliver: 'deliver',
+  OrderStatus.reject: 'reject',
+  OrderStatus.pending: 'pending',
+};

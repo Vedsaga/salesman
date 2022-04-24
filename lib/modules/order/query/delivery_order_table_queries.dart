@@ -1,23 +1,54 @@
-
-
 // Package imports:
 import 'package:drift/drift.dart';
 
 // Project imports:
 import 'package:salesman/core/db/drift/app_database.dart';
+import 'package:salesman/core/db/drift/models/model_client.dart';
 import 'package:salesman/core/db/drift/models/model_delivery_order.dart';
+import 'package:salesman/core/db/drift/models/model_item.dart';
+import 'package:salesman/core/db/drift/models/model_transport.dart';
+import 'package:salesman/core/utils/item_map.dart';
+import 'package:salesman/core/utils/order_map.dart';
+import 'package:salesman/main.dart';
+import 'package:salesman/modules/item/query/item_table_queries.dart';
 
 // part
 part 'delivery_order_table_queries.g.dart';
 
-@DriftAccessor(tables: [ModelDeliveryOrder])
+@DriftAccessor(
+  tables: [
+    ModelDeliveryOrder,
+    ModelItem,
+    ModelClient,
+    ModelTransport,
+  ],
+)
 class DeliveryOrderTableQueries extends DatabaseAccessor<AppDatabase>
     with _$DeliveryOrderTableQueriesMixin {
   final AppDatabase db;
   DeliveryOrderTableQueries(this.db) : super(db);
 
-  Future<int> newOrder(ModelDeliveryOrderCompanion order) async {
-    return into(modelDeliveryOrder).insert(order);
+  Future<int> newOrder(
+    ModelDeliveryOrderCompanion order,
+    List<ItemMap> itemList,
+    ModelClientData client,
+  ) {
+    return transaction(() async {
+      for (final ItemMap item in itemList) {
+        await ItemTableQueries(appDatabaseInstance)
+            .updateAvailableQuantity(item.id, item.quantity);
+      }
+      final int orderId = await into(modelDeliveryOrder).insert(order);
+      await (update(modelClient)
+            ..where((table) => table.clientId.equals(client.clientId)))
+          .write(
+        ModelClientCompanion(
+          noOfPendingOrder: Value(client.noOfPendingOrder + 1),
+          lastTradeOn: Value(DateTime.now()),
+        ),
+      );
+      return orderId;
+    });
   }
 
   Future<List<ModelDeliveryOrderData>> getAllPending() async {
@@ -26,8 +57,8 @@ class DeliveryOrderTableQueries extends DatabaseAccessor<AppDatabase>
             (table) =>
                 table.orderStatus.equals("pending") |
                 table.orderStatus.equals("delayed") |
-                table.orderStatus.equals("processing") |
-                table.orderStatus.equals("out-for-delivery"),
+                table.orderStatus.equals("process") |
+                table.orderStatus.equals("dispatch"),
           )
           ..orderBy([
             (table) => OrderingTerm(
@@ -37,14 +68,14 @@ class DeliveryOrderTableQueries extends DatabaseAccessor<AppDatabase>
         .get();
   }
 
-  // get all the orders with status    'delivered','cancelled' or 'rejected',
+  // get all the orders with status    'deliver','cancel' or 'reject',
   Future<List<ModelDeliveryOrderData>> getAllHistory() async {
     return (select(modelDeliveryOrder)
           ..where(
             (table) =>
-                table.orderStatus.equals("delivered") |
-                table.orderStatus.equals("cancelled") |
-                table.orderStatus.equals("rejected"),
+                table.orderStatus.equals("deliver") |
+                table.orderStatus.equals("cancel") |
+                table.orderStatus.equals("reject"),
           )
           ..orderBy([
             (table) => OrderingTerm(
@@ -87,68 +118,6 @@ class DeliveryOrderTableQueries extends DatabaseAccessor<AppDatabase>
         .get();
   }
 
-  Future<int> updateTotalReceivedAmount({
-    required int deliveryOrderId,
-    required String paymentStatus,
-    required double currentAmount,
-    required bool toAdd,
-    required double amountReceived,
-  }) async {
-    if (toAdd) {
-      return (update(modelDeliveryOrder)
-            ..where((table) => table.deliveryOrderId.equals(deliveryOrderId)))
-          .write(
-        ModelDeliveryOrderCompanion(
-          paymentStatus: Value(paymentStatus),
-          // add the amount to the existing amount
-          totalReceivedAmount: Value(currentAmount + amountReceived),
-        ),
-      );
-    }
-    if (!toAdd) {
-      return (update(modelDeliveryOrder)
-            ..where((table) => table.deliveryOrderId.equals(deliveryOrderId)))
-          .write(
-        ModelDeliveryOrderCompanion(
-          paymentStatus: Value(paymentStatus),
-          totalSendAmount: Value(currentAmount - amountReceived),
-        ),
-      );
-    }
-    return -1;
-  }
-
-  Future<int> updateTotalSendAmount({
-    required int deliveryOrderId,
-    required String paymentStatus,
-    required double currentAmount,
-    required bool toAdd,
-    required double amountSend,
-  }) async {
-    if (toAdd) {
-      return (update(modelDeliveryOrder)
-            ..where((table) => table.deliveryOrderId.equals(deliveryOrderId)))
-          .write(
-        ModelDeliveryOrderCompanion(
-          paymentStatus: Value(paymentStatus),
-          // add the amount to the existing amount
-          totalSendAmount: Value(currentAmount + amountSend),
-        ),
-      );
-    }
-    if (!toAdd) {
-      return (update(modelDeliveryOrder)
-            ..where((table) => table.deliveryOrderId.equals(deliveryOrderId)))
-          .write(
-        ModelDeliveryOrderCompanion(
-          paymentStatus: Value(paymentStatus),
-          totalSendAmount: Value(currentAmount - amountSend),
-        ),
-      );
-    }
-    return -1;
-  }
-
   Future<ModelDeliveryOrderData> getOrderDetails(int deliveryOrderId) async {
     return (select(modelDeliveryOrder)
           ..where((table) => table.deliveryOrderId.equals(deliveryOrderId)))
@@ -162,9 +131,8 @@ class DeliveryOrderTableQueries extends DatabaseAccessor<AppDatabase>
     final List<int> orderList = [];
     // if orders is not empty
     if (orders.isNotEmpty) {
-      // update the status of the ech orders
       for (final order in orders) {
-       final int orderId =  await (update(modelDeliveryOrder)
+        final int orderId = await (update(modelDeliveryOrder)
               ..where(
                 (table) => table.deliveryOrderId.equals(order.deliveryOrderId),
               ))
@@ -179,15 +147,130 @@ class DeliveryOrderTableQueries extends DatabaseAccessor<AppDatabase>
     return orderList;
   }
 
-  // update order status to cancelled
-  Future<int> updateOrderStatusToCancelled(
-      int deliveryOrderId,) async {
-    return (update(modelDeliveryOrder)
-          ..where((table) => table.deliveryOrderId.equals(deliveryOrderId)))
-        .write(
-      const ModelDeliveryOrderCompanion(
-        orderStatus:  Value("cancelled"),
-      ),
-    );
+  // update order status to cancel
+  Future<int> updateOrderStatusToCancelled({
+    required int deliveryOrderId,
+    required List<ItemMap> itemList,
+    required ModelClientData client,
+  }) {
+    return transaction(() async {
+      for (final ItemMap item in itemList) {
+        await ItemTableQueries(appDatabaseInstance)
+            .updateReservedQuantity(item.id, item.quantity);
+      }
+      await (update(modelClient)
+            ..where((table) => table.clientId.equals(client.clientId)))
+          .write(
+        ModelClientCompanion(
+          noOfPendingOrder: Value(client.noOfPendingOrder - 1),
+          lastTradeOn: Value(DateTime.now()),
+        ),
+      );
+      return (update(modelDeliveryOrder)
+            ..where((table) => table.deliveryOrderId.equals(deliveryOrderId)))
+          .write(
+        const ModelDeliveryOrderCompanion(
+          orderStatus: Value("cancel"),
+        ),
+      );
+    });
+  }
+
+  // update order status to reject
+  Future<int> updateOrderStatusToRejected({
+    required int deliveryOrderId,
+    required List<ItemMap> itemList,
+    required ModelClientData client,
+    required List<OrderMap> deliveryList,
+    required int transportId,
+  }) {
+    return transaction(() async {
+      for (final ItemMap item in itemList) {
+        await ItemTableQueries(appDatabaseInstance)
+            .updateReservedQuantity(item.id, item.quantity);
+      }
+      await (update(modelClient)
+            ..where((table) => table.clientId.equals(client.clientId)))
+          .write(
+        ModelClientCompanion(
+          noOfPendingOrder: Value(client.noOfPendingOrder - 1),
+          lastTradeOn: Value(DateTime.now()),
+        ),
+      );
+
+      await (update(modelTransport)
+            ..where((table) => table.transportId.equals(transportId)))
+          .write(
+        ModelTransportCompanion(
+          deliveryOrderList:
+              Value(DeliveryOrderList(deliveryList: deliveryList)),
+                    lastUpdated: Value(DateTime.now()),
+
+        ),
+      );
+      return (update(modelDeliveryOrder)
+            ..where((table) => table.deliveryOrderId.equals(deliveryOrderId)))
+          .write(
+         ModelDeliveryOrderCompanion(
+          orderStatus: const Value("reject"),
+          lastUpdated: Value(DateTime.now()),
+
+        ),
+      );
+    });
+  }
+
+  // update order status to deliver
+  Future<int> updateOrderStatusToDeliver({
+    required int deliveryOrderId,
+    required List<ItemMap> itemList,
+    required ModelClientData client,
+    required List<OrderMap> deliveryList,
+    required int transportId,
+    required double pendingDue,
+  }) {
+    return transaction(() async {
+      for (final ItemMap item in itemList) {
+        await ItemTableQueries(appDatabaseInstance)
+            .updateReservedQuantityOnDelivery(item.id, item.quantity);
+      }
+      await (update(modelClient)
+            ..where((table) => table.clientId.equals(client.clientId)))
+          .write(
+        ModelClientCompanion(
+          noOfPendingOrder: Value(client.noOfPendingOrder - 1),
+          lastTradeOn: Value(DateTime.now()),
+          pendingDue: Value(pendingDue),
+        ),
+      );
+
+      await (update(modelTransport)
+            ..where((table) => table.transportId.equals(transportId)))
+          .write(
+        ModelTransportCompanion(
+          deliveryOrderList:
+              Value(DeliveryOrderList(deliveryList: deliveryList)),
+              lastUpdated: Value(DateTime.now()),
+        ),
+      );
+
+      return (update(modelDeliveryOrder)
+            ..where((table) => table.deliveryOrderId.equals(deliveryOrderId)))
+          .write(
+         ModelDeliveryOrderCompanion(
+          orderStatus: const Value("deliver"),
+          lastUpdated: Value(DateTime.now()),
+        ),
+      );
+    });
+  }
+
+  // group by order orders with status pending or delayed for client Id
+  Future<int> getCountOfPendingOrDelayedOrders(int clientId) async {
+    return customSelect(
+      "SELECT COUNT(*)  AS count FROM delivery_order WHERE order_status = 'pending' OR order_status = 'delayed' AND client_id= ? LIMIT 1",
+      variables: [Variable.withInt(clientId)],
+      readsFrom: {modelDeliveryOrder},
+    ).map((row) => row.read<int>('c')).getSingle();
   }
 }

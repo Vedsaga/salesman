@@ -11,7 +11,7 @@ import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/layouts/mobile_layout.dart';
 import 'package:salesman/config/routes/arguments_models/add_payment_details_route_arguments.dart';
 import 'package:salesman/config/routes/route_name.dart';
-import 'package:salesman/core/components/bottom_navigation.dart';
+import 'package:salesman/core/components/common_bottom_navigation.dart';
 import 'package:salesman/core/components/empty_message.dart';
 import 'package:salesman/core/components/normal_top_app_bar.dart';
 import 'package:salesman/core/components/payment_card.dart';
@@ -47,7 +47,10 @@ class _ViewPaymentHistoryListState extends State<ViewPaymentHistoryList> {
           );
         }
       },
-      child: MobileLayout(topAppBar:
+      child: MobileLayout(
+        routeName: RouteNames.menu,
+        bottomAppBarRequired: true,
+        topAppBar:
           BlocBuilder<ViewPaymentHistoryListBloc, ViewPaymentHistoryListState>(
         builder: (context, state) {
           if (state is LoadedPaymentHistoryList) {
@@ -102,7 +105,8 @@ class _ViewPaymentHistoryListState extends State<ViewPaymentHistoryList> {
           }
           return const Center(child: CircularProgressIndicator());
         },
-      ), bottomAppBar:
+        ),
+        bottomAppBar:
           BlocBuilder<ViewPaymentHistoryListBloc, ViewPaymentHistoryListState>(
         builder: (context, state) {
           if (state is LoadedPaymentHistoryList) {

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 // Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/layouts/mobile_layout.dart';
+import 'package:salesman/config/routes/route_name.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
 import 'package:salesman/core/components/input_decoration.dart';
@@ -35,6 +36,9 @@ class _UiTetsState extends State<UiTets> {
   @override
   Widget build(BuildContext context) {
     return MobileLayout(
+              routeName: RouteNames.menu,
+                      bottomAppBarRequired: true,
+
         topAppBar: const NormalTopAppBar(title: "test"),
         body: Column(
           children: <Widget>[

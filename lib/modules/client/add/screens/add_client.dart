@@ -131,6 +131,9 @@ class _AddClientState extends State<AddClient> {
       },
       child: MobileLayout(
         topAppBar: const InputTopAppBar(title: "add client"),
+        routeName: RouteNames.menu,
+                bottomAppBarRequired: true,
+
         bottomAppBar: BlocBuilder<AddClientBloc, AddClientState>(
           builder: (context, state) {
             return ActionButton(

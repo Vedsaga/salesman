@@ -145,9 +145,12 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
         }
       },
       child: MobileLayout(
+        routeName: RouteNames.viewPaymentHistoryList,
         topAppBar: const InputTopAppBar(
           title: "add payment",
         ),
+                bottomAppBarRequired: true,
+
         body: BlocBuilder<AddPaymentDetailsBloc, AddPaymentDetailsState>(
           builder: (context, state) {
             if (state is FetchingRequiredDetailsState) {
@@ -183,7 +186,10 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                             ).add(
                               PaymentFieldsChangeEvent(
                                 deliveryOrderId: state.deliveryOrderId.value,
+                                selectedDeliveryOrder:
+                                    state.selectedDeliveryOrder,
                                 returnOrderId: state.returnOrderId.value,
+                                selectedReturnOrder: state.selectedReturnOrder,
                                 amount: state.amount.value,
                                 paymentMode: state.paymentMode.value,
                                 paymentType: state.paymentType.value,
@@ -256,7 +262,10 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                             ).add(
                               PaymentFieldsChangeEvent(
                                 deliveryOrderId: state.deliveryOrderId.value,
+                                selectedDeliveryOrder:
+                                    state.selectedDeliveryOrder,
                                 returnOrderId: state.returnOrderId.value,
+                                selectedReturnOrder: state.selectedReturnOrder,
                                 amount: state.amount.value,
                                 paymentMode: state.paymentMode.value,
                                 paymentType: state.paymentType.value,
@@ -346,7 +355,11 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                                     PaymentFieldsChangeEvent(
                                       deliveryOrderId:
                                           state.deliveryOrderId.value,
+                                      selectedDeliveryOrder:
+                                          state.selectedDeliveryOrder,
                                       returnOrderId: state.returnOrderId.value,
+                                      selectedReturnOrder:
+                                          state.selectedReturnOrder,
                                       amount: state.amount.value,
                                       paymentMode: state.paymentMode.value,
                                       paymentType: value!,
@@ -386,8 +399,12 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                                     PaymentFieldsChangeEvent(
                                       deliveryOrderId:
                                           state.deliveryOrderId.value,
+                                      selectedDeliveryOrder:
+                                          state.selectedDeliveryOrder,
                                       returnOrderId:
                                           state.deliveryOrderId.value,
+                                      selectedReturnOrder:
+                                          state.selectedReturnOrder,
                                       amount: state.amount.value,
                                       paymentMode: state.paymentMode.value,
                                       paymentType: value!,
@@ -438,7 +455,10 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                                   PaymentFieldsChangeEvent(
                                     deliveryOrderId:
                                         selectedDeliveryOrder?.deliveryOrderId,
+                                    selectedDeliveryOrder:
+                                        selectedDeliveryOrder,
                                     returnOrderId: 0,
+                                    selectedReturnOrder: null,
                                     amount: state.amount.value,
                                     paymentMode: state.paymentMode.value,
                                     paymentType: state.paymentType.value,
@@ -476,8 +496,10 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                                     .add(
                                   PaymentFieldsChangeEvent(
                                     deliveryOrderId: 0,
+                                    selectedDeliveryOrder: null,
                                     returnOrderId:
                                         selectedReturnOrder?.returnOrderId,
+                                    selectedReturnOrder: selectedReturnOrder,
                                     amount: state.amount.value,
                                     paymentMode: state.paymentMode.value,
                                     paymentType: state.paymentType.value,
@@ -498,7 +520,7 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                                   ),
                             ),
                           ],
-                        )
+                        ),
                       ],
                     ),
                     SizedBox(height: designValues(context).cornerRadius34),
@@ -528,7 +550,9 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                               PaymentFieldsChangeEvent(
                                 deliveryOrderId:
                                     selectedDeliveryOrder?.deliveryOrderId,
+                                selectedDeliveryOrder: selectedDeliveryOrder,
                                 returnOrderId: 0,
+                                selectedReturnOrder: null,
                                 amount: state.amount.value,
                                 paymentMode: state.paymentMode.value,
                                 paymentType: state.paymentType.value,
@@ -597,8 +621,10 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                             BlocProvider.of<AddPaymentDetailsBloc>(context).add(
                               PaymentFieldsChangeEvent(
                                 deliveryOrderId: 0,
+                                selectedDeliveryOrder: null,
                                 returnOrderId:
                                     selectedReturnOrder?.returnOrderId,
+                                selectedReturnOrder: selectedReturnOrder,
                                 amount: state.amount.value,
                                 paymentMode: state.paymentMode.value,
                                 paymentType: state.paymentType.value,
@@ -660,7 +686,10 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                           BlocProvider.of<AddPaymentDetailsBloc>(context).add(
                             PaymentFieldsChangeEvent(
                               deliveryOrderId: state.deliveryOrderId.value,
+                              selectedDeliveryOrder:
+                                  state.selectedDeliveryOrder,
                               returnOrderId: state.returnOrderId.value,
+                              selectedReturnOrder: state.selectedReturnOrder,
                               amount: state.amount.value,
                               paymentMode: _paymentModeController.text,
                               paymentType: state.paymentType.value,
@@ -710,7 +739,9 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                         BlocProvider.of<AddPaymentDetailsBloc>(context).add(
                           PaymentFieldsChangeEvent(
                             deliveryOrderId: state.deliveryOrderId.value,
+                            selectedDeliveryOrder: state.selectedDeliveryOrder,
                             returnOrderId: state.returnOrderId.value,
+                            selectedReturnOrder: state.selectedReturnOrder,
                             amount: double.tryParse(value) ?? 0,
                             paymentMode: state.paymentMode.value,
                             paymentType: state.paymentType.value,

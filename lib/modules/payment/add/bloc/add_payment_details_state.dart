@@ -3,7 +3,9 @@ part of 'add_payment_details_bloc.dart';
 class AddPaymentDetailsState extends Equatable {
   AddPaymentDetailsState({
     this.deliveryOrderList = const [],
+    this.selectedDeliveryOrder,
     this.returnOrderList = const [],
+    this.selectedReturnOrder,
     ForeignKeyField? deliveryOrderId,
     ForeignKeyField? returnOrderId,
     this.amount = const DoubleFieldNotZero.pure(),
@@ -18,7 +20,9 @@ class AddPaymentDetailsState extends Equatable {
         deliveryOrderId = deliveryOrderId ?? const ForeignKeyField.pure(),
         returnOrderId = returnOrderId ?? const ForeignKeyField.pure();
   final List<ModelDeliveryOrderData> deliveryOrderList;
+  final ModelDeliveryOrderData? selectedDeliveryOrder;
   final List<ModelReturnOrderData> returnOrderList;
+  final ModelReturnOrderData? selectedReturnOrder;
   final ForeignKeyField deliveryOrderId;
   final ForeignKeyField returnOrderId;
   final DoubleFieldNotZero amount;
@@ -30,9 +34,11 @@ class AddPaymentDetailsState extends Equatable {
   final FormzStatus status;
   final String comingFrom;
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         deliveryOrderList,
+        selectedDeliveryOrder,
         returnOrderList,
+        selectedReturnOrder,
         deliveryOrderId,
         returnOrderId,
         amount,
@@ -41,13 +47,16 @@ class AddPaymentDetailsState extends Equatable {
         paymentFor,
         receivedBy,
         paymentDate,
-        status
+        status,
+        comingFrom,
       ];
 
   // return a copy of this state with the given field updated
   AddPaymentDetailsState copyWith({
     List<ModelDeliveryOrderData>? deliveryOrderList,
+    ModelDeliveryOrderData? selectedDeliveryOrder,
     List<ModelReturnOrderData>? returnOrderList,
+    ModelReturnOrderData? selectedReturnOrder,
     ForeignKeyField? deliveryOrderId,
     ForeignKeyField? returnOrderId,
     DoubleFieldNotZero? amount,
@@ -61,7 +70,9 @@ class AddPaymentDetailsState extends Equatable {
   }) {
     return AddPaymentDetailsState(
       deliveryOrderList: deliveryOrderList ?? this.deliveryOrderList,
+      selectedDeliveryOrder: selectedDeliveryOrder ?? this.selectedDeliveryOrder,
       returnOrderList: returnOrderList ?? this.returnOrderList,
+      selectedReturnOrder: selectedReturnOrder ?? this.selectedReturnOrder,
       deliveryOrderId: deliveryOrderId ?? this.deliveryOrderId,
       returnOrderId: returnOrderId ?? this.returnOrderId,
       amount: amount ?? this.amount,

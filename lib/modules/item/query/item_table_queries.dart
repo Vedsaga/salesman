@@ -99,6 +99,27 @@ class ItemTableQueries extends DatabaseAccessor<AppDatabase>
     );
   }
 
+  // update reserved quantity on delivery
+  Future<int> updateReservedQuantityOnDelivery(
+      int itemId, double quantity,) async {
+    final double reservedQuantity = (await (select(modelItem)
+              ..where((table) => table.itemId.equals(itemId)))
+            .getSingle())
+        .reservedQuantity;
+
+    if (reservedQuantity < quantity) {
+      return -1;
+    }
+    return  (update(modelItem)
+          ..where((table) => table.itemId.equals(itemId)))
+        .write(
+      ModelItemCompanion(
+        reservedQuantity: Value(reservedQuantity - quantity),
+      ),
+    );
+  }
+
+
   // get item details
   Future<ModelItemData> getItemDetails(int itemId) async {
     return  (select(modelItem)

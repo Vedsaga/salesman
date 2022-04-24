@@ -24,7 +24,7 @@ import 'package:salesman/core/models/validations/generic_field.dart';
 import 'package:salesman/core/models/validations/unit_field.dart';
 import 'package:salesman/modules/item/add/bloc/add_item_bloc.dart';
 
-// third party import
+
 
 
 
@@ -201,6 +201,9 @@ class _AddItemState extends State<AddItem> {
         }
       },
       child: MobileLayout(
+        routeName: RouteNames.viewItemList,
+        bottomAppBarRequired: true,
+
         topAppBar: const InputTopAppBar(title: "add item"),
         bottomAppBar: BlocBuilder<AddItemBloc, AddItemState>(
           builder: (context, state) {

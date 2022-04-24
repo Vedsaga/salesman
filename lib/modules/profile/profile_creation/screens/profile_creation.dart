@@ -177,7 +177,10 @@ class _ProfileCreationState extends State<ProfileCreation> {
         }
       },
       child: MobileLayout(
+        routeName: RouteNames.profileCreation,
         topAppBar: const NormalTopAppBar(title: "agent"),
+                bottomAppBarRequired: true,
+
         bottomAppBar: BlocBuilder<ProfileCreationBloc, ProfileCreationState>(
           builder: (context, state) {
             return ActionButton(

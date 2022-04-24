@@ -11,7 +11,7 @@ import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/layouts/mobile_layout.dart';
 import 'package:salesman/config/routes/route_name.dart';
 import 'package:salesman/config/theme/colors.dart';
-import 'package:salesman/core/components/bottom_navigation.dart';
+import 'package:salesman/core/components/common_bottom_navigation.dart';
 import 'package:salesman/core/components/custom_list_card.dart';
 import 'package:salesman/core/components/empty_message.dart';
 import 'package:salesman/core/components/normal_top_app_bar.dart';
@@ -50,6 +50,9 @@ class _ViewItemState extends State<ViewItemList> {
         }
       },
       child: MobileLayout(
+                routeName: RouteNames.menu,
+                        bottomAppBarRequired: true,
+
         topAppBar: const NormalTopAppBar(title: "items"),
         body: BlocBuilder<ViewItemBloc, ViewItemState>(
           builder: (context, state) {

@@ -4,6 +4,7 @@ class CreateOrderState extends Equatable {
   CreateOrderState({
     this.clientList = const [],
     this.itemList = const [],
+     this.selectedClient ,
     this.clientId = const ForeignKeyField.pure(),
     this.clientName = const GenericField.pure(),
     this.itemId = const ForeignKeyField.pure(),
@@ -23,6 +24,7 @@ class CreateOrderState extends Equatable {
 
   final List<ModelClientData> clientList;
   final List<ModelItemData> itemList;
+  final ModelClientData? selectedClient;
   final ForeignKeyField clientId;
   final GenericField clientName;
   final ForeignKeyField itemId;
@@ -39,9 +41,10 @@ class CreateOrderState extends Equatable {
   final FormzStatus status;
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         clientList,
         itemList,
+        selectedClient,
         clientId,
         clientName,
         itemId,
@@ -62,6 +65,7 @@ class CreateOrderState extends Equatable {
   CreateOrderState copyWith({
     List<ModelClientData>? clientList,
     List<ModelItemData>? itemList,
+    ModelClientData? selectedClient,
     ForeignKeyField? clientId,
     GenericField? clientName,
     ForeignKeyField? itemId,
@@ -80,6 +84,7 @@ class CreateOrderState extends Equatable {
     return CreateOrderState(
       clientList: clientList ?? this.clientList,
       itemList: itemList ?? this.itemList,
+      selectedClient: selectedClient ?? this.selectedClient,
       clientId: clientId ?? this.clientId,
       clientName: clientName ?? this.clientName,
       itemId: itemId ?? this.itemId,
@@ -113,3 +118,5 @@ class EmptyAgentProfile extends CreateOrderState {}
 class EmptyItemListState extends CreateOrderState {}
 
 class OrderSuccessfullyCreatedState extends CreateOrderState {}
+
+class ErrorWhileCreatingOrderState extends CreateOrderState {}

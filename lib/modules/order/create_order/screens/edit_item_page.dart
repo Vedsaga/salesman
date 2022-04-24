@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/layouts/mobile_layout.dart';
+import 'package:salesman/config/routes/route_name.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
 import 'package:salesman/core/components/action_button.dart';
@@ -103,6 +104,9 @@ class _EditItemPageState extends State<EditItemPage> {
   @override
   Widget build(BuildContext context) {
     return MobileLayout(
+      routeName: RouteNames.viewOrderList,
+      bottomAppBarRequired: true,
+
       topAppBar: const InputTopAppBar(title: "Edit Item"),
       body: Container(
         margin: EdgeInsets.only(
@@ -199,6 +203,8 @@ class _EditItemPageState extends State<EditItemPage> {
                     });
                     BlocProvider.of<CreateOrderBloc>(context).add(
                       OrderFieldsChangeEvent(
+                        selectedClient: state.selectedClient,
+
                         clientId: state.clientId.value,
                         clientName: state.clientName.value,
                         itemId: widget.itemMap.id,
@@ -270,7 +276,7 @@ class _EditItemPageState extends State<EditItemPage> {
                             widget.itemData.availableQuantity,
                         text: "save",
                         buttonColor: light,
-                        textColor: secondaryDark,
+                        textColor: deepBlue,
                         onPressed: () {
                           // FIXME: This is a hack to event doesn't get triggered till values are not valid in future we need to fix this and move these check to bloc file...
                           if (state.itemTotalQuantity.value !=
@@ -289,6 +295,8 @@ class _EditItemPageState extends State<EditItemPage> {
                             );
                             BlocProvider.of<CreateOrderBloc>(context).add(
                               OrderFieldsChangeEvent(
+                                selectedClient: state.selectedClient,
+
                                 clientId: state.clientId.value,
                                 clientName: state.clientName.value,
                                 itemId: 0,

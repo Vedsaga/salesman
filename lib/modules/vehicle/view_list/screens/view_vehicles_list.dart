@@ -7,8 +7,8 @@ import 'package:salesman/config/routes/route_name.dart';
 import 'package:salesman/config/theme/card_box_decoration.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
-import 'package:salesman/core/components/bottom_navigation.dart';
 import 'package:salesman/core/components/column_flex_closed_children.dart';
+import 'package:salesman/core/components/common_bottom_navigation.dart';
 import 'package:salesman/core/components/empty_message.dart';
 import 'package:salesman/core/components/normal_top_app_bar.dart';
 import 'package:salesman/core/components/row_flex_spaced_children.dart';
@@ -48,6 +48,8 @@ class _ViewVehiclesListState extends State<ViewVehiclesList> {
         }
       },
       child: MobileLayout(
+        routeName: RouteNames.menu,
+        bottomAppBarRequired: true,
         topAppBar: const NormalTopAppBar(
           title: "vehicles",
         ),
@@ -100,6 +102,12 @@ class _ViewVehiclesListState extends State<ViewVehiclesList> {
                               RotatedBox(
                                 quarterTurns: 3,
                                 child: Container(
+                                  constraints: BoxConstraints(
+                                    minWidth: designValues(context)
+                                        .boxHeightConstrain,
+                                    maxWidth: designValues(context)
+                                        .boxHeightConstrain,
+                                  ),
                                   decoration: BoxDecoration(
                                     gradient:
                                         vehicleList[index].vehicleStatus ==
@@ -116,18 +124,18 @@ class _ViewVehiclesListState extends State<ViewVehiclesList> {
                                     ),
                                   ),
                                   child: Padding(
-                                    padding: EdgeInsets.only(
-                                      left: designValues(context).padding13,
-                                      right: designValues(context).padding13,
-                                      top: 3,
-                                      bottom: 4,
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 4,
+                                      vertical: 4,
                                     ),
-                                    child: Text(
-                                      vehicleList[index].vehicleStatus,
-                                      style: of(context)
-                                          .textTheme
-                                          .caption
-                                          ?.copyWith(color: light),
+                                    child: Center(
+                                      child: Text(
+                                        vehicleList[index].vehicleStatus,
+                                        style: of(context)
+                                            .textTheme
+                                            .caption
+                                            ?.copyWith(color: light),
+                                      ),
                                     ),
                                   ),
                                 ),

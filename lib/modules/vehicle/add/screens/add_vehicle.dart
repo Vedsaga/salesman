@@ -132,6 +132,8 @@ class _AddVehicleState extends State<AddVehicle> {
         }
       },
       child: MobileLayout(
+        routeName: RouteNames.viewVehicleList,
+        bottomAppBarRequired: true,
         topAppBar: const InputTopAppBar(title: "add vehicle"),
         body: BlocBuilder<AddVehicleBloc, AddVehicleState>(
           builder: (context, state) {
@@ -154,7 +156,7 @@ class _AddVehicleState extends State<AddVehicle> {
                     decoration: inputDecoration(
                       context,
                       labelText: 'Vehicle name',
-                      hintText: 'eg. Toyota',
+                      hintText: 'eg. Tata ace',
                       inFocus: _vehicleNameFocusNode.hasFocus,
                       errorText: _vehicleNameFocusNode.hasFocus
                           ? null

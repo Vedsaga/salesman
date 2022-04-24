@@ -18,10 +18,15 @@ class RouteNames {
   static const String viewOrderList = 'viewOrderList';
   static const String createOrder = 'createOrder';
   static const String viewOrderDetails = 'viewOrderDetails';
+  static const String processOrder = 'processOrder';
   static const String addPaymentDetails = 'addReceivePayment';
   static const String viewPaymentHistoryList = 'viewPaymentHistoryList';
   static const String paymentSent = "Payments Sent";
   static const String paymentReceived = "Payments Received";
   static const String viewPaymentDetails = 'viewPaymentDetails';
   static const String records = 'records';
+  static const String viewPendingTransportList = 'viewPendingTransportList';
+  static const String createTransport = 'createTransport';
+  static const String viewTransportDetails = 'viewTransportDetails';
+  static const String viewTransportHistoryList = 'viewTransportHistoryList';
 }

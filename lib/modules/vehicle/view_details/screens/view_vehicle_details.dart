@@ -53,6 +53,9 @@ class _ViewVehicleDetailsState extends State<ViewVehicleDetails> {
         }
       },
       child: MobileLayout(
+                        routeName: RouteNames.viewVehicleList,
+                                bottomAppBarRequired: true,
+
         topAppBar: const InputTopAppBar(
           title: "vehicle details",
           routeName: RouteNames.viewVehicleList,

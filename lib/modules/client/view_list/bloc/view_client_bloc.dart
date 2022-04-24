@@ -25,7 +25,7 @@ class ViewClientBloc extends Bloc<ViewClientEvent, ViewClientState> {
       final List<ModelClientData> clients =
           await ClientTableQueries(appDatabaseInstance).getAllActiveClients();
       if (clients.isNotEmpty) {
-        emit(FetchedClientState(clients));
+        emit(FetchedClientState(clients, ));
       } else {
         emit(EmptyClientState());
       }

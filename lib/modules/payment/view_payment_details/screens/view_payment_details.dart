@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/layouts/mobile_layout.dart';
 import 'package:salesman/config/routes/arguments_models/view_order_details_route_arguments.dart';
+import 'package:salesman/config/routes/route_name.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
 import 'package:salesman/core/components/details_card.dart';
@@ -63,6 +64,7 @@ class _ViewPaymentDetailsState extends State<ViewPaymentDetails> {
         }
       },
       child: MobileLayout(
+        routeName: RouteNames.viewPaymentHistoryList,
         topAppBar: const InputTopAppBar(title: "payment details"),
         body: BlocBuilder<ViewPaymentDetailsBloc, ViewPaymentDetailsState>(
           builder: (context, state) {

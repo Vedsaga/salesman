@@ -46,13 +46,13 @@ class PaymentCard extends StatelessWidget {
         padding: EdgeInsets.all(designValues(context).padding21),
         child: Flex(
           direction: Axis.horizontal,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // if listOfPayments[index].paymentType == "send" then show receive.svg if not show send.svg
             SvgPicture.asset(
               paymentData.paymentType == "send"
-                  ? "assets/icons/svgs/send.svg"
-                  : "assets/icons/svgs/receive.svg",
+                  ? "assets/icons/svgs/send_inr.svg"
+                  : "assets/icons/svgs/receive_inr.svg",
+              color: paymentData.paymentType == "send" ? red : green,
             ),
             Expanded(
               child: Padding(
@@ -63,26 +63,22 @@ class PaymentCard extends StatelessWidget {
                   firstChild: Flex(
                     direction: Axis.vertical,
                     crossAxisAlignment: CrossAxisAlignment.start,
-
                     children: [
                       RowFlexCloseChildren(
-                        firstChild: SvgPicture.asset(
-                          "assets/icons/svgs/inr.svg",
-                          height: 13,
-                          width: 13,
-                        ),
-                        secondChild: LimitedBox(
+                        firstChild: LimitedBox(
                           maxWidth: 144,
                           child: Text(
                             paymentData.amount.toStringAsFixed(2),
                             style: of(context).textTheme.headline6,
                           ),
                         ),
+                        secondChild: const SizedBox(),
                       ),
                       const SizedBox(
                         height: 5,
                       ),
                       Align(
+                        
                         alignment: Alignment.centerLeft,
                         child: Text(paymentData.paymentMode,
                           style: of(context).textTheme.caption,

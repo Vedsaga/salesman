@@ -28,6 +28,7 @@ class DesignValuesModel {
   double cornerRadius8;
   double padding13;
   double padding21;
+  double boxHeightConstrain;
   DesignValuesModel({
     required this.screenWidth,
     required this.screenHeight,
@@ -58,5 +59,6 @@ class DesignValuesModel {
     required this.cornerRadius8,
     required this.padding13,
     required this.padding21,
+    required this.boxHeightConstrain,
   });
 }

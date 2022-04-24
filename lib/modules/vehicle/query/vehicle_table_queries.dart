@@ -36,7 +36,12 @@ class VehicleTableQueries extends DatabaseAccessor<AppDatabase>
     );
   }
 
-
-  
-
+  // get all vehicles
+  Future<List<ModelVehicleData>> getAllVehicles() async {
+    return (select(modelVehicle)
+          ..orderBy([
+            (table) => OrderingTerm.desc(table.vehicleId),
+          ]))
+        .get();
+  }
 }

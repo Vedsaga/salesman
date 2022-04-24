@@ -6,11 +6,12 @@ import 'package:equatable/equatable.dart';
 import 'package:salesman/core/db/drift/app_database.dart';
 import 'package:salesman/core/utils/feature_monitor.dart';
 import 'package:salesman/core/utils/item_map.dart';
+import 'package:salesman/core/utils/order_map.dart';
 import 'package:salesman/main.dart';
-import 'package:salesman/modules/item/query/item_table_queries.dart';
 import 'package:salesman/modules/menu/repositories/menu_repository.dart';
 import 'package:salesman/modules/order/query/delivery_order_table_queries.dart';
 import 'package:salesman/modules/payment/query/payment_table_queries.dart';
+import 'package:salesman/modules/transport/query/transport_table_queries.dart';
 
 // part of
 part 'view_order_details_event.dart';
@@ -30,7 +31,10 @@ class ViewOrderDetailsBloc
   }) : super(ViewOrderDetailsInitialState()) {
     on<GetOrderDetailsEvent>(_getOrderDetails);
     on<CancelOrderEvent>(_cancelOrder);
+    on<RejectOrderEvent>(_rejectOrder);
+    on<DeliverOrderEvent>(_deliverOrder);
     on<EnableRecordsFeature>(_enableRecord);
+    on<EnableReturnFeature>(_enableReturn);
   }
 
   Future<void> _getOrderDetails(
@@ -42,12 +46,19 @@ class ViewOrderDetailsBloc
       final List<ModelPaymentData> paymentReceivedList =
           await PaymentTableQueries(appDatabaseInstance)
               .getAllPaymentsForDelivery(orderDetails.deliveryOrderId);
+      ModelTransportData? transportDetails;
+      if (orderDetails.transportId != null) {
+        transportDetails = await TransportTableQueries(appDatabaseInstance)
+            .getTransportById(orderDetails.transportId!);
+      }
+
       emit(
         FetchedOrderDetailsState(
           orderDetails: orderDetails,
           clientDetails: clientDetails,
           itemList: itemList,
           paymentReceivedList: paymentReceivedList,
+          transportDetails: transportDetails,
         ),
       );
     } catch (e) {
@@ -60,29 +71,92 @@ class ViewOrderDetailsBloc
     Emitter<ViewOrderDetailsState> emit,
   ) async {
     try {
-      final List<int> itemsId = [];
-
-      for (final itemDetails in event.orderDetails.itemList.itemList) {
-        final itemId = await ItemTableQueries(appDatabaseInstance)
-            .updateReservedQuantity(itemDetails.id, itemDetails.quantity);
-        if (itemId > 0) {
-          itemsId.add(itemId);
-        } else {
-          emit(ErrorWhileUpdatingItemReservedQuantity());
-        }
-      }
-      if (itemsId.isNotEmpty && event.orderDetails.itemList.itemList.length == itemsId.length ) {
       final int orderId = await DeliveryOrderTableQueries(appDatabaseInstance)
-            .updateOrderStatusToCancelled(event.orderDetails.deliveryOrderId);
-        if (orderId > 0) {
-          emit(OrderSuccessfullyCanceledState());
-        } else {
-          emit(ErrorWhileCancelingOrderState());
-        }
+          .updateOrderStatusToCancelled(
+        client: event.clientDetails,
+        deliveryOrderId: event.orderDetails.deliveryOrderId,
+        itemList: event.orderDetails.itemList.itemList,
+      );
+      if (orderId > 0) {
+        emit(OrderSuccessfullyCanceledState());
+      } else {
+        emit(ErrorWhileCancelingOrderState());
       }
-
     } catch (e) {
       emit(ErrorWhileCancelingOrderState());
+    }
+  }
+
+  Future<void> _rejectOrder(
+    RejectOrderEvent event,
+    Emitter<ViewOrderDetailsState> emit,
+  ) async {
+    final List<OrderMap> deliveryList =
+        event.transportDetails.deliveryOrderList!.deliveryList;
+    for (final OrderMap order in deliveryList) {
+      if (order.id == event.orderDetails.deliveryOrderId) {
+        order.status = OrderStatus.reject;
+      }
+    }
+    try {
+      final int orderId = await DeliveryOrderTableQueries(appDatabaseInstance)
+          .updateOrderStatusToRejected(
+        client: event.clientDetails,
+        deliveryOrderId: event.orderDetails.deliveryOrderId,
+        itemList: event.orderDetails.itemList.itemList,
+        deliveryList: deliveryList,
+        transportId: event.transportDetails.transportId,
+      );
+      if (orderId > 0) {
+        emit(OrderRejectedSuccessfullyState());
+      } else {
+        emit(ErrorWhileRejectingOrderState());
+      }
+    } catch (e) {
+      emit(ErrorWhileRejectingOrderState());
+    }
+  }
+
+  Future<void> _deliverOrder(
+    DeliverOrderEvent event,
+    Emitter<ViewOrderDetailsState> emit,
+  ) async {
+    final List<OrderMap> deliveryList =
+        event.transportDetails.deliveryOrderList!.deliveryList;
+    for (final OrderMap item in deliveryList) {
+      if (item.id == event.orderDetails.deliveryOrderId) {
+        item.status = OrderStatus.deliver;
+        break;
+      }
+    }
+
+    double _pendingDue = event.clientDetails.pendingDue;
+
+    if (((event.orderDetails.netTotal + event.orderDetails.totalSendAmount) -
+            event.orderDetails.totalReceivedAmount) >
+        0) {
+      _pendingDue +=
+          (event.orderDetails.netTotal + event.orderDetails.totalSendAmount) -
+              event.orderDetails.totalReceivedAmount;
+    }
+ 
+    try {
+      final int orderId = await DeliveryOrderTableQueries(appDatabaseInstance)
+          .updateOrderStatusToDeliver(
+        client: event.clientDetails,
+        deliveryOrderId: event.orderDetails.deliveryOrderId,
+        itemList: event.orderDetails.itemList.itemList,
+        deliveryList: deliveryList,
+        transportId: event.transportDetails.transportId,
+        pendingDue: _pendingDue,
+      );
+      if (orderId > 0) {
+        emit(OrderDeliveredSuccessfullyState());
+      } else {
+        emit(ErrorWhileDeliveringOrderState());
+      }
+    } catch (e) {
+      emit(ErrorWhileDeliveringOrderState());
     }
   }
 
@@ -94,6 +168,17 @@ class ViewOrderDetailsBloc
     if (feature != null && feature.disableRecords) {
       FeatureMonitor(menuRepository: menuRepository)
           .enableFeature('disableRecords');
+    }
+  }
+
+  Future<void> _enableReturn(
+    EnableReturnFeature event,
+    Emitter<ViewOrderDetailsState> emit,
+  ) async {
+    final feature = await menuRepository.getActiveFeatures();
+    if (feature != null && feature.disableReturn) {
+      FeatureMonitor(menuRepository: menuRepository)
+          .enableFeature('disableReturn');
     }
   }
 }

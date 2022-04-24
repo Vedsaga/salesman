@@ -8,6 +8,9 @@ class ModelClient extends Table {
   RealColumn get totalAmountReceived =>
       real().withDefault(const Constant(0.0))();
   RealColumn get totalAmountSent => real().withDefault(const Constant(0.0))();
+  RealColumn get pendingDue => real().withDefault(const Constant(0.0))();
+  RealColumn get pendingRefund => real().withDefault(const Constant(0.0))();
+  IntColumn get noOfPendingOrder => integer().withDefault(const Constant(0))();
   BoolColumn get isActive => boolean().withDefault(const Constant(true))();
   DateTimeColumn get lastTradeOn => dateTime().nullable()();
   DateTimeColumn get lastPaymentOn => dateTime().nullable()();

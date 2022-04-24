@@ -24,71 +24,9 @@ import 'package:salesman/modules/payment/query/payment_table_queries.dart';
 //  project import
 
 class Menu extends StatelessWidget {
-  Menu({
+  const Menu({
     Key? key,
   }) : super(key: key);
-  final List<MenuButtonModel> listOfMenuButtons = [
-    MenuButtonModel(
-      title: "client",
-      iconName: "client",
-      disabled: false,
-      onTap: () {},
-    ),
-    MenuButtonModel(
-      title: "item",
-      iconName: "item",
-      disabled: false,
-      onTap: () {},
-    ),
-    MenuButtonModel(
-      title: "order",
-      iconName: "order",
-      disabled: false,
-      onTap: () {},
-    ),
-    MenuButtonModel(
-      title: "delivery",
-      iconName: "delivery",
-      disabled: false,
-      onTap: () {},
-    ),
-    MenuButtonModel(
-      title: "return",
-      iconName: "return",
-      disabled: false,
-      onTap: () {},
-    ),
-    MenuButtonModel(
-      title: "records",
-      iconName: "records",
-      disabled: false,
-      onTap: () {},
-    ),
-    MenuButtonModel(
-      title: "receive",
-      iconName: "receive",
-      disabled: false,
-      onTap: () {},
-    ),
-    MenuButtonModel(
-      title: "history",
-      iconName: "history",
-      disabled: false,
-      onTap: () {},
-    ),
-    MenuButtonModel(
-      title: "survey",
-      iconName: "survey",
-      disabled: false,
-      onTap: () {},
-    ),
-    MenuButtonModel(
-      title: "stats",
-      iconName: "stats",
-      disabled: false,
-      onTap: () {},
-    ),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -129,6 +67,7 @@ class Menu extends StatelessWidget {
         }
       },
       child: MobileLayout(
+        routeName: null,
         topAppBar: BlocBuilder<MenuBloc, MenuState>(
           builder: (context, state) {
             if (state is FetchedAllDetailsState) {
@@ -161,7 +100,7 @@ class Menu extends StatelessWidget {
                       menuItems: [
                         MenuButtonModel(
                           title: "client",
-                          iconName: "client",
+                          iconName: "agent",
                           disabled: activeFeatures.disableClient,
                           onTap: () {
                             Navigator.pushNamed(
@@ -191,7 +130,7 @@ class Menu extends StatelessWidget {
                             );
                           },
                           disabled: activeFeatures.disableVehicle,
-                        )
+                        ),
                       ],
                       groupName: "details",
                     ),
@@ -218,10 +157,9 @@ class Menu extends StatelessWidget {
                           iconName: "transport",
                           disabled: activeFeatures.disableDelivery,
                           onTap: () {
-                            snackbarMessage(
+                            Navigator.pushNamed(
                               context,
-                              "will add soon :D",
-                              MessageType.normal,
+                              RouteNames.viewPendingTransportList,
                             );
                           },
                         ),
@@ -229,7 +167,24 @@ class Menu extends StatelessWidget {
                           title: "return",
                           iconName: "return_order",
                           disabled: activeFeatures.disableReturn,
-                          onTap: () {},
+                          onTap: () {
+                            snackbarMessage(
+                              context,
+                              "Will add soon :D",
+                              MessageType.normal,
+                            );
+                          },
+                        ),
+                        MenuButtonModel(
+                          title: "trips",
+                          iconName: "transport_history",
+                          disabled: activeFeatures.disableTrip,
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              RouteNames.viewTransportHistoryList,
+                            );
+                          },
                         ),
                         MenuButtonModel(
                           title: "records",
@@ -287,7 +242,7 @@ class Menu extends StatelessWidget {
                         ),
                         MenuButtonModel(
                           title: "history",
-                          iconName: "history",
+                          iconName: "inr_history",
                           disabled: activeFeatures.disableHistory,
                           onTap: () {
                             Navigator.pushNamed(

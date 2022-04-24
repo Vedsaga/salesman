@@ -13,6 +13,7 @@ class OrderFieldsChangeEvent extends CreateOrderEvent {
   const OrderFieldsChangeEvent({
     required this.clientId,
     required this.clientName,
+    required this.selectedClient,
     required this.itemId,
     required this.itemName,
     required this.itemUnit,
@@ -27,6 +28,7 @@ class OrderFieldsChangeEvent extends CreateOrderEvent {
 
   final int clientId;
   final String clientName;
+  final ModelClientData? selectedClient;
   final int itemId;
   final String itemName;
   final String itemUnit;

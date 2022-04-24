@@ -15,7 +15,9 @@ class FetchingOrderDetailsEvent extends AddPaymentDetailsEvent {
 class PaymentFieldsChangeEvent extends AddPaymentDetailsEvent {
   const PaymentFieldsChangeEvent({
     required this.deliveryOrderId,
+    required this.selectedDeliveryOrder,
     required this.returnOrderId,
+    required this.selectedReturnOrder,
     required this.amount,
     required this.paymentMode,
     required this.paymentType,
@@ -25,7 +27,9 @@ class PaymentFieldsChangeEvent extends AddPaymentDetailsEvent {
   });
 
   final int? deliveryOrderId;
+  final ModelDeliveryOrderData? selectedDeliveryOrder;
   final int? returnOrderId;
+  final ModelReturnOrderData? selectedReturnOrder;
   final double amount;
   final String paymentMode;
   final String paymentType;

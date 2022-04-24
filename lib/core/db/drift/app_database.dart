@@ -15,6 +15,7 @@ import 'package:salesman/core/db/drift/models/model_delivery_order.dart';
 import 'package:salesman/core/db/drift/models/model_item.dart';
 import 'package:salesman/core/db/drift/models/model_payment.dart';
 import 'package:salesman/core/db/drift/models/model_return_order.dart';
+import 'package:salesman/core/db/drift/models/model_status_group.dart';
 import 'package:salesman/core/db/drift/models/model_survey.dart';
 import 'package:salesman/core/db/drift/models/model_transport.dart';
 import 'package:salesman/core/db/drift/models/model_vehicle.dart';
@@ -25,6 +26,7 @@ import 'package:salesman/modules/item/query/item_table_queries.dart';
 import 'package:salesman/modules/order/query/delivery_order_table_queries.dart';
 import 'package:salesman/modules/payment/query/payment_table_queries.dart';
 import 'package:salesman/modules/return/query/return_order_table_queries.dart';
+import 'package:salesman/modules/status/query/status_group_table_queries.dart';
 import 'package:salesman/modules/survey/query/survey_table_queries.dart';
 import 'package:salesman/modules/transport/query/transport_table_queries.dart';
 import 'package:salesman/modules/vehicle/query/vehicle_table_queries.dart';
@@ -41,6 +43,7 @@ part 'app_database.g.dart';
     ModelReturnOrder,
     ModelPayment,
     ModelSurvey,
+    ModelStatusGroup,
   ],
   daos: [
     ClientTableQueries,
@@ -51,6 +54,7 @@ part 'app_database.g.dart';
     ReturnOrderTableQueries,
     PaymentTableQueries,
     SurveyTableQueries,
+    StatusGroupTableQueries,
   ],
 )
 class AppDatabase extends _$AppDatabase {

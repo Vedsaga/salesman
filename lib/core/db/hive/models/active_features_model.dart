@@ -38,6 +38,8 @@ class ActiveFeaturesModel extends HiveObject {
   bool disableSend;
   @HiveField(15)
   bool disableVehicle;
+  @HiveField(16)
+  bool disableTrip;
 
   ActiveFeaturesModel({
     this.disableDetails = false,
@@ -56,6 +58,7 @@ class ActiveFeaturesModel extends HiveObject {
     this.disableStats = true,
     this.disableSend = true,
     this.disableVehicle = true,
+    this.disableTrip = true,
   });
 
   Map<String, bool> toMap() {
@@ -76,6 +79,7 @@ class ActiveFeaturesModel extends HiveObject {
       'disableStats': disableStats,
       'disableSend': disableSend,
       'disableVehicle': disableVehicle,
+      'disableTrip': disableTrip,
     };
   }
 }
