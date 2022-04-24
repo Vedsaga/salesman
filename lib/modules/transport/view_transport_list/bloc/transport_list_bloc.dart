@@ -132,7 +132,7 @@ class TransportListBloc extends Bloc<TransportListEvent, TransportListState> {
           int completeCount = 0;
           for (final OrderMap delivery
               in transport.deliveryOrderList!.deliveryList) {
-            if (delivery.status == OrderStatus.deliver) {
+            if (delivery.status == OrderStatus.deliver || delivery.status == OrderStatus.reject) {
               completeCount++;
             }
           }
