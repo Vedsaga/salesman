@@ -14,7 +14,6 @@ class ModelDeliveryOrder extends Table {
   TextColumn get itemList => text().map(const ItemListConverter())();
   RealColumn get netTotal => real()();
   RealColumn get totalReceivedAmount => real().withDefault(const Constant(0.0))();
-  RealColumn get totalSendAmount => real().withDefault(const Constant(0.0))();
   TextColumn get paymentStatus => text().withDefault(const Constant('unpaid'))();
   TextColumn get orderStatus => text().withLength(min: 1, max: 20)();
   TextColumn get createdBy => text().withLength(min: 3, max: 20)();

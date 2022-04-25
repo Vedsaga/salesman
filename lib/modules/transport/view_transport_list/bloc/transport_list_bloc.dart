@@ -31,7 +31,7 @@ class TransportListBloc extends Bloc<TransportListEvent, TransportListState> {
               .getAllPendingTransports();
       if (transportList.isEmpty) {
         emit(
-            state.copyWith(status: TransportListScreenStatus.emptyPendingList));
+            state.copyWith(status: TransportListScreenStatus.emptyPendingList),);
       } else {
         emit(
           state.copyWith(
@@ -56,7 +56,7 @@ class TransportListBloc extends Bloc<TransportListEvent, TransportListState> {
               .getTransportHistoryTrip();
       if (transportList.isEmpty) {
         emit(
-            state.copyWith(status: TransportListScreenStatus.emptyHistoryList));
+            state.copyWith(status: TransportListScreenStatus.emptyHistoryList),);
       } else {
         emit(
           state.copyWith(

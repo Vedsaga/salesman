@@ -17,7 +17,6 @@ import 'package:salesman/core/components/delete_confirmation.dart';
 import 'package:salesman/core/components/details_card.dart';
 import 'package:salesman/core/components/item_info_card.dart';
 import 'package:salesman/core/components/normal_top_app_bar.dart';
-import 'package:salesman/core/components/snackbar_message.dart';
 import 'package:salesman/core/components/summary_card.dart';
 import 'package:salesman/modules/order/view_order_details/bloc/view_order_details_bloc.dart';
 

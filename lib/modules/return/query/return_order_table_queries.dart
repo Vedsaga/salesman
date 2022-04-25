@@ -24,4 +24,16 @@ class ReturnOrderTableQueries extends DatabaseAccessor<AppDatabase>
           ]))
         .get();
   }
+ Future<List<ModelReturnOrderData>?> getAllUnRefundReturnOrders() async {
+    return  (select(modelReturnOrder)
+    ..where((table) => 
+          table.refundStatus.equals("unpaid") |
+                table.refundStatus.equals("partial"),
+          )
+          ..orderBy([
+            (table) =>
+                OrderingTerm(expression: table.returnOrderId, mode: OrderingMode.desc)
+          ]))
+        .get();
+  }
 }

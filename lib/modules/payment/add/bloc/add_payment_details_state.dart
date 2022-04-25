@@ -16,6 +16,7 @@ class AddPaymentDetailsState extends Equatable {
     DateTimeField? paymentDate,
     this.status = FormzStatus.pure,
     this.comingFrom = RouteNames.viewPaymentHistoryList,
+    this.addPaymentStatus = AddPaymentStatus.initial,
   })  : paymentDate = paymentDate ?? DateTimeField.pure(null),
         deliveryOrderId = deliveryOrderId ?? const ForeignKeyField.pure(),
         returnOrderId = returnOrderId ?? const ForeignKeyField.pure();
@@ -33,6 +34,7 @@ class AddPaymentDetailsState extends Equatable {
   final DateTimeField paymentDate;
   final FormzStatus status;
   final String comingFrom;
+  final AddPaymentStatus addPaymentStatus;
   @override
   List<Object?> get props => [
         deliveryOrderList,
@@ -49,9 +51,9 @@ class AddPaymentDetailsState extends Equatable {
         paymentDate,
         status,
         comingFrom,
+        addPaymentStatus,
       ];
 
-  // return a copy of this state with the given field updated
   AddPaymentDetailsState copyWith({
     List<ModelDeliveryOrderData>? deliveryOrderList,
     ModelDeliveryOrderData? selectedDeliveryOrder,
@@ -67,6 +69,7 @@ class AddPaymentDetailsState extends Equatable {
     DateTimeField? paymentDate,
     FormzStatus? status,
     String? comingFrom,
+    AddPaymentStatus? addPaymentStatus,
   }) {
     return AddPaymentDetailsState(
       deliveryOrderList: deliveryOrderList ?? this.deliveryOrderList,
@@ -83,13 +86,25 @@ class AddPaymentDetailsState extends Equatable {
       paymentDate: paymentDate ?? this.paymentDate,
       status: status ?? this.status,
       comingFrom: comingFrom ?? this.comingFrom,
+      addPaymentStatus: addPaymentStatus ?? this.addPaymentStatus,
     );
   }
 }
 
 class FetchingRequiredDetailsState extends AddPaymentDetailsState {}
+
 class ErrorFetchingRequiredDetailsState extends AddPaymentDetailsState {}
+
 class EmptyAgentProfileState extends AddPaymentDetailsState {}
+
 class EmptyOrderDetailsState extends AddPaymentDetailsState {}
+
 class ErrorEmptyDeliveryReturnOrderIdState extends AddPaymentDetailsState {}
-class EmptyAddPaymentDetailsRouteArgumentsState extends AddPaymentDetailsState {}
+
+class EmptyAddPaymentDetailsRouteArgumentsState extends AddPaymentDetailsState {
+}
+
+enum AddPaymentStatus {
+  initial,
+  extraPayment,
+}

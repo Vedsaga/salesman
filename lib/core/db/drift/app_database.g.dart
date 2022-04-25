@@ -2105,7 +2105,6 @@ class ModelDeliveryOrderData extends DataClass
   final ItemList itemList;
   final double netTotal;
   final double totalReceivedAmount;
-  final double totalSendAmount;
   final String paymentStatus;
   final String orderStatus;
   final String createdBy;
@@ -2119,7 +2118,6 @@ class ModelDeliveryOrderData extends DataClass
       required this.itemList,
       required this.netTotal,
       required this.totalReceivedAmount,
-      required this.totalSendAmount,
       required this.paymentStatus,
       required this.orderStatus,
       required this.createdBy,
@@ -2143,8 +2141,6 @@ class ModelDeliveryOrderData extends DataClass
           .mapFromDatabaseResponse(data['${effectivePrefix}net_total'])!,
       totalReceivedAmount: const RealType().mapFromDatabaseResponse(
           data['${effectivePrefix}total_received_amount'])!,
-      totalSendAmount: const RealType().mapFromDatabaseResponse(
-          data['${effectivePrefix}total_send_amount'])!,
       paymentStatus: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}payment_status'])!,
       orderStatus: const StringType()
@@ -2173,7 +2169,6 @@ class ModelDeliveryOrderData extends DataClass
     }
     map['net_total'] = Variable<double>(netTotal);
     map['total_received_amount'] = Variable<double>(totalReceivedAmount);
-    map['total_send_amount'] = Variable<double>(totalSendAmount);
     map['payment_status'] = Variable<String>(paymentStatus);
     map['order_status'] = Variable<String>(orderStatus);
     map['created_by'] = Variable<String>(createdBy);
@@ -2195,7 +2190,6 @@ class ModelDeliveryOrderData extends DataClass
       itemList: Value(itemList),
       netTotal: Value(netTotal),
       totalReceivedAmount: Value(totalReceivedAmount),
-      totalSendAmount: Value(totalSendAmount),
       paymentStatus: Value(paymentStatus),
       orderStatus: Value(orderStatus),
       createdBy: Value(createdBy),
@@ -2218,7 +2212,6 @@ class ModelDeliveryOrderData extends DataClass
       netTotal: serializer.fromJson<double>(json['netTotal']),
       totalReceivedAmount:
           serializer.fromJson<double>(json['totalReceivedAmount']),
-      totalSendAmount: serializer.fromJson<double>(json['totalSendAmount']),
       paymentStatus: serializer.fromJson<String>(json['paymentStatus']),
       orderStatus: serializer.fromJson<String>(json['orderStatus']),
       createdBy: serializer.fromJson<String>(json['createdBy']),
@@ -2238,7 +2231,6 @@ class ModelDeliveryOrderData extends DataClass
       'itemList': serializer.toJson<ItemList>(itemList),
       'netTotal': serializer.toJson<double>(netTotal),
       'totalReceivedAmount': serializer.toJson<double>(totalReceivedAmount),
-      'totalSendAmount': serializer.toJson<double>(totalSendAmount),
       'paymentStatus': serializer.toJson<String>(paymentStatus),
       'orderStatus': serializer.toJson<String>(orderStatus),
       'createdBy': serializer.toJson<String>(createdBy),
@@ -2256,7 +2248,6 @@ class ModelDeliveryOrderData extends DataClass
           ItemList? itemList,
           double? netTotal,
           double? totalReceivedAmount,
-          double? totalSendAmount,
           String? paymentStatus,
           String? orderStatus,
           String? createdBy,
@@ -2270,7 +2261,6 @@ class ModelDeliveryOrderData extends DataClass
         itemList: itemList ?? this.itemList,
         netTotal: netTotal ?? this.netTotal,
         totalReceivedAmount: totalReceivedAmount ?? this.totalReceivedAmount,
-        totalSendAmount: totalSendAmount ?? this.totalSendAmount,
         paymentStatus: paymentStatus ?? this.paymentStatus,
         orderStatus: orderStatus ?? this.orderStatus,
         createdBy: createdBy ?? this.createdBy,
@@ -2287,7 +2277,6 @@ class ModelDeliveryOrderData extends DataClass
           ..write('itemList: $itemList, ')
           ..write('netTotal: $netTotal, ')
           ..write('totalReceivedAmount: $totalReceivedAmount, ')
-          ..write('totalSendAmount: $totalSendAmount, ')
           ..write('paymentStatus: $paymentStatus, ')
           ..write('orderStatus: $orderStatus, ')
           ..write('createdBy: $createdBy, ')
@@ -2306,7 +2295,6 @@ class ModelDeliveryOrderData extends DataClass
       itemList,
       netTotal,
       totalReceivedAmount,
-      totalSendAmount,
       paymentStatus,
       orderStatus,
       createdBy,
@@ -2323,7 +2311,6 @@ class ModelDeliveryOrderData extends DataClass
           other.itemList == this.itemList &&
           other.netTotal == this.netTotal &&
           other.totalReceivedAmount == this.totalReceivedAmount &&
-          other.totalSendAmount == this.totalSendAmount &&
           other.paymentStatus == this.paymentStatus &&
           other.orderStatus == this.orderStatus &&
           other.createdBy == this.createdBy &&
@@ -2340,7 +2327,6 @@ class ModelDeliveryOrderCompanion
   final Value<ItemList> itemList;
   final Value<double> netTotal;
   final Value<double> totalReceivedAmount;
-  final Value<double> totalSendAmount;
   final Value<String> paymentStatus;
   final Value<String> orderStatus;
   final Value<String> createdBy;
@@ -2354,7 +2340,6 @@ class ModelDeliveryOrderCompanion
     this.itemList = const Value.absent(),
     this.netTotal = const Value.absent(),
     this.totalReceivedAmount = const Value.absent(),
-    this.totalSendAmount = const Value.absent(),
     this.paymentStatus = const Value.absent(),
     this.orderStatus = const Value.absent(),
     this.createdBy = const Value.absent(),
@@ -2369,7 +2354,6 @@ class ModelDeliveryOrderCompanion
     required ItemList itemList,
     required double netTotal,
     this.totalReceivedAmount = const Value.absent(),
-    this.totalSendAmount = const Value.absent(),
     this.paymentStatus = const Value.absent(),
     required String orderStatus,
     required String createdBy,
@@ -2388,7 +2372,6 @@ class ModelDeliveryOrderCompanion
     Expression<ItemList>? itemList,
     Expression<double>? netTotal,
     Expression<double>? totalReceivedAmount,
-    Expression<double>? totalSendAmount,
     Expression<String>? paymentStatus,
     Expression<String>? orderStatus,
     Expression<String>? createdBy,
@@ -2404,7 +2387,6 @@ class ModelDeliveryOrderCompanion
       if (netTotal != null) 'net_total': netTotal,
       if (totalReceivedAmount != null)
         'total_received_amount': totalReceivedAmount,
-      if (totalSendAmount != null) 'total_send_amount': totalSendAmount,
       if (paymentStatus != null) 'payment_status': paymentStatus,
       if (orderStatus != null) 'order_status': orderStatus,
       if (createdBy != null) 'created_by': createdBy,
@@ -2422,7 +2404,6 @@ class ModelDeliveryOrderCompanion
       Value<ItemList>? itemList,
       Value<double>? netTotal,
       Value<double>? totalReceivedAmount,
-      Value<double>? totalSendAmount,
       Value<String>? paymentStatus,
       Value<String>? orderStatus,
       Value<String>? createdBy,
@@ -2436,7 +2417,6 @@ class ModelDeliveryOrderCompanion
       itemList: itemList ?? this.itemList,
       netTotal: netTotal ?? this.netTotal,
       totalReceivedAmount: totalReceivedAmount ?? this.totalReceivedAmount,
-      totalSendAmount: totalSendAmount ?? this.totalSendAmount,
       paymentStatus: paymentStatus ?? this.paymentStatus,
       orderStatus: orderStatus ?? this.orderStatus,
       createdBy: createdBy ?? this.createdBy,
@@ -2469,9 +2449,6 @@ class ModelDeliveryOrderCompanion
       map['total_received_amount'] =
           Variable<double>(totalReceivedAmount.value);
     }
-    if (totalSendAmount.present) {
-      map['total_send_amount'] = Variable<double>(totalSendAmount.value);
-    }
     if (paymentStatus.present) {
       map['payment_status'] = Variable<String>(paymentStatus.value);
     }
@@ -2503,7 +2480,6 @@ class ModelDeliveryOrderCompanion
           ..write('itemList: $itemList, ')
           ..write('netTotal: $netTotal, ')
           ..write('totalReceivedAmount: $totalReceivedAmount, ')
-          ..write('totalSendAmount: $totalSendAmount, ')
           ..write('paymentStatus: $paymentStatus, ')
           ..write('orderStatus: $orderStatus, ')
           ..write('createdBy: $createdBy, ')
@@ -2563,14 +2539,6 @@ class $ModelDeliveryOrderTable extends ModelDeliveryOrder
           type: const RealType(),
           requiredDuringInsert: false,
           defaultValue: const Constant(0.0));
-  final VerificationMeta _totalSendAmountMeta =
-      const VerificationMeta('totalSendAmount');
-  @override
-  late final GeneratedColumn<double?> totalSendAmount =
-      GeneratedColumn<double?>('total_send_amount', aliasedName, false,
-          type: const RealType(),
-          requiredDuringInsert: false,
-          defaultValue: const Constant(0.0));
   final VerificationMeta _paymentStatusMeta =
       const VerificationMeta('paymentStatus');
   @override
@@ -2625,7 +2593,6 @@ class $ModelDeliveryOrderTable extends ModelDeliveryOrder
         itemList,
         netTotal,
         totalReceivedAmount,
-        totalSendAmount,
         paymentStatus,
         orderStatus,
         createdBy,
@@ -2673,12 +2640,6 @@ class $ModelDeliveryOrderTable extends ModelDeliveryOrder
           _totalReceivedAmountMeta,
           totalReceivedAmount.isAcceptableOrUnknown(
               data['total_received_amount']!, _totalReceivedAmountMeta));
-    }
-    if (data.containsKey('total_send_amount')) {
-      context.handle(
-          _totalSendAmountMeta,
-          totalSendAmount.isAcceptableOrUnknown(
-              data['total_send_amount']!, _totalSendAmountMeta));
     }
     if (data.containsKey('payment_status')) {
       context.handle(
@@ -2743,7 +2704,6 @@ class ModelReturnOrderData extends DataClass
   final int? transportId;
   final int clientId;
   final String returnStatus;
-  final double totalReceivedAmount;
   final double totalSendAmount;
   final double netRefund;
   final String refundStatus;
@@ -2757,7 +2717,6 @@ class ModelReturnOrderData extends DataClass
       this.transportId,
       required this.clientId,
       required this.returnStatus,
-      required this.totalReceivedAmount,
       required this.totalSendAmount,
       required this.netRefund,
       required this.refundStatus,
@@ -2779,8 +2738,6 @@ class ModelReturnOrderData extends DataClass
           .mapFromDatabaseResponse(data['${effectivePrefix}client_id'])!,
       returnStatus: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}return_status'])!,
-      totalReceivedAmount: const RealType().mapFromDatabaseResponse(
-          data['${effectivePrefix}total_received_amount'])!,
       totalSendAmount: const RealType().mapFromDatabaseResponse(
           data['${effectivePrefix}total_send_amount'])!,
       netRefund: const RealType()
@@ -2807,7 +2764,6 @@ class ModelReturnOrderData extends DataClass
     }
     map['client_id'] = Variable<int>(clientId);
     map['return_status'] = Variable<String>(returnStatus);
-    map['total_received_amount'] = Variable<double>(totalReceivedAmount);
     map['total_send_amount'] = Variable<double>(totalSendAmount);
     map['net_refund'] = Variable<double>(netRefund);
     map['refund_status'] = Variable<String>(refundStatus);
@@ -2827,7 +2783,6 @@ class ModelReturnOrderData extends DataClass
           : Value(transportId),
       clientId: Value(clientId),
       returnStatus: Value(returnStatus),
-      totalReceivedAmount: Value(totalReceivedAmount),
       totalSendAmount: Value(totalSendAmount),
       netRefund: Value(netRefund),
       refundStatus: Value(refundStatus),
@@ -2847,8 +2802,6 @@ class ModelReturnOrderData extends DataClass
       transportId: serializer.fromJson<int?>(json['transportId']),
       clientId: serializer.fromJson<int>(json['clientId']),
       returnStatus: serializer.fromJson<String>(json['returnStatus']),
-      totalReceivedAmount:
-          serializer.fromJson<double>(json['totalReceivedAmount']),
       totalSendAmount: serializer.fromJson<double>(json['totalSendAmount']),
       netRefund: serializer.fromJson<double>(json['netRefund']),
       refundStatus: serializer.fromJson<String>(json['refundStatus']),
@@ -2867,7 +2820,6 @@ class ModelReturnOrderData extends DataClass
       'transportId': serializer.toJson<int?>(transportId),
       'clientId': serializer.toJson<int>(clientId),
       'returnStatus': serializer.toJson<String>(returnStatus),
-      'totalReceivedAmount': serializer.toJson<double>(totalReceivedAmount),
       'totalSendAmount': serializer.toJson<double>(totalSendAmount),
       'netRefund': serializer.toJson<double>(netRefund),
       'refundStatus': serializer.toJson<String>(refundStatus),
@@ -2884,7 +2836,6 @@ class ModelReturnOrderData extends DataClass
           int? transportId,
           int? clientId,
           String? returnStatus,
-          double? totalReceivedAmount,
           double? totalSendAmount,
           double? netRefund,
           String? refundStatus,
@@ -2898,7 +2849,6 @@ class ModelReturnOrderData extends DataClass
         transportId: transportId ?? this.transportId,
         clientId: clientId ?? this.clientId,
         returnStatus: returnStatus ?? this.returnStatus,
-        totalReceivedAmount: totalReceivedAmount ?? this.totalReceivedAmount,
         totalSendAmount: totalSendAmount ?? this.totalSendAmount,
         netRefund: netRefund ?? this.netRefund,
         refundStatus: refundStatus ?? this.refundStatus,
@@ -2915,7 +2865,6 @@ class ModelReturnOrderData extends DataClass
           ..write('transportId: $transportId, ')
           ..write('clientId: $clientId, ')
           ..write('returnStatus: $returnStatus, ')
-          ..write('totalReceivedAmount: $totalReceivedAmount, ')
           ..write('totalSendAmount: $totalSendAmount, ')
           ..write('netRefund: $netRefund, ')
           ..write('refundStatus: $refundStatus, ')
@@ -2934,7 +2883,6 @@ class ModelReturnOrderData extends DataClass
       transportId,
       clientId,
       returnStatus,
-      totalReceivedAmount,
       totalSendAmount,
       netRefund,
       refundStatus,
@@ -2951,7 +2899,6 @@ class ModelReturnOrderData extends DataClass
           other.transportId == this.transportId &&
           other.clientId == this.clientId &&
           other.returnStatus == this.returnStatus &&
-          other.totalReceivedAmount == this.totalReceivedAmount &&
           other.totalSendAmount == this.totalSendAmount &&
           other.netRefund == this.netRefund &&
           other.refundStatus == this.refundStatus &&
@@ -2967,7 +2914,6 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
   final Value<int?> transportId;
   final Value<int> clientId;
   final Value<String> returnStatus;
-  final Value<double> totalReceivedAmount;
   final Value<double> totalSendAmount;
   final Value<double> netRefund;
   final Value<String> refundStatus;
@@ -2981,7 +2927,6 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
     this.transportId = const Value.absent(),
     this.clientId = const Value.absent(),
     this.returnStatus = const Value.absent(),
-    this.totalReceivedAmount = const Value.absent(),
     this.totalSendAmount = const Value.absent(),
     this.netRefund = const Value.absent(),
     this.refundStatus = const Value.absent(),
@@ -2996,7 +2941,6 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
     this.transportId = const Value.absent(),
     required int clientId,
     required String returnStatus,
-    this.totalReceivedAmount = const Value.absent(),
     this.totalSendAmount = const Value.absent(),
     this.netRefund = const Value.absent(),
     this.refundStatus = const Value.absent(),
@@ -3015,7 +2959,6 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
     Expression<int?>? transportId,
     Expression<int>? clientId,
     Expression<String>? returnStatus,
-    Expression<double>? totalReceivedAmount,
     Expression<double>? totalSendAmount,
     Expression<double>? netRefund,
     Expression<String>? refundStatus,
@@ -3030,8 +2973,6 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
       if (transportId != null) 'transport_id': transportId,
       if (clientId != null) 'client_id': clientId,
       if (returnStatus != null) 'return_status': returnStatus,
-      if (totalReceivedAmount != null)
-        'total_received_amount': totalReceivedAmount,
       if (totalSendAmount != null) 'total_send_amount': totalSendAmount,
       if (netRefund != null) 'net_refund': netRefund,
       if (refundStatus != null) 'refund_status': refundStatus,
@@ -3048,7 +2989,6 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
       Value<int?>? transportId,
       Value<int>? clientId,
       Value<String>? returnStatus,
-      Value<double>? totalReceivedAmount,
       Value<double>? totalSendAmount,
       Value<double>? netRefund,
       Value<String>? refundStatus,
@@ -3062,7 +3002,6 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
       transportId: transportId ?? this.transportId,
       clientId: clientId ?? this.clientId,
       returnStatus: returnStatus ?? this.returnStatus,
-      totalReceivedAmount: totalReceivedAmount ?? this.totalReceivedAmount,
       totalSendAmount: totalSendAmount ?? this.totalSendAmount,
       netRefund: netRefund ?? this.netRefund,
       refundStatus: refundStatus ?? this.refundStatus,
@@ -3090,10 +3029,6 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
     }
     if (returnStatus.present) {
       map['return_status'] = Variable<String>(returnStatus.value);
-    }
-    if (totalReceivedAmount.present) {
-      map['total_received_amount'] =
-          Variable<double>(totalReceivedAmount.value);
     }
     if (totalSendAmount.present) {
       map['total_send_amount'] = Variable<double>(totalSendAmount.value);
@@ -3127,7 +3062,6 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
           ..write('transportId: $transportId, ')
           ..write('clientId: $clientId, ')
           ..write('returnStatus: $returnStatus, ')
-          ..write('totalReceivedAmount: $totalReceivedAmount, ')
           ..write('totalSendAmount: $totalSendAmount, ')
           ..write('netRefund: $netRefund, ')
           ..write('refundStatus: $refundStatus, ')
@@ -3186,14 +3120,6 @@ class $ModelReturnOrderTable extends ModelReturnOrder
           GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 20),
       type: const StringType(),
       requiredDuringInsert: true);
-  final VerificationMeta _totalReceivedAmountMeta =
-      const VerificationMeta('totalReceivedAmount');
-  @override
-  late final GeneratedColumn<double?> totalReceivedAmount =
-      GeneratedColumn<double?>('total_received_amount', aliasedName, false,
-          type: const RealType(),
-          requiredDuringInsert: false,
-          defaultValue: const Constant(0.0));
   final VerificationMeta _totalSendAmountMeta =
       const VerificationMeta('totalSendAmount');
   @override
@@ -3256,7 +3182,6 @@ class $ModelReturnOrderTable extends ModelReturnOrder
         transportId,
         clientId,
         returnStatus,
-        totalReceivedAmount,
         totalSendAmount,
         netRefund,
         refundStatus,
@@ -3306,12 +3231,6 @@ class $ModelReturnOrderTable extends ModelReturnOrder
               data['return_status']!, _returnStatusMeta));
     } else if (isInserting) {
       context.missing(_returnStatusMeta);
-    }
-    if (data.containsKey('total_received_amount')) {
-      context.handle(
-          _totalReceivedAmountMeta,
-          totalReceivedAmount.isAcceptableOrUnknown(
-              data['total_received_amount']!, _totalReceivedAmountMeta));
     }
     if (data.containsKey('total_send_amount')) {
       context.handle(

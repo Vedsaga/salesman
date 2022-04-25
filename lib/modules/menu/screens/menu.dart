@@ -66,7 +66,7 @@ class Menu extends StatelessWidget {
         }
       },
       child: MobileLayout(
-        routeName: null,
+        routeName: RouteNames.menu,
         topAppBar: BlocBuilder<MenuBloc, MenuState>(
           builder: (context, state) {
             if (state is FetchedAllDetailsState) {

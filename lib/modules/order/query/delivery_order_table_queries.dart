@@ -117,6 +117,20 @@ class DeliveryOrderTableQueries extends DatabaseAccessor<AppDatabase>
           ]))
         .get();
   }
+  Future<List<ModelDeliveryOrderData>?> getAllUnpaidOrders() async {
+    return (select(modelDeliveryOrder)
+          ..where(
+            (table) =>
+                table.paymentStatus.equals("unpaid") |
+                table.paymentStatus.equals("partial"),
+          )
+          ..orderBy([
+            (table) => OrderingTerm(
+                  expression: table.deliveryOrderId,
+                )
+          ]))
+        .get();
+  }
 
   Future<ModelDeliveryOrderData> getOrderDetails(int deliveryOrderId) async {
     return (select(modelDeliveryOrder)
@@ -241,6 +255,7 @@ class DeliveryOrderTableQueries extends DatabaseAccessor<AppDatabase>
           noOfPendingOrder: Value(client.noOfPendingOrder - 1),
           lastTradeOn: Value(DateTime.now()),
           pendingDue: Value(pendingDue),
+          lastUpdatedOn: Value(DateTime.now()),
         ),
       );
 

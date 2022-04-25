@@ -103,10 +103,10 @@ class AddPaymentDetailsBloc
         } else {
           final List<ModelDeliveryOrderData>? deliveryOrderList =
               await DeliveryOrderTableQueries(appDatabaseInstance)
-                  .getAllOrders();
+                  .getAllUnpaidOrders();
           final List<ModelReturnOrderData>? returnOrderList =
               await ReturnOrderTableQueries(appDatabaseInstance)
-                  .getAllReturnOrders();
+                  .getAllUnRefundReturnOrders();
           if (deliveryOrderList == null && returnOrderList == null) {
             emit(EmptyOrderDetailsState());
           } else {
@@ -354,50 +354,52 @@ class AddPaymentDetailsBloc
     );
     if (state.status.isValidated) {
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
-      String paymentStatus = "-";
-      final ModelPaymentCompanion newPayment = ModelPaymentCompanion(
-        deliveryOrderId: Value(state.deliveryOrderId.value),
-        returnOrderId: Value(state.returnOrderId.value),
-        amount: Value(state.amount.value),
-        paymentMode: Value(state.paymentMode.value),
-        paymentType: Value(state.paymentType.value),
-        paymentFor: Value(state.paymentFor.value),
-        paymentDate: Value(state.paymentDate.value!),
-        receivedBy: Value(state.receivedBy.value),
-      );
+
       try {
+        String paymentStatus = "-";
+        final ModelPaymentCompanion newPayment = ModelPaymentCompanion(
+          deliveryOrderId: Value(state.deliveryOrderId.value),
+          returnOrderId: Value(state.returnOrderId.value),
+          amount: Value(state.amount.value),
+          paymentMode: Value(state.paymentMode.value),
+          paymentType: Value(state.paymentType.value),
+          paymentFor: Value(state.paymentFor.value),
+          paymentDate: Value(state.paymentDate.value!),
+          receivedBy: Value(state.receivedBy.value),
+        );
         if (state.selectedDeliveryOrder != null) {
           final ModelDeliveryOrderData orderData = state.selectedDeliveryOrder!;
-          if (state.paymentType.value == "receive") {
-            final double computedDue =
-                (orderData.totalReceivedAmount + state.amount.value) -
-                    orderData.totalSendAmount;
-            if (computedDue >= orderData.netTotal) {
-              paymentStatus = "paid";
-            } else if (0 < computedDue) {
-              paymentStatus = "partial";
-            } else if (0 >= computedDue) {
-              paymentStatus = "unpaid";
-            } else {
-              final double computeDue = orderData.totalReceivedAmount -
-                  (orderData.totalSendAmount + state.amount.value);
-              if (computeDue >= orderData.netTotal) {
-                paymentStatus = "paid";
-              } else if (0 < computeDue) {
-                paymentStatus = "partial";
-              } else if (0 >= computeDue) {
-                paymentStatus = "unpaid";
-              }
-            }
+          final double computedDue =
+              orderData.totalReceivedAmount + state.amount.value;
+          if (computedDue > orderData.netTotal) {
+            emit(
+              state.copyWith(
+                deliveryOrderId: deliveryOrderId,
+                returnOrderId: returnOrderId,
+                amount: amount,
+                paymentMode: paymentMode,
+                paymentType: paymentType,
+                paymentFor: paymentFor,
+                paymentDate: paymentDate,
+                receivedBy: receivedBy,
+                addPaymentStatus: AddPaymentStatus.extraPayment,
+                status: FormzStatus.invalid,
+              ),
+            );
+            return;
+          } else if (computedDue == orderData.netTotal) {
+            paymentStatus = "paid";
+          } else if (0 < computedDue) {
+            paymentStatus = "partial";
+          } else if (0 == computedDue) {
+            paymentStatus = "unpaid";
           }
           final int paymentId = await PaymentTableQueries(appDatabaseInstance)
               .insertPaymentReceived(
             paymentReceived: newPayment,
-            selectedReturnOrder: state.selectedReturnOrder,
             selectedDeliveryOrder: state.selectedDeliveryOrder,
             clientID: orderData.clientId,
             status: paymentStatus,
-            paymentType: state.paymentType.value,
           );
           if (paymentId > 0) {
             emit(
@@ -406,31 +408,6 @@ class AddPaymentDetailsBloc
               ),
             );
           }
-        } else if (state.selectedReturnOrder != null) {
-          final ModelReturnOrderData returnData = state.selectedReturnOrder!;
-          if (state.paymentType.value == "receive") {
-            final double computedDue =
-                (returnData.totalReceivedAmount + state.amount.value) -
-                    returnData.totalSendAmount;
-            if (computedDue >= returnData.netRefund) {
-              paymentStatus = "paid";
-            } else if (0 < computedDue) {
-              paymentStatus = "partial";
-            } else if (0 >= computedDue) {
-              paymentStatus = "unpaid";
-            } else {
-              final double computeDue = returnData.totalReceivedAmount -
-                  (returnData.totalSendAmount + state.amount.value);
-              if (computeDue >= returnData.netRefund) {
-                paymentStatus = "paid";
-              } else if (0 < computeDue) {
-                paymentStatus = "partial";
-              } else if (0 >= computeDue) {
-                paymentStatus = "unpaid";
-              }
-            }
-          }
-        } else {
         }
       } catch (e) {
         emit(state.copyWith(status: FormzStatus.submissionFailure));

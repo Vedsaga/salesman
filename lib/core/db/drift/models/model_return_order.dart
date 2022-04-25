@@ -13,8 +13,6 @@ class ModelReturnOrder extends Table {
       integer().references(ModelTransport, #transportId).nullable()();
     IntColumn get clientId => integer().references(ModelClient, #clientId)();
   TextColumn get returnStatus => text().withLength(min: 1, max: 20)();
-  RealColumn get totalReceivedAmount =>
-      real().withDefault(const Constant(0.0))();
   RealColumn get totalSendAmount => real().withDefault(const Constant(0.0))();
   RealColumn get netRefund => real().withDefault(const Constant(0.0))();
   TextColumn get refundStatus =>

@@ -131,13 +131,9 @@ class ViewOrderDetailsBloc
     }
 
     double _pendingDue = event.clientDetails.pendingDue;
-
-    if (((event.orderDetails.netTotal + event.orderDetails.totalSendAmount) -
-            event.orderDetails.totalReceivedAmount) >
-        0) {
+    if (event.orderDetails.netTotal != event.orderDetails.totalReceivedAmount) {
       _pendingDue +=
-          (event.orderDetails.netTotal + event.orderDetails.totalSendAmount) -
-              event.orderDetails.totalReceivedAmount;
+          event.orderDetails.netTotal - event.orderDetails.totalReceivedAmount;
     }
  
     try {

@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/routes/arguments_models/add_payment_details_route_arguments.dart';
 import 'package:salesman/config/routes/route_name.dart';
+import 'package:salesman/config/theme/card_box_decoration.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
 import 'package:salesman/core/components/custom_round_button.dart';
@@ -89,6 +90,22 @@ class OrderPaymentsTab extends StatelessWidget {
                     child: Flex(
                       direction: Axis.vertical,
                       children: [
+                        if (state.orderDetails.paymentStatus == "paid")
+                          Container(
+                            height: 34,
+                            width: double.infinity,
+                            decoration: cardBoxDecoration(context),
+                            child: Center(
+                              child: Text(
+                                "PAID",
+                                style: of(context)
+                                    .textTheme
+                                    .headline6
+                                    ?.copyWith(color: green),
+                              ),
+                            ),
+                          ),
+                        if (state.orderDetails.paymentStatus != "paid")
                         SummaryCard(
                           summaryValuesList: [
                             SummaryCardModel(
@@ -177,6 +194,7 @@ class OrderPaymentsTab extends StatelessWidget {
                             },
                           ),
                       ],
+
                     ),
                   ),
                 ),
@@ -187,10 +205,13 @@ class OrderPaymentsTab extends StatelessWidget {
                 child: Flex(
                   direction: Axis.horizontal,
                   children: [
+
                     const Spacer(),
+                    if (state.orderDetails.paymentStatus != "paid")
                     CustomRoundButton(
-                      label: "pay",
-                      svgPath: "inr",
+                        label: "receive",
+                        svgPath: "receive_inr",
+                        svgColor: green,
                       onPressed: () {
                         Navigator.popAndPushNamed(
                             context, RouteNames.addPaymentDetails,

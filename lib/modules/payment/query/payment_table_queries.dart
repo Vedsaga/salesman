@@ -23,17 +23,14 @@ class PaymentTableQueries extends DatabaseAccessor<AppDatabase>
   Future<int> insertPaymentReceived({
     required ModelPaymentCompanion paymentReceived,
     required ModelDeliveryOrderData? selectedDeliveryOrder,
-    required ModelReturnOrderData? selectedReturnOrder,
     required int clientID,
     required String status,
-    required String paymentType,
   }) {
     return transaction(() async {
-      final int noOfRowUpdated = await into(modelPayment).insert(paymentReceived);
-      int orderId = 0;
+      final int noOfRowUpdated =
+          await into(modelPayment).insert(paymentReceived);
       if (selectedDeliveryOrder != null) {
-        if (paymentType == "receive") {
-          final int updatedId = await (update(modelDeliveryOrder)
+        final int noOfRowUpdated = await (update(modelDeliveryOrder)
                 ..where(
                   (tbl) => tbl.deliveryOrderId
                       .equals(selectedDeliveryOrder.deliveryOrderId),
@@ -45,13 +42,14 @@ class PaymentTableQueries extends DatabaseAccessor<AppDatabase>
                 selectedDeliveryOrder.totalReceivedAmount +
                     paymentReceived.amount.value,
               ),
+            lastUpdated: Value(DateTime.now()),
             ),
           );
-          orderId = updatedId;
-          if (orderId > 0) {
+        if (noOfRowUpdated > 0) {
             final ModelClientData clientData =
                 await ClientTableQueries(appDatabaseInstance)
                     .getClientDetails(clientID);
+          if (clientData.pendingDue > 0) {
             await (update(modelClient)
                   ..where((tbl) => tbl.clientId.equals(clientID)))
                 .write(
@@ -65,47 +63,19 @@ class PaymentTableQueries extends DatabaseAccessor<AppDatabase>
                 lastPaymentOn: Value(DateTime.now()),
               ),
             );
-          }
-        } else if (paymentType == "send") {
-          final int updatedId = await (update(modelDeliveryOrder)
-                ..where(
-                  (tbl) => tbl.deliveryOrderId
-                      .equals(selectedDeliveryOrder.deliveryOrderId),
-                ))
-              .write(
-            ModelDeliveryOrderCompanion(
-              paymentStatus: Value(status),
-              totalSendAmount: Value(
-                selectedDeliveryOrder.totalSendAmount +
-                    paymentReceived.amount.value,
-              ),
-            ),
-          );
-          orderId = updatedId;
-          if (orderId > 0) {
-            final ModelClientData clientData =
-                await ClientTableQueries(appDatabaseInstance)
-                    .getClientDetails(clientID);
+          } else {
             await (update(modelClient)
                   ..where((tbl) => tbl.clientId.equals(clientID)))
                 .write(
               ModelClientCompanion(
-                pendingDue: Value(
-                  clientData.pendingDue + paymentReceived.amount.value,
-                ),
-                totalAmountSent: Value(
-                  clientData.totalAmountSent + paymentReceived.amount.value,
+                totalAmountReceived: Value(
+                  clientData.totalAmountReceived + paymentReceived.amount.value,
                 ),
                 lastPaymentOn: Value(DateTime.now()),
               ),
             );
-            
           }
-        } else {
-          Exception("Invalid payment type");
         }
-      } else if (selectedReturnOrder != null) {
-        
       }
       else {
         Exception("Invalid payment type");

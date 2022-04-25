@@ -9,7 +9,6 @@ import 'package:salesman/core/utils/order_map.dart';
 import 'package:salesman/main.dart';
 import 'package:salesman/modules/client/query/client_table_queries.dart';
 import 'package:salesman/modules/transport/query/transport_table_queries.dart';
-import 'package:salesman/modules/vehicle/query/vehicle_table_queries.dart';
 
 part 'process_order_event.dart';
 part 'process_order_state.dart';
