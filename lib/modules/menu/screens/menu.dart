@@ -167,10 +167,10 @@ class Menu extends StatelessWidget {
                           iconName: "return_order",
                           disabled: activeFeatures.disableReturn,
                           onTap: () {
-                            snackbarMessage(
+                            Navigator.pushNamed(
                               context,
-                              "Will add soon :D",
-                              MessageType.normal,
+                              RouteNames.viewReturnOrderList,
+
                             );
                           },
                         ),

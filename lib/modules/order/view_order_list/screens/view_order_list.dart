@@ -57,7 +57,7 @@ class _ViewOrderListState extends State<ViewOrderList> {
           snackbarMessage(
             context,
             'No orders found! Please Create Order',
-            MessageType.warning,
+            MessageType.normal,
           );
         }
         if (state is UpdatedOrderStatusSuccessfully) {
@@ -92,7 +92,7 @@ class _ViewOrderListState extends State<ViewOrderList> {
             if (state is FetchedOrderListState) {
               final GlobalFunction globalFunction = GlobalFunction(
                 clientList: state.clientList,
-                itemList: state.itemList,
+                itemList: [],
               );
               return SingleChildScrollView(
                 child: Container(
@@ -203,7 +203,7 @@ class _ViewOrderListState extends State<ViewOrderList> {
         ),
         bottomAppBar: CommonBottomNavigation(
           onTapAddIcon: () {
-            Navigator.pushNamed(
+            Navigator.popAndPushNamed(
               context,
               RouteNames.createOrder,
             );

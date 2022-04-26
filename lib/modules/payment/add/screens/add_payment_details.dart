@@ -811,7 +811,7 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                       ),
                       inputFormatters: [
                         FilteringTextInputFormatter.allow(
-                          RegExp(r'^[0-9]+(\.[0-9]*)?$'),
+                          RegExp(r'^[0-9]+(\.[0-9]{0,4})?$'),
                         ),
                       ],
                       textAlignVertical: TextAlignVertical.center,

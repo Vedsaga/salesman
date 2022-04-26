@@ -107,17 +107,7 @@ class DeliveryOrderTableQueries extends DatabaseAccessor<AppDatabase>
         .toList();
   }
 
-  Future<List<ModelDeliveryOrderData>?> getAllOrders() async {
-    return (select(modelDeliveryOrder)
-          ..orderBy([
-            (table) => OrderingTerm(
-                  expression: table.deliveryOrderId,
-                  mode: OrderingMode.desc,
-                )
-          ]))
-        .get();
-  }
-  Future<List<ModelDeliveryOrderData>?> getAllUnpaidOrders() async {
+  Future<List<ModelDeliveryOrderData>> getAllUnpaidOrders() async {
     return (select(modelDeliveryOrder)
           ..where(
             (table) =>
@@ -127,6 +117,18 @@ class DeliveryOrderTableQueries extends DatabaseAccessor<AppDatabase>
           ..orderBy([
             (table) => OrderingTerm(
                   expression: table.deliveryOrderId,
+                )
+          ]))
+        .get();
+  }
+  Future<List<ModelDeliveryOrderData>> getAllDeliveredOrders() async {
+    return (select(modelDeliveryOrder)
+          ..where(
+            (table) => table.orderStatus.equals("deliver"),
+          )
+          ..orderBy([
+            (table) => OrderingTerm.desc(
+                  table.deliveryOrderId,
                 )
           ]))
         .get();
@@ -166,6 +168,7 @@ class DeliveryOrderTableQueries extends DatabaseAccessor<AppDatabase>
     required int deliveryOrderId,
     required List<ItemMap> itemList,
     required ModelClientData client,
+    required double pendingRefund,
   }) {
     return transaction(() async {
       for (final ItemMap item in itemList) {
@@ -178,6 +181,7 @@ class DeliveryOrderTableQueries extends DatabaseAccessor<AppDatabase>
         ModelClientCompanion(
           noOfPendingOrder: Value(client.noOfPendingOrder - 1),
           lastTradeOn: Value(DateTime.now()),
+          pendingRefund: Value(client.pendingRefund + pendingRefund),
         ),
       );
       return (update(modelDeliveryOrder)
@@ -197,6 +201,7 @@ class DeliveryOrderTableQueries extends DatabaseAccessor<AppDatabase>
     required ModelClientData client,
     required List<OrderMap> deliveryList,
     required int transportId,
+    required double totalReceiveAmount,
   }) {
     return transaction(() async {
       for (final ItemMap item in itemList) {
@@ -209,6 +214,9 @@ class DeliveryOrderTableQueries extends DatabaseAccessor<AppDatabase>
         ModelClientCompanion(
           noOfPendingOrder: Value(client.noOfPendingOrder - 1),
           lastTradeOn: Value(DateTime.now()),
+          pendingRefund: Value(
+            client.pendingRefund + totalReceiveAmount,
+          ),
         ),
       );
 
@@ -218,8 +226,7 @@ class DeliveryOrderTableQueries extends DatabaseAccessor<AppDatabase>
         ModelTransportCompanion(
           deliveryOrderList:
               Value(DeliveryOrderList(deliveryList: deliveryList)),
-                    lastUpdated: Value(DateTime.now()),
-
+          lastUpdated: Value(DateTime.now()),
         ),
       );
       return (update(modelDeliveryOrder)

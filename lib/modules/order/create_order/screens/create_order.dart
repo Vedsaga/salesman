@@ -166,7 +166,6 @@ class _CreateOrderState extends State<CreateOrder> {
                       highlightValueColor: secondaryDark,
                     ),
                     SizedBox(height: designValues(context).cornerRadius34),
-                    if (state.listOfItemsForOrder.valid)
                     CustomDropdown(
                       labelText: "Select Client",
                       dropDownWidget: DropdownButton<ModelClientData>(
@@ -212,8 +211,7 @@ class _CreateOrderState extends State<CreateOrder> {
                         }).toList(),
                       ),
                     ),
-                    if (state.listOfItemsForOrder.valid)
-
+                    
                     SizedBox(height: designValues(context).verticalPadding),
                     RowFlexSpacedChildren(
                       firstChild: GestureDetector(
@@ -256,6 +254,7 @@ class _CreateOrderState extends State<CreateOrder> {
                         },
                         child: Flex(
                           direction: Axis.vertical,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             labelForDropdown(
                               context,
@@ -380,33 +379,35 @@ class _CreateOrderState extends State<CreateOrder> {
                                   );
                                 }
                               }
-                              BlocProvider.of<CreateOrderBloc>(
-                                context,
-                              ).add(
-                                OrderFieldsChangeEvent(
-                                                                selectedClient: state.selectedClient,
-
-                                  clientId: state.clientId.value,
-                                  clientName: state.clientName.value,
-                                  itemId: state.itemId.value,
-                                  itemName: state.itemName.value,
-                                  itemUnit: state.itemUnit.value,
-                                  itemPerUnitCost: state.itemPerUnitCost.value,
-                                  itemTotalQuantity:
-                                      state.itemTotalQuantity.value,
-                                  itemTotalCost: state.itemTotalCost.value,
-                                  listOfItemsForOrder:
-                                      state.listOfItemsForOrder.value,
-                                  orderStatus: state.orderStatus.value,
-                                  createdBy: state.createdBy.value,
-                                  expectedDeliveryDate: expectedDeliveryDate,
-                                ),
-                              );
+                             
                             });
+                            BlocProvider.of<CreateOrderBloc>(
+                              context,
+                            ).add(
+                              OrderFieldsChangeEvent(
+                                selectedClient: state.selectedClient,
+                                clientId: state.clientId.value,
+                                clientName: state.clientName.value,
+                                itemId: state.itemId.value,
+                                itemName: state.itemName.value,
+                                itemUnit: state.itemUnit.value,
+                                itemPerUnitCost: state.itemPerUnitCost.value,
+                                itemTotalQuantity:
+                                    state.itemTotalQuantity.value,
+                                itemTotalCost: state.itemTotalCost.value,
+                                listOfItemsForOrder:
+                                    state.listOfItemsForOrder.value,
+                                orderStatus: state.orderStatus.value,
+                                createdBy: state.createdBy.value,
+                                expectedDeliveryDate: expectedDeliveryDate,
+                              ),
+                            );
                           });
                         },
                         child: Flex(
                           direction: Axis.vertical,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+
                           children: [
                             if (expectedDeliveryDate != null)
                               labelForDropdown(
@@ -502,6 +503,7 @@ class _CreateOrderState extends State<CreateOrder> {
                         ),
                       ],
                     ),
+                   
                     SizedBox(height: designValues(context).verticalPadding),
                     ListView.builder(
                       shrinkWrap: true,

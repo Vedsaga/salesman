@@ -15,7 +15,7 @@ class DoubleFieldNotZero extends FormzInput<double, DoubleFieldNotZeroValidation
   const DoubleFieldNotZero.dirty([double value = 0.0]) : super.dirty(value);
 
   // regex to validate the input value to only allow numbers and a dot
-  static final RegExp _doubleRegex = RegExp(r'^[0-9]+(\.[0-9]*)?$');
+  static final RegExp _doubleRegex = RegExp(r'^[0-9]+(\.[0-9]{0,4})?$');
 
   @override
   DoubleFieldNotZeroValidationError? validator(double value) {

@@ -21,36 +21,39 @@ import 'package:salesman/core/components/show_unit.dart';
 import 'package:salesman/core/db/drift/app_database.dart';
 import 'package:salesman/core/models/validations/double_field_not_zero.dart';
 import 'package:salesman/core/utils/item_map.dart';
-import 'package:salesman/modules/order/create_order/bloc/create_order_bloc.dart';
+import 'package:salesman/modules/return/create_return_order/bloc/create_return_bloc.dart';
 
-class EditItemPage extends StatefulWidget {
-  const EditItemPage({
+class EditReturnItemPage extends StatefulWidget {
+  const EditReturnItemPage({
     Key? key,
-    required this.itemMap,
-    required this.itemData,
+    required this.editItemMap,
+    required this.deliveredItemMap,
+    required this.selectedItemDetails,
   }) : super(key: key);
-  final ItemMap itemMap;
-  final ModelItemData itemData;
+  final ItemMap editItemMap;
+  final ItemMap deliveredItemMap;
+  final ModelItemData selectedItemDetails;
   @override
-  State<EditItemPage> createState() => _EditItemPageState();
+  State<EditReturnItemPage> createState() => _EditItemPageState();
 }
 
-class _EditItemPageState extends State<EditItemPage> {
+class _EditItemPageState extends State<EditReturnItemPage> {
   final FocusNode _totalQuantityFocusNode = FocusNode();
   TextEditingController _totalCost = TextEditingController();
   final List<ItemMap> _items = [];
-
   @override
   void initState() {
     super.initState();
     _totalCost =
-        TextEditingController(text: widget.itemMap.totalWorth.toString());
+        TextEditingController(text: widget.editItemMap.totalWorth.toString());
     _totalQuantityFocusNode.addListener(_totalQuantityFocusNodeListener);
   }
 
   void _totalQuantityFocusNodeListener() {
     if (!_totalQuantityFocusNode.hasFocus) {
-      context.read<CreateOrderBloc>().add(TotalQuantityFieldUnfocusedEvent());
+      context
+          .read<CreateReturnOrderBloc>()
+          .add(ReturnQuantityFieldChangesEvent());
     }
   }
 
@@ -74,13 +77,37 @@ class _EditItemPageState extends State<EditItemPage> {
     );
   }
 
-  String? _totalQuantityErrorText() {
-    final totalQuantity =
-        context.read<CreateOrderBloc>().state.itemTotalQuantity;
-    if (totalQuantity.value > widget.itemData.availableQuantity) {
-      return 'Selling quantity is greater than available quantity';
+  bool _isReturnGreaterThanDelivery({
+    required List<ItemMap> deliveredItems,
+    required ModelItemData? selectedItem,
+    required double returnQuantity,
+  }) {
+    for (final item in deliveredItems) {
+      if (item.id == selectedItem?.itemId) {
+        if (returnQuantity > item.quantity) {
+          return true;
+        }
+      }
     }
-    switch (totalQuantity.error) {
+    return false;
+  }
+
+  String? _totalQuantityErrorText() {
+    final deliveredList =
+        context.read<CreateReturnOrderBloc>().state.deliveredItemsList;
+    final returnQyt =
+        context.read<CreateReturnOrderBloc>().state.returnQuantity;
+    if (deliveredList != null) {
+      if (_isReturnGreaterThanDelivery(
+        deliveredItems: deliveredList,
+        selectedItem: widget.selectedItemDetails,
+        returnQuantity: returnQyt.value,
+      )) {
+        return 'Return quantity is greater than delivered quantity';
+      }
+    }
+
+    switch (returnQyt.error) {
       case DoubleFieldNotZeroValidationError.cannotBeEmpty:
         return 'Quantity cannot be empty';
       case DoubleFieldNotZeroValidationError.cannotBeZero:
@@ -106,7 +133,6 @@ class _EditItemPageState extends State<EditItemPage> {
     return MobileLayout(
       routeName: RouteNames.viewOrderList,
       bottomAppBarRequired: true,
-
       topAppBar: const InputTopAppBar(title: "Edit Item"),
       body: Container(
         margin: EdgeInsets.only(
@@ -121,27 +147,27 @@ class _EditItemPageState extends State<EditItemPage> {
             DetailsCard(
               label: "Item Name",
               firstChild: const SizedBox(),
-              secondChild: Text(widget.itemMap.name),
+              secondChild: Text(widget.editItemMap.name),
             ),
             SizedBox(height: designValues(context).cornerRadius34),
             DetailsCard(
-              label: "Item Per Unit",
+              label: "Delivery Rate Per Unit",
               firstChild: SvgPicture.asset(
                 "assets/icons/svgs/inr.svg",
                 width: 13,
                 height: 13,
                 color: orange,
               ),
-              secondChild: Text(widget.itemMap.rate.toString()),
+              secondChild: Text(widget.deliveredItemMap.rate.toString()),
             ),
             SizedBox(height: designValues(context).cornerRadius34),
             DetailsCard(
-              label: "Available Quantity",
+              label: "Delivered Quantity",
               firstChild: Text(
-                widget.itemData.availableQuantity.toStringAsFixed(2),
+                widget.deliveredItemMap.quantity.toStringAsFixed(2),
               ),
               secondChild: Text(
-                widget.itemMap.unit,
+                widget.deliveredItemMap.unit,
                 style: of(context).textTheme.subtitle2?.copyWith(
                       color: orange,
                     ),
@@ -149,7 +175,7 @@ class _EditItemPageState extends State<EditItemPage> {
             ),
             SizedBox(height: designValues(context).cornerRadius34),
             DetailsCard(
-              label: "Item Total Cost",
+              label: "Refund Item Cost",
               firstChild: SvgPicture.asset(
                 "assets/icons/svgs/inr.svg",
                 width: 13,
@@ -159,20 +185,20 @@ class _EditItemPageState extends State<EditItemPage> {
               secondChild: Text(_totalCost.text),
             ),
             SizedBox(height: designValues(context).verticalPadding),
-            BlocBuilder<CreateOrderBloc, CreateOrderState>(
+            BlocBuilder<CreateReturnOrderBloc, CreateReturnOrderState>(
               builder: (context, state) {
                 return TextFormField(
-                  initialValue: widget.itemMap.quantity.toStringAsFixed(2),
+                  initialValue: widget.editItemMap.quantity.toStringAsFixed(2),
                   keyboardType: TextInputType.number,
                   focusNode: _totalQuantityFocusNode,
                   decoration: inputDecoration(
                     context,
-                    labelText: "total quantity",
+                    labelText: "return quantity",
                     hintText: "XXX",
-                    inFocus: state.itemId.valid,
+                    inFocus: true,
                     suffixIconWidget: ShowUnit(
                       showUnit: false,
-                      value: widget.itemMap.unit,
+                      value: widget.deliveredItemMap.unit,
                       showIcon: false,
                     ),
                     errorText: _totalQuantityFocusNode.hasFocus
@@ -199,25 +225,19 @@ class _EditItemPageState extends State<EditItemPage> {
                     }
                     setState(() {
                       _totalCost.text =
-                          (quantity * widget.itemMap.rate).toStringAsFixed(2);
+                          (quantity * widget.deliveredItemMap.rate)
+                              .toStringAsFixed(2);
                     });
-                    BlocProvider.of<CreateOrderBloc>(context).add(
-                      OrderFieldsChangeEvent(
-                        selectedClient: state.selectedClient,
-                        clientId: state.clientId.value,
-                        clientName: state.clientName.value,
-                        itemId: widget.itemMap.id,
-                        itemName: widget.itemMap.name,
-                        itemUnit: widget.itemMap.unit,
-                        itemPerUnitCost: widget.itemMap.rate,
-                        itemTotalCost: widget.itemMap.rate * quantity,
-                        itemTotalQuantity: quantity,
-                        listOfItemsForOrder: state.listOfItemsForOrder.value,
-                        orderStatus: state.orderStatus.value,
-                        createdBy: state.createdBy.value,
-                        expectedDeliveryDate: state.expectedDeliveryDate.value,
-                      ),
-                    );
+                    context.read<CreateReturnOrderBloc>().add(
+                          CreateReturnOrderFieldChanges(
+                            selectedDelivery: state.selectedDelivery,
+                            listOfItemForReturn:
+                                state.listOfItemsForReturn.value,
+                            returnQuantity: double.tryParse(value) ?? 0,
+                            reason: state.reason.value,
+                            pickupDate: state.expectedPickUpDate.value,
+                          ),
+                        );
                   },
                 );
               },
@@ -248,13 +268,14 @@ class _EditItemPageState extends State<EditItemPage> {
                           textYes: "remove",
                           textNo: "no",
                           title: "remove item from order?",
-                          message: 'this will remove "${widget.itemMap.name}"',
+                          message:
+                              'this will remove "${widget.editItemMap.name}"',
                         ).build,
                       );
                       if (confirmation == "remove") {
-                        context.read<CreateOrderBloc>().add(
-                              RemoveItemFromListEvent(
-                                unselectedItemId: widget.itemMap.id,
+                        context.read<CreateReturnOrderBloc>().add(
+                              RemoveItemFromReturnListEvent(
+                                item: widget.editItemMap,
                               ),
                             );
                         Navigator.of(context).pop();
@@ -264,59 +285,43 @@ class _EditItemPageState extends State<EditItemPage> {
                     svgColor: red,
                   ),
                   const Spacer(),
-                  BlocBuilder<CreateOrderBloc, CreateOrderState>(
+                  BlocBuilder<CreateReturnOrderBloc, CreateReturnOrderState>(
                     builder: (context, state) {
                       return ActionButton(
-                        disabled: context
-                                .read<CreateOrderBloc>()
-                                .state
-                                .itemTotalQuantity
-                                .value >
-                                widget.itemData.availableQuantity ||
-                            context
-                                    .read<CreateOrderBloc>()
-                                    .state
-                                    .itemTotalQuantity
-                                    .value <=
-                                0,
+                        disabled: !state.returnQuantity.valid ||
+                            _isReturnGreaterThanDelivery(
+                              deliveredItems: state.deliveredItemsList!,
+                              selectedItem: widget.selectedItemDetails,
+                              returnQuantity: state.returnQuantity.value,
+                            ),
                         text: "save",
                         buttonColor: light,
                         textColor: deepBlue,
                         onPressed: () {
-                          // FIXME: This is a hack to event doesn't get triggered till values are not valid in future we need to fix this and move these check to bloc file...
-                          if (state.itemTotalQuantity.value !=
-                                  widget.itemMap.quantity &&
-                              state.itemTotalQuantity.valid &&
-                              state.itemTotalQuantity.value <=
-                                  widget.itemData.availableQuantity &&
-                              state.itemTotalQuantity.value > 0) {
+                          if (state.returnQuantity.value !=
+                                  widget.editItemMap.quantity &&
+                              state.returnQuantity.valid &&
+                              state.returnQuantity.value <=
+                                  widget.editItemMap.quantity &&
+                              state.returnQuantity.value > 0) {
                             _addIntoItem(
-                              name: state.itemName.value,
-                              id: state.itemId.value,
-                              unit: state.itemUnit.value,
-                              quantity: state.itemTotalQuantity.value,
-                              rate: state.itemPerUnitCost.value,
-                              totalWorth: state.itemTotalCost.value,
+                              name: widget.editItemMap.name,
+                              id: widget.editItemMap.id,
+                              unit: widget.editItemMap.unit,
+                              quantity: widget.editItemMap.quantity,
+                              rate: widget.editItemMap.rate,
+                              totalWorth: widget.editItemMap.rate *
+                                  widget.editItemMap.quantity,
                             );
-                            BlocProvider.of<CreateOrderBloc>(context).add(
-                              OrderFieldsChangeEvent(
-                                selectedClient: state.selectedClient,
-
-                                clientId: state.clientId.value,
-                                clientName: state.clientName.value,
-                                itemId: 0,
-                                itemName: '',
-                                itemUnit: '',
-                                itemPerUnitCost: 0,
-                                itemTotalCost: 0,
-                                itemTotalQuantity: 0.0,
-                                listOfItemsForOrder: _items,
-                                orderStatus: state.orderStatus.value,
-                                createdBy: state.createdBy.value,
-                                expectedDeliveryDate:
-                                    state.expectedDeliveryDate.value,
-                              ),
-                            );
+                            context.read<CreateReturnOrderBloc>().add(
+                                  CreateReturnOrderFieldChanges(
+                                    selectedDelivery: state.selectedDelivery,
+                                    listOfItemForReturn: _items,
+                                    returnQuantity: state.returnQuantity.value,
+                                    reason: state.reason.value,
+                                    pickupDate: state.expectedPickUpDate.value,
+                                  ),
+                                );
                           }
                           Navigator.of(context).pop();
                         },

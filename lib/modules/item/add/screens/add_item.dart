@@ -284,7 +284,7 @@ class _AddItemState extends State<AddItem> {
                     ),
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(
-                        RegExp(r'^[0-9]+(\.[0-9]*)?$'),
+                        RegExp(r'^[0-9]+(\.[0-9]{0,4})?$'),
                       ),
                     ],
                     keyboardType: TextInputType.number,
@@ -314,7 +314,7 @@ class _AddItemState extends State<AddItem> {
                     focusNode: _itemBuyingPriceFocusNode,
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(
-                        RegExp(r'^[0-9]+(\.[0-9]*)?$'),
+                        RegExp(r'^[0-9]+(\.[0-9]{0,4})?$'),
                       ),
                     ],
                     decoration: inputDecoration(
@@ -350,7 +350,7 @@ class _AddItemState extends State<AddItem> {
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(
                         RegExp(
-                          r'^[0-9]+(\.[0-9]*)?$',
+                          r'^[0-9]+(\.[0-9]{0,4})?$',
                         ),
                       ),
                     ],

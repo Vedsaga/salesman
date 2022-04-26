@@ -24,7 +24,7 @@ class ReturnOrderTableQueries extends DatabaseAccessor<AppDatabase>
           ]))
         .get();
   }
- Future<List<ModelReturnOrderData>?> getAllUnRefundReturnOrders() async {
+  Future<List<ModelReturnOrderData>> getAllUnRefundReturnOrders() async {
     return  (select(modelReturnOrder)
     ..where((table) => 
           table.refundStatus.equals("unpaid") |
@@ -35,5 +35,24 @@ class ReturnOrderTableQueries extends DatabaseAccessor<AppDatabase>
                 OrderingTerm(expression: table.returnOrderId, mode: OrderingMode.desc)
           ]))
         .get();
+  }
+  Future<List<ModelReturnOrderData>?> getPendingReturnOrders() async {
+    return (select(modelReturnOrder)
+          ..where(
+            (table) =>
+                table.returnStatus.equals("pending") |
+                table.returnStatus.equals("collect") |
+                table.returnStatus.equals("approve"),
+          )
+          ..orderBy([
+            (table) => OrderingTerm(
+                expression: table.returnOrderId, mode: OrderingMode.desc)
+          ]))
+        .get();
+  }
+
+  // insert return order
+  Future<int> newReturnOrder(ModelReturnOrderCompanion returnOrder) async {
+    return into(modelReturnOrder).insert(returnOrder);
   }
 }

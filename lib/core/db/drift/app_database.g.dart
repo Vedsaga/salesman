@@ -2107,7 +2107,7 @@ class ModelDeliveryOrderData extends DataClass
   final double totalReceivedAmount;
   final String paymentStatus;
   final String orderStatus;
-  final String createdBy;
+  final String? createdBy;
   final DateTime createdAt;
   final DateTime lastUpdated;
   final DateTime? expectedDeliveryDate;
@@ -2120,7 +2120,7 @@ class ModelDeliveryOrderData extends DataClass
       required this.totalReceivedAmount,
       required this.paymentStatus,
       required this.orderStatus,
-      required this.createdBy,
+      this.createdBy,
       required this.createdAt,
       required this.lastUpdated,
       this.expectedDeliveryDate});
@@ -2146,7 +2146,7 @@ class ModelDeliveryOrderData extends DataClass
       orderStatus: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}order_status'])!,
       createdBy: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}created_by'])!,
+          .mapFromDatabaseResponse(data['${effectivePrefix}created_by']),
       createdAt: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}created_at'])!,
       lastUpdated: const DateTimeType()
@@ -2171,7 +2171,9 @@ class ModelDeliveryOrderData extends DataClass
     map['total_received_amount'] = Variable<double>(totalReceivedAmount);
     map['payment_status'] = Variable<String>(paymentStatus);
     map['order_status'] = Variable<String>(orderStatus);
-    map['created_by'] = Variable<String>(createdBy);
+    if (!nullToAbsent || createdBy != null) {
+      map['created_by'] = Variable<String?>(createdBy);
+    }
     map['created_at'] = Variable<DateTime>(createdAt);
     map['last_updated'] = Variable<DateTime>(lastUpdated);
     if (!nullToAbsent || expectedDeliveryDate != null) {
@@ -2192,7 +2194,9 @@ class ModelDeliveryOrderData extends DataClass
       totalReceivedAmount: Value(totalReceivedAmount),
       paymentStatus: Value(paymentStatus),
       orderStatus: Value(orderStatus),
-      createdBy: Value(createdBy),
+      createdBy: createdBy == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdBy),
       createdAt: Value(createdAt),
       lastUpdated: Value(lastUpdated),
       expectedDeliveryDate: expectedDeliveryDate == null && nullToAbsent
@@ -2214,7 +2218,7 @@ class ModelDeliveryOrderData extends DataClass
           serializer.fromJson<double>(json['totalReceivedAmount']),
       paymentStatus: serializer.fromJson<String>(json['paymentStatus']),
       orderStatus: serializer.fromJson<String>(json['orderStatus']),
-      createdBy: serializer.fromJson<String>(json['createdBy']),
+      createdBy: serializer.fromJson<String?>(json['createdBy']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       lastUpdated: serializer.fromJson<DateTime>(json['lastUpdated']),
       expectedDeliveryDate:
@@ -2233,7 +2237,7 @@ class ModelDeliveryOrderData extends DataClass
       'totalReceivedAmount': serializer.toJson<double>(totalReceivedAmount),
       'paymentStatus': serializer.toJson<String>(paymentStatus),
       'orderStatus': serializer.toJson<String>(orderStatus),
-      'createdBy': serializer.toJson<String>(createdBy),
+      'createdBy': serializer.toJson<String?>(createdBy),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'lastUpdated': serializer.toJson<DateTime>(lastUpdated),
       'expectedDeliveryDate':
@@ -2329,7 +2333,7 @@ class ModelDeliveryOrderCompanion
   final Value<double> totalReceivedAmount;
   final Value<String> paymentStatus;
   final Value<String> orderStatus;
-  final Value<String> createdBy;
+  final Value<String?> createdBy;
   final Value<DateTime> createdAt;
   final Value<DateTime> lastUpdated;
   final Value<DateTime?> expectedDeliveryDate;
@@ -2356,15 +2360,14 @@ class ModelDeliveryOrderCompanion
     this.totalReceivedAmount = const Value.absent(),
     this.paymentStatus = const Value.absent(),
     required String orderStatus,
-    required String createdBy,
+    this.createdBy = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.lastUpdated = const Value.absent(),
     this.expectedDeliveryDate = const Value.absent(),
   })  : clientId = Value(clientId),
         itemList = Value(itemList),
         netTotal = Value(netTotal),
-        orderStatus = Value(orderStatus),
-        createdBy = Value(createdBy);
+        orderStatus = Value(orderStatus);
   static Insertable<ModelDeliveryOrderData> custom({
     Expression<int>? deliveryOrderId,
     Expression<int>? clientId,
@@ -2374,7 +2377,7 @@ class ModelDeliveryOrderCompanion
     Expression<double>? totalReceivedAmount,
     Expression<String>? paymentStatus,
     Expression<String>? orderStatus,
-    Expression<String>? createdBy,
+    Expression<String?>? createdBy,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? lastUpdated,
     Expression<DateTime?>? expectedDeliveryDate,
@@ -2406,7 +2409,7 @@ class ModelDeliveryOrderCompanion
       Value<double>? totalReceivedAmount,
       Value<String>? paymentStatus,
       Value<String>? orderStatus,
-      Value<String>? createdBy,
+      Value<String?>? createdBy,
       Value<DateTime>? createdAt,
       Value<DateTime>? lastUpdated,
       Value<DateTime?>? expectedDeliveryDate}) {
@@ -2456,7 +2459,7 @@ class ModelDeliveryOrderCompanion
       map['order_status'] = Variable<String>(orderStatus.value);
     }
     if (createdBy.present) {
-      map['created_by'] = Variable<String>(createdBy.value);
+      map['created_by'] = Variable<String?>(createdBy.value);
     }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
@@ -2559,11 +2562,11 @@ class $ModelDeliveryOrderTable extends ModelDeliveryOrder
   final VerificationMeta _createdByMeta = const VerificationMeta('createdBy');
   @override
   late final GeneratedColumn<String?> createdBy = GeneratedColumn<String?>(
-      'created_by', aliasedName, false,
+      'created_by', aliasedName, true,
       additionalChecks:
           GeneratedColumn.checkTextLength(minTextLength: 3, maxTextLength: 20),
       type: const StringType(),
-      requiredDuringInsert: true);
+      requiredDuringInsert: false);
   final VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
   @override
   late final GeneratedColumn<DateTime?> createdAt = GeneratedColumn<DateTime?>(
@@ -2658,8 +2661,6 @@ class $ModelDeliveryOrderTable extends ModelDeliveryOrder
     if (data.containsKey('created_by')) {
       context.handle(_createdByMeta,
           createdBy.isAcceptableOrUnknown(data['created_by']!, _createdByMeta));
-    } else if (isInserting) {
-      context.missing(_createdByMeta);
     }
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
@@ -2703,27 +2704,31 @@ class ModelReturnOrderData extends DataClass
   final int orderId;
   final int? transportId;
   final int clientId;
+  final ItemList itemList;
   final String returnStatus;
   final double totalSendAmount;
   final double netRefund;
   final String refundStatus;
-  final String returnedBy;
+  final String? returnedBy;
   final String returnReason;
   final DateTime lastUpdated;
   final DateTime createdAt;
+  final DateTime? expectedPickupDate;
   ModelReturnOrderData(
       {required this.returnOrderId,
       required this.orderId,
       this.transportId,
       required this.clientId,
+      required this.itemList,
       required this.returnStatus,
       required this.totalSendAmount,
       required this.netRefund,
       required this.refundStatus,
-      required this.returnedBy,
+      this.returnedBy,
       required this.returnReason,
       required this.lastUpdated,
-      required this.createdAt});
+      required this.createdAt,
+      this.expectedPickupDate});
   factory ModelReturnOrderData.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -2736,6 +2741,8 @@ class ModelReturnOrderData extends DataClass
           .mapFromDatabaseResponse(data['${effectivePrefix}transport_id']),
       clientId: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}client_id'])!,
+      itemList: $ModelReturnOrderTable.$converter0.mapToDart(const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}item_list']))!,
       returnStatus: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}return_status'])!,
       totalSendAmount: const RealType().mapFromDatabaseResponse(
@@ -2745,13 +2752,15 @@ class ModelReturnOrderData extends DataClass
       refundStatus: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}refund_status'])!,
       returnedBy: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}returned_by'])!,
+          .mapFromDatabaseResponse(data['${effectivePrefix}returned_by']),
       returnReason: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}return_reason'])!,
       lastUpdated: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}last_updated'])!,
       createdAt: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}created_at'])!,
+      expectedPickupDate: const DateTimeType().mapFromDatabaseResponse(
+          data['${effectivePrefix}expected_pickup_date']),
     );
   }
   @override
@@ -2763,14 +2772,23 @@ class ModelReturnOrderData extends DataClass
       map['transport_id'] = Variable<int?>(transportId);
     }
     map['client_id'] = Variable<int>(clientId);
+    {
+      final converter = $ModelReturnOrderTable.$converter0;
+      map['item_list'] = Variable<String>(converter.mapToSql(itemList)!);
+    }
     map['return_status'] = Variable<String>(returnStatus);
     map['total_send_amount'] = Variable<double>(totalSendAmount);
     map['net_refund'] = Variable<double>(netRefund);
     map['refund_status'] = Variable<String>(refundStatus);
-    map['returned_by'] = Variable<String>(returnedBy);
+    if (!nullToAbsent || returnedBy != null) {
+      map['returned_by'] = Variable<String?>(returnedBy);
+    }
     map['return_reason'] = Variable<String>(returnReason);
     map['last_updated'] = Variable<DateTime>(lastUpdated);
     map['created_at'] = Variable<DateTime>(createdAt);
+    if (!nullToAbsent || expectedPickupDate != null) {
+      map['expected_pickup_date'] = Variable<DateTime?>(expectedPickupDate);
+    }
     return map;
   }
 
@@ -2782,14 +2800,20 @@ class ModelReturnOrderData extends DataClass
           ? const Value.absent()
           : Value(transportId),
       clientId: Value(clientId),
+      itemList: Value(itemList),
       returnStatus: Value(returnStatus),
       totalSendAmount: Value(totalSendAmount),
       netRefund: Value(netRefund),
       refundStatus: Value(refundStatus),
-      returnedBy: Value(returnedBy),
+      returnedBy: returnedBy == null && nullToAbsent
+          ? const Value.absent()
+          : Value(returnedBy),
       returnReason: Value(returnReason),
       lastUpdated: Value(lastUpdated),
       createdAt: Value(createdAt),
+      expectedPickupDate: expectedPickupDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(expectedPickupDate),
     );
   }
 
@@ -2801,14 +2825,17 @@ class ModelReturnOrderData extends DataClass
       orderId: serializer.fromJson<int>(json['orderId']),
       transportId: serializer.fromJson<int?>(json['transportId']),
       clientId: serializer.fromJson<int>(json['clientId']),
+      itemList: serializer.fromJson<ItemList>(json['itemList']),
       returnStatus: serializer.fromJson<String>(json['returnStatus']),
       totalSendAmount: serializer.fromJson<double>(json['totalSendAmount']),
       netRefund: serializer.fromJson<double>(json['netRefund']),
       refundStatus: serializer.fromJson<String>(json['refundStatus']),
-      returnedBy: serializer.fromJson<String>(json['returnedBy']),
+      returnedBy: serializer.fromJson<String?>(json['returnedBy']),
       returnReason: serializer.fromJson<String>(json['returnReason']),
       lastUpdated: serializer.fromJson<DateTime>(json['lastUpdated']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      expectedPickupDate:
+          serializer.fromJson<DateTime?>(json['expectedPickupDate']),
     );
   }
   @override
@@ -2819,14 +2846,16 @@ class ModelReturnOrderData extends DataClass
       'orderId': serializer.toJson<int>(orderId),
       'transportId': serializer.toJson<int?>(transportId),
       'clientId': serializer.toJson<int>(clientId),
+      'itemList': serializer.toJson<ItemList>(itemList),
       'returnStatus': serializer.toJson<String>(returnStatus),
       'totalSendAmount': serializer.toJson<double>(totalSendAmount),
       'netRefund': serializer.toJson<double>(netRefund),
       'refundStatus': serializer.toJson<String>(refundStatus),
-      'returnedBy': serializer.toJson<String>(returnedBy),
+      'returnedBy': serializer.toJson<String?>(returnedBy),
       'returnReason': serializer.toJson<String>(returnReason),
       'lastUpdated': serializer.toJson<DateTime>(lastUpdated),
       'createdAt': serializer.toJson<DateTime>(createdAt),
+      'expectedPickupDate': serializer.toJson<DateTime?>(expectedPickupDate),
     };
   }
 
@@ -2835,6 +2864,7 @@ class ModelReturnOrderData extends DataClass
           int? orderId,
           int? transportId,
           int? clientId,
+          ItemList? itemList,
           String? returnStatus,
           double? totalSendAmount,
           double? netRefund,
@@ -2842,12 +2872,14 @@ class ModelReturnOrderData extends DataClass
           String? returnedBy,
           String? returnReason,
           DateTime? lastUpdated,
-          DateTime? createdAt}) =>
+          DateTime? createdAt,
+          DateTime? expectedPickupDate}) =>
       ModelReturnOrderData(
         returnOrderId: returnOrderId ?? this.returnOrderId,
         orderId: orderId ?? this.orderId,
         transportId: transportId ?? this.transportId,
         clientId: clientId ?? this.clientId,
+        itemList: itemList ?? this.itemList,
         returnStatus: returnStatus ?? this.returnStatus,
         totalSendAmount: totalSendAmount ?? this.totalSendAmount,
         netRefund: netRefund ?? this.netRefund,
@@ -2856,6 +2888,7 @@ class ModelReturnOrderData extends DataClass
         returnReason: returnReason ?? this.returnReason,
         lastUpdated: lastUpdated ?? this.lastUpdated,
         createdAt: createdAt ?? this.createdAt,
+        expectedPickupDate: expectedPickupDate ?? this.expectedPickupDate,
       );
   @override
   String toString() {
@@ -2864,6 +2897,7 @@ class ModelReturnOrderData extends DataClass
           ..write('orderId: $orderId, ')
           ..write('transportId: $transportId, ')
           ..write('clientId: $clientId, ')
+          ..write('itemList: $itemList, ')
           ..write('returnStatus: $returnStatus, ')
           ..write('totalSendAmount: $totalSendAmount, ')
           ..write('netRefund: $netRefund, ')
@@ -2871,7 +2905,8 @@ class ModelReturnOrderData extends DataClass
           ..write('returnedBy: $returnedBy, ')
           ..write('returnReason: $returnReason, ')
           ..write('lastUpdated: $lastUpdated, ')
-          ..write('createdAt: $createdAt')
+          ..write('createdAt: $createdAt, ')
+          ..write('expectedPickupDate: $expectedPickupDate')
           ..write(')'))
         .toString();
   }
@@ -2882,6 +2917,7 @@ class ModelReturnOrderData extends DataClass
       orderId,
       transportId,
       clientId,
+      itemList,
       returnStatus,
       totalSendAmount,
       netRefund,
@@ -2889,7 +2925,8 @@ class ModelReturnOrderData extends DataClass
       returnedBy,
       returnReason,
       lastUpdated,
-      createdAt);
+      createdAt,
+      expectedPickupDate);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2898,6 +2935,7 @@ class ModelReturnOrderData extends DataClass
           other.orderId == this.orderId &&
           other.transportId == this.transportId &&
           other.clientId == this.clientId &&
+          other.itemList == this.itemList &&
           other.returnStatus == this.returnStatus &&
           other.totalSendAmount == this.totalSendAmount &&
           other.netRefund == this.netRefund &&
@@ -2905,7 +2943,8 @@ class ModelReturnOrderData extends DataClass
           other.returnedBy == this.returnedBy &&
           other.returnReason == this.returnReason &&
           other.lastUpdated == this.lastUpdated &&
-          other.createdAt == this.createdAt);
+          other.createdAt == this.createdAt &&
+          other.expectedPickupDate == this.expectedPickupDate);
 }
 
 class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
@@ -2913,19 +2952,22 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
   final Value<int> orderId;
   final Value<int?> transportId;
   final Value<int> clientId;
+  final Value<ItemList> itemList;
   final Value<String> returnStatus;
   final Value<double> totalSendAmount;
   final Value<double> netRefund;
   final Value<String> refundStatus;
-  final Value<String> returnedBy;
+  final Value<String?> returnedBy;
   final Value<String> returnReason;
   final Value<DateTime> lastUpdated;
   final Value<DateTime> createdAt;
+  final Value<DateTime?> expectedPickupDate;
   const ModelReturnOrderCompanion({
     this.returnOrderId = const Value.absent(),
     this.orderId = const Value.absent(),
     this.transportId = const Value.absent(),
     this.clientId = const Value.absent(),
+    this.itemList = const Value.absent(),
     this.returnStatus = const Value.absent(),
     this.totalSendAmount = const Value.absent(),
     this.netRefund = const Value.absent(),
@@ -2934,44 +2976,49 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
     this.returnReason = const Value.absent(),
     this.lastUpdated = const Value.absent(),
     this.createdAt = const Value.absent(),
+    this.expectedPickupDate = const Value.absent(),
   });
   ModelReturnOrderCompanion.insert({
     this.returnOrderId = const Value.absent(),
     required int orderId,
     this.transportId = const Value.absent(),
     required int clientId,
-    required String returnStatus,
+    required ItemList itemList,
+    this.returnStatus = const Value.absent(),
     this.totalSendAmount = const Value.absent(),
     this.netRefund = const Value.absent(),
     this.refundStatus = const Value.absent(),
-    required String returnedBy,
+    this.returnedBy = const Value.absent(),
     required String returnReason,
     this.lastUpdated = const Value.absent(),
     this.createdAt = const Value.absent(),
+    this.expectedPickupDate = const Value.absent(),
   })  : orderId = Value(orderId),
         clientId = Value(clientId),
-        returnStatus = Value(returnStatus),
-        returnedBy = Value(returnedBy),
+        itemList = Value(itemList),
         returnReason = Value(returnReason);
   static Insertable<ModelReturnOrderData> custom({
     Expression<int>? returnOrderId,
     Expression<int>? orderId,
     Expression<int?>? transportId,
     Expression<int>? clientId,
+    Expression<ItemList>? itemList,
     Expression<String>? returnStatus,
     Expression<double>? totalSendAmount,
     Expression<double>? netRefund,
     Expression<String>? refundStatus,
-    Expression<String>? returnedBy,
+    Expression<String?>? returnedBy,
     Expression<String>? returnReason,
     Expression<DateTime>? lastUpdated,
     Expression<DateTime>? createdAt,
+    Expression<DateTime?>? expectedPickupDate,
   }) {
     return RawValuesInsertable({
       if (returnOrderId != null) 'return_order_id': returnOrderId,
       if (orderId != null) 'order_id': orderId,
       if (transportId != null) 'transport_id': transportId,
       if (clientId != null) 'client_id': clientId,
+      if (itemList != null) 'item_list': itemList,
       if (returnStatus != null) 'return_status': returnStatus,
       if (totalSendAmount != null) 'total_send_amount': totalSendAmount,
       if (netRefund != null) 'net_refund': netRefund,
@@ -2980,6 +3027,8 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
       if (returnReason != null) 'return_reason': returnReason,
       if (lastUpdated != null) 'last_updated': lastUpdated,
       if (createdAt != null) 'created_at': createdAt,
+      if (expectedPickupDate != null)
+        'expected_pickup_date': expectedPickupDate,
     });
   }
 
@@ -2988,19 +3037,22 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
       Value<int>? orderId,
       Value<int?>? transportId,
       Value<int>? clientId,
+      Value<ItemList>? itemList,
       Value<String>? returnStatus,
       Value<double>? totalSendAmount,
       Value<double>? netRefund,
       Value<String>? refundStatus,
-      Value<String>? returnedBy,
+      Value<String?>? returnedBy,
       Value<String>? returnReason,
       Value<DateTime>? lastUpdated,
-      Value<DateTime>? createdAt}) {
+      Value<DateTime>? createdAt,
+      Value<DateTime?>? expectedPickupDate}) {
     return ModelReturnOrderCompanion(
       returnOrderId: returnOrderId ?? this.returnOrderId,
       orderId: orderId ?? this.orderId,
       transportId: transportId ?? this.transportId,
       clientId: clientId ?? this.clientId,
+      itemList: itemList ?? this.itemList,
       returnStatus: returnStatus ?? this.returnStatus,
       totalSendAmount: totalSendAmount ?? this.totalSendAmount,
       netRefund: netRefund ?? this.netRefund,
@@ -3009,6 +3061,7 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
       returnReason: returnReason ?? this.returnReason,
       lastUpdated: lastUpdated ?? this.lastUpdated,
       createdAt: createdAt ?? this.createdAt,
+      expectedPickupDate: expectedPickupDate ?? this.expectedPickupDate,
     );
   }
 
@@ -3027,6 +3080,10 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
     if (clientId.present) {
       map['client_id'] = Variable<int>(clientId.value);
     }
+    if (itemList.present) {
+      final converter = $ModelReturnOrderTable.$converter0;
+      map['item_list'] = Variable<String>(converter.mapToSql(itemList.value)!);
+    }
     if (returnStatus.present) {
       map['return_status'] = Variable<String>(returnStatus.value);
     }
@@ -3040,7 +3097,7 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
       map['refund_status'] = Variable<String>(refundStatus.value);
     }
     if (returnedBy.present) {
-      map['returned_by'] = Variable<String>(returnedBy.value);
+      map['returned_by'] = Variable<String?>(returnedBy.value);
     }
     if (returnReason.present) {
       map['return_reason'] = Variable<String>(returnReason.value);
@@ -3050,6 +3107,10 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
     }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (expectedPickupDate.present) {
+      map['expected_pickup_date'] =
+          Variable<DateTime?>(expectedPickupDate.value);
     }
     return map;
   }
@@ -3061,6 +3122,7 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
           ..write('orderId: $orderId, ')
           ..write('transportId: $transportId, ')
           ..write('clientId: $clientId, ')
+          ..write('itemList: $itemList, ')
           ..write('returnStatus: $returnStatus, ')
           ..write('totalSendAmount: $totalSendAmount, ')
           ..write('netRefund: $netRefund, ')
@@ -3068,7 +3130,8 @@ class ModelReturnOrderCompanion extends UpdateCompanion<ModelReturnOrderData> {
           ..write('returnedBy: $returnedBy, ')
           ..write('returnReason: $returnReason, ')
           ..write('lastUpdated: $lastUpdated, ')
-          ..write('createdAt: $createdAt')
+          ..write('createdAt: $createdAt, ')
+          ..write('expectedPickupDate: $expectedPickupDate')
           ..write(')'))
         .toString();
   }
@@ -3111,15 +3174,20 @@ class $ModelReturnOrderTable extends ModelReturnOrder
       type: const IntType(),
       requiredDuringInsert: true,
       defaultConstraints: 'REFERENCES model_client (client_id)');
+  final VerificationMeta _itemListMeta = const VerificationMeta('itemList');
+  @override
+  late final GeneratedColumnWithTypeConverter<ItemList, String?> itemList =
+      GeneratedColumn<String?>('item_list', aliasedName, false,
+              type: const StringType(), requiredDuringInsert: true)
+          .withConverter<ItemList>($ModelReturnOrderTable.$converter0);
   final VerificationMeta _returnStatusMeta =
       const VerificationMeta('returnStatus');
   @override
   late final GeneratedColumn<String?> returnStatus = GeneratedColumn<String?>(
       'return_status', aliasedName, false,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 20),
       type: const StringType(),
-      requiredDuringInsert: true);
+      requiredDuringInsert: false,
+      defaultValue: const Constant('pending'));
   final VerificationMeta _totalSendAmountMeta =
       const VerificationMeta('totalSendAmount');
   @override
@@ -3146,11 +3214,11 @@ class $ModelReturnOrderTable extends ModelReturnOrder
   final VerificationMeta _returnedByMeta = const VerificationMeta('returnedBy');
   @override
   late final GeneratedColumn<String?> returnedBy = GeneratedColumn<String?>(
-      'returned_by', aliasedName, false,
+      'returned_by', aliasedName, true,
       additionalChecks:
           GeneratedColumn.checkTextLength(minTextLength: 3, maxTextLength: 20),
       type: const StringType(),
-      requiredDuringInsert: true);
+      requiredDuringInsert: false);
   final VerificationMeta _returnReasonMeta =
       const VerificationMeta('returnReason');
   @override
@@ -3175,12 +3243,19 @@ class $ModelReturnOrderTable extends ModelReturnOrder
       type: const IntType(),
       requiredDuringInsert: false,
       defaultValue: currentDateAndTime);
+  final VerificationMeta _expectedPickupDateMeta =
+      const VerificationMeta('expectedPickupDate');
+  @override
+  late final GeneratedColumn<DateTime?> expectedPickupDate =
+      GeneratedColumn<DateTime?>('expected_pickup_date', aliasedName, true,
+          type: const IntType(), requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         returnOrderId,
         orderId,
         transportId,
         clientId,
+        itemList,
         returnStatus,
         totalSendAmount,
         netRefund,
@@ -3188,7 +3263,8 @@ class $ModelReturnOrderTable extends ModelReturnOrder
         returnedBy,
         returnReason,
         lastUpdated,
-        createdAt
+        createdAt,
+        expectedPickupDate
       ];
   @override
   String get aliasedName => _alias ?? 'model_return_order';
@@ -3224,13 +3300,12 @@ class $ModelReturnOrderTable extends ModelReturnOrder
     } else if (isInserting) {
       context.missing(_clientIdMeta);
     }
+    context.handle(_itemListMeta, const VerificationResult.success());
     if (data.containsKey('return_status')) {
       context.handle(
           _returnStatusMeta,
           returnStatus.isAcceptableOrUnknown(
               data['return_status']!, _returnStatusMeta));
-    } else if (isInserting) {
-      context.missing(_returnStatusMeta);
     }
     if (data.containsKey('total_send_amount')) {
       context.handle(
@@ -3253,8 +3328,6 @@ class $ModelReturnOrderTable extends ModelReturnOrder
           _returnedByMeta,
           returnedBy.isAcceptableOrUnknown(
               data['returned_by']!, _returnedByMeta));
-    } else if (isInserting) {
-      context.missing(_returnedByMeta);
     }
     if (data.containsKey('return_reason')) {
       context.handle(
@@ -3274,6 +3347,12 @@ class $ModelReturnOrderTable extends ModelReturnOrder
       context.handle(_createdAtMeta,
           createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
     }
+    if (data.containsKey('expected_pickup_date')) {
+      context.handle(
+          _expectedPickupDateMeta,
+          expectedPickupDate.isAcceptableOrUnknown(
+              data['expected_pickup_date']!, _expectedPickupDateMeta));
+    }
     return context;
   }
 
@@ -3289,6 +3368,9 @@ class $ModelReturnOrderTable extends ModelReturnOrder
   $ModelReturnOrderTable createAlias(String alias) {
     return $ModelReturnOrderTable(attachedDatabase, alias);
   }
+
+  static TypeConverter<ItemList, String> $converter0 =
+      const ItemListConverter();
 }
 
 class ModelPaymentData extends DataClass

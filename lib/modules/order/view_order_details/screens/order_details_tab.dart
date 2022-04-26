@@ -273,12 +273,15 @@ class _ViewOrderDetailTabState extends State<OrderDetailsTab> {
                           firstChild: const SizedBox(),
                           secondChild: Text(state.clientDetails.clientName),
                         ),
+                        if (state.orderDetails.createdBy != null)
                         SizedBox(height: designValues(context).padding21),
+                        if (state.orderDetails.createdBy != null)
                         DetailsCard(
                           label: "Created By",
                           firstChild: const SizedBox(),
-                          secondChild: Text(state.orderDetails.createdBy),
+                            secondChild: Text(state.orderDetails.createdBy!),
                         ),
+
                         SizedBox(
                           height: designValues(context).cornerRadius34,
                         ),

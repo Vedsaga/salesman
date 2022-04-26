@@ -76,6 +76,7 @@ class ViewOrderDetailsBloc
         client: event.clientDetails,
         deliveryOrderId: event.orderDetails.deliveryOrderId,
         itemList: event.orderDetails.itemList.itemList,
+        pendingRefund: event.orderDetails.totalReceivedAmount,
       );
       if (orderId > 0) {
         emit(OrderSuccessfullyCanceledState());
@@ -102,6 +103,7 @@ class ViewOrderDetailsBloc
       final int orderId = await DeliveryOrderTableQueries(appDatabaseInstance)
           .updateOrderStatusToRejected(
         client: event.clientDetails,
+        totalReceiveAmount: event.orderDetails.totalReceivedAmount,
         deliveryOrderId: event.orderDetails.deliveryOrderId,
         itemList: event.orderDetails.itemList.itemList,
         deliveryList: deliveryList,

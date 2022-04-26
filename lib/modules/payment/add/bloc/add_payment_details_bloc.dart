@@ -101,19 +101,19 @@ class AddPaymentDetailsBloc
             ),
           );
         } else {
-          final List<ModelDeliveryOrderData>? deliveryOrderList =
+          final List<ModelDeliveryOrderData> deliveryOrderList =
               await DeliveryOrderTableQueries(appDatabaseInstance)
                   .getAllUnpaidOrders();
-          final List<ModelReturnOrderData>? returnOrderList =
+          final List<ModelReturnOrderData> returnOrderList =
               await ReturnOrderTableQueries(appDatabaseInstance)
                   .getAllUnRefundReturnOrders();
-          if (deliveryOrderList == null && returnOrderList == null) {
+          if (deliveryOrderList.isEmpty && returnOrderList.isEmpty) {
             emit(EmptyOrderDetailsState());
           } else {
             emit(
               AddPaymentDetailsState(
-                deliveryOrderList: deliveryOrderList!,
-                returnOrderList: returnOrderList!,
+                deliveryOrderList: deliveryOrderList,
+                returnOrderList: returnOrderList,
                 receivedBy: GenericField.dirty(agentProfile.name),
                 comingFrom: _argument.comingFrom,
                 paymentDate: state.paymentDate,

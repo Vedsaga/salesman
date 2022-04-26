@@ -15,15 +15,15 @@ import 'package:salesman/core/components/show_unit.dart';
 import 'package:salesman/core/db/drift/app_database.dart';
 import 'package:salesman/core/models/validations/double_field_not_zero.dart';
 import 'package:salesman/core/utils/item_map.dart';
-import 'package:salesman/modules/order/create_order/bloc/create_order_bloc.dart';
+import 'package:salesman/modules/return/create_return_order/bloc/create_return_bloc.dart';
 
-class AddItemPage extends StatefulWidget {
-  const AddItemPage({Key? key}) : super(key: key);
+class AddReturnItemPage extends StatefulWidget {
+  const AddReturnItemPage({Key? key}) : super(key: key);
   @override
-  State<AddItemPage> createState() => _AddItemPageState();
+  State<AddReturnItemPage> createState() => _AddItemPageState();
 }
 
-class _AddItemPageState extends State<AddItemPage> {
+class _AddItemPageState extends State<AddReturnItemPage> {
   final FocusNode _totalQuantityFocusNode = FocusNode();
   ModelItemData? selectedItem;
   final List<ItemMap> _items = [];
@@ -36,7 +36,9 @@ class _AddItemPageState extends State<AddItemPage> {
 
   void _totalQuantityFocusNodeListener() {
     if (!_totalQuantityFocusNode.hasFocus) {
-      context.read<CreateOrderBloc>().add(TotalQuantityFieldUnfocusedEvent());
+      context
+          .read<CreateReturnOrderBloc>()
+          .add(ReturnQuantityFieldChangesEvent());
     }
   }
 
@@ -60,22 +62,43 @@ class _AddItemPageState extends State<AddItemPage> {
     );
   }
 
+  bool _isReturnGreaterThanDelivery({
+    required List<ItemMap> deliveredItems,
+    required ModelItemData? selectedItem,
+    required double returnQuantity,
+  }) {
+    for (final item in deliveredItems) {
+      if (item.id == selectedItem?.itemId) {
+        if (returnQuantity > item.quantity) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   String? _totalQuantityErrorText() {
-    final totalQuantity =
-        context.read<CreateOrderBloc>().state.itemTotalQuantity;
-    if (selectedItem != null) {
-      if (totalQuantity.value > selectedItem!.availableQuantity) {
-        return 'Selling quantity is greater than available quantity';
+    final deliveredList =
+        context.read<CreateReturnOrderBloc>().state.deliveredItemsList;
+    final returnQyt =
+        context.read<CreateReturnOrderBloc>().state.returnQuantity;
+    if (deliveredList != null && selectedItem != null) {
+      if (_isReturnGreaterThanDelivery(
+        deliveredItems: deliveredList,
+        selectedItem: selectedItem,
+        returnQuantity: returnQyt.value,
+      )) {
+        return 'Return quantity is greater than delivered quantity';
       }
     }
 
-    switch (totalQuantity.error) {
+    switch (returnQyt.error) {
       case DoubleFieldNotZeroValidationError.cannotBeEmpty:
         return 'Quantity cannot be empty';
       case DoubleFieldNotZeroValidationError.cannotBeZero:
-        return 'Order Quantity cannot be zero';
+        return 'Return Quantity cannot be zero';
       case DoubleFieldNotZeroValidationError.cannotBeNegative:
-        return 'Order Quantity cannot be less than zero';
+        return 'Return Quantity cannot be less than zero';
       case DoubleFieldNotZeroValidationError.invalidFormat:
         return 'Please enter a valid quantity';
       default:
@@ -92,7 +115,7 @@ class _AddItemPageState extends State<AddItemPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreateOrderBloc, CreateOrderState>(
+    return BlocBuilder<CreateReturnOrderBloc, CreateReturnOrderState>(
       builder: (context, state) {
         return MobileLayout(
           routeName: null,
@@ -121,44 +144,38 @@ class _AddItemPageState extends State<AddItemPage> {
                       setState(() {
                         selectedItem = newValue;
                       });
-                      BlocProvider.of<CreateOrderBloc>(context).add(
-                        OrderFieldsChangeEvent(
-                          selectedClient: state.selectedClient,
-                          clientId: state.clientId.value,
-                          clientName: state.clientName.value,
-                          itemId: selectedItem!.itemId,
-                          itemName: selectedItem!.itemName,
-                          itemUnit: selectedItem!.unit,
-                          itemPerUnitCost: selectedItem!.sellingPricePerUnit,
-                          itemTotalCost: state.itemTotalCost.value,
-                          itemTotalQuantity: state.itemTotalQuantity.value,
-                          listOfItemsForOrder: state.listOfItemsForOrder.value,
-                          orderStatus: state.orderStatus.value,
-                          createdBy: state.createdBy.value,
-                          expectedDeliveryDate:
-                              state.expectedDeliveryDate.value,
-                        ),
-                      );
+                      context.read<CreateReturnOrderBloc>().add(
+                            CreateReturnOrderFieldChanges(
+                              selectedDelivery: state.selectedDelivery,
+                              listOfItemForReturn:
+                                  state.listOfItemsForReturn.value,
+                              returnQuantity: state.returnQuantity.value,
+                              reason: state.reason.value,
+                              pickupDate: state.expectedPickUpDate.value,
+                            ),
+                          );
                     },
-                    items: state.itemList.map((ModelItemData item) {
+                    items: state.showReturnItemList.map((ModelItemData item) {
                       return DropdownMenuItem<ModelItemData>(
                         value: item,
-                        enabled: !state.listOfItemsForOrder.value
+                        enabled: !state.listOfItemsForReturn.value
                             .any((element) => element.id == item.itemId),
                         child: Padding(
                           padding: EdgeInsets.only(
-                              right: designValues(context).padding13,),
+                            right: designValues(context).padding13,
+                          ),
                           child: RowFlexSpacedChildren(
                             firstChild: Text(
                               item.itemName,
                               style: of(context).textTheme.bodyText1?.copyWith(
-                                    color: !state.listOfItemsForOrder.value.any(
+                                    color:
+                                        !state.listOfItemsForReturn.value.any(
                                       (element) => element.id == item.itemId,
                                     )
-                                        ? dark
-                                        : grey,
+                                            ? dark
+                                            : grey,
                                     fontWeight:
-                                        !state.listOfItemsForOrder.value.any(
+                                        !state.listOfItemsForReturn.value.any(
                                       (element) => element.id == item.itemId,
                                     )
                                             ? FontWeight.bold
@@ -166,13 +183,16 @@ class _AddItemPageState extends State<AddItemPage> {
                                   ),
                             ),
                             secondChild: Text(
-                              "avl: ${item.availableQuantity}",
-                              style: of(context).textTheme.bodyText2?.copyWith(
-                                    color: !state.listOfItemsForOrder.value.any(
+                              "sold qyt: ${state.deliveredItemsList!.firstWhere(
+                                    (element) => element.id == item.itemId,
+                                  ).quantity}",
+                              style: of(context).textTheme.subtitle2?.copyWith(
+                                    color:
+                                        !state.listOfItemsForReturn.value.any(
                                       (element) => element.id == item.itemId,
                                     )
-                                        ? dark
-                                        : grey,
+                                            ? dark
+                                            : grey,
                                   ),
                             ),
                           ),
@@ -183,16 +203,15 @@ class _AddItemPageState extends State<AddItemPage> {
                 ),
                 SizedBox(height: designValues(context).cornerRadius34),
                 TextFormField(
-                  initialValue:
-                      state.itemTotalQuantity.value.toStringAsFixed(2),
+                  initialValue: state.returnQuantity.value.toStringAsFixed(2),
                   keyboardType: TextInputType.number,
                   focusNode: _totalQuantityFocusNode,
                   decoration: inputDecoration(
                     context,
-                    labelText: "total quantity",
+                    labelText: "return quantity",
                     hintText: "XXX",
-                    inFocus: state.itemId.valid,
-                    suffixIconWidget: state.itemId.valid
+                    inFocus: selectedItem != null,
+                    suffixIconWidget: selectedItem != null
                         ? ShowUnit(
                             showUnit: false,
                             value:
@@ -216,65 +235,54 @@ class _AddItemPageState extends State<AddItemPage> {
                     _totalQuantityFocusNode.unfocus();
                   },
                   onChanged: (value) {
-                    BlocProvider.of<CreateOrderBloc>(context).add(
-                      OrderFieldsChangeEvent(
-                        selectedClient: state.selectedClient,
-                        clientId: state.clientId.value,
-                        clientName: state.clientName.value,
-                        itemId: state.itemId.value,
-                        itemName: state.itemName.value,
-                        itemUnit: state.itemUnit.value,
-                        itemPerUnitCost: state.itemPerUnitCost.value,
-                        itemTotalCost: double.tryParse(value) == null
-                            ? 0
-                            : state.itemPerUnitCost.value * double.parse(value),
-                        itemTotalQuantity: double.tryParse(value) ?? 0,
-                        listOfItemsForOrder: state.listOfItemsForOrder.value,
-                        orderStatus: state.orderStatus.value,
-                        createdBy: state.createdBy.value,
-                        expectedDeliveryDate: state.expectedDeliveryDate.value,
-                      ),
-                    );
+                    context.read<CreateReturnOrderBloc>().add(
+                          CreateReturnOrderFieldChanges(
+                            selectedDelivery: state.selectedDelivery,
+                            listOfItemForReturn:
+                                state.listOfItemsForReturn.value,
+                            returnQuantity: double.tryParse(value) ?? 0,
+                            reason: state.reason.value,
+                            pickupDate: state.expectedPickUpDate.value,
+                          ),
+                        );
                   },
                 ),
               ],
             ),
           ),
-          bottomAppBar: BlocBuilder<CreateOrderBloc, CreateOrderState>(
+          bottomAppBar:
+              BlocBuilder<CreateReturnOrderBloc, CreateReturnOrderState>(
             builder: (context, state) {
               return ActionButton(
-                disabled: !state.itemTotalQuantity.valid ||
-                    selectedItem == null ||
-                    state.itemTotalQuantity.value >
-                        selectedItem!.availableQuantity,
+                disabled: !state.returnQuantity.valid ||
+                    _isReturnGreaterThanDelivery(
+                      deliveredItems: state.deliveredItemsList!,
+                      selectedItem: selectedItem,
+                      returnQuantity: state.returnQuantity.value,
+                    ),
                 text: "add",
                 onPressed: () {
                   _addIntoItem(
-                    name: state.itemName.value,
-                    id: state.itemId.value,
-                    unit: state.itemUnit.value,
-                    quantity: state.itemTotalQuantity.value,
-                    rate: state.itemPerUnitCost.value,
-                    totalWorth: state.itemTotalCost.value,
+                    name: selectedItem!.itemName,
+                    id: selectedItem!.itemId,
+                    unit: selectedItem!.unit,
+                    quantity: state.returnQuantity.value,
+                    rate: selectedItem!.sellingPricePerUnit,
+                    totalWorth: state.returnQuantity.value *
+                        selectedItem!.sellingPricePerUnit,
                   );
-                  context.read<CreateOrderBloc>().add(ResetItemFieldsEvent());
-                  BlocProvider.of<CreateOrderBloc>(context).add(
-                    OrderFieldsChangeEvent(
-                      selectedClient: state.selectedClient,
-                      clientId: state.clientId.value,
-                      clientName: state.clientName.value,
-                      itemId: state.itemId.value,
-                      itemName: state.itemName.value,
-                      itemUnit: state.itemUnit.value,
-                      itemPerUnitCost: state.itemPerUnitCost.value,
-                      itemTotalCost: state.itemTotalCost.value,
-                      itemTotalQuantity: state.itemTotalQuantity.value,
-                      listOfItemsForOrder: _items,
-                      orderStatus: state.orderStatus.value,
-                      createdBy: state.createdBy.value,
-                      expectedDeliveryDate: state.expectedDeliveryDate.value,
-                    ),
-                  );
+                  context.read<CreateReturnOrderBloc>().add(
+                        ResetReturnItemFieldsEvent(),
+                      );
+                  context.read<CreateReturnOrderBloc>().add(
+                        CreateReturnOrderFieldChanges(
+                          selectedDelivery: state.selectedDelivery,
+                          listOfItemForReturn: _items,
+                          returnQuantity: state.returnQuantity.value,
+                          reason: state.reason.value,
+                          pickupDate: state.expectedPickUpDate.value,
+                        ),
+                      );
                   Navigator.of(context).pop();
                 },
               );

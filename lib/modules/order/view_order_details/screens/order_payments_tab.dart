@@ -207,7 +207,9 @@ class OrderPaymentsTab extends StatelessWidget {
                   children: [
 
                     const Spacer(),
-                    if (state.orderDetails.paymentStatus != "paid")
+                    if (state.orderDetails.paymentStatus != "paid" &&
+                        state.orderDetails.orderStatus != "cancel" &&
+                        state.orderDetails.orderStatus != "reject")
                     CustomRoundButton(
                         label: "receive",
                         svgPath: "receive_inr",

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/layouts/mobile_layout.dart';
 import 'package:salesman/config/routes/route_name.dart';
@@ -126,7 +127,7 @@ class _ViewTransportDetailsState extends State<ViewTransportDetails> {
             "Transport started successfully.",
             MessageType.success,
           );
-          Future.delayed(const Duration(seconds: 1), () {
+          Future.delayed(const Duration(milliseconds: 300), () {
             Navigator.of(context)
                 .popAndPushNamed(RouteNames.viewPendingTransportList);
           });
@@ -296,16 +297,24 @@ class _ViewTransportDetailsState extends State<ViewTransportDetails> {
               final transportDetails = state.transportDetails!;
               final remainingTime = transportDetails.scheduleDate
                   .difference(DateTime.now())
-                  .inDays;
+                  .inSeconds
+                  .abs();
               String remainingDate = '';
-              // if remainingTime is 0 then set remainingDate to 'today'
-              if (remainingTime == 0) {
-                remainingDate = 'today';
-              } else if (remainingTime < 0) {
-                // if it's in -ve then add ago at suffix and remove - sign
-                remainingDate = '${remainingTime.abs()} late';
+
+              if (remainingTime > 604800) {
+                remainingDate =
+                    '${remainingTime ~/ 604800}w ${remainingTime % 604800 ~/ 86400}d ago';
+              } else if (remainingTime > 86400) {
+                remainingDate =
+                    '${remainingTime ~/ 86400}d ${remainingTime % 86400 ~/ 3600}h ago';
+              } else if (remainingTime > 3600) {
+                remainingDate =
+                    '${remainingTime ~/ 3600}h ${remainingTime % 3600 ~/ 60}m ago';
+              } else if (remainingTime > 60) {
+                remainingDate =
+                    '${remainingTime ~/ 60}m ${remainingTime % 60}s ago';
               } else {
-                remainingDate = 'in $remainingTime days';
+                remainingDate = '${remainingTime}s ago';
               }
               String vehicleName = '';
               for (final vehicle in state.vehicleList) {
@@ -423,7 +432,7 @@ class _ViewTransportDetailsState extends State<ViewTransportDetails> {
                       children: <Widget>[
                         Expanded(
                           child: DetailsCard(
-                            label: "Schedule Date",
+                            label: "Schedule was",
                             firstChild: Flexible(
                               child: Text(
                                 remainingDate,
@@ -467,7 +476,19 @@ class _ViewTransportDetailsState extends State<ViewTransportDetails> {
                       SizedBox(
                         height: designValues(context).padding21,
                       ),
+                    DetailsCard(
+                      label: "Schedule Date",
+                      firstChild: const SizedBox(),
+                      secondChild: Text(
+                        DateFormat("dd MMMM yyyy   hh:mm a").format(
+                          state.transportDetails!.scheduleDate.toLocal(),
+                        ),
+                      ),
+                    ),
                     if (transportDetails.vehicleId != null)
+                      SizedBox(
+                        height: designValues(context).padding21,
+                      ),
                       DetailsCard(
                         label: "Vehicle Name",
                         firstChild: const SizedBox(),

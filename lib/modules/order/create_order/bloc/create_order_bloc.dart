@@ -419,19 +419,6 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
         itemTotalQuantity: const DoubleFieldNotZero.pure(),
         itemPerUnitCost: const DoubleField.pure(),
         itemTotalCost: const DoubleField.pure(),
-        status: Formz.validate([
-          state.clientId,
-          state.itemId,
-          state.itemName,
-          state.itemUnit,
-          state.itemTotalQuantity,
-          state.itemPerUnitCost,
-          state.itemTotalCost,
-          state.listOfItemsForOrder,
-          state.itemTotalCost,
-          state.orderStatus,
-          state.createdBy,
-        ]),
       ),
     );
   }

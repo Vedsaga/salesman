@@ -6,7 +6,6 @@ import 'package:equatable/equatable.dart';
 import 'package:salesman/core/db/drift/app_database.dart';
 import 'package:salesman/main.dart';
 import 'package:salesman/modules/client/query/client_table_queries.dart';
-import 'package:salesman/modules/item/query/item_table_queries.dart';
 import 'package:salesman/modules/order/query/delivery_order_table_queries.dart';
 
 part 'view_order_list_event.dart';
@@ -31,13 +30,10 @@ class ViewOrderListBloc extends Bloc<ViewOrderListEvent, ViewOrderListState> {
               .getAllPending();
       final List<ModelClientData> clientList =
           await ClientTableQueries(appDatabaseInstance).getAllClients();
-      final List<ModelItemData> itemList =
-          await ItemTableQueries(appDatabaseInstance).getAllItems();
       if (pendingDeliveryOrders.isNotEmpty) {
         emit(FetchedOrderListState(
             orderList: pendingDeliveryOrders,
             clientList: clientList,
-            itemList: itemList,
           ),
         );
       } else {
@@ -56,14 +52,11 @@ class ViewOrderListBloc extends Bloc<ViewOrderListEvent, ViewOrderListState> {
           await DeliveryOrderTableQueries(appDatabaseInstance).getAllHistory();
       final List<ModelClientData> clientList =
           await ClientTableQueries(appDatabaseInstance).getAllClients();
-      final List<ModelItemData> itemList =
-          await ItemTableQueries(appDatabaseInstance).getAllItems();
       if (orderHistory.isNotEmpty) {
         emit(
           FetchedOrderListState(
             orderList: orderHistory,
             clientList: clientList,
-            itemList: itemList,
           ),
         );
       } else {

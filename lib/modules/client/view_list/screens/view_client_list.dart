@@ -84,7 +84,8 @@ class _ViewClientState extends State<ViewClientList> {
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
                       final client = state.clients;
-                      if (client[index].pendingDue > 0) {
+                      if (client[index].pendingDue >
+                          client[index].pendingRefund) {
                         return GestureDetector(
                           onTap: () {
                             Navigator.of(context).popAndPushNamed(
@@ -140,7 +141,7 @@ class _ViewClientState extends State<ViewClientList> {
                                                 designValues(context).padding13,
                                             width:
                                                 designValues(context).padding13,
-                                            color: red,
+                                            color: green,
                                           ),
                                           secondChild: Text(
                                             client[index]
@@ -151,8 +152,7 @@ class _ViewClientState extends State<ViewClientList> {
                                                 .subtitle1
                                                 ?.copyWith(
                                                   fontWeight: FontWeight.w600,
-                                                  color: red,
-
+                                                  color: green,
                                                 ),
                                           ),
                                         ),
@@ -175,6 +175,99 @@ class _ViewClientState extends State<ViewClientList> {
                             ),
                           ),
                         );
+                      } else if (client[index].pendingDue <
+                          client[index].pendingRefund) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).popAndPushNamed(
+                              RouteNames.viewClientDetails,
+                              arguments: state.clients[index],
+                            );
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(
+                              bottom: designValues(context).padding21,
+                            ),
+                            decoration: cardBoxDecoration(context),
+                            child: Padding(
+                              padding: EdgeInsets.all(
+                                designValues(context).padding21,
+                              ),
+                              child: Flex(
+                                direction: Axis.horizontal,
+                                children: [
+                                  Expanded(
+                                    child: RowFlexSpacedChildren(
+                                      firstChild: ColumnFlexClosedChildren(
+                                        firstChild: Text(
+                                          client[index].clientName,
+                                          style:
+                                              of(context).textTheme.headline6,
+                                        ),
+                                        secondChild: RowFlexCloseChildren(
+                                          firstChild: SvgPicture.asset(
+                                            "assets/icons/svgs/inr.svg",
+                                            height: 13,
+                                            width: 13,
+                                          ),
+                                          secondChild: Text(
+                                            (client[index].totalAmountSent +
+                                                    client[index]
+                                                        .totalAmountReceived)
+                                                .toStringAsFixed(2),
+                                            style: of(context)
+                                                .textTheme
+                                                .subtitle2
+                                                ?.copyWith(
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                                      secondChild: ColumnFlexClosedChildren(
+                                        firstChild: RowFlexCloseChildren(
+                                          firstChild: SvgPicture.asset(
+                                            "assets/icons/svgs/send_inr.svg",
+                                            height:
+                                                designValues(context).padding13,
+                                            width:
+                                                designValues(context).padding13,
+                                            color: red,
+                                          ),
+                                          secondChild: Text(
+                                            client[index]
+                                                .pendingRefund
+                                                .toStringAsFixed(2),
+                                            style: of(context)
+                                                .textTheme
+                                                .subtitle1
+                                                ?.copyWith(
+                                                  fontWeight: FontWeight.w600,
+                                                  color: red,
+
+                                                ),
+                                          ),
+                                        ),
+                                        secondChild:
+                                            client[index].lastPaymentOn == null
+                                                ? const Text("no refund yet!")
+                                                : Text(
+                                                    DateFormat("dd MMM yyyy")
+                                                        .format(
+                                                      client[index]
+                                                          .lastPaymentOn!
+                                                          .toLocal(),
+                                                    ),
+                                                  ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      
                       }
                       return GestureDetector(
                         onTap: () {
@@ -207,6 +300,7 @@ class _ViewClientState extends State<ViewClientList> {
                                           "assets/icons/svgs/inr.svg",
                                           height: 13,
                                           width: 13,
+                                          color: grey,
                                         ),
                                         secondChild: Text(
                                           (client[index].totalAmountSent +
