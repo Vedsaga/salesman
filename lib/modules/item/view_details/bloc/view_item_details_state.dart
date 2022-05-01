@@ -16,6 +16,8 @@ class ViewingItemDetailsState extends ViewItemDetailsState {
 
   @override
   List<Object> get props => [itemDetails];
+
+
 }
 
 class DeactivationOfItemInProgressState extends ViewItemDetailsState {}

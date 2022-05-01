@@ -44,6 +44,8 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
     on<EnablePaymentFeatureEvent>(_enablePaymentFeature);
     on<EnableReceiveFeatureEvent>(_enableReceiveFeature);
     on<EnableSendFeatureEvent>(_enableSendFeature);
+
+
     on<ResetItemFieldsEvent>(_resetItemField);
   }
   @override
@@ -358,6 +360,7 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
         );
       }
     }
+
   }
 
   Future<void> _enableDeliveryFeature(

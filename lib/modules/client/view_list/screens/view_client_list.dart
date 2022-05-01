@@ -209,6 +209,7 @@ class _ViewClientState extends State<ViewClientList> {
                                             "assets/icons/svgs/inr.svg",
                                             height: 13,
                                             width: 13,
+                                            color: grey,
                                           ),
                                           secondChild: Text(
                                             (client[index].totalAmountSent +

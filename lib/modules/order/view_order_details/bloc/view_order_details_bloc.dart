@@ -35,6 +35,9 @@ class ViewOrderDetailsBloc
     on<DeliverOrderEvent>(_deliverOrder);
     on<EnableRecordsFeature>(_enableRecord);
     on<EnableReturnFeature>(_enableReturn);
+    on<EnableSurveyFeatureEvent>(_enableSurveyFeature);
+    on<EnableReportFeatureEvent>(_enableReportFeature);
+    on<EnableStatsFeatureEvent>(_enableStatsFeature);
   }
 
   Future<void> _getOrderDetails(
@@ -137,7 +140,7 @@ class ViewOrderDetailsBloc
       _pendingDue +=
           event.orderDetails.netTotal - event.orderDetails.totalReceivedAmount;
     }
- 
+
     try {
       final int orderId = await DeliveryOrderTableQueries(appDatabaseInstance)
           .updateOrderStatusToDeliver(
@@ -177,6 +180,41 @@ class ViewOrderDetailsBloc
     if (feature != null && feature.disableReturn) {
       FeatureMonitor(menuRepository: menuRepository)
           .enableFeature('disableReturn');
+    }
+  }
+
+  Future<void> _enableSurveyFeature(
+    EnableSurveyFeatureEvent event,
+    Emitter<ViewOrderDetailsState> emit,
+  ) async {
+    final feature = await menuRepository.getActiveFeatures();
+    if (feature != null && feature.disableSurvey) {
+      FeatureMonitor(menuRepository: menuRepository)
+          .enableFeature("disableSurvey");
+    }
+  }
+
+  Future<void> _enableReportFeature(
+    EnableReportFeatureEvent event,
+    Emitter<ViewOrderDetailsState> emit,
+  ) async {
+    final feature = await menuRepository.getActiveFeatures();
+    if (feature != null && feature.disableReport) {
+      FeatureMonitor(menuRepository: menuRepository)
+          .enableFeature("disableReport");
+    }
+  }
+
+// _enableStatsFeature
+
+  Future<void> _enableStatsFeature(
+    EnableStatsFeatureEvent event,
+    Emitter<ViewOrderDetailsState> emit,
+  ) async {
+    final feature = await menuRepository.getActiveFeatures();
+    if (feature != null && feature.disableStats) {
+      FeatureMonitor(menuRepository: menuRepository)
+          .enableFeature("disableStats");
     }
   }
 }

@@ -95,7 +95,9 @@ class CreateReturnOrderBloc
     final reason = GenericField.dirty(event.reason);
     final pickupDate = DateTimeField.dirty(event.pickupDate);
     final returnQuantity = DoubleFieldNotZero.dirty(event.returnQuantity);
-    if (state.selectedDelivery != null) {
+    if (state.selectedDelivery != null &&
+        state.selectedDelivery!.deliveryOrderId ==
+            event.selectedDelivery!.deliveryOrderId) {
       if (listOfItemForReturn.valid) {
         final List<ItemMap> itemToReturn = <ItemMap>{
           ...listOfItemForReturn.value,
@@ -142,6 +144,7 @@ class CreateReturnOrderBloc
         state.copyWith(
           formStatus: FormzStatus.invalid,
           selectedDelivery: event.selectedDelivery,
+          listOfItemsForReturn: ListItemField.pure([]),
         ),
       );
       if (event.selectedDelivery != null && state.showReturnItemList.isEmpty) {
@@ -159,9 +162,7 @@ class CreateReturnOrderBloc
             deliveredItemsList: deliveredItem,
             showReturnItemList: showItemList,
             selectedDelivery: event.selectedDelivery,
-            listOfItemsForReturn: listOfItemForReturn.valid
-                ? listOfItemForReturn
-                : ListItemField.pure(event.listOfItemForReturn),
+            listOfItemsForReturn: ListItemField.pure([]),
             reason: reason.valid ? reason : GenericField.pure(event.reason),
             expectedPickUpDate: pickupDate.valid
                 ? pickupDate

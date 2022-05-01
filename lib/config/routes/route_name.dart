@@ -32,4 +32,7 @@ class RouteNames {
   static const String viewReturnOrderList = 'viewReturnOrderList';
   static const String viewReturnOrderDetails = 'viewReturnOrderDetails';
   static const String createReturnOrder = 'createReturnOrder';
+  static const String addSurvey = 'addSurvey';
+  static const String viewSurveyList = 'viewSurveyList';
+  static const String viewSurveyDetails = 'viewSurveyDetails';
 }

@@ -17,6 +17,7 @@ import 'package:salesman/core/components/normal_top_app_bar.dart';
 import 'package:salesman/core/components/row_flex_close_children.dart';
 import 'package:salesman/core/components/row_flex_spaced_children.dart';
 import 'package:salesman/core/components/snackbar_message.dart';
+import 'package:salesman/core/utils/global_function.dart';
 import 'package:salesman/core/utils/order_map.dart';
 import 'package:salesman/modules/transport/view_transport_details.dart/bloc/transport_details_bloc.dart';
 
@@ -43,11 +44,20 @@ class _ViewTransportDetailsState extends State<ViewTransportDetails> {
         }
 
         if (state.navigationStatus ==
-            TransportDetailsStatus.readyToNavigateToOrderDetails) {
+            TransportDetailsStatus.readyToNavigateToDeliveryDetails) {
           Future.delayed(const Duration(seconds: 1), () {
             Navigator.of(context).pushNamed(
               RouteNames.viewOrderDetails,
-              arguments: state.routeArguments,
+              arguments: state.deliveryRouteArguments,
+            );
+          });
+        }
+        if (state.navigationStatus ==
+            TransportDetailsStatus.readyToNavigateToReturnOrderDetails) {
+          Future.delayed(const Duration(seconds: 1), () {
+            Navigator.of(context).pushNamed(
+              RouteNames.viewReturnOrderDetails,
+              arguments: state.returnOrderRouteArgument,
             );
           });
         }
@@ -295,27 +305,13 @@ class _ViewTransportDetailsState extends State<ViewTransportDetails> {
             if (state.transportDetailsStatus ==
                 TransportDetailsStatus.loadedDetails) {
               final transportDetails = state.transportDetails!;
-              final remainingTime = transportDetails.scheduleDate
-                  .difference(DateTime.now())
-                  .inSeconds
-                  .abs();
-              String remainingDate = '';
+              final remainingTime = DateTime.now()
+                  .difference(transportDetails.scheduleDate)
+                  .inSeconds;
+              final String remainingDate =
+                  GlobalFunction().computeTime(remainingTime);
 
-              if (remainingTime > 604800) {
-                remainingDate =
-                    '${remainingTime ~/ 604800}w ${remainingTime % 604800 ~/ 86400}d ago';
-              } else if (remainingTime > 86400) {
-                remainingDate =
-                    '${remainingTime ~/ 86400}d ${remainingTime % 86400 ~/ 3600}h ago';
-              } else if (remainingTime > 3600) {
-                remainingDate =
-                    '${remainingTime ~/ 3600}h ${remainingTime % 3600 ~/ 60}m ago';
-              } else if (remainingTime > 60) {
-                remainingDate =
-                    '${remainingTime ~/ 60}m ${remainingTime % 60}s ago';
-              } else {
-                remainingDate = '${remainingTime}s ago';
-              }
+
               String vehicleName = '';
               for (final vehicle in state.vehicleList) {
                 if (vehicle.vehicleId == transportDetails.vehicleId) {
@@ -374,7 +370,7 @@ class _ViewTransportDetailsState extends State<ViewTransportDetails> {
                       children: <Widget>[
                         Expanded(
                           child: DetailsCard(
-                            label: "Order Id",
+                            label: "Transport Id",
                             firstChild: Flexible(
                               child: Text(
                                 state.transportDetails!.transportId.toString(),
@@ -432,7 +428,7 @@ class _ViewTransportDetailsState extends State<ViewTransportDetails> {
                       children: <Widget>[
                         Expanded(
                           child: DetailsCard(
-                            label: "Schedule was",
+                            label: "Schedule Time",
                             firstChild: Flexible(
                               child: Text(
                                 remainingDate,
@@ -675,6 +671,9 @@ class _ViewTransportDetailsState extends State<ViewTransportDetails> {
                             ?.copyWith(color: grey),
                       ),
                     ),
+                    SizedBox(
+                      height: designValues(context).padding21,
+                    ),
                     Flex(
                       direction: Axis.vertical,
                       children: [
@@ -688,69 +687,110 @@ class _ViewTransportDetailsState extends State<ViewTransportDetails> {
                             if (transportDetails.returnOrderList != null &&
                                 transportDetails
                                     .returnOrderList!.returnList.isNotEmpty) {
-                              return Container(
-                                decoration: cardBoxDecoration(context),
-                                margin: EdgeInsets.only(
-                                  bottom: designValues(context).padding21,
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.all(
-                                    designValues(context).padding21,
-                                  ),
-                                  child: Flex(
-                                    direction: Axis.horizontal,
-                                    children: [
-                                      SvgPicture.asset(
-                                        transportDetails.returnOrderList!
-                                                    .returnList[index].status ==
-                                                OrderStatus.pending
-                                            ? 'assets/icons/svgs/pending.svg'
-                                            : transportDetails
-                                                        .returnOrderList!
-                                                        .returnList[index]
-                                                        .status ==
-                                                    OrderStatus.deliver
-                                                ? 'assets/icons/svgs/completed_order.svg'
-                                                : transportDetails
-                                                            .returnOrderList!
-                                                            .returnList[index]
-                                                            .status ==
-                                                        OrderStatus.reject
-                                                    ? 'assets/icons/svgs/rejected_order.svg'
-                                                    : 'assets/icons/svgs/pending.svg',
-                                        width:
-                                            designValues(context).cornerRadius8,
-                                      ),
-                                      Expanded(
-                                        child: RowFlexSpacedChildren(
-                                          firstChild: RowFlexCloseChildren(
-                                            firstChild: Text(
-                                              transportDetails.returnOrderList!
-                                                  .returnList[index].name,
-                                              style: of(context)
-                                                  .textTheme
-                                                  .headline6,
-                                            ),
-                                            secondChild: const SizedBox(),
-                                          ),
-                                          secondChild: RowFlexCloseChildren(
-                                            firstChild: SvgPicture.asset(
-                                              'assets/icons/svgs/inr.svg',
-                                              width: designValues(context)
-                                                  .cornerRadius8,
-                                            ),
-                                            secondChild: Text(
-                                              transportDetails.returnOrderList!
-                                                  .returnList[index].total
-                                                  .toStringAsFixed(2),
-                                              style: of(context)
-                                                  .textTheme
-                                                  .headline6,
-                                            ),
-                                          ),
+                              return GestureDetector(
+                                onTap: () {
+                                  context.read<TransportDetailsBloc>().add(
+                                        FetchReturnOrderRelatedDetailsEvent(
+                                          returnId: transportDetails
+                                              .returnOrderList!
+                                              .returnList[index]
+                                              .id,
                                         ),
-                                      )
-                                    ],
+                                      );
+                                },
+                                child: Container(
+                                  decoration: cardBoxDecoration(context),
+                                  margin: EdgeInsets.only(
+                                    bottom: designValues(context).padding21,
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(
+                                      designValues(context).padding21,
+                                    ),
+                                    child: Flex(
+                                      direction: Axis.horizontal,
+                                      children: [
+                                        SvgPicture.asset(
+                                          transportDetails
+                                                      .returnOrderList!
+                                                      .returnList[index]
+                                                      .status ==
+                                                  OrderStatus.pending
+                                              ? 'assets/icons/svgs/pending.svg'
+                                              : transportDetails
+                                                          .returnOrderList!
+                                                          .returnList[index]
+                                                          .status ==
+                                                      OrderStatus.deliver
+                                                  ? 'assets/icons/svgs/completed_order.svg'
+                                                  : transportDetails
+                                                              .returnOrderList!
+                                                              .returnList[index]
+                                                              .status ==
+                                                          OrderStatus.reject
+                                                      ? 'assets/icons/svgs/rejected_order.svg'
+                                                      : 'assets/icons/svgs/pending.svg',
+                                          width:
+                                              designValues(context).padding21,
+                                          color: transportDetails
+                                                      .returnOrderList!
+                                                      .returnList[index]
+                                                      .status ==
+                                                  OrderStatus.pending
+                                              ? skyBlue
+                                              : transportDetails
+                                                          .returnOrderList!
+                                                          .returnList[index]
+                                                          .status ==
+                                                      OrderStatus.deliver
+                                                  ? green
+                                                  : transportDetails
+                                                              .returnOrderList!
+                                                              .returnList[index]
+                                                              .status ==
+                                                          OrderStatus.reject
+                                                      ? red
+                                                      : skyBlue,
+                                        ),
+                                        SizedBox(
+                                          width:
+                                              designValues(context).padding21,
+                                        ),
+                                        Expanded(
+                                          child: RowFlexSpacedChildren(
+                                            firstChild: RowFlexCloseChildren(
+                                              firstChild: Text(
+                                                transportDetails
+                                                    .returnOrderList!
+                                                    .returnList[index]
+                                                    .name,
+                                                style: of(context)
+                                                    .textTheme
+                                                    .headline6,
+                                              ),
+                                              secondChild: const SizedBox(),
+                                            ),
+                                            secondChild: RowFlexCloseChildren(
+                                              firstChild: SvgPicture.asset(
+                                                'assets/icons/svgs/inr.svg',
+                                                width: designValues(context)
+                                                    .cornerRadius8,
+                                              ),
+                                              secondChild: Text(
+                                                transportDetails
+                                                    .returnOrderList!
+                                                    .returnList[index]
+                                                    .total
+                                                    .toStringAsFixed(2),
+                                                style: of(context)
+                                                    .textTheme
+                                                    .headline6,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
                               );

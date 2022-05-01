@@ -237,6 +237,7 @@ class _AddItemPageState extends State<AddItemPage> {
                     );
                   },
                 ),
+              
               ],
             ),
           ),

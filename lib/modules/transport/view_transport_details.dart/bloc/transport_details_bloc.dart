@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:salesman/config/routes/arguments_models/view_order_details_route_arguments.dart';
+import 'package:salesman/config/routes/arguments_models/view_return_order_details_route_argument.dart';
 import 'package:salesman/config/routes/arguments_models/view_transport_details_route_arguments.dart';
 import 'package:salesman/core/db/drift/app_database.dart';
 import 'package:salesman/core/db/hive/models/agent_profile_model.dart';
@@ -11,6 +12,7 @@ import 'package:salesman/modules/client/query/client_table_queries.dart';
 import 'package:salesman/modules/menu/repositories/menu_repository.dart';
 import 'package:salesman/modules/order/query/delivery_order_table_queries.dart';
 import 'package:salesman/modules/profile/repositories/profile_repository.dart';
+import 'package:salesman/modules/return/query/return_order_table_queries.dart';
 import 'package:salesman/modules/transport/query/transport_table_queries.dart';
 import 'package:salesman/modules/vehicle/query/vehicle_table_queries.dart';
 
@@ -27,6 +29,7 @@ class TransportDetailsBloc
   }) : super(const TransportDetailsState()) {
     on<FetchTransportDetailsEvent>(_fetchTransportDetails);
     on<FetchDeliveryRelatedDetailsEvent>(_fetchOrderRelatedDetails);
+    on<FetchReturnOrderRelatedDetailsEvent>(_fetchReturnOrderRelatedDetails);
     on<CancelledTransportEvent>(_transportStatusToCancelled);
     on<StartTransportEvent>(_transportStatusToInProgress);
     on<EnableTransportTripsFeatureEvent>(
@@ -80,13 +83,13 @@ class TransportDetailsBloc
               .getClientDetails(orderDetails.clientId);
       emit(
         state.copyWith(
-          routeArguments: ViewOrderDetailsRouteArguments(
+          deliveryRouteArguments: ViewOrderDetailsRouteArguments(
             orderDetails: orderDetails,
             itemList: orderDetails.itemList.itemList,
             clientDetails: clientDetails,
           ),
           navigationStatus:
-              TransportDetailsStatus.readyToNavigateToOrderDetails,
+              TransportDetailsStatus.readyToNavigateToDeliveryDetails,
         ),
       );
     } catch (e) {
@@ -122,6 +125,7 @@ class TransportDetailsBloc
       final int transportId = await TransportTableQueries(appDatabaseInstance)
           .updateTransportStatusById(
         id: state.transportDetails!.transportId,
+        vehicleId: state.transportDetails!.vehicleId!,
         deliveryOrderIds: state
             .transportDetails?.deliveryOrderList?.deliveryList
             .where((delivery) => delivery.status == OrderStatus.pending)
@@ -184,6 +188,8 @@ class TransportDetailsBloc
       final int transportId = await TransportTableQueries(appDatabaseInstance)
           .updateTransportStatusById(
         id: state.transportDetails!.transportId,
+        vehicleId: state.transportDetails!.vehicleId!,
+
         deliveryOrderIds: state
             .transportDetails?.deliveryOrderList?.deliveryList
             .where((delivery) => delivery.status == OrderStatus.pending)
@@ -195,7 +201,7 @@ class TransportDetailsBloc
             .toList(),
         transportStatus: "started",
         deliveryStatus: "dispatch",
-        returnStatus: "approve",
+        returnStatus: "initiated",
         transportBy: agentProfile.name,
         startedAt: DateTime.now(),
       );
@@ -231,6 +237,38 @@ class TransportDetailsBloc
     if (feature != null && feature.disableTrip) {
       FeatureMonitor(menuRepository: menuRepository)
           .enableFeature("disableTrip");
+    }
+  }
+
+  
+  Future<void> _fetchReturnOrderRelatedDetails(
+    FetchReturnOrderRelatedDetailsEvent event,
+    Emitter<TransportDetailsState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        navigationStatus: TransportDetailsStatus.loadingNavigationData,
+      ),
+    );
+    try {
+      final ModelReturnOrderData returnOrderData =
+          await ReturnOrderTableQueries(appDatabaseInstance)
+              .getReturnOrderById(event.returnId);
+      emit(
+        state.copyWith(
+          returnOrderRouteArgument: ViewReturnOrderDetailsRouteArgument(
+            returnOrderData: returnOrderData,
+          ),
+          navigationStatus:
+              TransportDetailsStatus.readyToNavigateToReturnOrderDetails,
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          navigationStatus: TransportDetailsStatus.errorFetchingOrderDetails,
+        ),
+      );
     }
   }
 }

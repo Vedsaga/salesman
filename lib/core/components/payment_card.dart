@@ -49,10 +49,10 @@ class PaymentCard extends StatelessWidget {
           children: [
             // if listOfPayments[index].paymentType == "send" then show receive.svg if not show send.svg
             SvgPicture.asset(
-              paymentData.paymentType == "send"
+              paymentData.paymentType == "refund"
                   ? "assets/icons/svgs/send_inr.svg"
                   : "assets/icons/svgs/receive_inr.svg",
-              color: paymentData.paymentType == "send" ? red : green,
+              color: paymentData.paymentType == "refund" ? red : green,
             ),
             Expanded(
               child: Padding(

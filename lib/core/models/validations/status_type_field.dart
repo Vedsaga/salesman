@@ -20,7 +20,7 @@ class StatusTypeField
     'reject',
     'delayed',
   ];
-  static final List<String> paymentType = ['receive', 'send'];
+  static final List<String> paymentType = ['receive', 'refund'];
   static final List<String> paymentFor = ['delivery', 'return', 'other'];
   static final List<String> paymentStatus = ['paid', 'unpaid', 'partial'];
   static final List<String> paymentMode = [
@@ -43,10 +43,11 @@ class StatusTypeField
   static final List<String> returnOrderStatus = [
     'pending',
     'approve',
-    'collect',
+    'initiated',
     'return',
     'reject',
-    'cancel'
+    'cancel',
+    'delayed',
   ];
 
   static final List<String> vehicleStatus = ['available', 'unavailable'];

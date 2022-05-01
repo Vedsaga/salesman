@@ -233,7 +233,7 @@ class _EditItemPageState extends State<EditReturnItemPage> {
                             selectedDelivery: state.selectedDelivery,
                             listOfItemForReturn:
                                 state.listOfItemsForReturn.value,
-                            returnQuantity: double.tryParse(value) ?? 0,
+                            returnQuantity: quantity,
                             reason: state.reason.value,
                             pickupDate: state.expectedPickUpDate.value,
                           ),
@@ -302,16 +302,16 @@ class _EditItemPageState extends State<EditReturnItemPage> {
                                   widget.editItemMap.quantity &&
                               state.returnQuantity.valid &&
                               state.returnQuantity.value <=
-                                  widget.editItemMap.quantity &&
+                                  widget.deliveredItemMap.quantity &&
                               state.returnQuantity.value > 0) {
                             _addIntoItem(
                               name: widget.editItemMap.name,
                               id: widget.editItemMap.id,
                               unit: widget.editItemMap.unit,
-                              quantity: widget.editItemMap.quantity,
+                              quantity: state.returnQuantity.value,
                               rate: widget.editItemMap.rate,
                               totalWorth: widget.editItemMap.rate *
-                                  widget.editItemMap.quantity,
+                                  state.returnQuantity.value,
                             );
                             context.read<CreateReturnOrderBloc>().add(
                                   CreateReturnOrderFieldChanges(

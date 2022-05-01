@@ -10,6 +10,8 @@ import 'package:salesman/config/routes/arguments_models/create_return_order_rout
 import 'package:salesman/config/routes/arguments_models/process_order_route_arguments.dart';
 import 'package:salesman/config/routes/arguments_models/view_order_details_route_arguments.dart';
 import 'package:salesman/config/routes/arguments_models/view_payment_history_list_route_arguments.dart';
+import 'package:salesman/config/routes/arguments_models/view_return_order_details_route_argument.dart';
+import 'package:salesman/config/routes/arguments_models/view_survey_details_route_argument.dart';
 import 'package:salesman/config/routes/arguments_models/view_transport_details_route_arguments.dart';
 import 'package:salesman/config/routes/route_name.dart';
 import 'package:salesman/config/theme/test_design.dart';
@@ -48,10 +50,18 @@ import 'package:salesman/modules/profile/profile_creation/screens/profile_creati
 import 'package:salesman/modules/profile/repositories/profile_repository.dart';
 import 'package:salesman/modules/return/create_return_order/bloc/create_return_bloc.dart';
 import 'package:salesman/modules/return/create_return_order/screens/create_return_order.dart';
+import 'package:salesman/modules/return/view_return_details/bloc/return_order_details_bloc.dart';
+import 'package:salesman/modules/return/view_return_details/screens/view_return_order_details.dart';
 import 'package:salesman/modules/return/view_return_list/bloc/return_list_bloc.dart';
 import 'package:salesman/modules/return/view_return_list/screens/view_return_order_list.dart';
 import 'package:salesman/modules/splashscreen/bloc/profile_check_bloc.dart';
 import 'package:salesman/modules/splashscreen/screens/splash_screen.dart';
+import 'package:salesman/modules/survey/add_survey/bloc/add_survey_bloc.dart';
+import 'package:salesman/modules/survey/add_survey/screens/add_survey.dart';
+import 'package:salesman/modules/survey/survey_details/bloc/survey_details_bloc.dart';
+import 'package:salesman/modules/survey/survey_details/screens/view_survey_details.dart';
+import 'package:salesman/modules/survey/survey_list/bloc/survey_list_bloc.dart';
+import 'package:salesman/modules/survey/survey_list/screens/view_survey_list.dart';
 import 'package:salesman/modules/transport/add_transport/bloc/add_transport_bloc.dart';
 import 'package:salesman/modules/transport/add_transport/screens/create_transport.dart';
 import 'package:salesman/modules/transport/view_transport_details.dart/bloc/transport_details_bloc.dart';
@@ -341,6 +351,53 @@ class AppRouter {
             );
           },
         );
+      case RouteNames.viewReturnOrderDetails:
+        final routeArgument =
+            settings.arguments as ViewReturnOrderDetailsRouteArgument?;
+        return MaterialPageRoute(
+          builder: (_) {
+            return BlocProvider<ReturnOrderDetailsBloc>(
+              create: (context) => ReturnOrderDetailsBloc()
+                ..add(
+                  FetchReturnOrderDetails(
+                    routeArgument: routeArgument,
+                  ),
+                ),
+              child: const ViewReturnOrderDetails(),
+            );
+          },
+        );
+      case RouteNames.addSurvey:
+        return MaterialPageRoute(
+          builder: (_) {
+            return BlocProvider<AddSurveyBloc>(
+              create: (context) => AddSurveyBloc(ProfileRepository())
+                ..add(FetchDetailsForAddSurveyEvent()),
+              child: const AddSurvey(),
+            );
+          },
+        );
+      case RouteNames.viewSurveyList:
+        return MaterialPageRoute(
+          builder: (_) {
+            return BlocProvider<SurveyListBloc>(
+              create: (context) =>
+                  SurveyListBloc()..add(FetchSurveyListEvent()),
+              child: const ViewSurveyList(),
+            );
+          },
+        );
+      case RouteNames.viewSurveyDetails:
+      final routeArgument = settings.arguments as ViewSurveyDetailsRouteArgument?;
+        return MaterialPageRoute(
+          builder: (_) {
+            return BlocProvider<SurveyDetailsBloc>(
+              create: (context) => SurveyDetailsBloc()..add(FetchSurveyDetailsEvent(routeArgument: routeArgument )),
+              child: const ViewSurveyDetails(),
+            );
+          },
+        );
+        
       default:
         return MaterialPageRoute(
           builder: (_) {

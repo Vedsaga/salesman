@@ -170,7 +170,6 @@ class Menu extends StatelessWidget {
                             Navigator.pushNamed(
                               context,
                               RouteNames.viewReturnOrderList,
-
                             );
                           },
                         ),
@@ -263,7 +262,12 @@ class Menu extends StatelessWidget {
                           title: "survey",
                           iconName: "survey",
                           disabled: activeFeatures.disableSurvey,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              RouteNames.viewSurveyList,
+                            );
+                          },
                         ),
                         MenuButtonModel(
                           title: "stats",

@@ -53,3 +53,10 @@ class DeliverOrderEvent extends ViewOrderDetailsEvent {
 }
 
 class EnableReturnFeature extends ViewOrderDetailsEvent {}
+
+
+class EnableReportFeatureEvent extends ViewOrderDetailsEvent {}
+
+class EnableSurveyFeatureEvent extends ViewOrderDetailsEvent {}
+
+class EnableStatsFeatureEvent extends ViewOrderDetailsEvent {}

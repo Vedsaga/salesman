@@ -5,7 +5,7 @@ class GlobalFunction {
   final List<ModelItemData> itemList;
   final List<ModelClientData> clientList;
 
-  GlobalFunction({required this.itemList, required this.clientList});
+  GlobalFunction({ this.itemList = const [],  this.clientList = const []});
 
 
   String? getClientName(int clientId) {
@@ -96,5 +96,34 @@ class GlobalFunction {
       }
     }
     return null;
+  }
+
+  String computeTime(int remainingTime) {
+    if (remainingTime > 0) {
+      if (remainingTime > 604800) {
+        return '${remainingTime ~/ 604800}w ${remainingTime % 604800 ~/ 86400}d ago';
+      } else if (remainingTime > 86400) {
+        return '${remainingTime ~/ 86400}d ${remainingTime % 86400 ~/ 3600}h ago';
+      } else if (remainingTime > 3600) {
+        return '${remainingTime ~/ 3600}h ${remainingTime % 3600 ~/ 60}m ago';
+      } else if (remainingTime > 60) {
+        return '${remainingTime ~/ 60}m ${remainingTime % 60}s ago';
+      } else {
+        return '${remainingTime}s ago';
+      }
+    } else {
+      // if remainingTime > -60 then it is in the future.
+      if (remainingTime > -60) {
+        return 'in ${-remainingTime}s';
+      } else if (remainingTime > -3600) {
+        return 'in ${-remainingTime ~/ 60}m';
+      } else if (remainingTime > -86400) {
+        return 'in ${-remainingTime ~/ 3600}h';
+      } else if (remainingTime > -604800) {
+        return 'in ${-remainingTime ~/ 86400}d';
+      } else {
+        return 'in ${-remainingTime ~/ 604800}w';
+      }
+    }
   }
 }

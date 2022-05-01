@@ -14,6 +14,7 @@ import 'package:salesman/core/components/normal_top_app_bar.dart';
 import 'package:salesman/core/components/row_flex_close_children.dart';
 import 'package:salesman/core/components/row_flex_spaced_children.dart';
 import 'package:salesman/core/components/snackbar_message.dart';
+import 'package:salesman/core/utils/global_function.dart';
 import 'package:salesman/modules/transport/view_transport_list/bloc/transport_list_bloc.dart';
 
 class ViewTransportList extends StatefulWidget {
@@ -88,20 +89,11 @@ class _ViewTransportListState extends State<ViewTransportList> {
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
                       final transport = state.transportList;
-                      final remainingTime = transport[index]
-                          .scheduleDate
-                          .difference(DateTime.now())
-                          .inDays;
-                      String remainingDate = '';
-                      // if remainingTime is 0 then set remainingDate to 'today'
-                      if (remainingTime == 0) {
-                        remainingDate = 'today';
-                      } else if (remainingTime < 0) {
-                        // if it's in -ve then add ago at suffix and remove - sign
-                        remainingDate = '${remainingTime.abs()} days ago';
-                      } else {
-                        remainingDate = 'in $remainingTime days';
-                      }
+                      final remainingTime = DateTime.now()
+                          .difference(transport[index].scheduleDate)
+                          .inSeconds;
+                      final String remainingDate =
+                          GlobalFunction().computeTime(remainingTime);
                       return GestureDetector(
                         onTap: () {
                           Navigator.popAndPushNamed(

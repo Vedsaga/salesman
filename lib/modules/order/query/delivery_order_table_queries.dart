@@ -1,5 +1,6 @@
 // Package imports:
 import 'package:drift/drift.dart';
+import 'package:salesman/common/query/client_item_table_queries.dart';
 
 // Project imports:
 import 'package:salesman/core/db/drift/app_database.dart';
@@ -121,6 +122,7 @@ class DeliveryOrderTableQueries extends DatabaseAccessor<AppDatabase>
           ]))
         .get();
   }
+
   Future<List<ModelDeliveryOrderData>> getAllDeliveredOrders() async {
     return (select(modelDeliveryOrder)
           ..where(
@@ -232,10 +234,9 @@ class DeliveryOrderTableQueries extends DatabaseAccessor<AppDatabase>
       return (update(modelDeliveryOrder)
             ..where((table) => table.deliveryOrderId.equals(deliveryOrderId)))
           .write(
-         ModelDeliveryOrderCompanion(
+        ModelDeliveryOrderCompanion(
           orderStatus: const Value("reject"),
           lastUpdated: Value(DateTime.now()),
-
         ),
       );
     });
@@ -254,6 +255,33 @@ class DeliveryOrderTableQueries extends DatabaseAccessor<AppDatabase>
       for (final ItemMap item in itemList) {
         await ItemTableQueries(appDatabaseInstance)
             .updateReservedQuantityOnDelivery(item.id, item.quantity);
+        final ModelClientItemRecordData? itemRecord =
+            await ClientItemTableQueries(attachedDatabase)
+                .getRecordByClientItemId(client.clientId, item.id);
+
+        if (itemRecord != null) {
+          final ModelClientItemRecordCompanion clientItemRecordCompanion =
+              ModelClientItemRecordCompanion(
+            clientId: Value(client.clientId),
+            itemId: Value(item.id),
+            availableQuantity:
+                Value(itemRecord.availableQuantity + item.quantity),
+            lastUpdatedOn: Value(DateTime.now()),
+          );
+          await ClientItemTableQueries(attachedDatabase)
+              .updateClientItemRecord(clientItemRecordCompanion);
+        } else {
+          final ModelClientItemRecordCompanion clientItemRecordCompanion =
+              ModelClientItemRecordCompanion(
+            clientId: Value(client.clientId),
+            itemId: Value(item.id),
+            availableQuantity: Value(item.quantity),
+            itemName: Value(item.name),
+            unit: Value(item.unit),
+          );
+          await ClientItemTableQueries(attachedDatabase)
+              .insertClientItemRecord(clientItemRecordCompanion);
+        }
       }
       await (update(modelClient)
             ..where((table) => table.clientId.equals(client.clientId)))
@@ -272,14 +300,14 @@ class DeliveryOrderTableQueries extends DatabaseAccessor<AppDatabase>
         ModelTransportCompanion(
           deliveryOrderList:
               Value(DeliveryOrderList(deliveryList: deliveryList)),
-              lastUpdated: Value(DateTime.now()),
+          lastUpdated: Value(DateTime.now()),
         ),
       );
 
       return (update(modelDeliveryOrder)
             ..where((table) => table.deliveryOrderId.equals(deliveryOrderId)))
           .write(
-         ModelDeliveryOrderCompanion(
+        ModelDeliveryOrderCompanion(
           orderStatus: const Value("deliver"),
           lastUpdated: Value(DateTime.now()),
         ),

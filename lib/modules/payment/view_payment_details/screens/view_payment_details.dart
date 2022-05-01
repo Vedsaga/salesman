@@ -126,7 +126,7 @@ class _ViewPaymentDetailsState extends State<ViewPaymentDetails> {
                           child: Container(
                             decoration: BoxDecoration(
                               gradient:
-                                  state.paymentDetails.paymentType == "send"
+                                  state.paymentDetails.paymentType == "refund"
                                       ? redGradient
                                       : greenGradient,
                               boxShadow: const [
@@ -146,7 +146,7 @@ class _ViewPaymentDetailsState extends State<ViewPaymentDetails> {
                                 ),
                                 child: RowFlexCloseChildren(
                                   firstChild: SvgPicture.asset(
-                                    state.paymentDetails.paymentType == "send"
+                                    state.paymentDetails.paymentType == "refund"
                                         ? "assets/icons/svgs/send.svg"
                                         : "assets/icons/svgs/receive.svg",
                                     color: light,

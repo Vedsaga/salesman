@@ -31,7 +31,8 @@ class TransportListBloc extends Bloc<TransportListEvent, TransportListState> {
               .getAllPendingTransports();
       if (transportList.isEmpty) {
         emit(
-            state.copyWith(status: TransportListScreenStatus.emptyPendingList),);
+          state.copyWith(status: TransportListScreenStatus.emptyPendingList),
+        );
       } else {
         emit(
           state.copyWith(
@@ -56,7 +57,8 @@ class TransportListBloc extends Bloc<TransportListEvent, TransportListState> {
               .getTransportHistoryTrip();
       if (transportList.isEmpty) {
         emit(
-            state.copyWith(status: TransportListScreenStatus.emptyHistoryList),);
+          state.copyWith(status: TransportListScreenStatus.emptyHistoryList),
+        );
       } else {
         emit(
           state.copyWith(
@@ -130,17 +132,39 @@ class TransportListBloc extends Bloc<TransportListEvent, TransportListState> {
         final List<ModelTransportData> completeTransports = [];
         for (final ModelTransportData transport in transportList) {
           int completeCount = 0;
-          for (final OrderMap delivery
-              in transport.deliveryOrderList!.deliveryList) {
-            if (delivery.status == OrderStatus.deliver || delivery.status == OrderStatus.reject) {
-              completeCount++;
+          final List<OrderMap>? deliveryList =
+              transport.deliveryOrderList?.deliveryList;
+          final List<OrderMap>? returnList =
+              transport.returnOrderList?.returnList;
+          if (deliveryList != null) {
+            for (final OrderMap delivery in deliveryList) {
+              if (delivery.status == OrderStatus.deliver ||
+                  delivery.status == OrderStatus.reject) {
+                completeCount++;
+              }
             }
           }
+          if (returnList != null) {
+            for (final OrderMap returnOrder in returnList) {
+              if (returnOrder.status == OrderStatus.deliver ||
+                  returnOrder.status == OrderStatus.reject) {
+                completeCount++;
+              }
+            }
+          }
+
+          // check if deliveryList and returnList is null and completeCount == returnList length + deliveryList length
           if (completeCount ==
-              transport.deliveryOrderList!.deliveryList.length) {
+              (returnList?.length ?? 0) + (deliveryList?.length ?? 0)) {
             completeTransports.add(transport);
             add(const EnableTransportTripsFeatureEvent());
+
           }
+
+          // if (completeCount == ) {
+          //     completeTransports.add(transport);
+          //     add(const EnableTransportTripsFeatureEvent());
+          //   }
         }
         if (completeTransports.isEmpty) {
           emit(

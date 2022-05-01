@@ -9,4 +9,6 @@ part of 'return_order_table_queries.dart';
 mixin _$ReturnOrderTableQueriesMixin on DatabaseAccessor<AppDatabase> {
   $ModelReturnOrderTable get modelReturnOrder =>
       attachedDatabase.modelReturnOrder;
+  $ModelTransportTable get modelTransport => attachedDatabase.modelTransport;
+  $ModelClientTable get modelClient => attachedDatabase.modelClient;
 }

@@ -119,10 +119,11 @@ class _ViewOrderDetailsState extends State<ViewOrderDetails>
             "Order delivered successfully...",
             MessageType.success,
           );
-          BlocProvider.of<ViewOrderDetailsBloc>(context)
-              .add(EnableRecordsFeature());
-          BlocProvider.of<ViewOrderDetailsBloc>(context)
-              .add(EnableReturnFeature());
+          context.read<ViewOrderDetailsBloc>().add(EnableReportFeatureEvent());
+          context.read<ViewOrderDetailsBloc>().add(EnableRecordsFeature());
+          context.read<ViewOrderDetailsBloc>().add(EnableReturnFeature());
+          context.read<ViewOrderDetailsBloc>().add(EnableSurveyFeatureEvent());
+          context.read<ViewOrderDetailsBloc>().add(EnableStatsFeatureEvent());
           Future.delayed(const Duration(seconds: 1), () {
             Navigator.popAndPushNamed(context, RouteNames.viewOrderList);
           });

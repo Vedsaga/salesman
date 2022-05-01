@@ -16,6 +16,7 @@ class RowFlexSpacedChildren extends StatelessWidget {
   Widget build(BuildContext context) {
     return Flex(
       direction: Axis.horizontal,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         firstChild,
         const Spacer(),

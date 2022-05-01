@@ -28,3 +28,8 @@ class CancelledTransportEvent extends TransportDetailsEvent {}
 class StartTransportEvent extends TransportDetailsEvent {}
 
 class EnableTransportTripsFeatureEvent extends TransportDetailsEvent {}
+
+class FetchReturnOrderRelatedDetailsEvent extends TransportDetailsEvent {
+  final int returnId;
+  const FetchReturnOrderRelatedDetailsEvent({required this.returnId});
+}

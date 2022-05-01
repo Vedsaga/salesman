@@ -226,6 +226,7 @@ class _EditItemPageState extends State<EditItemPage> {
           ],
         ),
       ),
+      
       bottomAppBar: Flex(
         direction: Axis.horizontal,
         children: [
@@ -329,6 +330,7 @@ class _EditItemPageState extends State<EditItemPage> {
           )
         ],
       ),
+    
     );
   }
 }

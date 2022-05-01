@@ -26,7 +26,6 @@ class TransportTableQueries extends DatabaseAccessor<AppDatabase>
   Future<int> newTransport(ModelTransportCompanion transport) {
     return transaction(() async {
       if (transport.vehicleId.value != null) {
-        // in modelVehicle to update the vehicleStatus to unavailable
         await (update(modelVehicle)
               ..where(
                 (table) => table.vehicleId.equals(transport.vehicleId.value),
@@ -87,16 +86,6 @@ class TransportTableQueries extends DatabaseAccessor<AppDatabase>
         .get();
   }
 
-  Future<List<ModelTransportData>> getAllCompletedTransports() async {
-    return (select(modelTransport)
-          ..where(
-            (table) =>
-                table.transportStatus.equals("complete") |
-                table.transportStatus.equals("cancel"),
-          )
-          ..orderBy([(table) => OrderingTerm.desc(table.transportId)]))
-        .get();
-  }
 
   Future<List<ModelTransportData>> getOnlyScheduleDatePassedTransport() async {
     final transportList = await (select(modelTransport)
@@ -169,6 +158,7 @@ class TransportTableQueries extends DatabaseAccessor<AppDatabase>
             .write(
           ModelReturnOrderCompanion(
             returnStatus: const Value("approve"),
+            transportId: Value(transport.transportId.value),
             lastUpdated: Value(DateTime.now()),
           ),
         );
@@ -190,6 +180,7 @@ class TransportTableQueries extends DatabaseAccessor<AppDatabase>
     required String returnStatus,
     required String? transportBy,
     required DateTime? startedAt,
+    required int vehicleId,
   }) {
     return transaction(() async {
       final int transportId = await (update(modelTransport)
@@ -241,7 +232,7 @@ class TransportTableQueries extends DatabaseAccessor<AppDatabase>
         // in modelVehicle to update the vehicleStatus to available
         await (update(modelVehicle)
               ..where(
-                (table) => table.vehicleId.equals(transportId),
+                (table) => table.vehicleId.equals(vehicleId),
               ))
             .write(
           ModelVehicleCompanion(
@@ -296,6 +287,7 @@ class TransportTableQueries extends DatabaseAccessor<AppDatabase>
             (table) => table.transportStatus.equals("started"),
           )
           ..orderBy([(table) => OrderingTerm.asc(table.transportId)]))
+          
         .get();
     return transportList;
   }

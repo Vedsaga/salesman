@@ -20,8 +20,6 @@ import 'package:salesman/core/utils/global_function.dart';
 import 'package:salesman/modules/order/view_order_list/bloc/view_order_list_bloc.dart';
 
 
-
-
 class ViewOrderList extends StatefulWidget {
   const ViewOrderList({Key? key}) : super(key: key);
 

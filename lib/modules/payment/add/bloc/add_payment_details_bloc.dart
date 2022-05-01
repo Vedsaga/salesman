@@ -400,6 +400,7 @@ class AddPaymentDetailsBloc
             selectedDeliveryOrder: state.selectedDeliveryOrder,
             clientID: orderData.clientId,
             status: paymentStatus,
+            selectedReturnOrder: state.selectedReturnOrder,
           );
           if (paymentId > 0) {
             emit(
@@ -408,6 +409,66 @@ class AddPaymentDetailsBloc
               ),
             );
           }
+        } else if (state.selectedReturnOrder != null) {
+          final ModelReturnOrderData orderData = state.selectedReturnOrder!;
+          final double computedRefund =
+              orderData.totalSendAmount + state.amount.value;
+
+          if (computedRefund > orderData.netRefund) {
+            emit(
+              state.copyWith(
+                deliveryOrderId: deliveryOrderId,
+                returnOrderId: returnOrderId,
+                amount: amount,
+                paymentMode: paymentMode,
+                paymentType: paymentType,
+                paymentFor: paymentFor,
+                paymentDate: paymentDate,
+                receivedBy: receivedBy,
+                addPaymentStatus: AddPaymentStatus.extraPayment,
+                status: FormzStatus.invalid,
+              ),
+            );
+            return;
+          } else if (computedRefund == orderData.netRefund) {
+            paymentStatus = "paid";
+          } else if (0 < computedRefund) {
+            paymentStatus = "partial";
+          } else if (0 == computedRefund) {
+            paymentStatus = "unpaid";
+          }
+          final int paymentId = await PaymentTableQueries(appDatabaseInstance)
+              .insertPaymentReceived(
+            paymentReceived: newPayment,
+            selectedDeliveryOrder: state.selectedDeliveryOrder,
+            clientID: orderData.clientId,
+            status: paymentStatus,
+            selectedReturnOrder: state.selectedReturnOrder,
+          );
+          if (paymentId > 0) {
+            emit(
+              state.copyWith(
+                status: FormzStatus.submissionSuccess,
+              ),
+            );
+          }
+        } else {
+          emit(
+            state.copyWith(
+              deliveryOrderId: deliveryOrderId,
+              returnOrderId: returnOrderId,
+              amount: amount,
+              paymentMode: paymentMode,
+              paymentType: paymentType,
+              paymentFor: paymentFor,
+              paymentDate: paymentDate,
+              receivedBy: receivedBy,
+              addPaymentStatus: AddPaymentStatus.extraPayment,
+              status: FormzStatus.invalid,
+            ),
+          );
+
+          
         }
       } catch (e) {
         emit(state.copyWith(status: FormzStatus.submissionFailure));

@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 
 // Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
+import 'package:salesman/config/routes/arguments_models/create_return_order_route_argument.dart';
 import 'package:salesman/config/routes/arguments_models/process_order_route_arguments.dart';
 import 'package:salesman/config/routes/route_name.dart';
 import 'package:salesman/config/theme/colors.dart';
@@ -222,7 +223,7 @@ class _ViewOrderDetailTabState extends State<OrderDetailsTab> {
                         SizedBox(height: designValues(context).verticalPadding),
                         NormalTopAppBar(
                           titleWidget: Text(
-                            'ITEMs',
+                            'DELIVERY ITEMs',
                             style: of(context)
                                 .textTheme
                                 .headline6
@@ -323,6 +324,7 @@ class _ViewOrderDetailTabState extends State<OrderDetailsTab> {
                             ),
                           ],
                         ),
+                      
                       ],
                     ),
                   ),
@@ -471,7 +473,41 @@ class _ViewOrderDetailTabState extends State<OrderDetailsTab> {
                     ),
                   ],
                 ),
+              
+              if (state.orderDetails.orderStatus == "deliver")
+                Flex(
+                  direction: Axis.horizontal,
+                  children: [
+                    const Spacer(),
+                    Container(
+                      margin: EdgeInsets.only(
+                        bottom: designValues(context).padding13,
+                        right: designValues(context).padding21,
+                        top: designValues(context).padding13,
+                      ),
+                      child: CustomRoundButton(
+                        label: "return",
+                        svgPath: "return_order",
+                        svgHeight: 21,
+                        onPressed: () {
+                          Navigator.pushNamed(
+                            context,
+                            RouteNames.createReturnOrder,
+                            arguments: CreateReturnOrderRouteArgument(
+                              comingFrom: RouteNames.viewOrderDetails,
+                              deliveryOrderData: state.orderDetails,
+                            ),
+                          );
+                        },
+                        gradient: skyBlueGradient,
+                        svgColor: white,
+                      ),
+                    ),
+                    const Spacer()
+                  ],
+                )
             ],
+            
           );
         }
         return const Center(child: CircularProgressIndicator());

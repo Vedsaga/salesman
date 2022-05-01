@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/layouts/mobile_layout.dart';
 import 'package:salesman/config/routes/arguments_models/create_return_order_route_argument.dart';
+import 'package:salesman/config/routes/arguments_models/view_return_order_details_route_argument.dart';
 import 'package:salesman/config/routes/route_name.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/core/components/common_bottom_navigation.dart';
@@ -90,7 +91,15 @@ class _ViewReturnOrderListState extends State<ViewReturnOrderList> {
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
                           return GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.popAndPushNamed(
+                                context,
+                                RouteNames.viewReturnOrderDetails,
+                                arguments: ViewReturnOrderDetailsRouteArgument(
+                                  returnOrderData: returnOrderList[index],
+                                ),
+                              );
+                            },
                             child: TransactionListCard(
                               statusColor: returnOrderList[index]
                                           .returnStatus ==
@@ -100,7 +109,7 @@ class _ViewReturnOrderListState extends State<ViewReturnOrderList> {
                                           "approve"
                                       ? orangeGradient
                                       : returnOrderList[index].returnStatus ==
-                                              "collect"
+                                              "initiated"
                                           ? yellowGradient
                                           : returnOrderList[index]
                                                           .returnStatus ==
@@ -116,7 +125,7 @@ class _ViewReturnOrderListState extends State<ViewReturnOrderList> {
                                                   : darkGradient,
                               statusTextColor:
                                   returnOrderList[index].returnStatus ==
-                                          "collect"
+                                          "initiated"
                                       ? secondaryDark
                                       : light,
                               status: returnOrderList[index].returnStatus,

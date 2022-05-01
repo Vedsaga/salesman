@@ -137,9 +137,6 @@ class _CreateOrderState extends State<CreateOrder> {
         ),
         body: BlocBuilder<CreateOrderBloc, CreateOrderState>(
           builder: (context, state) {
-            // ! state.status.isValidated works well in windows but, in mobile if we move from CreateOrder to AddItemPage,
-            // ! and come back to CreateOrder, then state.status.isValidated is false not sure why?
-            // FIXME: find out why state.status.isValidated is false in mobile
             if (state is FetchingRequiredListState) {
               return const CircularProgressIndicator();
             }

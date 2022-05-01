@@ -8,9 +8,11 @@ import 'package:drift/native.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
+import 'package:salesman/common/query/client_item_table_queries.dart';
 
 // Project imports:
 import 'package:salesman/core/db/drift/models/model_client.dart';
+import 'package:salesman/core/db/drift/models/model_client_item_record.dart';
 import 'package:salesman/core/db/drift/models/model_delivery_order.dart';
 import 'package:salesman/core/db/drift/models/model_item.dart';
 import 'package:salesman/core/db/drift/models/model_payment.dart';
@@ -21,6 +23,7 @@ import 'package:salesman/core/db/drift/models/model_transport.dart';
 import 'package:salesman/core/db/drift/models/model_vehicle.dart';
 import 'package:salesman/core/utils/item_map.dart';
 import 'package:salesman/core/utils/order_map.dart';
+import 'package:salesman/core/utils/survey_item.dart';
 import 'package:salesman/modules/client/query/client_table_queries.dart';
 import 'package:salesman/modules/item/query/item_table_queries.dart';
 import 'package:salesman/modules/order/query/delivery_order_table_queries.dart';
@@ -44,6 +47,7 @@ part 'app_database.g.dart';
     ModelPayment,
     ModelSurvey,
     ModelStatusGroup,
+    ModelClientItemRecord,
   ],
   daos: [
     ClientTableQueries,
@@ -55,6 +59,7 @@ part 'app_database.g.dart';
     PaymentTableQueries,
     SurveyTableQueries,
     StatusGroupTableQueries,
+    ClientItemTableQueries,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -159,9 +164,39 @@ class ItemListConverter extends TypeConverter<ItemList, String> {
       json.decode(fromDb) as Map<String, dynamic>,
     );
   }
-
   @override
   String? mapToSql(ItemList? value) {
+    if (value == null) return null;
+    return json.encode(value.toJson());
+  }
+}
+
+@JsonSerializable()
+class SurveyItemList {
+  final List<SurveyItem> surveyItemList;
+  SurveyItemList({
+    required this.surveyItemList,
+  });
+
+  factory SurveyItemList.fromJson(Map<String, dynamic> json) =>
+      _$SurveyItemListFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SurveyItemListToJson(this);
+}
+
+class SurveyItemListConverter extends TypeConverter<SurveyItemList, String> {
+  const SurveyItemListConverter();
+
+  @override
+  SurveyItemList? mapToDart(String? fromDb) {
+    if (fromDb == null) return null;
+    return SurveyItemList.fromJson(
+      json.decode(fromDb) as Map<String, dynamic>,
+    );
+  }
+
+  @override
+  String? mapToSql(SurveyItemList? value) {
     if (value == null) return null;
     return json.encode(value.toJson());
   }

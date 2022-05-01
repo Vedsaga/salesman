@@ -23,32 +23,35 @@ class PaymentTableQueries extends DatabaseAccessor<AppDatabase>
   Future<int> insertPaymentReceived({
     required ModelPaymentCompanion paymentReceived,
     required ModelDeliveryOrderData? selectedDeliveryOrder,
+    required ModelReturnOrderData? selectedReturnOrder,
     required int clientID,
     required String status,
   }) {
+
     return transaction(() async {
       final int noOfRowUpdated =
           await into(modelPayment).insert(paymentReceived);
+
       if (selectedDeliveryOrder != null) {
         final int noOfRowUpdated = await (update(modelDeliveryOrder)
-                ..where(
-                  (tbl) => tbl.deliveryOrderId
-                      .equals(selectedDeliveryOrder.deliveryOrderId),
-                ))
-              .write(
-            ModelDeliveryOrderCompanion(
-              paymentStatus: Value(status),
-              totalReceivedAmount: Value(
-                selectedDeliveryOrder.totalReceivedAmount +
-                    paymentReceived.amount.value,
-              ),
-            lastUpdated: Value(DateTime.now()),
+              ..where(
+                (tbl) => tbl.deliveryOrderId
+                    .equals(selectedDeliveryOrder.deliveryOrderId),
+              ))
+            .write(
+          ModelDeliveryOrderCompanion(
+            paymentStatus: Value(status),
+            totalReceivedAmount: Value(
+              selectedDeliveryOrder.totalReceivedAmount +
+                  paymentReceived.amount.value,
             ),
-          );
+            lastUpdated: Value(DateTime.now()),
+          ),
+        );
         if (noOfRowUpdated > 0) {
-            final ModelClientData clientData =
-                await ClientTableQueries(appDatabaseInstance)
-                    .getClientDetails(clientID);
+          final ModelClientData clientData =
+              await ClientTableQueries(appDatabaseInstance)
+                  .getClientDetails(clientID);
           if (clientData.pendingDue > 0) {
             await (update(modelClient)
                   ..where((tbl) => tbl.clientId.equals(clientID)))
@@ -76,8 +79,55 @@ class PaymentTableQueries extends DatabaseAccessor<AppDatabase>
             );
           }
         }
-      }
-      else {
+      } else if (selectedReturnOrder != null) {
+        final int noOfRowUpdated = await (update(modelReturnOrder)
+              ..where(
+                (tbl) =>
+                    tbl.returnOrderId.equals(selectedReturnOrder.returnOrderId),
+              ))
+            .write(
+          ModelReturnOrderCompanion(
+            refundStatus: Value(status),
+            totalSendAmount: Value(
+              selectedReturnOrder.totalSendAmount +
+                  paymentReceived.amount.value,
+            ),
+            lastUpdated: Value(DateTime.now()),
+          ),
+        );
+
+        if (noOfRowUpdated > 0) {
+          final ModelClientData clientData =
+              await ClientTableQueries(appDatabaseInstance)
+                  .getClientDetails(clientID);
+          if (clientData.pendingRefund > 0) {
+            await (update(modelClient)
+                  ..where((tbl) => tbl.clientId.equals(clientID)))
+                .write(
+              ModelClientCompanion(
+                pendingRefund: Value(
+                  clientData.pendingRefund - paymentReceived.amount.value,
+                ),
+                totalAmountReceived: Value(
+                  clientData.totalAmountReceived + paymentReceived.amount.value,
+                ),
+                lastPaymentOn: Value(DateTime.now()),
+              ),
+            );
+          } else {
+            await (update(modelClient)
+                  ..where((tbl) => tbl.clientId.equals(clientID)))
+                .write(
+              ModelClientCompanion(
+                totalAmountReceived: Value(
+                  clientData.totalAmountReceived + paymentReceived.amount.value,
+                ),
+                lastPaymentOn: Value(DateTime.now()),
+              ),
+            );
+          }
+        }
+      } else {
         Exception("Invalid payment type");
       }
       return noOfRowUpdated;

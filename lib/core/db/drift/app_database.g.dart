@@ -40,6 +40,18 @@ Map<String, dynamic> _$ItemListToJson(ItemList instance) => <String, dynamic>{
       'itemList': instance.itemList,
     };
 
+SurveyItemList _$SurveyItemListFromJson(Map<String, dynamic> json) =>
+    SurveyItemList(
+      surveyItemList: (json['surveyItemList'] as List<dynamic>)
+          .map((e) => SurveyItem.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$SurveyItemListToJson(SurveyItemList instance) =>
+    <String, dynamic>{
+      'surveyItemList': instance.surveyItemList,
+    };
+
 // **************************************************************************
 // MoorGenerator
 // **************************************************************************
@@ -3938,23 +3950,17 @@ class $ModelPaymentTable extends ModelPayment
 class ModelSurveyData extends DataClass implements Insertable<ModelSurveyData> {
   final int surveyId;
   final int clientId;
-  final int itemId;
-  final double remainQuantity;
-  final String surveyDescription;
+  final SurveyItemList itemList;
   final String conductedBy;
   final DateTime createdAt;
   final DateTime lastUpdated;
-  final bool isValid;
   ModelSurveyData(
       {required this.surveyId,
       required this.clientId,
-      required this.itemId,
-      required this.remainQuantity,
-      required this.surveyDescription,
+      required this.itemList,
       required this.conductedBy,
       required this.createdAt,
-      required this.lastUpdated,
-      required this.isValid});
+      required this.lastUpdated});
   factory ModelSurveyData.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -3963,20 +3969,14 @@ class ModelSurveyData extends DataClass implements Insertable<ModelSurveyData> {
           .mapFromDatabaseResponse(data['${effectivePrefix}survey_id'])!,
       clientId: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}client_id'])!,
-      itemId: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}item_id'])!,
-      remainQuantity: const RealType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}remain_quantity'])!,
-      surveyDescription: const StringType().mapFromDatabaseResponse(
-          data['${effectivePrefix}survey_description'])!,
+      itemList: $ModelSurveyTable.$converter0.mapToDart(const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}item_list']))!,
       conductedBy: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}conducted_by'])!,
       createdAt: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}created_at'])!,
       lastUpdated: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}last_updated'])!,
-      isValid: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}is_valid'])!,
     );
   }
   @override
@@ -3984,13 +3984,13 @@ class ModelSurveyData extends DataClass implements Insertable<ModelSurveyData> {
     final map = <String, Expression>{};
     map['survey_id'] = Variable<int>(surveyId);
     map['client_id'] = Variable<int>(clientId);
-    map['item_id'] = Variable<int>(itemId);
-    map['remain_quantity'] = Variable<double>(remainQuantity);
-    map['survey_description'] = Variable<String>(surveyDescription);
+    {
+      final converter = $ModelSurveyTable.$converter0;
+      map['item_list'] = Variable<String>(converter.mapToSql(itemList)!);
+    }
     map['conducted_by'] = Variable<String>(conductedBy);
     map['created_at'] = Variable<DateTime>(createdAt);
     map['last_updated'] = Variable<DateTime>(lastUpdated);
-    map['is_valid'] = Variable<bool>(isValid);
     return map;
   }
 
@@ -3998,13 +3998,10 @@ class ModelSurveyData extends DataClass implements Insertable<ModelSurveyData> {
     return ModelSurveyCompanion(
       surveyId: Value(surveyId),
       clientId: Value(clientId),
-      itemId: Value(itemId),
-      remainQuantity: Value(remainQuantity),
-      surveyDescription: Value(surveyDescription),
+      itemList: Value(itemList),
       conductedBy: Value(conductedBy),
       createdAt: Value(createdAt),
       lastUpdated: Value(lastUpdated),
-      isValid: Value(isValid),
     );
   }
 
@@ -4014,13 +4011,10 @@ class ModelSurveyData extends DataClass implements Insertable<ModelSurveyData> {
     return ModelSurveyData(
       surveyId: serializer.fromJson<int>(json['surveyId']),
       clientId: serializer.fromJson<int>(json['clientId']),
-      itemId: serializer.fromJson<int>(json['itemId']),
-      remainQuantity: serializer.fromJson<double>(json['remainQuantity']),
-      surveyDescription: serializer.fromJson<String>(json['surveyDescription']),
+      itemList: serializer.fromJson<SurveyItemList>(json['itemList']),
       conductedBy: serializer.fromJson<String>(json['conductedBy']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       lastUpdated: serializer.fromJson<DateTime>(json['lastUpdated']),
-      isValid: serializer.fromJson<bool>(json['isValid']),
     );
   }
   @override
@@ -4029,151 +4023,113 @@ class ModelSurveyData extends DataClass implements Insertable<ModelSurveyData> {
     return <String, dynamic>{
       'surveyId': serializer.toJson<int>(surveyId),
       'clientId': serializer.toJson<int>(clientId),
-      'itemId': serializer.toJson<int>(itemId),
-      'remainQuantity': serializer.toJson<double>(remainQuantity),
-      'surveyDescription': serializer.toJson<String>(surveyDescription),
+      'itemList': serializer.toJson<SurveyItemList>(itemList),
       'conductedBy': serializer.toJson<String>(conductedBy),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'lastUpdated': serializer.toJson<DateTime>(lastUpdated),
-      'isValid': serializer.toJson<bool>(isValid),
     };
   }
 
   ModelSurveyData copyWith(
           {int? surveyId,
           int? clientId,
-          int? itemId,
-          double? remainQuantity,
-          String? surveyDescription,
+          SurveyItemList? itemList,
           String? conductedBy,
           DateTime? createdAt,
-          DateTime? lastUpdated,
-          bool? isValid}) =>
+          DateTime? lastUpdated}) =>
       ModelSurveyData(
         surveyId: surveyId ?? this.surveyId,
         clientId: clientId ?? this.clientId,
-        itemId: itemId ?? this.itemId,
-        remainQuantity: remainQuantity ?? this.remainQuantity,
-        surveyDescription: surveyDescription ?? this.surveyDescription,
+        itemList: itemList ?? this.itemList,
         conductedBy: conductedBy ?? this.conductedBy,
         createdAt: createdAt ?? this.createdAt,
         lastUpdated: lastUpdated ?? this.lastUpdated,
-        isValid: isValid ?? this.isValid,
       );
   @override
   String toString() {
     return (StringBuffer('ModelSurveyData(')
           ..write('surveyId: $surveyId, ')
           ..write('clientId: $clientId, ')
-          ..write('itemId: $itemId, ')
-          ..write('remainQuantity: $remainQuantity, ')
-          ..write('surveyDescription: $surveyDescription, ')
+          ..write('itemList: $itemList, ')
           ..write('conductedBy: $conductedBy, ')
           ..write('createdAt: $createdAt, ')
-          ..write('lastUpdated: $lastUpdated, ')
-          ..write('isValid: $isValid')
+          ..write('lastUpdated: $lastUpdated')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(surveyId, clientId, itemId, remainQuantity,
-      surveyDescription, conductedBy, createdAt, lastUpdated, isValid);
+  int get hashCode => Object.hash(
+      surveyId, clientId, itemList, conductedBy, createdAt, lastUpdated);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ModelSurveyData &&
           other.surveyId == this.surveyId &&
           other.clientId == this.clientId &&
-          other.itemId == this.itemId &&
-          other.remainQuantity == this.remainQuantity &&
-          other.surveyDescription == this.surveyDescription &&
+          other.itemList == this.itemList &&
           other.conductedBy == this.conductedBy &&
           other.createdAt == this.createdAt &&
-          other.lastUpdated == this.lastUpdated &&
-          other.isValid == this.isValid);
+          other.lastUpdated == this.lastUpdated);
 }
 
 class ModelSurveyCompanion extends UpdateCompanion<ModelSurveyData> {
   final Value<int> surveyId;
   final Value<int> clientId;
-  final Value<int> itemId;
-  final Value<double> remainQuantity;
-  final Value<String> surveyDescription;
+  final Value<SurveyItemList> itemList;
   final Value<String> conductedBy;
   final Value<DateTime> createdAt;
   final Value<DateTime> lastUpdated;
-  final Value<bool> isValid;
   const ModelSurveyCompanion({
     this.surveyId = const Value.absent(),
     this.clientId = const Value.absent(),
-    this.itemId = const Value.absent(),
-    this.remainQuantity = const Value.absent(),
-    this.surveyDescription = const Value.absent(),
+    this.itemList = const Value.absent(),
     this.conductedBy = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.lastUpdated = const Value.absent(),
-    this.isValid = const Value.absent(),
   });
   ModelSurveyCompanion.insert({
     this.surveyId = const Value.absent(),
     required int clientId,
-    required int itemId,
-    required double remainQuantity,
-    required String surveyDescription,
+    required SurveyItemList itemList,
     required String conductedBy,
     this.createdAt = const Value.absent(),
     this.lastUpdated = const Value.absent(),
-    this.isValid = const Value.absent(),
   })  : clientId = Value(clientId),
-        itemId = Value(itemId),
-        remainQuantity = Value(remainQuantity),
-        surveyDescription = Value(surveyDescription),
+        itemList = Value(itemList),
         conductedBy = Value(conductedBy);
   static Insertable<ModelSurveyData> custom({
     Expression<int>? surveyId,
     Expression<int>? clientId,
-    Expression<int>? itemId,
-    Expression<double>? remainQuantity,
-    Expression<String>? surveyDescription,
+    Expression<SurveyItemList>? itemList,
     Expression<String>? conductedBy,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? lastUpdated,
-    Expression<bool>? isValid,
   }) {
     return RawValuesInsertable({
       if (surveyId != null) 'survey_id': surveyId,
       if (clientId != null) 'client_id': clientId,
-      if (itemId != null) 'item_id': itemId,
-      if (remainQuantity != null) 'remain_quantity': remainQuantity,
-      if (surveyDescription != null) 'survey_description': surveyDescription,
+      if (itemList != null) 'item_list': itemList,
       if (conductedBy != null) 'conducted_by': conductedBy,
       if (createdAt != null) 'created_at': createdAt,
       if (lastUpdated != null) 'last_updated': lastUpdated,
-      if (isValid != null) 'is_valid': isValid,
     });
   }
 
   ModelSurveyCompanion copyWith(
       {Value<int>? surveyId,
       Value<int>? clientId,
-      Value<int>? itemId,
-      Value<double>? remainQuantity,
-      Value<String>? surveyDescription,
+      Value<SurveyItemList>? itemList,
       Value<String>? conductedBy,
       Value<DateTime>? createdAt,
-      Value<DateTime>? lastUpdated,
-      Value<bool>? isValid}) {
+      Value<DateTime>? lastUpdated}) {
     return ModelSurveyCompanion(
       surveyId: surveyId ?? this.surveyId,
       clientId: clientId ?? this.clientId,
-      itemId: itemId ?? this.itemId,
-      remainQuantity: remainQuantity ?? this.remainQuantity,
-      surveyDescription: surveyDescription ?? this.surveyDescription,
+      itemList: itemList ?? this.itemList,
       conductedBy: conductedBy ?? this.conductedBy,
       createdAt: createdAt ?? this.createdAt,
       lastUpdated: lastUpdated ?? this.lastUpdated,
-      isValid: isValid ?? this.isValid,
     );
   }
 
@@ -4186,14 +4142,9 @@ class ModelSurveyCompanion extends UpdateCompanion<ModelSurveyData> {
     if (clientId.present) {
       map['client_id'] = Variable<int>(clientId.value);
     }
-    if (itemId.present) {
-      map['item_id'] = Variable<int>(itemId.value);
-    }
-    if (remainQuantity.present) {
-      map['remain_quantity'] = Variable<double>(remainQuantity.value);
-    }
-    if (surveyDescription.present) {
-      map['survey_description'] = Variable<String>(surveyDescription.value);
+    if (itemList.present) {
+      final converter = $ModelSurveyTable.$converter0;
+      map['item_list'] = Variable<String>(converter.mapToSql(itemList.value)!);
     }
     if (conductedBy.present) {
       map['conducted_by'] = Variable<String>(conductedBy.value);
@@ -4204,9 +4155,6 @@ class ModelSurveyCompanion extends UpdateCompanion<ModelSurveyData> {
     if (lastUpdated.present) {
       map['last_updated'] = Variable<DateTime>(lastUpdated.value);
     }
-    if (isValid.present) {
-      map['is_valid'] = Variable<bool>(isValid.value);
-    }
     return map;
   }
 
@@ -4215,13 +4163,10 @@ class ModelSurveyCompanion extends UpdateCompanion<ModelSurveyData> {
     return (StringBuffer('ModelSurveyCompanion(')
           ..write('surveyId: $surveyId, ')
           ..write('clientId: $clientId, ')
-          ..write('itemId: $itemId, ')
-          ..write('remainQuantity: $remainQuantity, ')
-          ..write('surveyDescription: $surveyDescription, ')
+          ..write('itemList: $itemList, ')
           ..write('conductedBy: $conductedBy, ')
           ..write('createdAt: $createdAt, ')
-          ..write('lastUpdated: $lastUpdated, ')
-          ..write('isValid: $isValid')
+          ..write('lastUpdated: $lastUpdated')
           ..write(')'))
         .toString();
   }
@@ -4247,28 +4192,12 @@ class $ModelSurveyTable extends ModelSurvey
       type: const IntType(),
       requiredDuringInsert: true,
       defaultConstraints: 'REFERENCES model_client (client_id)');
-  final VerificationMeta _itemIdMeta = const VerificationMeta('itemId');
+  final VerificationMeta _itemListMeta = const VerificationMeta('itemList');
   @override
-  late final GeneratedColumn<int?> itemId = GeneratedColumn<int?>(
-      'item_id', aliasedName, false,
-      type: const IntType(),
-      requiredDuringInsert: true,
-      defaultConstraints: 'REFERENCES model_item (item_id)');
-  final VerificationMeta _remainQuantityMeta =
-      const VerificationMeta('remainQuantity');
-  @override
-  late final GeneratedColumn<double?> remainQuantity = GeneratedColumn<double?>(
-      'remain_quantity', aliasedName, false,
-      type: const RealType(), requiredDuringInsert: true);
-  final VerificationMeta _surveyDescriptionMeta =
-      const VerificationMeta('surveyDescription');
-  @override
-  late final GeneratedColumn<String?> surveyDescription =
-      GeneratedColumn<String?>('survey_description', aliasedName, false,
-          additionalChecks: GeneratedColumn.checkTextLength(
-              minTextLength: 3, maxTextLength: 50),
-          type: const StringType(),
-          requiredDuringInsert: true);
+  late final GeneratedColumnWithTypeConverter<SurveyItemList, String?>
+      itemList = GeneratedColumn<String?>('item_list', aliasedName, false,
+              type: const StringType(), requiredDuringInsert: true)
+          .withConverter<SurveyItemList>($ModelSurveyTable.$converter0);
   final VerificationMeta _conductedByMeta =
       const VerificationMeta('conductedBy');
   @override
@@ -4293,26 +4222,9 @@ class $ModelSurveyTable extends ModelSurvey
           type: const IntType(),
           requiredDuringInsert: false,
           defaultValue: currentDateAndTime);
-  final VerificationMeta _isValidMeta = const VerificationMeta('isValid');
   @override
-  late final GeneratedColumn<bool?> isValid = GeneratedColumn<bool?>(
-      'is_valid', aliasedName, false,
-      type: const BoolType(),
-      requiredDuringInsert: false,
-      defaultConstraints: 'CHECK (is_valid IN (0, 1))',
-      defaultValue: const Constant(true));
-  @override
-  List<GeneratedColumn> get $columns => [
-        surveyId,
-        clientId,
-        itemId,
-        remainQuantity,
-        surveyDescription,
-        conductedBy,
-        createdAt,
-        lastUpdated,
-        isValid
-      ];
+  List<GeneratedColumn> get $columns =>
+      [surveyId, clientId, itemList, conductedBy, createdAt, lastUpdated];
   @override
   String get aliasedName => _alias ?? 'model_survey';
   @override
@@ -4332,28 +4244,7 @@ class $ModelSurveyTable extends ModelSurvey
     } else if (isInserting) {
       context.missing(_clientIdMeta);
     }
-    if (data.containsKey('item_id')) {
-      context.handle(_itemIdMeta,
-          itemId.isAcceptableOrUnknown(data['item_id']!, _itemIdMeta));
-    } else if (isInserting) {
-      context.missing(_itemIdMeta);
-    }
-    if (data.containsKey('remain_quantity')) {
-      context.handle(
-          _remainQuantityMeta,
-          remainQuantity.isAcceptableOrUnknown(
-              data['remain_quantity']!, _remainQuantityMeta));
-    } else if (isInserting) {
-      context.missing(_remainQuantityMeta);
-    }
-    if (data.containsKey('survey_description')) {
-      context.handle(
-          _surveyDescriptionMeta,
-          surveyDescription.isAcceptableOrUnknown(
-              data['survey_description']!, _surveyDescriptionMeta));
-    } else if (isInserting) {
-      context.missing(_surveyDescriptionMeta);
-    }
+    context.handle(_itemListMeta, const VerificationResult.success());
     if (data.containsKey('conducted_by')) {
       context.handle(
           _conductedByMeta,
@@ -4372,10 +4263,6 @@ class $ModelSurveyTable extends ModelSurvey
           lastUpdated.isAcceptableOrUnknown(
               data['last_updated']!, _lastUpdatedMeta));
     }
-    if (data.containsKey('is_valid')) {
-      context.handle(_isValidMeta,
-          isValid.isAcceptableOrUnknown(data['is_valid']!, _isValidMeta));
-    }
     return context;
   }
 
@@ -4391,6 +4278,9 @@ class $ModelSurveyTable extends ModelSurvey
   $ModelSurveyTable createAlias(String alias) {
     return $ModelSurveyTable(attachedDatabase, alias);
   }
+
+  static TypeConverter<SurveyItemList, String> $converter0 =
+      const SurveyItemListConverter();
 }
 
 class ModelStatusGroupData extends DataClass
@@ -4619,6 +4509,384 @@ class $ModelStatusGroupTable extends ModelStatusGroup
   }
 }
 
+class ModelClientItemRecordData extends DataClass
+    implements Insertable<ModelClientItemRecordData> {
+  final int clientId;
+  final int itemId;
+  final String itemName;
+  final String unit;
+  final double availableQuantity;
+  final DateTime lastUpdatedOn;
+  final DateTime lastSurveyedOn;
+  ModelClientItemRecordData(
+      {required this.clientId,
+      required this.itemId,
+      required this.itemName,
+      required this.unit,
+      required this.availableQuantity,
+      required this.lastUpdatedOn,
+      required this.lastSurveyedOn});
+  factory ModelClientItemRecordData.fromData(Map<String, dynamic> data,
+      {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return ModelClientItemRecordData(
+      clientId: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}client_id'])!,
+      itemId: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}item_id'])!,
+      itemName: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}item_name'])!,
+      unit: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}unit'])!,
+      availableQuantity: const RealType().mapFromDatabaseResponse(
+          data['${effectivePrefix}available_quantity'])!,
+      lastUpdatedOn: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}last_updated_on'])!,
+      lastSurveyedOn: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}last_surveyed_on'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['client_id'] = Variable<int>(clientId);
+    map['item_id'] = Variable<int>(itemId);
+    map['item_name'] = Variable<String>(itemName);
+    map['unit'] = Variable<String>(unit);
+    map['available_quantity'] = Variable<double>(availableQuantity);
+    map['last_updated_on'] = Variable<DateTime>(lastUpdatedOn);
+    map['last_surveyed_on'] = Variable<DateTime>(lastSurveyedOn);
+    return map;
+  }
+
+  ModelClientItemRecordCompanion toCompanion(bool nullToAbsent) {
+    return ModelClientItemRecordCompanion(
+      clientId: Value(clientId),
+      itemId: Value(itemId),
+      itemName: Value(itemName),
+      unit: Value(unit),
+      availableQuantity: Value(availableQuantity),
+      lastUpdatedOn: Value(lastUpdatedOn),
+      lastSurveyedOn: Value(lastSurveyedOn),
+    );
+  }
+
+  factory ModelClientItemRecordData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ModelClientItemRecordData(
+      clientId: serializer.fromJson<int>(json['clientId']),
+      itemId: serializer.fromJson<int>(json['itemId']),
+      itemName: serializer.fromJson<String>(json['itemName']),
+      unit: serializer.fromJson<String>(json['unit']),
+      availableQuantity: serializer.fromJson<double>(json['availableQuantity']),
+      lastUpdatedOn: serializer.fromJson<DateTime>(json['lastUpdatedOn']),
+      lastSurveyedOn: serializer.fromJson<DateTime>(json['lastSurveyedOn']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'clientId': serializer.toJson<int>(clientId),
+      'itemId': serializer.toJson<int>(itemId),
+      'itemName': serializer.toJson<String>(itemName),
+      'unit': serializer.toJson<String>(unit),
+      'availableQuantity': serializer.toJson<double>(availableQuantity),
+      'lastUpdatedOn': serializer.toJson<DateTime>(lastUpdatedOn),
+      'lastSurveyedOn': serializer.toJson<DateTime>(lastSurveyedOn),
+    };
+  }
+
+  ModelClientItemRecordData copyWith(
+          {int? clientId,
+          int? itemId,
+          String? itemName,
+          String? unit,
+          double? availableQuantity,
+          DateTime? lastUpdatedOn,
+          DateTime? lastSurveyedOn}) =>
+      ModelClientItemRecordData(
+        clientId: clientId ?? this.clientId,
+        itemId: itemId ?? this.itemId,
+        itemName: itemName ?? this.itemName,
+        unit: unit ?? this.unit,
+        availableQuantity: availableQuantity ?? this.availableQuantity,
+        lastUpdatedOn: lastUpdatedOn ?? this.lastUpdatedOn,
+        lastSurveyedOn: lastSurveyedOn ?? this.lastSurveyedOn,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('ModelClientItemRecordData(')
+          ..write('clientId: $clientId, ')
+          ..write('itemId: $itemId, ')
+          ..write('itemName: $itemName, ')
+          ..write('unit: $unit, ')
+          ..write('availableQuantity: $availableQuantity, ')
+          ..write('lastUpdatedOn: $lastUpdatedOn, ')
+          ..write('lastSurveyedOn: $lastSurveyedOn')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(clientId, itemId, itemName, unit,
+      availableQuantity, lastUpdatedOn, lastSurveyedOn);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ModelClientItemRecordData &&
+          other.clientId == this.clientId &&
+          other.itemId == this.itemId &&
+          other.itemName == this.itemName &&
+          other.unit == this.unit &&
+          other.availableQuantity == this.availableQuantity &&
+          other.lastUpdatedOn == this.lastUpdatedOn &&
+          other.lastSurveyedOn == this.lastSurveyedOn);
+}
+
+class ModelClientItemRecordCompanion
+    extends UpdateCompanion<ModelClientItemRecordData> {
+  final Value<int> clientId;
+  final Value<int> itemId;
+  final Value<String> itemName;
+  final Value<String> unit;
+  final Value<double> availableQuantity;
+  final Value<DateTime> lastUpdatedOn;
+  final Value<DateTime> lastSurveyedOn;
+  const ModelClientItemRecordCompanion({
+    this.clientId = const Value.absent(),
+    this.itemId = const Value.absent(),
+    this.itemName = const Value.absent(),
+    this.unit = const Value.absent(),
+    this.availableQuantity = const Value.absent(),
+    this.lastUpdatedOn = const Value.absent(),
+    this.lastSurveyedOn = const Value.absent(),
+  });
+  ModelClientItemRecordCompanion.insert({
+    required int clientId,
+    required int itemId,
+    required String itemName,
+    required String unit,
+    required double availableQuantity,
+    this.lastUpdatedOn = const Value.absent(),
+    this.lastSurveyedOn = const Value.absent(),
+  })  : clientId = Value(clientId),
+        itemId = Value(itemId),
+        itemName = Value(itemName),
+        unit = Value(unit),
+        availableQuantity = Value(availableQuantity);
+  static Insertable<ModelClientItemRecordData> custom({
+    Expression<int>? clientId,
+    Expression<int>? itemId,
+    Expression<String>? itemName,
+    Expression<String>? unit,
+    Expression<double>? availableQuantity,
+    Expression<DateTime>? lastUpdatedOn,
+    Expression<DateTime>? lastSurveyedOn,
+  }) {
+    return RawValuesInsertable({
+      if (clientId != null) 'client_id': clientId,
+      if (itemId != null) 'item_id': itemId,
+      if (itemName != null) 'item_name': itemName,
+      if (unit != null) 'unit': unit,
+      if (availableQuantity != null) 'available_quantity': availableQuantity,
+      if (lastUpdatedOn != null) 'last_updated_on': lastUpdatedOn,
+      if (lastSurveyedOn != null) 'last_surveyed_on': lastSurveyedOn,
+    });
+  }
+
+  ModelClientItemRecordCompanion copyWith(
+      {Value<int>? clientId,
+      Value<int>? itemId,
+      Value<String>? itemName,
+      Value<String>? unit,
+      Value<double>? availableQuantity,
+      Value<DateTime>? lastUpdatedOn,
+      Value<DateTime>? lastSurveyedOn}) {
+    return ModelClientItemRecordCompanion(
+      clientId: clientId ?? this.clientId,
+      itemId: itemId ?? this.itemId,
+      itemName: itemName ?? this.itemName,
+      unit: unit ?? this.unit,
+      availableQuantity: availableQuantity ?? this.availableQuantity,
+      lastUpdatedOn: lastUpdatedOn ?? this.lastUpdatedOn,
+      lastSurveyedOn: lastSurveyedOn ?? this.lastSurveyedOn,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (clientId.present) {
+      map['client_id'] = Variable<int>(clientId.value);
+    }
+    if (itemId.present) {
+      map['item_id'] = Variable<int>(itemId.value);
+    }
+    if (itemName.present) {
+      map['item_name'] = Variable<String>(itemName.value);
+    }
+    if (unit.present) {
+      map['unit'] = Variable<String>(unit.value);
+    }
+    if (availableQuantity.present) {
+      map['available_quantity'] = Variable<double>(availableQuantity.value);
+    }
+    if (lastUpdatedOn.present) {
+      map['last_updated_on'] = Variable<DateTime>(lastUpdatedOn.value);
+    }
+    if (lastSurveyedOn.present) {
+      map['last_surveyed_on'] = Variable<DateTime>(lastSurveyedOn.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ModelClientItemRecordCompanion(')
+          ..write('clientId: $clientId, ')
+          ..write('itemId: $itemId, ')
+          ..write('itemName: $itemName, ')
+          ..write('unit: $unit, ')
+          ..write('availableQuantity: $availableQuantity, ')
+          ..write('lastUpdatedOn: $lastUpdatedOn, ')
+          ..write('lastSurveyedOn: $lastSurveyedOn')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ModelClientItemRecordTable extends ModelClientItemRecord
+    with TableInfo<$ModelClientItemRecordTable, ModelClientItemRecordData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ModelClientItemRecordTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _clientIdMeta = const VerificationMeta('clientId');
+  @override
+  late final GeneratedColumn<int?> clientId = GeneratedColumn<int?>(
+      'client_id', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _itemIdMeta = const VerificationMeta('itemId');
+  @override
+  late final GeneratedColumn<int?> itemId = GeneratedColumn<int?>(
+      'item_id', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  final VerificationMeta _itemNameMeta = const VerificationMeta('itemName');
+  @override
+  late final GeneratedColumn<String?> itemName = GeneratedColumn<String?>(
+      'item_name', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _unitMeta = const VerificationMeta('unit');
+  @override
+  late final GeneratedColumn<String?> unit = GeneratedColumn<String?>(
+      'unit', aliasedName, false,
+      type: const StringType(), requiredDuringInsert: true);
+  final VerificationMeta _availableQuantityMeta =
+      const VerificationMeta('availableQuantity');
+  @override
+  late final GeneratedColumn<double?> availableQuantity =
+      GeneratedColumn<double?>('available_quantity', aliasedName, false,
+          type: const RealType(), requiredDuringInsert: true);
+  final VerificationMeta _lastUpdatedOnMeta =
+      const VerificationMeta('lastUpdatedOn');
+  @override
+  late final GeneratedColumn<DateTime?> lastUpdatedOn =
+      GeneratedColumn<DateTime?>('last_updated_on', aliasedName, false,
+          type: const IntType(),
+          requiredDuringInsert: false,
+          defaultValue: currentDateAndTime);
+  final VerificationMeta _lastSurveyedOnMeta =
+      const VerificationMeta('lastSurveyedOn');
+  @override
+  late final GeneratedColumn<DateTime?> lastSurveyedOn =
+      GeneratedColumn<DateTime?>('last_surveyed_on', aliasedName, false,
+          type: const IntType(),
+          requiredDuringInsert: false,
+          defaultValue: currentDateAndTime);
+  @override
+  List<GeneratedColumn> get $columns => [
+        clientId,
+        itemId,
+        itemName,
+        unit,
+        availableQuantity,
+        lastUpdatedOn,
+        lastSurveyedOn
+      ];
+  @override
+  String get aliasedName => _alias ?? 'model_client_item_record';
+  @override
+  String get actualTableName => 'model_client_item_record';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<ModelClientItemRecordData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('client_id')) {
+      context.handle(_clientIdMeta,
+          clientId.isAcceptableOrUnknown(data['client_id']!, _clientIdMeta));
+    } else if (isInserting) {
+      context.missing(_clientIdMeta);
+    }
+    if (data.containsKey('item_id')) {
+      context.handle(_itemIdMeta,
+          itemId.isAcceptableOrUnknown(data['item_id']!, _itemIdMeta));
+    } else if (isInserting) {
+      context.missing(_itemIdMeta);
+    }
+    if (data.containsKey('item_name')) {
+      context.handle(_itemNameMeta,
+          itemName.isAcceptableOrUnknown(data['item_name']!, _itemNameMeta));
+    } else if (isInserting) {
+      context.missing(_itemNameMeta);
+    }
+    if (data.containsKey('unit')) {
+      context.handle(
+          _unitMeta, unit.isAcceptableOrUnknown(data['unit']!, _unitMeta));
+    } else if (isInserting) {
+      context.missing(_unitMeta);
+    }
+    if (data.containsKey('available_quantity')) {
+      context.handle(
+          _availableQuantityMeta,
+          availableQuantity.isAcceptableOrUnknown(
+              data['available_quantity']!, _availableQuantityMeta));
+    } else if (isInserting) {
+      context.missing(_availableQuantityMeta);
+    }
+    if (data.containsKey('last_updated_on')) {
+      context.handle(
+          _lastUpdatedOnMeta,
+          lastUpdatedOn.isAcceptableOrUnknown(
+              data['last_updated_on']!, _lastUpdatedOnMeta));
+    }
+    if (data.containsKey('last_surveyed_on')) {
+      context.handle(
+          _lastSurveyedOnMeta,
+          lastSurveyedOn.isAcceptableOrUnknown(
+              data['last_surveyed_on']!, _lastSurveyedOnMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {clientId, itemId};
+  @override
+  ModelClientItemRecordData map(Map<String, dynamic> data,
+      {String? tablePrefix}) {
+    return ModelClientItemRecordData.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $ModelClientItemRecordTable createAlias(String alias) {
+    return $ModelClientItemRecordTable(attachedDatabase, alias);
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $ModelClientTable modelClient = $ModelClientTable(this);
@@ -4633,6 +4901,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $ModelSurveyTable modelSurvey = $ModelSurveyTable(this);
   late final $ModelStatusGroupTable modelStatusGroup =
       $ModelStatusGroupTable(this);
+  late final $ModelClientItemRecordTable modelClientItemRecord =
+      $ModelClientItemRecordTable(this);
   late final ClientTableQueries clientTableQueries =
       ClientTableQueries(this as AppDatabase);
   late final ItemTableQueries itemTableQueries =
@@ -4651,6 +4921,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       SurveyTableQueries(this as AppDatabase);
   late final StatusGroupTableQueries statusGroupTableQueries =
       StatusGroupTableQueries(this as AppDatabase);
+  late final ClientItemTableQueries clientItemTableQueries =
+      ClientItemTableQueries(this as AppDatabase);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
@@ -4663,6 +4935,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         modelReturnOrder,
         modelPayment,
         modelSurvey,
-        modelStatusGroup
+        modelStatusGroup,
+        modelClientItemRecord
       ];
 }
