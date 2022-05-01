@@ -160,8 +160,8 @@ class _ViewSurveyDetailsState extends State<ViewSurveyDetails> {
                                       ),
                                     ),
                                     secondChild: RowFlexCloseChildren(
-                                      firstChild: Text(timeDifference),
-                                      secondChild: Text(stockDifference),
+                                      firstChild: Text(stockDifference),
+                                      secondChild: Text(timeDifference),
                                     ),
                                   ),
                                 ],
