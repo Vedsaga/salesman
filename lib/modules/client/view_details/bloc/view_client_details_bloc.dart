@@ -1,6 +1,7 @@
 // Package imports:
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:salesman/common/query/client_item_table_queries.dart';
 
 // Project imports:
 import 'package:salesman/core/db/drift/app_database.dart';
@@ -20,15 +21,16 @@ class ViewClientDetailsBloc
     on<DeactivateClientEvent>(_deactivateClient);
   }
 
-  void _getClientDetails(
+  Future<void> _getClientDetails(
     GetClientDetailsEvent event,
     Emitter<ViewClientDetailsState> emit,
-  ) {
+  ) async {
     if (clientDetails == null) {
       emit(FailedToDeactivateClientState());
       return;
     } else {
-      emit(ViewingClientDetailsState(clientDetails: clientDetails!));
+      final itemRecordData = await ClientItemTableQueries(appDatabaseInstance).getRecordByClientId(clientDetails!.clientId);
+      emit(ViewingClientDetailsState(clientDetails: clientDetails!, itemRecordData: itemRecordData));
     }
   }
 

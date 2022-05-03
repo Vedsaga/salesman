@@ -1,7 +1,4 @@
-
-
 // Flutter imports:
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -9,14 +6,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
 import 'package:salesman/config/layouts/design_values.dart';
-import 'package:salesman/config/layouts/mobile_layout.dart';
+import 'package:salesman/config/layouts/mobile_layout_for_tab.dart';
 import 'package:salesman/config/routes/route_name.dart';
-import 'package:salesman/core/components/custom_round_button.dart';
-import 'package:salesman/core/components/delete_confirmation.dart';
-import 'package:salesman/core/components/input_decoration.dart';
-import 'package:salesman/core/components/input_top_app_bar.dart';
+import 'package:salesman/config/theme/colors.dart';
+import 'package:salesman/config/theme/theme.dart';
 import 'package:salesman/core/components/snackbar_message.dart';
 import 'package:salesman/modules/client/view_details/bloc/view_client_details_bloc.dart';
+import 'package:salesman/modules/client/view_details/screens/client_details.dart';
+import 'package:salesman/modules/client/view_details/screens/stock_details.dart';
 
 class ViewClientDetails extends StatefulWidget {
   const ViewClientDetails({Key? key}) : super(key: key);
@@ -25,19 +22,30 @@ class ViewClientDetails extends StatefulWidget {
   State<ViewClientDetails> createState() => _ViewClientDetailsState();
 }
 
-class _ViewClientDetailsState extends State<ViewClientDetails> {
+class _ViewClientDetailsState extends State<ViewClientDetails>
+    with SingleTickerProviderStateMixin {
+  late final TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MobileLayout(
-      routeName: RouteNames.viewClientList,
-      topAppBar: const InputTopAppBar(
-        title: "client details",
-        routeName: RouteNames.viewClientList,
-      ),
-              bottomAppBarRequired: true,
-      body: BlocListener<ViewClientDetailsBloc, ViewClientDetailsState>(
-        listener: (context, state) {
-          if (state is SuccessfullyDeactivateClientState) {
+    return BlocConsumer<ViewClientDetailsBloc, ViewClientDetailsState>(
+      listener: (context, state) {
+        if (state is SuccessfullyDeactivateClientState) {
             snackbarMessage(
               context,
               "Client removed successfully...",
@@ -64,83 +72,40 @@ class _ViewClientDetailsState extends State<ViewClientDetails> {
               Navigator.popAndPushNamed(context, RouteNames.viewClientList);
             });
           }
-        },
-        child: BlocBuilder<ViewClientDetailsBloc, ViewClientDetailsState>(
-          builder: (context, state) {
-            if (state is ViewingClientDetailsState) {
-              return Container(
-                margin: EdgeInsets.only(
-                  left: designValues(context).horizontalPadding,
-                  right: designValues(context).horizontalPadding,
-                  bottom: designValues(context).verticalPadding,
-                  top: 8,
-                ),
-                child: Flex(
-                  direction: Axis.vertical,
-                  children: [
-                    TextFormField(
-                      initialValue: state.clientDetails.clientName,
-                      keyboardType: TextInputType.text,
-                      readOnly: true,
-                      textAlignVertical: TextAlignVertical.center,
-                      style: Theme.of(context).textTheme.bodyText1,
-                      decoration: inputDecoration(context,
-                          labelText: "client name",
-                          hintText: "client name",
-                        inFocus: false,
-                      ),
-                    ),
-                    SizedBox(height: designValues(context).cornerRadius34),
-                    TextFormField(
-                      initialValue: state.clientDetails.clientPhone,
-                      keyboardType: TextInputType.text,
-                      readOnly: true,
-                      textAlignVertical: TextAlignVertical.center,
-                      style: Theme.of(context).textTheme.bodyText1,
-                      decoration: inputDecoration(
-                        context,
-                        labelText: "client phone no.",
-                        hintText: "client phone no.",
-                        inFocus: false,
-                      ),
-                    ),
-                    SizedBox(height: designValues(context).cornerRadius34),
-                  ],
-                ),
-              );
-            }
-            return const CircularProgressIndicator();
-          },
-        ),
-      ),
-      bottomAppBar: Flex(
-        direction: Axis.horizontal,
-        children: [
-          const Spacer(),
-          CustomRoundButton(
-            label: "delete",
-            svgPath: "delete",
-            onPressed: () async {
-              final confirmation = await showCupertinoDialog(
-                context: context,
-                builder: DeleteConfirmation(
-                  context: context,
-                  textYes: "remove",
-                  textNo: "no",
-                  title: 'Remove the client?',
-                  message: 'are you sure to remove this client?',
-                ).build,
-              );
-              if (mounted && confirmation == 'remove') {
-                context
-                    .read<ViewClientDetailsBloc>()
-                    .add(DeactivateClientEvent());
-              }
-            },
+      },
+      builder: (context, state) {
+        return MobileLayoutForTabScreen(
+          tabController: _tabController,
+          title: "Client Details",
+          tabs: [
+            Padding(
+              padding: EdgeInsets.only(bottom: designValues(context).padding21),
+              child: Text(
+                'details',
+                style: _tabController.index == 0
+                    ? of(context).textTheme.headline6?.copyWith(color: skyBlue)
+                    : of(context).textTheme.subtitle2?.copyWith(color: grey),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: designValues(context).padding21),
+              child: Text(
+                'stock',
+                style: _tabController.index == 1
+                    ? of(context).textTheme.headline6?.copyWith(color: skyBlue)
+                    : of(context).textTheme.subtitle2?.copyWith(color: grey),
+              ),
+            ),
+          ],
+          body: TabBarView(
+            controller: _tabController,
+            children: const [
+              ClientDetails(),
+              StockDetails(),
+            ],
           ),
-          const Spacer(),
-        ],
-      ),
+        );
+      },
     );
   }
 }

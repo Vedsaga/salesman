@@ -11,7 +11,8 @@ class ViewClientDetailsInitialState extends ViewClientDetailsState{}
 
 class ViewingClientDetailsState extends ViewClientDetailsState {
   final ModelClientData clientDetails;
-  const ViewingClientDetailsState({required this.clientDetails});
+  final List<ModelClientItemRecordData> itemRecordData;
+  const ViewingClientDetailsState({required this.clientDetails, required this.itemRecordData});
   }
 
 

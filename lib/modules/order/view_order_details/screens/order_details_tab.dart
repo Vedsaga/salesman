@@ -98,6 +98,7 @@ class _ViewOrderDetailTabState extends State<OrderDetailsTab> {
                             ),
                           ],
                         ),
+                        
                         SizedBox(
                           height: designValues(context).verticalPadding,
                         ),

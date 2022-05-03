@@ -129,7 +129,7 @@ class _ViewSurveyListState extends State<ViewSurveyList> {
                                     style: of(context)
                                         .textTheme
                                         .subtitle1
-                                        ?.copyWith(color: grey),
+                                        ?.copyWith(color: orange),
                                   ),
                                 ),
                               ),
