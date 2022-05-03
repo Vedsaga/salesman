@@ -14,7 +14,6 @@ part 'view_order_list_state.dart';
 class ViewOrderListBloc extends Bloc<ViewOrderListEvent, ViewOrderListState> {
   ViewOrderListBloc() : super(ViewOrderListInitial()) {
     on<FetchAllPendingOrderListEvent>(_fetchPendingAndDelayedOrders);
-    on<FetchOrderHistoryListEvent>(_fetchOrderHistory);
     on<UpdatePendingDeliveryOrderStatusEvent>(
       _updatePendingDeliveryOrderStatus,
     );
@@ -33,29 +32,6 @@ class ViewOrderListBloc extends Bloc<ViewOrderListEvent, ViewOrderListState> {
       if (pendingDeliveryOrders.isNotEmpty) {
         emit(FetchedOrderListState(
             orderList: pendingDeliveryOrders,
-            clientList: clientList,
-          ),
-        );
-      } else {
-        emit(EmptyOrderListState());
-      }
-    } catch (e) {
-      emit(ErrorFetchingOrderListState());
-    }
-  }
-
-  Future<void> _fetchOrderHistory(FetchOrderHistoryListEvent event,
-      Emitter<ViewOrderListState> emit,) async {
-    emit(FetchingOrderListState());
-    try {
-      final List<ModelDeliveryOrderData> orderHistory =
-          await DeliveryOrderTableQueries(appDatabaseInstance).getAllHistory();
-      final List<ModelClientData> clientList =
-          await ClientTableQueries(appDatabaseInstance).getAllClients();
-      if (orderHistory.isNotEmpty) {
-        emit(
-          FetchedOrderListState(
-            orderList: orderHistory,
             clientList: clientList,
           ),
         );

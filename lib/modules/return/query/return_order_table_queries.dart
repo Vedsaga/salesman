@@ -70,6 +70,22 @@ class ReturnOrderTableQueries extends DatabaseAccessor<AppDatabase>
           ]))
         .get();
   }
+  Future<List<ModelReturnOrderData>> getReturnedOrders() async {
+    return (select(modelReturnOrder)
+          ..where(
+            (table) =>
+                table.returnStatus.equals("return") |
+                table.returnStatus.equals("cancel") |
+                table.returnStatus.equals("reject"),
+          )
+          ..orderBy([
+            (table) => OrderingTerm(
+                  expression: table.returnOrderId,
+                  mode: OrderingMode.desc,
+                )
+          ]))
+        .get();
+  }
 
   // insert return order
   Future<int> newReturnOrder(ModelReturnOrderCompanion returnOrder) async {

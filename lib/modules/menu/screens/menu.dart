@@ -173,17 +173,17 @@ class Menu extends StatelessWidget {
                             );
                           },
                         ),
-                        MenuButtonModel(
-                          title: "trips",
-                          iconName: "transport_history",
-                          disabled: activeFeatures.disableTrip,
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              RouteNames.viewTransportHistoryList,
-                            );
-                          },
-                        ),
+                        // MenuButtonModel(
+                        //   title: "trips",
+                        //   iconName: "transport_history",
+                        //   disabled: activeFeatures.disableTrip,
+                        //   onTap: () {
+                        //     Navigator.pushNamed(
+                        //       context,
+                        //       RouteNames.viewTransportHistoryList,
+                        //     );
+                        //   },
+                        // ),
                         MenuButtonModel(
                           title: "records",
                           iconName: "records",
@@ -269,12 +269,12 @@ class Menu extends StatelessWidget {
                             );
                           },
                         ),
-                        MenuButtonModel(
-                          title: "stats",
-                          iconName: "stats",
-                          disabled: activeFeatures.disableStats,
-                          onTap: () {},
-                        ),
+                        // MenuButtonModel(
+                        //   title: "stats",
+                        //   iconName: "stats",
+                        //   disabled: activeFeatures.disableStats,
+                        //   onTap: () {},
+                        // ),
                       ],
                       groupName: "reports",
                     ),

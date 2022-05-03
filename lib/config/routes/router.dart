@@ -48,6 +48,8 @@ import 'package:salesman/modules/payment/view_payment_history_list/screens/view_
 import 'package:salesman/modules/profile/profile_creation/bloc/profile_bloc.dart';
 import 'package:salesman/modules/profile/profile_creation/screens/profile_creation.dart';
 import 'package:salesman/modules/profile/repositories/profile_repository.dart';
+import 'package:salesman/modules/records/record_list/bloc/record_list_bloc.dart';
+import 'package:salesman/modules/records/record_list/screens/view_record_list.dart';
 import 'package:salesman/modules/return/create_return_order/bloc/create_return_bloc.dart';
 import 'package:salesman/modules/return/create_return_order/screens/create_return_order.dart';
 import 'package:salesman/modules/return/view_return_details/bloc/return_order_details_bloc.dart';
@@ -201,10 +203,10 @@ class AppRouter {
       case RouteNames.records:
         return MaterialPageRoute(
           builder: (_) {
-            return BlocProvider<ViewOrderListBloc>(
+            return BlocProvider<RecordListBloc>(
               create: (context) =>
-                  ViewOrderListBloc()..add(FetchOrderHistoryListEvent()),
-              child: const ViewOrderList(),
+                  RecordListBloc()..add(FetchDeliveryOrders()),
+              child: const ViewRecordList(),
             );
           },
         );
@@ -290,7 +292,7 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) {
             return BlocProvider<TransportListBloc>(
-              create: (context) => TransportListBloc(MenuRepository())
+              create: (context) => TransportListBloc()
                 ..add(const UpdateTransportStatusEvent()),
               child: const ViewTransportList(),
             );
@@ -312,7 +314,6 @@ class AppRouter {
           builder: (_) => BlocProvider<TransportDetailsBloc>(
             create: (context) => TransportDetailsBloc(
               profileRepository: ProfileRepository(),
-              menuRepository: MenuRepository(),
             )..add(
                 FetchTransportDetailsEvent(
                   transportDetailsRouteArguments: transportDetails,
@@ -320,16 +321,6 @@ class AppRouter {
               ),
             child: const ViewTransportDetails(),
           ),
-        );
-      case RouteNames.viewTransportHistoryList:
-        return MaterialPageRoute(
-          builder: (_) {
-            return BlocProvider<TransportListBloc>(
-              create: (context) => TransportListBloc(MenuRepository())
-                ..add(const FetchHistoryTransportsTripsEvent()),
-              child: const ViewTransportList(),
-            );
-          },
         );
       case RouteNames.viewReturnOrderList:
         return MaterialPageRoute(builder: (_) {

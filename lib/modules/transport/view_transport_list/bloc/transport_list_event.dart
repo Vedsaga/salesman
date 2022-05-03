@@ -16,11 +16,6 @@ class FetchPendingTransportsEvent extends TransportListEvent {
   }) : super(transportList: transportList);
 }
 
-class FetchHistoryTransportsTripsEvent extends TransportListEvent {
-  const FetchHistoryTransportsTripsEvent({
-    List<ModelTransportData> transportList = const [],
-  }) : super(transportList: transportList);
-}
 
 class UpdateTransportStatusEvent extends TransportListEvent {
   const UpdateTransportStatusEvent({
@@ -32,8 +27,4 @@ class UpdateTransportStatusCompleteEvent extends TransportListEvent {
   const UpdateTransportStatusCompleteEvent({
     List<ModelTransportData> transportList = const [],
   }) : super(transportList: transportList);
-}
-
-class EnableTransportTripsFeatureEvent extends TransportListEvent {
-  const EnableTransportTripsFeatureEvent() : super(transportList: const []);
 }

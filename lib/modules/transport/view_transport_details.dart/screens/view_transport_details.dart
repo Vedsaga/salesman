@@ -95,9 +95,6 @@ class _ViewTransportDetailsState extends State<ViewTransportDetails> {
             "Transport cancel successfully.",
             MessageType.success,
           );
-          context.read<TransportDetailsBloc>().add(
-                EnableTransportTripsFeatureEvent(),
-              );
           Future.delayed(const Duration(seconds: 1), () {
             Navigator.of(context)
                 .popAndPushNamed(RouteNames.viewPendingTransportList);
@@ -152,7 +149,7 @@ class _ViewTransportDetailsState extends State<ViewTransportDetails> {
                   state.transportDetails?.transportStatus == "cancel") {
                 return const InputTopAppBar(
                   title: "transport info",
-                  routeName: RouteNames.viewTransportHistoryList,
+                  routeName: RouteNames.viewPendingTransportList,
                 );
               }
               return const InputTopAppBar(

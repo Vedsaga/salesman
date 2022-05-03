@@ -28,7 +28,6 @@ class RouteNames {
   static const String viewPendingTransportList = 'viewPendingTransportList';
   static const String createTransport = 'createTransport';
   static const String viewTransportDetails = 'viewTransportDetails';
-  static const String viewTransportHistoryList = 'viewTransportHistoryList';
   static const String viewReturnOrderList = 'viewReturnOrderList';
   static const String viewReturnOrderDetails = 'viewReturnOrderDetails';
   static const String createReturnOrder = 'createReturnOrder';

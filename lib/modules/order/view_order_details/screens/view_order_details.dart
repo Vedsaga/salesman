@@ -119,6 +119,7 @@ class _ViewOrderDetailsState extends State<ViewOrderDetails>
             "Order delivered successfully...",
             MessageType.success,
           );
+          // ! TODO: enable records feature not working properly
           context.read<ViewOrderDetailsBloc>().add(EnableReportFeatureEvent());
           context.read<ViewOrderDetailsBloc>().add(EnableRecordsFeature());
           context.read<ViewOrderDetailsBloc>().add(EnableReturnFeature());

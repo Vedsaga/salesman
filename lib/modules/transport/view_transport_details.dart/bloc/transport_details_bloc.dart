@@ -21,10 +21,8 @@ part 'transport_details_state.dart';
 
 class TransportDetailsBloc
     extends Bloc<TransportDetailsEvent, TransportDetailsState> {
-  final MenuRepository menuRepository;
   final ProfileRepository profileRepository;
   TransportDetailsBloc({
-    required this.menuRepository,
     required this.profileRepository,
   }) : super(const TransportDetailsState()) {
     on<FetchTransportDetailsEvent>(_fetchTransportDetails);
@@ -32,9 +30,6 @@ class TransportDetailsBloc
     on<FetchReturnOrderRelatedDetailsEvent>(_fetchReturnOrderRelatedDetails);
     on<CancelledTransportEvent>(_transportStatusToCancelled);
     on<StartTransportEvent>(_transportStatusToInProgress);
-    on<EnableTransportTripsFeatureEvent>(
-      _enableTransportTripsFeature,
-    );
   }
 
   Future<void> _fetchTransportDetails(
@@ -228,17 +223,6 @@ class TransportDetailsBloc
     }
   }
 
-  Future<void> _enableTransportTripsFeature(
-    EnableTransportTripsFeatureEvent event,
-    Emitter<TransportDetailsState> emit,
-  ) async {
-    final feature = await menuRepository.getActiveFeatures();
-
-    if (feature != null && feature.disableTrip) {
-      FeatureMonitor(menuRepository: menuRepository)
-          .enableFeature("disableTrip");
-    }
-  }
 
   
   Future<void> _fetchReturnOrderRelatedDetails(

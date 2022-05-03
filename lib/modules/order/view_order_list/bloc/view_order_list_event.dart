@@ -8,7 +8,4 @@ abstract class ViewOrderListEvent extends Equatable {
 }
 
 class FetchAllPendingOrderListEvent extends ViewOrderListEvent {}
-
-class FetchOrderHistoryListEvent extends ViewOrderListEvent {}
-
 class UpdatePendingDeliveryOrderStatusEvent extends ViewOrderListEvent {}

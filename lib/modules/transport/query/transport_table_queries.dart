@@ -257,9 +257,8 @@ class TransportTableQueries extends DatabaseAccessor<AppDatabase>
                 (table) => table.transportId.equals(data.transportId),
               ))
             .write(
-          ModelTransportCompanion(
-            transportStatus: const Value("complete"),
-            lastUpdated: Value(DateTime.now()),
+          const ModelTransportCompanion(
+            transportStatus: Value("complete"),
           ),
         );
 
