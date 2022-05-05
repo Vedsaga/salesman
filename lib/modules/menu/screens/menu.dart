@@ -66,14 +66,13 @@ class Menu extends StatelessWidget {
         }
       },
       child: MobileLayout(
-        routeName: RouteNames.menu,
+        routeName: RouteNames.home,
         topAppBar: BlocBuilder<MenuBloc, MenuState>(
           builder: (context, state) {
             if (state is FetchedAllDetailsState) {
               final CompanyProfileModel companyProfile = state.companyProfile;
               return MenuTopAppBar(
                 companyProfile: companyProfile,
-                currentPage: "menu",
               );
             }
             return const SizedBox();

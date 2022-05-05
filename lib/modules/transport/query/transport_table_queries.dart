@@ -39,7 +39,6 @@ class TransportTableQueries extends DatabaseAccessor<AppDatabase>
       }
       return into(modelTransport).insert(transport);
     });
-
   }
 
   // get transport by id
@@ -85,7 +84,6 @@ class TransportTableQueries extends DatabaseAccessor<AppDatabase>
           ..orderBy([(table) => OrderingTerm.asc(table.transportId)]))
         .get();
   }
-
 
   Future<List<ModelTransportData>> getOnlyScheduleDatePassedTransport() async {
     final transportList = await (select(modelTransport)
@@ -286,7 +284,14 @@ class TransportTableQueries extends DatabaseAccessor<AppDatabase>
             (table) => table.transportStatus.equals("started"),
           )
           ..orderBy([(table) => OrderingTerm.asc(table.transportId)]))
-          
+        .get();
+    return transportList;
+  }
+
+  // getAllTransports
+  Future<List<ModelTransportData>> getAllTransports() async {
+    final transportList = await (select(modelTransport)
+          ..orderBy([(table) => OrderingTerm.asc(table.transportId)]))
         .get();
     return transportList;
   }

@@ -118,7 +118,7 @@ class _ReturnItemDetailsState extends State<ReturnItemDetails> {
                                         ? orangeGradient
                                         : returnDetails.returnStatus ==
                                                 "initiated"
-                                            ? yellowGradient
+                                            ? purpleGradient
                                             : returnDetails.returnStatus ==
                                                         "cancel" ||
                                                     returnDetails
@@ -136,10 +136,7 @@ class _ReturnItemDetailsState extends State<ReturnItemDetails> {
                                         .textTheme
                                         .overline
                                         ?.copyWith(
-                                          color: returnDetails.returnStatus ==
-                                                  "initiated"
-                                              ? secondaryDark
-                                              : light,
+                                          color: light,
                                         ),
                                   ),
                                 ),
@@ -159,7 +156,7 @@ class _ReturnItemDetailsState extends State<ReturnItemDetails> {
                                         "unpaid"
                                     ? redGradient
                                     : returnDetails.refundStatus == "partial"
-                                        ? yellowGradient
+                                        ? purpleGradient
                                         : returnDetails.refundStatus == "paid"
                                             ? greenGradient
                                             : darkGradient,

@@ -6,73 +6,58 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:salesman/config/routes/route_name.dart';
 
 // Project imports:
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
-import 'package:salesman/core/components/snackbar_message.dart';
 import 'package:salesman/core/db/hive/models/company_profile_model.dart';
 
 //  created an AppBar widget
 class MenuTopAppBar extends StatelessWidget {
-  const MenuTopAppBar(
-      {
+  const MenuTopAppBar({
     Key? key,
     required this.companyProfile,
-    required this.currentPage,
-  })
-      : super(key: key);
+  }) : super(key: key);
   final CompanyProfileModel companyProfile;
-  final String currentPage;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {},
-      child: AppBar(
-        foregroundColor: dark,
-        leading: IconButton(
-          hoverColor: Colors.transparent,
-          focusColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          icon: Align(
-            alignment: Alignment.centerLeft,
-            child: currentPage == "home"
-                ? SvgPicture.asset(
-                    'assets/icons/svgs/menu.svg',
-                  )
-                : SvgPicture.asset(
-                    'assets/icons/svgs/home.svg',
-                  ),
+    return AppBar(
+      foregroundColor: dark,
+      leading: IconButton(
+        hoverColor: Colors.transparent,
+        focusColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        icon: Align(
+          alignment: Alignment.centerLeft,
+          child: SvgPicture.asset(
+            'assets/icons/svgs/home.svg',
           ),
-          onPressed: () {
-            snackbarMessage(
-              context,
-              "Coming Soon :D",
-              MessageType.normal,
-            );
-          },
         ),
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              // capitalize the first letter of the each word in organization name
-              companyProfile.name,
-              style: of(context).textTheme.subtitle1?.copyWith(
-                    color: dark,
-                  ),
-              overflow: TextOverflow.ellipsis,
-              softWrap: false,
-            ),
-            Text(
-              "Last synced on ${DateFormat('d MMM, hh:mm a').format(companyProfile.lastUpdated)}",
-              style: of(context).textTheme.subtitle2,
-              overflow: TextOverflow.ellipsis,
-              softWrap: false,
-            ),
-          ],
-        ),
+        onPressed: () {
+          Navigator.popAndPushNamed(context, RouteNames.home);
+        },
+      ),
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            // capitalize the first letter of the each word in organization name
+            companyProfile.name,
+            style: of(context).textTheme.subtitle1?.copyWith(
+                  color: dark,
+                ),
+            overflow: TextOverflow.ellipsis,
+            softWrap: false,
+          ),
+          Text(
+            "Last synced on ${DateFormat('d MMM, hh:mm a').format(companyProfile.lastUpdated)}",
+            style: of(context).textTheme.subtitle2,
+            overflow: TextOverflow.ellipsis,
+            softWrap: false,
+          ),
+        ],
       ),
     );
   }

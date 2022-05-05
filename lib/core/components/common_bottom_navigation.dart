@@ -10,7 +10,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:salesman/config/layouts/design_values.dart';
 import 'package:salesman/config/routes/route_name.dart';
 import 'package:salesman/config/theme/colors.dart';
-import 'package:salesman/core/components/snackbar_message.dart';
 
 class CommonBottomNavigation extends StatelessWidget {
   const CommonBottomNavigation({
@@ -62,16 +61,12 @@ class CommonBottomNavigation extends StatelessWidget {
               ),
             ),
             IconButton(
-              onPressed: () {
-                snackbarMessage(
-                  context,
-                  "Coming Soon :D",
-                  MessageType.normal,
-                );
-              },
               icon: SvgPicture.asset(
                 'assets/icons/svgs/home.svg',
               ),
+              onPressed: () {
+                Navigator.popAndPushNamed(context, RouteNames.home);
+              },
             ),
           ],
         ),

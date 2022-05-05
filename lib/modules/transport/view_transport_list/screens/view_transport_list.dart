@@ -140,7 +140,7 @@ class _ViewTransportListState extends State<ViewTransportList> {
                                                     : transport[index]
                                                                 .transportStatus ==
                                                             "started"
-                                                        ? yellowGradient
+                                                        ? purpleGradient
                                                         : darkGradient,
                                     borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(

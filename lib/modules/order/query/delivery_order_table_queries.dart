@@ -107,6 +107,18 @@ class DeliveryOrderTableQueries extends DatabaseAccessor<AppDatabase>
         )
         .toList();
   }
+    // get all orders
+  Future<List<ModelDeliveryOrderData>> getAllDeliveryOrders() async {
+    return (select(modelDeliveryOrder)
+          ..orderBy([
+            (table) => OrderingTerm(
+                  expression: table.deliveryOrderId,
+                  mode: OrderingMode.desc,
+                )
+          ]))
+        .get();
+  }
+
 
   Future<List<ModelDeliveryOrderData>> getAllUnpaidOrders() async {
     return (select(modelDeliveryOrder)
@@ -323,4 +335,5 @@ class DeliveryOrderTableQueries extends DatabaseAccessor<AppDatabase>
       readsFrom: {modelDeliveryOrder},
     ).map((row) => row.read<int>('c')).getSingle();
   }
+
 }

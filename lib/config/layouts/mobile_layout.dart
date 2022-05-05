@@ -13,12 +13,14 @@ class MobileLayout extends StatelessWidget {
     required this.bottomAppBarRequired,
     required this.routeName,
     required this.body,
+    this.customTopAppBarHeight,
   }) : super(key: key);
 
   final Widget topAppBar;
   final Widget body;
   final Widget bottomAppBar;
   final bool bottomAppBarRequired;
+  final double? customTopAppBarHeight;
   final String? routeName;
 
   @override
@@ -34,7 +36,7 @@ class MobileLayout extends StatelessWidget {
       child: Scaffold(
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(
-            designValues(context).topAppBarHeight,
+          customTopAppBarHeight ??  designValues(context).topAppBarHeight,
           ),
           child: Padding(
             padding: EdgeInsets.symmetric(

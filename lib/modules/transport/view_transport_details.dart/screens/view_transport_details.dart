@@ -266,7 +266,7 @@ class _ViewTransportDetailsState extends State<ViewTransportDetails> {
                               builder: DeleteConfirmation(
                                 context: context,
                                 colorNo: secondaryDark,
-                                colorYes: yellow,
+                                colorYes: purple,
                                 textYes: "start",
                                 textNo: "no",
                                 title: 'start this transport?',
@@ -279,7 +279,7 @@ class _ViewTransportDetailsState extends State<ViewTransportDetails> {
                                   );
                             }
                           },
-                          gradient: yellowGradient,
+                          gradient: purpleGradient,
                           svgColor: secondaryDark,
                         ),
                       ),
@@ -400,7 +400,7 @@ class _ViewTransportDetailsState extends State<ViewTransportDetails> {
                                             : transportDetails
                                                         .transportStatus ==
                                                     "started"
-                                                ? yellowGradient
+                                                ? purpleGradient
                                                 : darkGradient,
                             firstChild: Flexible(
                               child: Text(

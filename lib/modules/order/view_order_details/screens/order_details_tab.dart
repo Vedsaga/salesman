@@ -126,7 +126,7 @@ class _ViewOrderDetailTabState extends State<OrderDetailsTab> {
                                             ? orangeGradient
                                             : state.orderDetails.orderStatus ==
                                                     "dispatch"
-                                                ? yellowGradient
+                                                ? purpleGradient
                                                 : state.orderDetails
                                                                 .orderStatus ==
                                                             "cancel" ||
@@ -146,11 +146,7 @@ class _ViewOrderDetailTabState extends State<OrderDetailsTab> {
                                         .textTheme
                                         .overline
                                         ?.copyWith(
-                                          color:
-                                              state.orderDetails.orderStatus ==
-                                                      "dispatch"
-                                                  ? secondaryDark
-                                                  : light,
+                                          color:light,
                                         ),
                                   ),
                                 ),
@@ -171,7 +167,7 @@ class _ViewOrderDetailTabState extends State<OrderDetailsTab> {
                                         ? redGradient
                                         : state.orderDetails.paymentStatus ==
                                                 "partial"
-                                            ? yellowGradient
+                                            ? purpleGradient
                                             : state.orderDetails
                                                         .paymentStatus ==
                                                     "paid"

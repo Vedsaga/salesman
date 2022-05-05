@@ -189,7 +189,7 @@ class _ViewRecordListState extends State<ViewRecordList> {
                                   : deliveryOrder.orderStatus == "process"
                                       ? orangeGradient
                                       : deliveryOrder.orderStatus == "dispatch"
-                                          ? yellowGradient
+                                          ? purpleGradient
                                           : deliveryOrder.orderStatus ==
                                                       "cancel" ||
                                                   deliveryOrder.orderStatus ==
@@ -199,10 +199,7 @@ class _ViewRecordListState extends State<ViewRecordList> {
                                                       "deliver"
                                                   ? greenGradient
                                                   : darkGradient,
-                              statusTextColor:
-                                  deliveryOrder.orderStatus == "dispatch"
-                                      ? secondaryDark
-                                      : light,
+                              statusTextColor: light,
                               status: deliveryOrder.orderStatus,
                               leadingDataAtTop: globalFunction.getClientName(
                                             deliveryOrder.clientId,
@@ -301,7 +298,7 @@ class _ViewRecordListState extends State<ViewRecordList> {
                                                         : transport[index]
                                                                     .transportStatus ==
                                                                 "started"
-                                                            ? yellowGradient
+                                                            ? purpleGradient
                                                             : darkGradient,
                                         borderRadius: BorderRadius.only(
                                           topLeft: Radius.circular(
@@ -324,11 +321,7 @@ class _ViewRecordListState extends State<ViewRecordList> {
                                                 .textTheme
                                                 .caption
                                                 ?.copyWith(
-                                                  color: transport[index]
-                                                              .transportStatus ==
-                                                          "started"
-                                                      ? secondaryDark
-                                                      : light,
+                                                  color: light,
                                                 ),
                                           ),
                                         ),
@@ -477,7 +470,7 @@ class _ViewRecordListState extends State<ViewRecordList> {
                                       ? orangeGradient
                                       : returnOrderList[index].returnStatus ==
                                               "initiated"
-                                          ? yellowGradient
+                                          ? purpleGradient
                                           : returnOrderList[index]
                                                           .returnStatus ==
                                                       "cancel" ||
@@ -490,11 +483,7 @@ class _ViewRecordListState extends State<ViewRecordList> {
                                                       "return"
                                                   ? greenGradient
                                                   : darkGradient,
-                              statusTextColor:
-                                  returnOrderList[index].returnStatus ==
-                                          "initiated"
-                                      ? secondaryDark
-                                      : light,
+                              statusTextColor:light,
                               status: returnOrderList[index].returnStatus,
                               leadingDataAtTop: globalFunction.getClientName(
                                             returnOrderList[index].clientId,

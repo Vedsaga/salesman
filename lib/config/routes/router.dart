@@ -22,6 +22,8 @@ import 'package:salesman/modules/client/view_details/bloc/view_client_details_bl
 import 'package:salesman/modules/client/view_details/screens/view_client_details.dart';
 import 'package:salesman/modules/client/view_list/bloc/view_client_bloc.dart';
 import 'package:salesman/modules/client/view_list/screens/view_client_list.dart';
+import 'package:salesman/modules/home/bloc/home_bloc.dart';
+import 'package:salesman/modules/home/screens/home_screen.dart';
 import 'package:salesman/modules/item/add/bloc/add_item_bloc.dart';
 import 'package:salesman/modules/item/add/screens/add_item.dart';
 import 'package:salesman/modules/item/view_details/bloc/view_item_details_bloc.dart';
@@ -85,7 +87,7 @@ class AppRouter {
       case RouteNames.testDesign:
         return MaterialPageRoute(
           builder: (context) => const TestDesign(),
-        );
+        );      
       case RouteNames.profileCreation:
         return MaterialPageRoute(
           builder: (_) {
@@ -388,7 +390,15 @@ class AppRouter {
             );
           },
         );
-        
+      case RouteNames.home:
+      return MaterialPageRoute(
+        builder: (_) {
+          return BlocProvider<HomeBloc>(
+            create: (context) => HomeBloc()..add(FetchDataForHomeEvent()),
+            child: const HomeScreen(),
+          );
+        },
+      );
       default:
         return MaterialPageRoute(
           builder: (_) {

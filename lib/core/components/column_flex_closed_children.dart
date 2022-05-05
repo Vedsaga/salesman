@@ -7,9 +7,11 @@ class ColumnFlexClosedChildren extends StatelessWidget {
     Key? key,
     required this.firstChild,
     required this.secondChild,
+    this.height,
   }) : super(key: key);
   final Widget firstChild;
   final Widget secondChild;
+  final double? height;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,7 @@ class ColumnFlexClosedChildren extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         firstChild,
-        SizedBox(height: designValues(context).padding13),
+        SizedBox(height: height ?? designValues(context).padding13),
         secondChild,
       ],
     );

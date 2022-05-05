@@ -128,7 +128,7 @@ class _ViewOrderListState extends State<ViewOrderList> {
                                   ? orangeGradient
                                   : state.orderList[index].orderStatus ==
                                           "dispatch"
-                                      ? yellowGradient
+                                      ? purpleGradient
                                       : state.orderList[index].orderStatus ==
                                                   "cancel" ||
                                               state.orderList[index].orderStatus ==
@@ -138,10 +138,7 @@ class _ViewOrderListState extends State<ViewOrderList> {
                                                   "deliver"
                                               ? greenGradient
                                               : darkGradient,
-                          statusTextColor:
-                              state.orderList[index].orderStatus == "dispatch"
-                                  ? secondaryDark
-                                  : light,
+                          statusTextColor: light,
                           status:
                               state.orderList[index].orderStatus,
                           leadingDataAtTop: globalFunction.getClientName(

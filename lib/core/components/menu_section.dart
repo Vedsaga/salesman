@@ -24,20 +24,15 @@ class MenuSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            groupName.toUpperCase(),
-            style: disabled
-                ? of(context)
-                .textTheme
-                .headline5
-                    ?.copyWith(color: grey)
-                : of(context).textTheme.headline5?.copyWith(
-                      color: orange,
-                    ),
-          ),
+        Text(
+          groupName.toUpperCase(),
+          style: disabled
+              ? of(context).textTheme.headline5?.copyWith(color: grey)
+              : of(context).textTheme.headline5?.copyWith(
+                    color: orange,
+                  ),
         ),
         SizedBox(height: designValues(context).containerCornerRadius21),
         CustomScrollView(

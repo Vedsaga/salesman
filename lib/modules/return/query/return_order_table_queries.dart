@@ -27,7 +27,7 @@ class ReturnOrderTableQueries extends DatabaseAccessor<AppDatabase>
   ReturnOrderTableQueries(this.db) : super(db);
 
   // get all return orders
-  Future<List<ModelReturnOrderData>?> getAllReturnOrders() async {
+  Future<List<ModelReturnOrderData>> getAllReturnOrders() async {
     return (select(modelReturnOrder)
           ..orderBy([
             (table) => OrderingTerm(

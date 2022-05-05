@@ -110,7 +110,7 @@ class _ViewReturnOrderListState extends State<ViewReturnOrderList> {
                                       ? orangeGradient
                                       : returnOrderList[index].returnStatus ==
                                               "initiated"
-                                          ? yellowGradient
+                                          ? purpleGradient
                                           : returnOrderList[index]
                                                           .returnStatus ==
                                                       "cancel" ||
@@ -123,11 +123,7 @@ class _ViewReturnOrderListState extends State<ViewReturnOrderList> {
                                                       "return"
                                                   ? greenGradient
                                                   : darkGradient,
-                              statusTextColor:
-                                  returnOrderList[index].returnStatus ==
-                                          "initiated"
-                                      ? secondaryDark
-                                      : light,
+                              statusTextColor: light,
                               status: returnOrderList[index].returnStatus,
                               leadingDataAtTop: globalFunction.getClientName(
                                             returnOrderList[index].clientId,

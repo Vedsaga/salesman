@@ -634,7 +634,7 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                                                             .paymentStatus ==
                                                         "unpaid"
                                                     ? red
-                                                    : yellow,
+                                                    : purple,
                                               ),
                                         ),
                                       ),
@@ -736,7 +736,7 @@ class _AddReceivedPaymentDetailsState extends State<AddPaymentDetails> {
                                                     returnOrder.refundStatus ==
                                                             "unpaid"
                                                         ? red
-                                                        : yellow,
+                                                        : purple,
                                               ),
                                         ),
                                       ),

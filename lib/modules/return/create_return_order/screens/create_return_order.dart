@@ -392,7 +392,7 @@ class _CreateReturnOrderState extends State<CreateReturnOrder> {
                                             : deliveryOrder.paymentStatus ==
                                                     "unpaid"
                                                 ? red
-                                                : yellow,
+                                                : purple,
                                       ),
                                 ),
                               ),
