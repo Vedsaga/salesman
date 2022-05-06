@@ -16,11 +16,11 @@ import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
 import 'package:salesman/core/components/custom_round_button.dart';
 import 'package:salesman/core/components/delete_confirmation.dart';
-import 'package:salesman/core/components/double_info_box.dart';
-import 'package:salesman/core/components/input_decoration.dart';
+import 'package:salesman/core/components/details_card.dart';
 import 'package:salesman/core/components/input_top_app_bar.dart';
 import 'package:salesman/core/components/normal_top_app_bar.dart';
-import 'package:salesman/core/components/single_info_box.dart';
+import 'package:salesman/core/components/row_flex_close_children.dart';
+import 'package:salesman/core/components/row_flex_spaced_children.dart';
 import 'package:salesman/core/components/snackbar_message.dart';
 import 'package:salesman/modules/item/view_details/bloc/view_item_details_bloc.dart';
 
@@ -101,6 +101,18 @@ class _ViewItemDetailsState extends State<ViewItemDetails> {
         body: BlocBuilder<ViewItemDetailsBloc, ViewItemDetailsState>(
           builder: (context, state) {
             if (state is ViewingItemDetailsState) {
+              final Color color = state.itemDetails.availableQuantity >
+                      state.itemDetails.minStockAlert
+                  ? green
+                  : state.itemDetails.availableQuantity <= 0
+                      ? red
+                      : purple;
+              final String status = state.itemDetails.availableQuantity >
+                      state.itemDetails.minStockAlert
+                  ? "in stock"
+                  : state.itemDetails.availableQuantity == 0
+                      ? 'out-of-stock'
+                      : "low in stock";
               return Container(
                 margin: EdgeInsets.only(
                   left: designValues(context).horizontalPadding,
@@ -111,47 +123,64 @@ class _ViewItemDetailsState extends State<ViewItemDetails> {
                 child: Flex(
                   direction: Axis.vertical,
                   children: [
-                    TextFormField(
-                      initialValue: state.itemDetails.itemName,
-                      keyboardType: TextInputType.text,
-                      readOnly: true,
-                      textAlignVertical: TextAlignVertical.center,
-                      style: Theme.of(context).textTheme.bodyText1,
-                      decoration: inputDecoration(context,
-                          labelText: "item name",
-                          hintText: "item name",
-                        inFocus: false,
-                      ),
+                    SizedBox(
+                      height: designValues(context).padding21,
                     ),
-                    SizedBox(height: designValues(context).cornerRadius34),
-                    TextFormField(
-                      initialValue:
-                          state.itemDetails.sellingPricePerUnit.toString(),
-                      keyboardType: TextInputType.text,
-                      readOnly: true,
-                      textAlignVertical: TextAlignVertical.center,
-                      style: Theme.of(context).textTheme.bodyText1,
-                      decoration: inputDecoration(
-                        context,
-                        labelText: "selling price per unit",
-                        hintText: "selling price per unit",
-                        inFocus: false,
-                      ),
+                    Flex(
+                      direction: Axis.horizontal,
+                      children: <Widget>[
+                        Expanded(
+                          child: DetailsCard(
+                            label: "Item Id",
+                            firstChild: Flexible(
+                              child: Text(
+                                state.itemDetails.itemId.toString(),
+                              ),
+                            ),
+                            secondChild: const Flexible(
+                              flex: 0,
+                              child: SizedBox(),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: designValues(context).cornerRadius34,
+                        ),
+                        Expanded(
+                          child: DetailsCard(
+                            label: "Stock Status",
+                            containerGradient:
+                                state.itemDetails.availableQuantity >
+                                        state.itemDetails.minStockAlert
+                                    ? greenGradient
+                                    : state.itemDetails.availableQuantity == 0
+                                        ? redGradient
+                                        : purpleGradient,
+                            firstChild: Flexible(
+                              child: Text(
+                                status,
+                                style: of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    ?.copyWith(color: light),
+                              ),
+                            ),
+                            secondChild:
+                                const Flexible(flex: 0, child: SizedBox()),
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(height: designValues(context).cornerRadius34),
-                    TextFormField(
-                      initialValue:
-                          state.itemDetails.buyingPricePerUnit.toString(),
-                      keyboardType: TextInputType.text,
-                      readOnly: true,
-                      textAlignVertical: TextAlignVertical.center,
-                      style: Theme.of(context).textTheme.bodyText1,
-                      decoration: inputDecoration(
-                        context,
-                        labelText: "buying price per unit",
-                        hintText: "buying price per unit",
-                        inFocus: false,
-                      ),
+                    SizedBox(
+                      height: designValues(context).padding21,
+                    ),
+                    DetailsCard(
+                      label: "Name",
+                      firstChild: Text(state.itemDetails.itemName),
+                      secondChild: const SizedBox(),
+                    ),
+                    SizedBox(
+                      height: designValues(context).padding21,
                     ),
                     SizedBox(height: designValues(context).verticalPadding),
                     NormalTopAppBar(
@@ -160,69 +189,255 @@ class _ViewItemDetailsState extends State<ViewItemDetails> {
                         style: of(context).textTheme.headline6,
                       ),
                     ),
-                    SizedBox(height: designValues(context).cornerRadius34),
-                  // ignore: fixme
-                  // FIXME: fix overflow error
-                    DoubleInfoBox(
-                      firstBoxWidget: SingleInfoBox(
-                        info: "available",
-                        data: state.itemDetails.availableQuantity
-                            .toStringAsFixed(2),
-                        dataSuffixWidget: Text(
-                          state.itemDetails.unit,
-                          style: Theme.of(context)
-                              .textTheme
-                              .subtitle2
-                              ?.copyWith(color: deepBlue),
+                    SizedBox(height: designValues(context).padding21),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          designValues(context).cornerRadius8,
                         ),
+                        color: color.withAlpha(34),
                       ),
-                      secondBoxWidget: SingleInfoBox(
-                        info: "reserved",
-                        data: state.itemDetails.reservedQuantity
-                            .toStringAsFixed(2),
-                        dataSuffixWidget: Text(
-                          state.itemDetails.unit,
-                          style: Theme.of(context)
-                              .textTheme
-                              .subtitle2
-                              ?.copyWith(color: orange),
+                      child: Padding(
+                        padding: EdgeInsets.all(
+                          designValues(context).padding13,
+                        ),
+                        child: RowFlexSpacedChildren(
+                          firstChild: RowFlexCloseChildren(
+                            firstChild: Text(
+                              state.itemDetails.availableQuantity
+                                  .toStringAsFixed(2),
+                              style: of(context)
+                                  .textTheme
+                                  .headline6
+                                  ?.copyWith(color: color),
+                            ),
+                            secondChild: Text(
+                              state.itemDetails.unit,
+                              style: of(context).textTheme.subtitle2?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: color,
+                                  ),
+                            ),
+                          ),
+                          secondChild: Text(
+                            status,
+                            style: of(context).textTheme.subtitle2?.copyWith(
+                                  fontWeight: FontWeight.w500,
+                                  color: color,
+                                ),
+                          ),
                         ),
                       ),
                     ),
+                    SizedBox(
+                      height: designValues(context).padding21,
+                    ),
+                    Flex(
+                      direction: Axis.horizontal,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          child: Flex(
+                            direction: Axis.vertical,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "reserve",
+                                style: of(context)
+                                    .textTheme
+                                    .subtitle2
+                                    ?.copyWith(color: skyBlue),
+                              ),
+                              SizedBox(
+                                height: designValues(context).cornerRadius8,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(
+                                    designValues(context).cornerRadius8,
+                                  ),
+                                  color: skyBlue.withAlpha(34),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(
+                                    designValues(context).padding13,
+                                  ),
+                                  child: Text(
+                                    state.itemDetails.reservedQuantity
+                                        .toStringAsFixed(2),
+                                    style: of(context)
+                                        .textTheme
+                                        .subtitle2
+                                        ?.copyWith(color: skyBlue),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          width: designValues(context).padding21,
+                        ),
+                        // add for sold quantity
+                        Flexible(
+                          child: Flex(
+                            direction: Axis.vertical,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "sold",
+                                style: of(context)
+                                    .textTheme
+                                    .subtitle2
+                                    ?.copyWith(color: dark),
+                              ),
+                              SizedBox(
+                                height: designValues(context).cornerRadius8,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(
+                                    designValues(context).cornerRadius8,
+                                  ),
+                                  color: dark.withAlpha(34),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(
+                                    designValues(context).padding13,
+                                  ),
+                                  child: Text(
+                                    state.itemDetails.totalTrade
+                                        .toStringAsFixed(2),
+                                    style: of(context)
+                                        .textTheme
+                                        .subtitle2
+                                        ?.copyWith(color: dark),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  
+                
                     SizedBox(height: designValues(context).verticalPadding),
                     NormalTopAppBar(
                       titleWidget: Text(
-                        "COST per ${state.itemDetails.unit.substring(0, 1).toUpperCase() + state.itemDetails.unit.substring(1)}",
+                        "COST per ${state.itemDetails.unit.toLowerCase()}",
                         style: of(context).textTheme.headline6,
                       ),
                     ),
-                    SizedBox(height: designValues(context).cornerRadius34),
-                    DoubleInfoBox(
-                      firstBoxWidget: SingleInfoBox(
-                        info: "sell price",
-                        data: state.itemDetails.sellingPricePerUnit
-                            .toStringAsFixed(2),
-                        dataColor: deepBlue,
-                        dataPrefixWidget: SvgPicture.asset(
-                          "assets/icons/svgs/inr.svg",
-                          height: 13,
-                          width: 13,
-                          color: deepBlue,
+                    SizedBox(height: designValues(context).padding21),
+                    Flex(
+                      direction: Axis.horizontal,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          child: Flex(
+                            direction: Axis.vertical,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "buy price",
+                                style: of(context)
+                                    .textTheme
+                                    .subtitle2
+                                    ?.copyWith(color: deepGreen),
+                              ),
+                              SizedBox(
+                                height: designValues(context).cornerRadius8,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(
+                                    designValues(context).cornerRadius8,
+                                  ),
+                                  color: deepGreen.withAlpha(34),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(
+                                    designValues(context).padding13,
+                                  ),
+                                  child: RowFlexCloseChildren(
+                                    firstChild: SvgPicture.asset(
+                                      "assets/icons/svgs/receive_inr.svg",
+                                      color: deepGreen,
+                                    ),
+                                    secondChild: Text(
+                                      state.itemDetails.buyingPricePerUnit
+                                          .toStringAsFixed(2),
+                                      style: of(context)
+                                          .textTheme
+                                          .subtitle2
+                                          ?.copyWith(color: deepGreen),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      secondBoxWidget: SingleInfoBox(
-                        info: "buy price",
-                        data: state.itemDetails.buyingPricePerUnit
-                            .toStringAsFixed(2),
-                        dataColor: orange,
-                        dataPrefixWidget: SvgPicture.asset(
-                          "assets/icons/svgs/inr.svg",
-                          height: 13,
-                          width: 13,
-                          color: orange,
+                        SizedBox(
+                          width: designValues(context).padding21,
                         ),
-                      ),
+                        // add for sold quantity
+                        Flexible(
+                          child: Flex(
+                            direction: Axis.vertical,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "sell price",
+                                style: of(context)
+                                    .textTheme
+                                    .subtitle2
+                                    ?.copyWith(color: lightRed),
+                              ),
+                              SizedBox(
+                                height: designValues(context).cornerRadius8,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(
+                                    designValues(context).cornerRadius8,
+                                  ),
+                                  color: lightRed.withAlpha(34),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: shadowColor,
+                                      blurRadius: 34,
+                                      offset: Offset(-5, 5),
+                                    ),
+                                  ],
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(
+                                    designValues(context).padding13,
+                                  ),
+                                  child: RowFlexCloseChildren(
+                                    firstChild: SvgPicture.asset(
+                                      "assets/icons/svgs/send_inr.svg",
+                                      color: lightRed,
+                                    ),
+                                    secondChild: Text(
+                                      state.itemDetails.sellingPricePerUnit
+                                          .toStringAsFixed(2),
+                                      style: of(context)
+                                          .textTheme
+                                          .subtitle2
+                                          ?.copyWith(color: lightRed),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
+                  
                   ],
                 ),
               );

@@ -30,6 +30,7 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
     on<ItemSellingPriceFieldUnfocused>(_sellingPriceUnfocused);
     on<ItemBuyingPriceFieldUnfocused>(_buyingPriceUnfocused);
     on<ItemAvailableQuantityFieldUnfocused>(_availableQuantityUnfocused);
+    on<ItemMinStockAlertFieldUnfocused>(_minStockAlertUnfocused);
     on<ItemFormSubmitted>(_itemFormSubmitted);
     on<EnableVehicleFeatureEvent>(_enableVehicleFeature);
   }
@@ -45,6 +46,7 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
     final sellingPrice = DoubleField.dirty(event.sellingPrice);
     final buyingPrice = DoubleField.dirty(event.buyingPrice);
     final availableQuantity = DoubleField.dirty(event.availableQuantity);
+    final minStockAlert = DoubleField.dirty(event.minStockAlert);
     emit(state.copyWith(
       itemName: itemName.valid ? itemName : GenericField.pure(event.itemName),
       unit: unit.valid ? unit : UnitField.pure(event.unit),
@@ -56,6 +58,9 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
       availableQuantity: availableQuantity.valid
           ? availableQuantity
           : DoubleField.pure(event.availableQuantity),
+        minStockAlert: minStockAlert.valid
+            ? minStockAlert
+            : DoubleField.pure(event.minStockAlert),
       status: Formz.validate(
           [itemName, unit, sellingPrice, buyingPrice, availableQuantity],),
     ),);
@@ -146,6 +151,26 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
     );
   }
 
+  void _minStockAlertUnfocused(
+    ItemMinStockAlertFieldUnfocused event,
+    Emitter<AddItemState> emit,
+  ) {
+    final minStockAlert = DoubleField.dirty(state.minStockAlert.value);
+    emit(
+      state.copyWith(
+        minStockAlert: minStockAlert,
+        status: Formz.validate([
+          state.itemName,
+          state.unit,
+          state.sellingPrice,
+          state.buyingPrice,
+          state.availableQuantity,
+          minStockAlert
+        ]),
+      ),
+    );
+  }
+
   Future<void> _itemFormSubmitted(
       ItemFormSubmitted event, Emitter<AddItemState> emit,) async {
     final itemName = GenericField.dirty(state.itemName.value);
@@ -153,6 +178,7 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
     final sellingPrice = DoubleField.dirty(state.sellingPrice.value);
     final buyingPrice = DoubleField.dirty(state.buyingPrice.value);
     final availableQuantity = DoubleField.dirty(state.availableQuantity.value);
+    final minStockAlert = DoubleField.dirty(state.minStockAlert.value);
 
     emit(
       state.copyWith(
@@ -161,8 +187,9 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
         sellingPrice: sellingPrice,
         buyingPrice: buyingPrice,
         availableQuantity: availableQuantity,
+        minStockAlert: minStockAlert,
         status: Formz.validate(
-            [itemName, unit, sellingPrice, buyingPrice, availableQuantity],),
+            [itemName, unit, sellingPrice, buyingPrice, availableQuantity, minStockAlert],),
       ),
     );
 
@@ -174,6 +201,7 @@ class AddItemBloc extends Bloc<AddItemEvent, AddItemState> {
         sellingPricePerUnit: Value(state.sellingPrice.value),
         buyingPricePerUnit: Value(state.buyingPrice.value),
         availableQuantity: Value(state.availableQuantity.value),
+        minStockAlert: Value(state.minStockAlert.value),
       );
       try {
         final itemId = await ItemTableQueries(appDatabaseInstance)

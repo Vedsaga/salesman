@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 
 // Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
 
 // Project imports:
@@ -43,6 +44,7 @@ class _AddItemState extends State<AddItem> {
   final FocusNode _itemSellingPriceFocusNode = FocusNode();
   final FocusNode _itemBuyingPriceFocusNode = FocusNode();
   final FocusNode _itemAvailableQuantityFocusNode = FocusNode();
+  final FocusNode _itemMinStockAlertFocusNode = FocusNode();
   final List<String> _units = UnitField.units;
 
   @override
@@ -52,6 +54,7 @@ class _AddItemState extends State<AddItem> {
     _itemBuyingPriceFocusNode.addListener(_itemBuyingPriceFocusListener);
     _itemAvailableQuantityFocusNode
         .addListener(_itemAvailableQuantityFocusListener);
+    _itemMinStockAlertFocusNode.addListener(_itemMinStockAlertFocusListener);
     super.initState();
   }
 
@@ -98,6 +101,19 @@ class _AddItemState extends State<AddItem> {
       context.read<AddItemBloc>().add(ItemAvailableQuantityFieldUnfocused());
     }
   }
+
+  void _itemMinStockAlertFocusListener() {
+    if (_itemMinStockAlertFocusNode.hasFocus) {
+      _itemNameFocusNode.unfocus();
+      _itemSellingPriceFocusNode.unfocus();
+      _itemBuyingPriceFocusNode.unfocus();
+      _itemAvailableQuantityFocusNode.unfocus();
+    }
+    if (!_itemMinStockAlertFocusNode.hasFocus) {
+      context.read<AddItemBloc>().add(ItemMinStockAlertFieldUnfocused());
+    }
+  }
+
 
   String? _itemNameErrorText() {
     final itemNameError = context.read<AddItemBloc>().state.itemName.error;
@@ -154,6 +170,19 @@ class _AddItemState extends State<AddItem> {
     }
   }
 
+  String? _itemMinStockAlertErrorText() {
+    final itemMinStockAlertError =
+        context.read<AddItemBloc>().state.minStockAlert.error;
+    switch (itemMinStockAlertError) {
+      case DoubleFieldValidationError.cannotBeEmpty:
+        return 'Min stock alert is required';
+      case DoubleFieldValidationError.cannotBeNegative:
+        return 'Min stock alert cannot be negative';
+      default:
+        return null;
+    }
+  }
+
   @override
   void dispose() {
     _itemNameFocusNode.removeListener(_itemNameFocusListener);
@@ -167,6 +196,7 @@ class _AddItemState extends State<AddItem> {
     _itemSellingPriceFocusNode.dispose();
     _itemBuyingPriceFocusNode.dispose();
     _itemAvailableQuantityFocusNode.dispose();
+    _itemMinStockAlertFocusNode.dispose();
     super.dispose();
   }
 
@@ -256,6 +286,7 @@ class _AddItemState extends State<AddItem> {
                           sellingPrice: state.sellingPrice.value,
                           buyingPrice: state.buyingPrice.value,
                           availableQuantity: state.availableQuantity.value,
+                          minStockAlert: state.minStockAlert.value,
                         ),
                       );
                     },
@@ -296,6 +327,7 @@ class _AddItemState extends State<AddItem> {
                           sellingPrice: double.tryParse(value) ?? 0.0,
                           buyingPrice: state.buyingPrice.value,
                           availableQuantity: state.availableQuantity.value,
+                          minStockAlert: state.minStockAlert.value,
                         ),
                       );
                     },
@@ -336,6 +368,7 @@ class _AddItemState extends State<AddItem> {
                           sellingPrice: state.sellingPrice.value,
                           buyingPrice: double.tryParse(value) ?? 0.0,
                           availableQuantity: state.availableQuantity.value,
+                          minStockAlert: state.minStockAlert.value,
                         ),
                       );
                     },
@@ -343,6 +376,49 @@ class _AddItemState extends State<AddItem> {
                     textInputAction: TextInputAction.next,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
+                  SizedBox(height: designValues(context).cornerRadius34),
+                  TextFormField(
+                    initialValue: state.minStockAlert.value.toString(),
+                    focusNode: _itemMinStockAlertFocusNode,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(
+                        RegExp(r'^[0-9]+(\.[0-9]{0,4})?$'),
+                      ),
+                    ],
+                    decoration: inputDecoration(
+                      context,
+                      inFocus: _itemMinStockAlertFocusNode.hasFocus,
+                      labelText: "Min Stock Alert",
+                      hintText: "enter minimum stock alert",
+                      errorText: _itemMinStockAlertFocusNode.hasFocus
+                          ? _itemMinStockAlertErrorText()
+                          : null,
+                      prefixWidget: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 13),
+                        child: SvgPicture.asset(
+                          "assets/icons/svgs/alarm.svg",
+                          color: dark,
+                        ),
+                      ),
+                    ),
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      BlocProvider.of<AddItemBloc>(context).add(
+                        ItemFieldsChange(
+                          itemName: state.itemName.value,
+                          unit: state.unit.value,
+                          sellingPrice: state.sellingPrice.value,
+                          buyingPrice: state.buyingPrice.value,
+                          availableQuantity: state.availableQuantity.value,
+                          minStockAlert: double.tryParse(value) ?? 0.0,
+                        ),
+                      );
+                    },
+                    textAlignVertical: TextAlignVertical.center,
+                    textInputAction: TextInputAction.next,
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                  
                   SizedBox(height: designValues(context).cornerRadius34),
                   TextFormField(
                     initialValue: state.availableQuantity.value.toString(),
@@ -387,6 +463,7 @@ class _AddItemState extends State<AddItem> {
                           sellingPrice: state.sellingPrice.value,
                           buyingPrice: state.buyingPrice.value,
                           availableQuantity: double.tryParse(value) ?? 0.0,
+                          minStockAlert: state.minStockAlert.value,
                         ),
                       );
                     },
@@ -433,6 +510,7 @@ class _AddItemState extends State<AddItem> {
                                     buyingPrice: state.buyingPrice.value,
                                     availableQuantity:
                                         state.availableQuantity.value,
+                                    minStockAlert: state.minStockAlert.value,
                                   ),
                                 );
                                 _unitFocusNode.unfocus();

@@ -14,6 +14,7 @@ class ItemFieldsChange extends AddItemEvent {
     required this.sellingPrice,
     required this.buyingPrice,
     required this.availableQuantity,
+    required this.minStockAlert,
   });
 
   final String itemName;
@@ -21,6 +22,7 @@ class ItemFieldsChange extends AddItemEvent {
   final double sellingPrice;
   final double buyingPrice;
   final double availableQuantity;
+  final double minStockAlert;
 
   @override
   List<Object> get props => [
@@ -29,6 +31,7 @@ class ItemFieldsChange extends AddItemEvent {
         sellingPrice,
         buyingPrice,
         availableQuantity,
+        minStockAlert,
       ];
 }
 
@@ -41,6 +44,8 @@ class ItemSellingPriceFieldUnfocused extends AddItemEvent {}
 class ItemBuyingPriceFieldUnfocused extends AddItemEvent {}
 
 class ItemAvailableQuantityFieldUnfocused extends AddItemEvent {}
+
+class ItemMinStockAlertFieldUnfocused extends AddItemEvent {}
 
 class ItemFormSubmitted extends AddItemEvent {}
 class EnableVehicleFeatureEvent extends AddItemEvent {}

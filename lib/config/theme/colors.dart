@@ -8,13 +8,14 @@ const Color secondaryLight = Color(0xFFEDF3FE);
 const Color white = Color(0xFFFFFFFF);
 const Color orange = Color(0xFFFF7F00);
 const Color red = Color(0xFFDA0000);
+const Color lightRed = Color(0xFFFF3D00);
 const Color green = Color(0xFF49C969);
 const Color deepGreen = Color(0xFF00C981);
 const Color skyBlue = Color(0xFF2CCEFF);
 const Color deepBlue = Color(0xFF3253FF);
 const Color grey = Color(0xFF9D9D9D);
 const Color lightGrey = Color(0xFFE5E5E5);
-const Color yellow = Color(0xFFFFC107);
+// const Color yellow = Color(0xFFFFC107);
 const Color purple = Color(0xFF8C63D2);
 const Color shadowColor = Color(0x14191919);
 

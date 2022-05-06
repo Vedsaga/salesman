@@ -16,7 +16,6 @@ import 'package:salesman/config/routes/route_name.dart';
 import 'package:salesman/config/theme/colors.dart';
 import 'package:salesman/config/theme/theme.dart';
 import 'package:salesman/core/components/details_card.dart';
-import 'package:salesman/core/components/info_data_duo_box.dart';
 import 'package:salesman/core/components/input_top_app_bar.dart';
 import 'package:salesman/core/components/normal_top_app_bar.dart';
 import 'package:salesman/core/components/row_flex_close_children.dart';
@@ -79,90 +78,55 @@ class _ViewPaymentDetailsState extends State<ViewPaymentDetails> {
                 child: Flex(
                   direction: Axis.vertical,
                   children: [
-                    InfoDataDuoBox(
-                        infoText: "Id",
-                      dataText: state.paymentDetails.paymentId.toString(),
+                    SizedBox(
+                      height: designValues(context).padding21,
                     ),
-                    SizedBox(height: designValues(context).cornerRadius34),
                     Flex(
                       direction: Axis.horizontal,
                       children: <Widget>[
-                        Flexible(
-                          flex: 2,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              gradient: lightGradient,
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: shadowColor,
-                                    blurRadius: 34,
-                                  offset: Offset(-5, 5),
-                                ),
-                              ],
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Center(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: designValues(context).padding21,
-                                  vertical: designValues(context).padding21,
-                                ),
-                                child: Text(
-                                  "Type",
-                                  style: of(context)
-                                      .textTheme
-                                      .caption
-                                      ?.copyWith(color: grey),
-                                ),
+                        Expanded(
+                          child: DetailsCard(
+                            label: "Item Id",
+                            firstChild: Flexible(
+                              child: Text(
+                                state.paymentDetails.paymentId.toString(),
                               ),
+                            ),
+                            secondChild: const Flexible(
+                              flex: 0,
+                              child: SizedBox(),
                             ),
                           ),
                         ),
                         SizedBox(
-                          width: designValues(context).padding21,
+                          width: designValues(context).cornerRadius34,
                         ),
-                        Flexible(
-                          flex: 3,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              gradient:
+                        Expanded(
+                          child: DetailsCard(
+                            label: "payment type",
+                            containerGradient:
+                                state.paymentDetails.paymentType == "refund"
+                                    ? redGradient
+                                    : greenGradient,
+                            firstChild: Flexible(
+                              child: RowFlexCloseChildren(
+                                firstChild: SvgPicture.asset(
                                   state.paymentDetails.paymentType == "refund"
-                                      ? redGradient
-                                      : greenGradient,
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: shadowColor,
-                                    blurRadius: 34,
-                                  offset: Offset(-5, 5),
+                                      ? "assets/icons/svgs/send_inr.svg"
+                                      : "assets/icons/svgs/receive_inr.svg",
+                                  color: light,
                                 ),
-                              ],
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Center(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: designValues(context).padding21,
-                                  vertical: designValues(context).padding21,
-                                ),
-                                child: RowFlexCloseChildren(
-                                  firstChild: SvgPicture.asset(
-                                    state.paymentDetails.paymentType == "refund"
-                                        ? "assets/icons/svgs/send.svg"
-                                        : "assets/icons/svgs/receive.svg",
-                                    color: light,
-                                  ),
-                                  secondChild: Text(
-                                    state.paymentDetails.paymentType,
-                                    style: of(context)
-                                        .textTheme
-                                        .overline
-                                        ?.copyWith(
-                                          color: light,
-                                        ),
-                                  ),
+                                secondChild: Text(
+                                  state.paymentDetails.paymentType,
+                                  style:
+                                      of(context).textTheme.overline?.copyWith(
+                                            color: light,
+                                          ),
                                 ),
                               ),
                             ),
+                            secondChild:
+                                const Flexible(flex: 0, child: SizedBox()),
                           ),
                         ),
                       ],

@@ -167,7 +167,7 @@ class _ViewOrderDetailTabState extends State<OrderDetailsTab> {
                                         ? redGradient
                                         : state.orderDetails.paymentStatus ==
                                                 "partial"
-                                            ? purpleGradient
+                                            ? yellowGradient
                                             : state.orderDetails
                                                         .paymentStatus ==
                                                     "paid"

@@ -21,6 +21,7 @@ InputDecoration inputDecoration(
   bool usernameSuffix = false,
   String? errorText,
   required bool inFocus,
+  Widget? prefixWidget,
 }) {
   return InputDecoration(
     errorText: errorText,
@@ -38,7 +39,7 @@ InputDecoration inputDecoration(
               color: currencyColor ?? secondaryDark,
             ),
           )
-        : null,
+        : prefixWidget,
     suffixIcon: suffixIconWidget,
     suffix: usernameSuffix
         ? Padding(

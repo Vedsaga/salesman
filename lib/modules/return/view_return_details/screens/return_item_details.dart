@@ -156,7 +156,7 @@ class _ReturnItemDetailsState extends State<ReturnItemDetails> {
                                         "unpaid"
                                     ? redGradient
                                     : returnDetails.refundStatus == "partial"
-                                        ? purpleGradient
+                                        ? yellowGradient
                                         : returnDetails.refundStatus == "paid"
                                             ? greenGradient
                                             : darkGradient,

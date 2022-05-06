@@ -658,6 +658,7 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
   final double totalTrade;
   final double availableQuantity;
   final double reservedQuantity;
+  final double minStockAlert;
   final bool isActive;
   ModelItemData(
       {required this.itemId,
@@ -668,6 +669,7 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
       required this.totalTrade,
       required this.availableQuantity,
       required this.reservedQuantity,
+      required this.minStockAlert,
       required this.isActive});
   factory ModelItemData.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -688,6 +690,8 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
           data['${effectivePrefix}available_quantity'])!,
       reservedQuantity: const RealType().mapFromDatabaseResponse(
           data['${effectivePrefix}reserved_quantity'])!,
+      minStockAlert: const RealType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}min_stock_alert'])!,
       isActive: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}is_active'])!,
     );
@@ -703,6 +707,7 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
     map['total_trade'] = Variable<double>(totalTrade);
     map['available_quantity'] = Variable<double>(availableQuantity);
     map['reserved_quantity'] = Variable<double>(reservedQuantity);
+    map['min_stock_alert'] = Variable<double>(minStockAlert);
     map['is_active'] = Variable<bool>(isActive);
     return map;
   }
@@ -717,6 +722,7 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
       totalTrade: Value(totalTrade),
       availableQuantity: Value(availableQuantity),
       reservedQuantity: Value(reservedQuantity),
+      minStockAlert: Value(minStockAlert),
       isActive: Value(isActive),
     );
   }
@@ -735,6 +741,7 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
       totalTrade: serializer.fromJson<double>(json['totalTrade']),
       availableQuantity: serializer.fromJson<double>(json['availableQuantity']),
       reservedQuantity: serializer.fromJson<double>(json['reservedQuantity']),
+      minStockAlert: serializer.fromJson<double>(json['minStockAlert']),
       isActive: serializer.fromJson<bool>(json['isActive']),
     );
   }
@@ -750,6 +757,7 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
       'totalTrade': serializer.toJson<double>(totalTrade),
       'availableQuantity': serializer.toJson<double>(availableQuantity),
       'reservedQuantity': serializer.toJson<double>(reservedQuantity),
+      'minStockAlert': serializer.toJson<double>(minStockAlert),
       'isActive': serializer.toJson<bool>(isActive),
     };
   }
@@ -763,6 +771,7 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
           double? totalTrade,
           double? availableQuantity,
           double? reservedQuantity,
+          double? minStockAlert,
           bool? isActive}) =>
       ModelItemData(
         itemId: itemId ?? this.itemId,
@@ -773,6 +782,7 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
         totalTrade: totalTrade ?? this.totalTrade,
         availableQuantity: availableQuantity ?? this.availableQuantity,
         reservedQuantity: reservedQuantity ?? this.reservedQuantity,
+        minStockAlert: minStockAlert ?? this.minStockAlert,
         isActive: isActive ?? this.isActive,
       );
   @override
@@ -786,6 +796,7 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
           ..write('totalTrade: $totalTrade, ')
           ..write('availableQuantity: $availableQuantity, ')
           ..write('reservedQuantity: $reservedQuantity, ')
+          ..write('minStockAlert: $minStockAlert, ')
           ..write('isActive: $isActive')
           ..write(')'))
         .toString();
@@ -801,6 +812,7 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
       totalTrade,
       availableQuantity,
       reservedQuantity,
+      minStockAlert,
       isActive);
   @override
   bool operator ==(Object other) =>
@@ -814,6 +826,7 @@ class ModelItemData extends DataClass implements Insertable<ModelItemData> {
           other.totalTrade == this.totalTrade &&
           other.availableQuantity == this.availableQuantity &&
           other.reservedQuantity == this.reservedQuantity &&
+          other.minStockAlert == this.minStockAlert &&
           other.isActive == this.isActive);
 }
 
@@ -826,6 +839,7 @@ class ModelItemCompanion extends UpdateCompanion<ModelItemData> {
   final Value<double> totalTrade;
   final Value<double> availableQuantity;
   final Value<double> reservedQuantity;
+  final Value<double> minStockAlert;
   final Value<bool> isActive;
   const ModelItemCompanion({
     this.itemId = const Value.absent(),
@@ -836,6 +850,7 @@ class ModelItemCompanion extends UpdateCompanion<ModelItemData> {
     this.totalTrade = const Value.absent(),
     this.availableQuantity = const Value.absent(),
     this.reservedQuantity = const Value.absent(),
+    this.minStockAlert = const Value.absent(),
     this.isActive = const Value.absent(),
   });
   ModelItemCompanion.insert({
@@ -847,6 +862,7 @@ class ModelItemCompanion extends UpdateCompanion<ModelItemData> {
     this.totalTrade = const Value.absent(),
     this.availableQuantity = const Value.absent(),
     this.reservedQuantity = const Value.absent(),
+    this.minStockAlert = const Value.absent(),
     this.isActive = const Value.absent(),
   })  : itemName = Value(itemName),
         unit = Value(unit);
@@ -859,6 +875,7 @@ class ModelItemCompanion extends UpdateCompanion<ModelItemData> {
     Expression<double>? totalTrade,
     Expression<double>? availableQuantity,
     Expression<double>? reservedQuantity,
+    Expression<double>? minStockAlert,
     Expression<bool>? isActive,
   }) {
     return RawValuesInsertable({
@@ -872,6 +889,7 @@ class ModelItemCompanion extends UpdateCompanion<ModelItemData> {
       if (totalTrade != null) 'total_trade': totalTrade,
       if (availableQuantity != null) 'available_quantity': availableQuantity,
       if (reservedQuantity != null) 'reserved_quantity': reservedQuantity,
+      if (minStockAlert != null) 'min_stock_alert': minStockAlert,
       if (isActive != null) 'is_active': isActive,
     });
   }
@@ -885,6 +903,7 @@ class ModelItemCompanion extends UpdateCompanion<ModelItemData> {
       Value<double>? totalTrade,
       Value<double>? availableQuantity,
       Value<double>? reservedQuantity,
+      Value<double>? minStockAlert,
       Value<bool>? isActive}) {
     return ModelItemCompanion(
       itemId: itemId ?? this.itemId,
@@ -895,6 +914,7 @@ class ModelItemCompanion extends UpdateCompanion<ModelItemData> {
       totalTrade: totalTrade ?? this.totalTrade,
       availableQuantity: availableQuantity ?? this.availableQuantity,
       reservedQuantity: reservedQuantity ?? this.reservedQuantity,
+      minStockAlert: minStockAlert ?? this.minStockAlert,
       isActive: isActive ?? this.isActive,
     );
   }
@@ -927,6 +947,9 @@ class ModelItemCompanion extends UpdateCompanion<ModelItemData> {
     if (reservedQuantity.present) {
       map['reserved_quantity'] = Variable<double>(reservedQuantity.value);
     }
+    if (minStockAlert.present) {
+      map['min_stock_alert'] = Variable<double>(minStockAlert.value);
+    }
     if (isActive.present) {
       map['is_active'] = Variable<bool>(isActive.value);
     }
@@ -944,6 +967,7 @@ class ModelItemCompanion extends UpdateCompanion<ModelItemData> {
           ..write('totalTrade: $totalTrade, ')
           ..write('availableQuantity: $availableQuantity, ')
           ..write('reservedQuantity: $reservedQuantity, ')
+          ..write('minStockAlert: $minStockAlert, ')
           ..write('isActive: $isActive')
           ..write(')'))
         .toString();
@@ -1018,6 +1042,14 @@ class $ModelItemTable extends ModelItem
           type: const RealType(),
           requiredDuringInsert: false,
           defaultValue: const Constant(0.0));
+  final VerificationMeta _minStockAlertMeta =
+      const VerificationMeta('minStockAlert');
+  @override
+  late final GeneratedColumn<double?> minStockAlert = GeneratedColumn<double?>(
+      'min_stock_alert', aliasedName, false,
+      type: const RealType(),
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0.0));
   final VerificationMeta _isActiveMeta = const VerificationMeta('isActive');
   @override
   late final GeneratedColumn<bool?> isActive = GeneratedColumn<bool?>(
@@ -1036,6 +1068,7 @@ class $ModelItemTable extends ModelItem
         totalTrade,
         availableQuantity,
         reservedQuantity,
+        minStockAlert,
         isActive
       ];
   @override
@@ -1092,6 +1125,12 @@ class $ModelItemTable extends ModelItem
           _reservedQuantityMeta,
           reservedQuantity.isAcceptableOrUnknown(
               data['reserved_quantity']!, _reservedQuantityMeta));
+    }
+    if (data.containsKey('min_stock_alert')) {
+      context.handle(
+          _minStockAlertMeta,
+          minStockAlert.isAcceptableOrUnknown(
+              data['min_stock_alert']!, _minStockAlertMeta));
     }
     if (data.containsKey('is_active')) {
       context.handle(_isActiveMeta,

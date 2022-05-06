@@ -355,6 +355,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       int dispatch = 0;
                       int deliver = 0;
                       int cancel = 0;
+                      int reject = 0;
                       int delayed = 0;
                       int unpaid = 0;
                       int paid = 0;
@@ -374,7 +375,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         } else if (order.orderStatus == 'cancel') {
                           cancel++;
                         } else if (order.orderStatus == 'reject') {
-                          cancel++;
+                          reject++;
                         } else if (order.orderStatus == 'delayed') {
                           delayed++;
                         }
@@ -472,6 +473,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                       info: "cancelled",
                                       data: cancel.toString(),
                                     ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: designValues(context).padding21,
+                                ),
+                                Flex(
+                                  direction: Axis.horizontal,
+                                  children: [
+                                    QuickStatsCard(
+                                      boxColor: lightRed,
+                                      data: reject.toString(),
+                                      info: "rejected",
+                                    ),
+                                    SizedBox(
+                                      width: designValues(context).padding21,
+                                    ),
+                                    const Expanded(child: SizedBox())
                                   ],
                                 ),
                                 SizedBox(
@@ -577,7 +595,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       firstChild: RowFlexCloseChildren(
                                         firstChild: SvgPicture.asset(
                                           "assets/icons/svgs/receive_inr.svg",
-                                          color: orange,
+                                          color: purple,
                                         ),
                                         secondChild: Text(
                                           (totalVolume - totalReceive)
@@ -585,7 +603,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           style: of(context)
                                               .textTheme
                                               .headline6
-                                              ?.copyWith(color: orange),
+                                              ?.copyWith(color: purple),
                                         ),
                                       ),
                                       secondChild: Text(
@@ -593,7 +611,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         style: of(context)
                                             .textTheme
                                             .subtitle2
-                                            ?.copyWith(color: orange),
+                                            ?.copyWith(color: purple),
                                       ),
                                     ),
                                   ),

@@ -12,5 +12,6 @@ class ModelItem extends Table {
   RealColumn get totalTrade => real().withDefault(const Constant(0.0))();
   RealColumn get availableQuantity => real().withDefault(const Constant(0.0))();
   RealColumn get reservedQuantity => real().withDefault(const Constant(0.0))();
+  RealColumn get minStockAlert => real().withDefault(const Constant(0.0))();
   BoolColumn get isActive => boolean().withDefault(const Constant(true))();
 }

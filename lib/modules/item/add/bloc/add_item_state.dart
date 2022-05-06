@@ -1,12 +1,13 @@
 part of 'add_item_bloc.dart';
 
- class AddItemState extends Equatable {
+class AddItemState extends Equatable {
   const AddItemState({
     this.itemName = const GenericField.pure(),
     this.unit = const UnitField.pure(),
     this.sellingPrice = const DoubleField.pure(),
     this.buyingPrice = const DoubleField.pure(),
     this.availableQuantity = const DoubleField.pure(),
+    this.minStockAlert = const DoubleField.pure(),
     this.status = FormzStatus.pure,
   });
 
@@ -16,16 +17,21 @@ part of 'add_item_bloc.dart';
   final DoubleField buyingPrice;
   final DoubleField availableQuantity;
   final FormzStatus status;
+  final DoubleField minStockAlert;
   @override
-  List<Object> get props => [itemName, unit, sellingPrice, buyingPrice, availableQuantity, status];
+  List<Object> get props =>
+      [itemName, unit, sellingPrice, buyingPrice, availableQuantity, status, minStockAlert
+      ];
+
 
   AddItemState copyWith({
     GenericField? itemName,
-    UnitField?  unit,
+    UnitField? unit,
     DoubleField? sellingPrice,
     DoubleField? buyingPrice,
     DoubleField? availableQuantity,
     FormzStatus? status,
+    DoubleField? minStockAlert,
   }) {
     return AddItemState(
       itemName: itemName ?? this.itemName,
@@ -34,6 +40,7 @@ part of 'add_item_bloc.dart';
       buyingPrice: buyingPrice ?? this.buyingPrice,
       availableQuantity: availableQuantity ?? this.availableQuantity,
       status: status ?? this.status,
+      minStockAlert: minStockAlert ?? this.minStockAlert,
     );
   }
 }
