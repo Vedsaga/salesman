@@ -440,7 +440,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   direction: Axis.horizontal,
                                   children: [
                                     QuickStatsCard(
-                                      boxColor: purple,
+                                      boxColor: orange,
                                       info: "processed",
                                       data: process.toString(),
                                     ),
@@ -448,7 +448,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       width: designValues(context).padding21,
                                     ),
                                     QuickStatsCard(
-                                      boxColor: orange,
+                                      boxColor: purple,
                                       info: "dispatch",
                                       data: dispatch.toString(),
                                     ),

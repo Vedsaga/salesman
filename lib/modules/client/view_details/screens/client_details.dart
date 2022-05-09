@@ -130,7 +130,8 @@ class _ClientDetailsState extends State<ClientDetails> {
                             color: red,
                           ),
                           secondChild: Text(
-                            state.clientDetails.pendingDue.toStringAsFixed(2),
+                            state.clientDetails.pendingRefund
+                                .toStringAsFixed(2),
                             style: of(context)
                                 .textTheme
                                 .caption

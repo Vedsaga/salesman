@@ -75,7 +75,7 @@ class _ViewTransportDetailsState extends State<ViewTransportDetails> {
             TransportDetailsStatus.loadingNavigationData) {
           snackbarMessage(
             context,
-            "loadingData...",
+            "loading Data...",
             MessageType.inProgress,
           );
         }
@@ -134,10 +134,8 @@ class _ViewTransportDetailsState extends State<ViewTransportDetails> {
             "Transport started successfully.",
             MessageType.success,
           );
-          Future.delayed(const Duration(milliseconds: 300), () {
-            Navigator.of(context)
-                .popAndPushNamed(RouteNames.viewPendingTransportList);
-          });
+          Navigator.of(context)
+              .popAndPushNamed(RouteNames.viewPendingTransportList);
         }
       },
       child: MobileLayout(
@@ -280,7 +278,7 @@ class _ViewTransportDetailsState extends State<ViewTransportDetails> {
                             }
                           },
                           gradient: purpleGradient,
-                          svgColor: secondaryDark,
+                          svgColor: light,
                         ),
                       ),
                     ],
@@ -307,7 +305,6 @@ class _ViewTransportDetailsState extends State<ViewTransportDetails> {
                   .inSeconds;
               final String remainingDate =
                   GlobalFunction().computeTime(remainingTime);
-
 
               String vehicleName = '';
               for (final vehicle in state.vehicleList) {
@@ -482,11 +479,11 @@ class _ViewTransportDetailsState extends State<ViewTransportDetails> {
                       SizedBox(
                         height: designValues(context).padding21,
                       ),
-                      DetailsCard(
-                        label: "Vehicle Name",
-                        firstChild: const SizedBox(),
-                        secondChild: Text(vehicleName),
-                      ),
+                    DetailsCard(
+                      label: "Vehicle Name",
+                      firstChild: const SizedBox(),
+                      secondChild: Text(vehicleName),
+                    ),
                     if (transportDetails.transportBy != null)
                       SizedBox(
                         height: designValues(context).padding21,

@@ -163,11 +163,7 @@ class _ViewTransportListState extends State<ViewTransportList> {
                                             .textTheme
                                             .caption
                                             ?.copyWith(
-                                              color: transport[index]
-                                                          .transportStatus ==
-                                                      "started"
-                                                  ? secondaryDark
-                                                  : light,
+                                              color: light,
                                             ),
                                       ),
                                     ),
