@@ -8,15 +8,16 @@ This is just quick prototype build in approx 50 days from design to logic. In th
 
 # Screen Screenshot
 
-<details close>
+<details open>
 <summary>Onboading</summary>
 <br>
+
+![Screenshot_2022_0720_084104](https://user-images.githubusercontent.com/59083528/179907477-1f5c4631-da61-4b1d-8e3f-7a482ae53356.jpg)
 ![Screenshot_20220720_082514](https://user-images.githubusercontent.com/59083528/179907530-5df05792-0d0d-4a0f-8a35-9f4f1096c5dd.jpg)
 ![Screenshot_2022_0720_082014](https://user-images.githubusercontent.com/59083528/179907549-90da5f47-9ded-47d9-aeb8-6718e388b5d8.jpg)
 ![Screenshot_20220720_081937](https://user-images.githubusercontent.com/59083528/179907552-c7e3122d-f2c3-4f2a-a7cc-f39575a9090b.jpg)
 ![Screenshot_20220720_081917](https://user-images.githubusercontent.com/59083528/179907461-cc09bd2e-f7e9-46c2-8879-4ef005ddbc6b.jpg)
 ![Screenshot_2022_0720_081844](https://user-images.githubusercontent.com/59083528/179907470-e63fe3a6-0198-4d19-b841-468daa7a039e.jpg)
-![Screenshot_2022_0720_084104](https://user-images.githubusercontent.com/59083528/179907477-1f5c4631-da61-4b1d-8e3f-7a482ae53356.jpg)
 </details>
 
 <details close>
@@ -34,6 +35,7 @@ This is just quick prototype build in approx 50 days from design to logic. In th
 <details close>
 <summary>item</summary>
 <br>
+
 ![Screenshot_20220720_082505](https://user-images.githubusercontent.com/59083528/179907535-51dc95ac-5832-4985-856b-8180a4594118.jpg)
 ![Screenshot_20220720_082455](https://user-images.githubusercontent.com/59083528/179907537-b754dbeb-7898-44b3-b098-a8df68fdc2fa.jpg)
 ![Screenshot_20220720_082438](https://user-images.githubusercontent.com/59083528/179907539-0b8412a6-f4a1-4eaf-89ae-7e7ad718a04c.jpg)
